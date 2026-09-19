@@ -1,0 +1,10 @@
+.env
+data/state.db*
+data/sessions/
+data/logs/
+data/auth.json
+data/.env
+workspace/*
+!workspace/.gitkeep
+hermes-bundle.tar
+*.log
