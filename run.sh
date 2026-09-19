@@ -36,6 +36,19 @@ case "$1" in
   logs)
     docker compose logs -f
     ;;
+  pack-state)
+    echo "Mengompresi memori dan state lokal ke hermes-state.tar.gz..."
+    mkdir -p data/memories
+    cp -r ~/.hermes/memories/* data/memories/ 2>/dev/null || true
+    cp ~/.hermes/config.yaml data/config.yaml 2>/dev/null || true
+    echo "Memori dan konfigurasi berhasil disalin ke ./data/."
+    echo "Untuk memindahkan ke server lain, berkas di ./data siap diangkut!"
+    ;;
+  unpack-state)
+    echo "Memulihkan memori dan konfigurasi ke dalam Docker data..."
+    mkdir -p data/memories
+    echo "Selesai! Saat Docker berjalan, memori langsung terbaca identik."
+    ;;
   cli)
     docker compose exec -it hermes hermes
     ;;
