@@ -216,6 +216,13 @@
     - Selalu terapkan fungsi sanitasi sebelum rendering data:
       `str.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{1FA70}-\u{1FAFF}]/gu, '').trim()`
     - Langkah ini menjamin antarmuka web tetap bersih, profesional, konsisten lintas-OS, dan 100% mematuhi standar zero-emoji tanpa merusak data asli di basis data.
+56. Pre-Flight Auto-Save Sebelum Eksekusi Streaming Asinkron (SSE / AI Transforms):
+    - Pada fitur transformasi dokumen interaktif di mana frontend memicu SSE streaming berdasarkan ID dokumen (`note_id`), request akan gagal/mengembalikan teks kosong jika perubahan terakhir di editor belum tersimpan ke database.
+    - Fungsi pemanggil di klien WAJIB menjalankan `await performSave()` sebelum mengirim request streaming asinkron (`/api/ai/transform`).
+    - Router backend wajib menerima sinonim aksi umum (misal `critic` dan `critique`) untuk mencegah silent routing failure akibat perbedaan penamaan parameter klien vs backend.
+57. Tata Kelola Riwayat Percakapan Draf (Local Draft Chat Governance):
+    - Obrolan AI yang mendampingi penyusunan draf dokumen harus terisolasi per `note_id` dan tersimpan otomatis di basis data lokal SQLite agar tidak mengotori repositori catatan permanen.
+    - Sediakan status keterlihatan draf (`[RIWAYAT DRAF TERSIMPAN • N PESAN]`) dan tombol pembersih eksplisit (`DELETE /api/notes/:id/conversations`) agar pengguna memiliki kontrol penuh untuk mereset riwayat diskusi tanpa menghapus draf dokumen.
 
 
 

@@ -8,3 +8,11 @@ workspace/*
 !workspace/.gitkeep
 hermes-bundle.tar
 *.log
+*.lock
+skills/.curator_backups/
+skills/.curator_state*
+skills/.curator_ledger*
+skills/.usage.json*
+skills/.bundled_manifest
+skills/.hub/
+data/memories/*.lock

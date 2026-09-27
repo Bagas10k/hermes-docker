@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ambient Binaural Soundscape Generator</title>
+  <style>
+    :root {
+      --bg: #0F172A;
+      --card: #1E293B;
+      --text: #F8FAFC;
+      --accent-gamma: #F59E0B;
+      --accent-alpha: #10B981;
+      --border: #334155;
+    }
+    body {
+      margin: 0;
+      padding: 32px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .hud-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .hud-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: #FFFFFF;
+      letter-spacing: -0.5px;
+    }
+    .hud-desc {
+      font-size: 13px;
+      color: #94A3B8;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .control-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: #CBD5E1;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--accent-gamma);
+      background: #334155;
+      height: 6px;
+      border-radius: 3px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent-gamma);
+      color: #0F172A;
+    }
+    .btn-secondary {
+      background: #334155;
+      color: #F8FAFC;
+    }
+    .mode-select {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .mode-chip {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 12px;
+      text-align: center;
+      cursor: pointer;
+      background: #0F172A;
+      color: #94A3B8;
+    }
+    .mode-chip.active {
+      border-color: var(--accent-gamma);
+      color: #FFFFFF;
+      background: #2D281E;
+    }
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #64748B;
+      margin-top: 16px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #64748B;
+    }
+    .status-dot.active {
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hud-card">
+  <div class="hud-title">Binaural Soundscape Studio</div>
+  <div class="hud-desc">Procedural Web Audio synthesis for deep focus & flow state. Zero external audio files.</div>
+
+  <div class="mode-select">
+    <div class="mode-chip active" id="chipGamma" onclick="selectMode('gamma')">Gamma 40Hz (Flow)</div>
+    <div class="mode-chip" id="chipAlpha" onclick="selectMode('alpha')">Alpha 10Hz (Calm)</div>
+  </div>
+
+  <div class="control-group">
+    <label><span>Master Gain</span><span id="lblMaster">40%</span></label>
+    <input type="range" id="rngMaster" min="0" max="1" step="0.01" value="0.4" oninput="updateGains()">
+  </div>
+
+  <div class="control-group">
+    <label><span>Pink Noise Background</span><span id="lblNoise">15%</span></label>
+    <input type="range" id="rngNoise" min="0" max="0.5" step="0.01" value="0.15" oninput="updateGains()">
+  </div>
+
+  <div class="control-group">
+    <label><span>Warm Drone Tone</span><span id="lblDrone">12%</span></label>
+    <input type="range" id="rngDrone" min="0" max="0.4" step="0.01" value="0.12" oninput="updateGains()">
+  </div>
+
+  <div class="control-group">
+    <label><span>Filter Cutoff</span><span id="lblFilter">450 Hz</span></label>
+    <input type="range" id="rngFilter" min="150" max="1800" step="10" value="450" oninput="updateFilter()">
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="btnToggle" onclick="togglePlay()">Start Audio</button>
+  </div>
+
+  <div class="status-indicator">
+    <div class="status-dot" id="dotStatus"></div>
+    <span id="txtStatus">Engine Ready (Standby)</span>
+  </div>
+</div>
+
+<script>
+let ctx = null;
+let isPlaying = false;
+let currentMode = 'gamma';
+
+let oscLeft = null;
+let oscRight = null;
+let oscDrone = null;
+let noiseNode = null;
+let filterNode = null;
+
+let masterGainNode = null;
+let binauralGainNode = null;
+let noiseGainNode = null;
+let droneGainNode = null;
+
+function initAudio() {
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Master compressor
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -12;
+  comp.knee.value = 8;
+  comp.ratio.value = 4;
+  comp.attack.value = 0.005;
+  comp.release.value = 0.1;
+
+  masterGainNode = ctx.createGain();
+  masterGainNode.gain.value = 0.4;
+  masterGainNode.connect(comp);
+  comp.connect(ctx.destination);
+
+  // Filter
+  filterNode = ctx.createBiquadFilter();
+  filterNode.type = 'lowpass';
+  filterNode.frequency.value = 450;
+  filterNode.Q.value = 0.707;
+  filterNode.connect(masterGainNode);
+
+  // Binaural bus
+  binauralGainNode = ctx.createGain();
+  binauralGainNode.gain.value = 0.20;
+  binauralGainNode.connect(filterNode);
+
+  // Noise bus
+  noiseGainNode = ctx.createGain();
+  noiseGainNode.gain.value = 0.15;
+  noiseGainNode.connect(filterNode);
+
+  // Drone bus
+  droneGainNode = ctx.createGain();
+  droneGainNode.gain.value = 0.12;
+  droneGainNode.connect(masterGainNode);
+
+  buildNoiseGenerator();
+}
+
+function buildNoiseGenerator() {
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+  for (let i = 0; i < bufferSize; i++) {
+    const white = Math.random() * 2 - 1;
+    b0 = 0.99886 * b0 + white * 0.0555179;
+    b1 = 0.99332 * b1 + white * 0.0750759;
+    b2 = 0.96900 * b2 + white * 0.1538520;
+    b3 = 0.86650 * b3 + white * 0.3104856;
+    b4 = 0.55000 * b4 + white * 0.5329522;
+    b5 = -0.7616 * b5 - white * 0.0168980;
+    data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+    b6 = white * 0.115926;
+  }
+
+  noiseNode = ctx.createBufferSource();
+  noiseNode.buffer = buffer;
+  noiseNode.loop = true;
+  noiseNode.connect(noiseGainNode);
+  noiseNode.start();
+}
+
+function startBinauralOscillators() {
+  const carrier = 216;
+  const delta = (currentMode === 'gamma') ? 40 : 10;
+
+  // Left ear
+  oscLeft = ctx.createOscillator();
+  oscLeft.type = 'sine';
+  oscLeft.frequency.value = carrier;
+  const pannerLeft = ctx.createStereoPanner();
+  pannerLeft.pan.value = -1.0;
+  oscLeft.connect(pannerLeft);
+  pannerLeft.connect(binauralGainNode);
+
+  // Right ear
+  oscRight = ctx.createOscillator();
+  oscRight.type = 'sine';
+  oscRight.frequency.value = carrier + delta;
+  const pannerRight = ctx.createStereoPanner();
+  pannerRight.pan.value = 1.0;
+  oscRight.connect(pannerRight);
+  pannerRight.connect(binauralGainNode);
+
+  // Harmonic Drone (sub-octave warm bed)
+  oscDrone = ctx.createOscillator();
+  oscDrone.type = 'sine';
+  oscDrone.frequency.value = carrier / 2; // 108 Hz warm sub
+  oscDrone.connect(droneGainNode);
+
+  oscLeft.start();
+  oscRight.start();
+  oscDrone.start();
+}
+
+function stopBinauralOscillators() {
+  if (oscLeft) { oscLeft.stop(); oscLeft.disconnect(); oscLeft = null; }
+  if (oscRight) { oscRight.stop(); oscRight.disconnect(); oscRight = null; }
+  if (oscDrone) { oscDrone.stop(); oscDrone.disconnect(); oscDrone = null; }
+}
+
+async function togglePlay() {
+  if (!ctx) initAudio();
+  if (ctx.state === 'suspended') await ctx.resume();
+
+  const btn = document.getElementById('btnToggle');
+  const dot = document.getElementById('dotStatus');
+  const txt = document.getElementById('txtStatus');
+
+  if (!isPlaying) {
+    startBinauralOscillators();
+    isPlaying = true;
+    btn.innerText = 'Pause Soundscape';
+    btn.className = 'btn btn-secondary';
+    dot.className = 'status-dot active';
+    txt.innerText = 'Synthesizing ' + (currentMode === 'gamma' ? 'Gamma 40Hz Flow' : 'Alpha 10Hz Calm');
+  } else {
+    stopBinauralOscillators();
+    isPlaying = false;
+    btn.innerText = 'Start Audio';
+    btn.className = 'btn btn-primary';
+    dot.className = 'status-dot';
+    txt.innerText = 'Engine Standby (Paused)';
+  }
+}
+
+function selectMode(mode) {
+  currentMode = mode;
+  document.getElementById('chipGamma').className = mode === 'gamma' ? 'mode-chip active' : 'mode-chip';
+  document.getElementById('chipAlpha').className = mode === 'alpha' ? 'mode-chip active' : 'mode-chip';
+  if (isPlaying) {
+    stopBinauralOscillators();
+    startBinauralOscillators();
+    document.getElementById('txtStatus').innerText = 'Synthesizing ' + (mode === 'gamma' ? 'Gamma 40Hz Flow' : 'Alpha 10Hz Calm');
+  }
+}
+
+function updateGains() {
+  if (!ctx) return;
+  const m = parseFloat(document.getElementById('rngMaster').value);
+  const n = parseFloat(document.getElementById('rngNoise').value);
+  const d = parseFloat(document.getElementById('rngDrone').value);
+
+  document.getElementById('lblMaster').innerText = Math.round(m * 100) + '%';
+  document.getElementById('lblNoise').innerText = Math.round(n * 100) + '%';
+  document.getElementById('lblDrone').innerText = Math.round(d * 100) + '%';
+
+  masterGainNode.gain.linearRampToValueAtTime(m, ctx.currentTime + 0.05);
+  noiseGainNode.gain.linearRampToValueAtTime(n, ctx.currentTime + 0.05);
+  droneGainNode.gain.linearRampToValueAtTime(d, ctx.currentTime + 0.05);
+}
+
+function updateFilter() {
+  if (!ctx) return;
+  const f = parseFloat(document.getElementById('rngFilter').value);
+  document.getElementById('lblFilter').innerText = f + ' Hz';
+  filterNode.frequency.linearRampToValueAtTime(f, ctx.currentTime + 0.05);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "vibe-005-mock-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:guard": "node tests/prod-guard.mjs"
+  },
+  "devDependencies": {
+    "msw": "2.12.7",
+    "vite": "7.3.1",
+    "playwright": "1.58.2"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}

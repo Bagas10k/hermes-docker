@@ -1,0 +1,4 @@
+interface:
+  display_name: "Color Intelligence"
+  short_description: "Analyze, design, adapt, and implement color systems."
+  brand_color: "#5B5BD6"

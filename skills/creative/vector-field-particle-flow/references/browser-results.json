@@ -1,0 +1,117 @@
+{
+  "pause": true,
+  "resume": {
+    "frames": 1731,
+    "count": 360,
+    "state": "running",
+    "pendingRAF": true,
+    "samples": 240,
+    "p95RenderMs": 0.6000000238418579,
+    "p95FrameMs": 16.700000762939453,
+    "particleBytes": 2880,
+    "bitmapPixels": 308160,
+    "finite": true
+  },
+  "reduced": {
+    "frames": 1731,
+    "count": 360,
+    "state": "reduced-motion",
+    "pendingRAF": false,
+    "samples": 240,
+    "p95RenderMs": 0.6000000238418579,
+    "p95FrameMs": 16.700000762939453,
+    "particleBytes": 2880,
+    "bitmapPixels": 308160,
+    "finite": true
+  },
+  "mobile": {
+    "overflow": false,
+    "stats": {
+      "frames": 1756,
+      "count": 360,
+      "state": "running",
+      "pendingRAF": true,
+      "samples": 240,
+      "p95RenderMs": 0.6000000238418579,
+      "p95FrameMs": 16.799999237060547,
+      "particleBytes": 2880,
+      "bitmapPixels": 439128,
+      "finite": true
+    }
+  },
+  "idle": {
+    "frames": 12,
+    "count": 360,
+    "state": "idle",
+    "pendingRAF": false,
+    "samples": 11,
+    "p95RenderMs": 1.2999999523162842,
+    "p95FrameMs": 16.799999237060547,
+    "particleBytes": 2880,
+    "bitmapPixels": 439128,
+    "finite": true
+  },
+  "editor_wake": {
+    "frames": 12,
+    "count": 360,
+    "state": "idle",
+    "pendingRAF": false,
+    "samples": 11,
+    "p95RenderMs": 1.2999999523162842,
+    "p95FrameMs": 16.799999237060547,
+    "particleBytes": 2880,
+    "bitmapPixels": 439128,
+    "finite": true
+  },
+  "disposed": {
+    "frames": 12,
+    "count": 360,
+    "state": "disposed",
+    "pendingRAF": false,
+    "samples": 11,
+    "p95RenderMs": 1.2999999523162842,
+    "p95FrameMs": 16.799999237060547,
+    "particleBytes": 2880,
+    "bitmapPixels": 439128,
+    "finite": true
+  },
+  "hook_wake": {
+    "frames": 23,
+    "count": 360,
+    "state": "running",
+    "pendingRAF": true,
+    "samples": 21,
+    "p95RenderMs": 0.6000000238418579,
+    "p95FrameMs": 16.700000762939453,
+    "particleBytes": 2880,
+    "bitmapPixels": 439128,
+    "finite": true
+  },
+  "original_editor": {
+    "idle": {
+      "frames": 2700,
+      "count": 360,
+      "state": "idle",
+      "pendingRAF": false,
+      "samples": 240,
+      "p95RenderMs": 0.3999999761581421,
+      "p95FrameMs": 16.700000762939453,
+      "particleBytes": 2880,
+      "bitmapPixels": 308160,
+      "finite": true
+    },
+    "wake": {
+      "frames": 2749,
+      "count": 360,
+      "state": "running",
+      "pendingRAF": true,
+      "samples": 240,
+      "p95RenderMs": 0.3999999761581421,
+      "p95FrameMs": 16.700000762939453,
+      "particleBytes": 2880,
+      "bitmapPixels": 308160,
+      "finite": true
+    },
+    "non_background_pixels": 308160
+  }
+}

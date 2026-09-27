@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0A10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Tactile PWA Mobile Ergonomics</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0A10;
+      --card-bg: #14121E;
+      --border: #232034;
+      --text-main: #FAF8F5;
+      --text-muted: #8E8A9F;
+      --accent-amber: #F59E0B;
+      --accent-emerald: #10B981;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+      overflow-x: hidden;
+      overscroll-behavior-y: contain;
+    }
+    header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 10, 16, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .brand {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      font-weight: 700;
+    }
+    main {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    .card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .btn-tactile {
+      margin-top: 10px;
+      background: var(--accent-amber);
+      color: #000000;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.1s ease, filter 0.1s ease;
+    }
+    .btn-tactile:active {
+      transform: scale(0.97);
+      filter: brightness(0.9);
+    }
+    /* Bottom Sheet Styles */
+    .sheet-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 100;
+    }
+    .sheet-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .bottom-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #181524;
+      border-top: 1px solid var(--border);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+      z-index: 101;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      display: flex;
+      flex-direction: column;
+      max-height: 85vh;
+      padding-bottom: var(--safe-bottom);
+    }
+    .sheet-handle-bar {
+      width: 100%;
+      padding: 12px 0 6px;
+      display: flex;
+      justify-content: center;
+      cursor: grab;
+      touch-action: none;
+    }
+    .sheet-pill {
+      width: 44px;
+      height: 5px;
+      border-radius: 3px;
+      background: #39344E;
+    }
+    .sheet-content {
+      padding: 16px 20px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sheet-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .sheet-item:active {
+      background: #232034;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+        <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+        <line x1="12" y1="18" x2="12" y2="18.01"></line>
+      </svg>
+      <span>Tactile PWA</span>
+    </div>
+    <div class="badge" id="sw-status">SW: STANDBY</div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Mobile Ergonomics Engine</h2>
+      <p>Arsitektur Progressive Web App mobile-first: zero-emoji vector UI, Spring Bottom Sheet, dan Service Worker v2 bypass aman untuk streaming real-time.</p>
+      <button class="btn-tactile" id="open-sheet-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        Buka Tactile Bottom Sheet
+      </button>
+    </div>
+  </main>
+
+  <div class="sheet-overlay" id="overlay"></div>
+  <div class="bottom-sheet" id="sheet">
+    <div class="sheet-handle-bar" id="handle">
+      <div class="sheet-pill"></div>
+    </div>
+    <div class="sheet-content">
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF;">Pilih Konfigurasi Vibe</h3>
+      <div class="sheet-item" onclick="selectOption('Flow State Turbo')">
+        <span style="font-weight: 600;">Flow State Turbo</span>
+        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.3);">AKTIF</span>
+      </div>
+      <div class="sheet-item" onclick="selectOption('Zero Latency Canvas')">
+        <span style="font-weight: 600;">Zero Latency Canvas</span>
+        <span style="color: var(--text-muted); font-size: 0.8rem;">60 FPS</span>
+      </div>
+      <div class="sheet-item" onclick="selectOption('Tactile Haptic Sync')">
+        <span style="font-weight: 600;">Tactile Haptic Sync</span>
+        <span style="color: var(--text-muted); font-size: 0.8rem;">Ready</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').then((reg) => {
+          document.getElementById('sw-status').innerText = 'SW: ACTIVE';
+          document.getElementById('sw-status').style.color = 'var(--accent-emerald)';
+        }).catch(() => {
+          document.getElementById('sw-status').innerText = 'SW: OFFLINE';
+        });
+      });
+    }
+
+    const sheet = document.getElementById('sheet');
+    const overlay = document.getElementById('overlay');
+    const openBtn = document.getElementById('open-sheet-btn');
+    const handle = document.getElementById('handle');
+
+    function openSheet() {
+      sheet.style.transform = 'translateY(0%)';
+      overlay.classList.add('active');
+      if (navigator.vibrate) navigator.vibrate([10]);
+    }
+
+    function closeSheet() {
+      sheet.style.transform = 'translateY(100%)';
+      overlay.classList.remove('active');
+    }
+
+    openBtn.addEventListener('click', openSheet);
+    overlay.addEventListener('click', closeSheet);
+
+    function selectOption(name) {
+      if (navigator.vibrate) navigator.vibrate([15]);
+      closeSheet();
+    }
+  </script>
+</body>
+</html>

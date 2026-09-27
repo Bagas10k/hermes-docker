@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="id"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Audio build workspace</title>
+<style>body{font:17px system-ui;background:#faf6ef;color:#14120e;max-width:48rem;margin:3rem auto;padding:0 1rem}button,input{font:inherit;margin:.4rem;padding:.65rem}button{cursor:pointer}output{display:block;border-top:1px solid #777;padding:1rem 0;margin-top:1rem}button:focus-visible{outline:3px solid #086bb0}</style>
+<h1>Audio build workspace</h1><p>Opsional. Audio mati sampai diaktifkan. Tombol pratinjau bukan hasil build nyata.</p>
+<button id="enable">Aktifkan audio</button><button id="mute">Matikan audio</button>
+<label>Volume <input id="volume" type="range" min="0" max="0.15" step="0.01" value="0.08"></label>
+<div><button id="success">Pratinjau lolos</button><button id="failure">Pratinjau gagal</button></div>
+<output id="status" aria-live="polite">Audio mati</output>
+<script src="../scripts/flow-audio.js"></script><script>
+const audio=window.audio=new FlowAudio();let run=0;const status=document.querySelector('#status');
+document.querySelector('#enable').onclick=async()=>{try{status.textContent=await audio.enable()?'Audio aktif':'Audio belum aktif';}catch(e){status.textContent='Audio tidak tersedia: '+e.message;}};
+document.querySelector('#mute').onclick=async()=>{try{await audio.mute();status.textContent='Audio mati';}catch(e){status.textContent=e.message;}};
+document.querySelector('#volume').oninput=e=>audio.setVolume(Number(e.target.value));
+for(const kind of ['success','failure'])document.getElementById(kind).onclick=()=>{status.textContent='Pratinjau '+kind+(audio.cue(kind,'preview-'+(++run))?' diputar':' tanpa audio');};
+// Call with real build runner results; never infer success from silence.
+window.reportBuild=(result)=>{if(!result || typeof result.runId!=='string' || !['success','failure'].includes(result.status))throw new TypeError('Invalid build event');status.textContent='Build '+result.runId+': '+result.status;return audio.cue(result.status,result.runId);};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)status.textContent='Audio mati: tab tersembunyi';});
+</script></html>

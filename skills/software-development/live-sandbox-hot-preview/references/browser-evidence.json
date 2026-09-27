@@ -1,0 +1,63 @@
+[
+  {
+    "test": "counter interaction",
+    "pass": true,
+    "result": {
+      "text": "Running\nexecuted: Count: 2",
+      "elapsed": "36.40000009536743"
+    }
+  },
+  {
+    "test": "runtime error",
+    "pass": true,
+    "result": {
+      "text": "Running\nerror: Uncaught Error: expected-runtime-failure\nexecuted: Count: 0",
+      "elapsed": "55"
+    }
+  },
+  {
+    "test": "syntax error",
+    "pass": true,
+    "result": {
+      "text": "Running\nerror: Uncaught SyntaxError: Failed to execute 'append' on 'Element': Unexpected token '='\nexecuted: Count: 0",
+      "elapsed": "37.200000047683716"
+    }
+  },
+  {
+    "test": "promise rejection",
+    "pass": true,
+    "result": {
+      "text": "Running\nexecuted: Count: 0\nerror: expected-rejection",
+      "elapsed": "44.10000002384186"
+    }
+  },
+  {
+    "test": "network policy",
+    "pass": true,
+    "result": {
+      "text": "Running\nexecuted: Count: 0\nerror: network-blocked",
+      "elapsed": "42.299999952316284"
+    }
+  },
+  {
+    "test": "stop destroys frame",
+    "pass": true
+  },
+  {
+    "test": "mobile overflow",
+    "pass": true
+  },
+  {
+    "test": "parent isolation corrected probe",
+    "pass": true,
+    "result": "Running\nexecuted: blocked:SecurityError"
+  },
+  {
+    "test": "error remains after executed acknowledgement",
+    "pass": true
+  },
+  {
+    "test": "wrong source rejected",
+    "pass": true
+  }
+]

@@ -22,7 +22,11 @@ Aturan pencegahan mutlak:
 1. **Zero Text Gradient**: Judul dan heading wajib berwarna solid monokrom murni (putih di dark mode, hitam di light mode). Dilarang keras menerapkan teks bergradasi pelangi/neon cyan-purple yang merupakan penanda khas template AI generik.
 2. **Zero Decorative Badge Kickers**: Dilarang meletakkan kapsul pil pemanis dekoratif mengambang di atas headline utama (misal: "● PRODUCTION-GRADE..."). Mulai langsung dari headline inti atau value proposition lugas.
 3. **Wordmark-Only Branding**: Hindari logo box generik (seperti ikon huruf dalam kotak gradasi). Gunakan tipografi murni (*pure typographical wordmark*) dengan tracking presisi.
-4. **Anti-Slop Directory & Dashboard Taxonomy**:
+4. **Mata Batin Koding Visual (Bayangkan Bentuk Saat Kode Ditulis)**:
+   - *Zero Cumulative Layout Shift (CLS)*: Kunci `min-height` pada wadah teks dinamis (typewriter, text rotator) agar panjang kalimat yang berganti tidak menggeser elemen di bawahnya satu piksel pun.
+   - *Full Desktop Viewport Hero Stage (100dvh)*: Layar pembuka (Hero) wajib dirancang memenuhi tepat satu layar desktop penuh (`min-height: 100dvh`), dengan distribusi vertikal seimbang (navbar di atas, pesan inti terpusat di tengah, petunjuk scroll halus di lipatan bawah) agar konten berikutnya baru terlihat saat digulir, menciptakan ruang bernapas yang sangat lega dan berwibawa.
+   - *Anti-Orphan & Tipografi Seimbang*: Dilarang membiarkan kata sambung pendek ("oleh", "dan", "di", "dengan") berdiri sendirian di satu baris penuh; gunakan `text-wrap: balance` dan struktur baris yang simetris secara optik. Hindari garis bawah putus-putus (`border-bottom: dashed`) yang meluber melebihi kata. Jembatani skala font antara judul raksasa dan teks pendukung agar tidak jomplang (skala raksasa vs semut).
+5. **Anti-Slop Directory & Dashboard Taxonomy**:
    - Jangan pernah mencampuradukkan sistem operasional/bisnis aktif terpisah ke dalam daftar kartu proyek generik.
    - Bedakan dengan tegas antara **Publikasi/Produksi (Live)** dan **Internal/Lab (Uji Coba)**.
    - Hindari layout bento bertumpuk warna-warni semu (pastel pills, icon boxes warna-warni acak). Gunakan chassis linier berdensitas tinggi (Linear/Obsidian style), micro-dot status 6px monokrom/status murni, dan garis 1px bergradien nol.
@@ -36,6 +40,12 @@ Aturan pencegahan mutlak:
    - Produk consumer/kriya membutuhkan kehangatan bahan: warna perkamen, tipografi serif italic humanist, foto asli.
    - Produk digital/modern: palet akromatik dengan aksen tunggal disiplin (gaya Linear/Mercury/Revolut).
 6. **Arsitektur Multi-Page (MPA) untuk Publikasi Referensi**: Proyek referensi komponen kelas publikasi wajib dipisah ke halaman mandiri per kategori menggunakan bundler modern (Vite) dengan Home Bento Hub interaktif.
+7. **Standar Antarmuka Cerah & Kaya Warna (Warm Paper & Obsidian 98/100)**:
+   - Terapkan antarmuka cerah, hidup, dan kaya warna yang terkalibrasi dan harmonis, dengan **mutlak 0% emoji** (wajib menggunakan SVG Lucide monokrom/aksen).
+   - **Kanvas Luar / Visualisasi 3D**: Gunakan warna porselen bersih (`#f8fafc`).
+   - **Drawer Dokumen & Panel Baca**: Gunakan warna perkamen hangat (*Warm Paper*: latar `#fdfbf7`, kartu elevasi `#f5f0ea`, border hairline `#e8e2d6`) dipadukan tipografi Obsidian pekat (`#0f172a` / `#1e293b`) untuk kenyamanan membaca teks panjang tanpa silau.
+   - **Token Warna Kategori Terkalibrasi**: Gunakan palet permata (*jewel tones*) jenuh dan berbobot (Amber Gold `#d97706`, Emerald `#059669`, Sapphire `#2563eb`, Electric Purple `#7c3aed`, Vivid Rose `#e11d48`, Ocean Cyan `#0284c7`).
+   - **Kontras Garis Relasi di Latar Terang**: Garis relasi di atas kanvas terang wajib menggunakan warna tegas dan tebal (`rgba(14, 165, 233, 0.70)` default, `#0284c7` dengan tebal `4.5px` saat aktif); garis tipis transparan akan hilang terserap latar terang.
 
 ---
 
@@ -123,3 +133,48 @@ Koleksi 30 arsitektur kontrol masukan data presisi yang terkalibrasi di `apex-ui
    - Apakah ada teks terpotong (*text truncation / overflow*) pada kolom pencarian dan input.
    - Apakah elemen bento membentang proporsional dan tidak terlempar keluar dari kontainer induk.
    - Perbaiki semua cacat visual secara tuntas sebelum menyerahkan laporan kepada pengguna.
+
+---
+
+## 5. Standar Mobile-First Workspace & Ergonomi Jempol (Zero Feature Pruning)
+Ketika mengadaptasi software desktop multi-kolom yang kompleks (studio catatan, editor dokumen, asisten AI) ke perangkat seluler (layar <= 768px):
+- **Dilarang Memangkas Fitur (Zero Pruning)**: Seluruh aksi, instrumen, dan pintasan wajib tetap dapat diakses di HP tanpa pengurangan kapabilitas.
+- **Pengelompokan Aksi Sekunder (Clustered Dropdown Menu)**:
+  - Jangan memaksakan 5-8 tombol aksi berjejer horizontal di topbar HP karena memicu overflow horizontal dan tabrakan tombol.
+  - Rangkum seluruh tombol sekunder (simpan ke vault, muat template, mode zen, hapus) ke dalam satu tombol dropdown taktil kompak `[AKSI ▼]`.
+- **Pengelompokan Transformasi & Resep AI**:
+  - Tombol-tombol resep prompt cepat AI (misal: "Bedah Jadi PRD", "Action Plan", "Action Items", "Critic") tidak boleh ditumpuk berjejer horizontal atau vertikal jika memakan >150px ruang layar.
+  - Kemas menjadi satu elemen `<select>` dropdown bergaya taktil: `[TRANSFORMASI DRAF ▼]` agar riwayat percakapan tetap lapang dan mudah di-scroll.
+- **Isolasi Tampilan Penuh per Tab (Segmented Bottom Dock)**:
+  - Di layar HP, jangan tampilkan 3 kolom sekaligus secara menyempit.
+  - Sembunyikan panel non-aktif dan beri 100% lebar layar pada panel aktif (`[CATATAN]`, `[EDITOR]`, `[CORETAN]`, `[AI MIKIR]`).
+  - Letakkan navigasi tab di bagian bawah layar (*Thumb Zone*) dengan area sentuh minimal tinggi 48px agar ergonomis bagi jempol satu tangan.
+
+## 6. Standar Anti-Scroll Trap & Virtual Keyboard Mobile
+- **Gunakan 100dvh**: Jangan gunakan `height: 100vh` kaku yang bertabrakan dengan bilah navigasi browser HP; gunakan `height: 100dvh` (Dynamic Viewport Height).
+- **Viewport Keyboard Resizing**:
+  Sematkan `interactive-widget=resizes-content` pada tag viewport HTML:
+  ```html
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+  ```
+  Atribut ini mencegah keyboard virtual Android/iOS menutupi area ketik atau memicu lompatan scroll yang merusak posisi fixed bottom dock.
+- **Isolasi Scroll Container Mandiri**:
+  Setiap kontainer tab yang dapat di-scroll wajib memiliki aturan:
+  ```css
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  ```
+  Ini mengisolasi inersia gulir di dalam kontainer aktif dan mencegah *body rubber-banding* atau *scroll trap* ganda.
+
+## 7. Arketipe "Cute Candy Studio / Tactile Pastel Pop" (Zero-Emoji Compliant)
+- **Karakter Visual**: Ceria, hangat, berenergi tinggi, dan taktil kenyal tanpa terlihat kekanak-kanakan yang mengorbankan fungsionalitas profesional.
+- **Palet Warna Permen Pastel**:
+  - Latar kanvas utama: Bubblegum Pink lembut (`#ffeef2`), Lavender Haze (`#f5f3ff`), atau Warm Cream Custard (`#fefce8`).
+  - Aksen kartu & tombol: Pink Bubblegum (`#ff85a1`), Lilac Lavender (`#b8c0ff`), Matcha Mint (`#bbf7d0`), Buttercream Honey (`#fef08a`), Coral Rose (`#ff6b6b`).
+  - Tinta kontras: Slate Navy pekat (`#1e293b`) untuk teks dan batas 1.5px - 2px solid.
+  - Fisika taktil: Offset drop-shadow tebal 2px - 3px tanpa blur (`box-shadow: 2.5px 2.5px 0px #1e293b`), sudut squircle 8px - 14px, dan efek tekan `transform: translate(1.5px, 1.5px)`.
+- **Kepatuhan Mutlak Zero Emoji (Termasuk Simbol Glif Ambigu)**:
+  - Dilarang keras menggunakan emoji grafis unicode (`😀`, `🔥`, `🚀`).
+  - **Kritis**: Simbol unicode yang tampak seperti simbol biasa di desktop (seperti petir `⚡` U+26A1, bintang kilau `✨` U+2728, tanda bahaya `⚠️` U+26A0, gunting `✂️` U+2702) akan dirender sebagai emoji warna grafis oleh sistem operasi mobile (iOS/Android). Hindari seluruh glif ini!
+  - Gunakan alternatif 100% steril: label teks kurung siku `[TRANSFORMASI]`, panah geometris ASCII murni `[AKSI ▼]`, titik bullet `•`, atau SVG inline monokrom.

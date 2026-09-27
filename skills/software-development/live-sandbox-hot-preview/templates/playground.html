@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live sandbox</title>
+<style>body{margin:20px;background:#faf6ef;color:#14120e;font:16px system-ui}main{display:grid;grid-template-columns:1fr 1fr;gap:18px}label{display:block;margin:12px 0}textarea{box-sizing:border-box;width:100%;height:120px;font:14px monospace}iframe{width:100%;height:460px;border:1px solid #888;background:white}button{padding:10px 18px}pre{white-space:pre-wrap;overflow-wrap:anywhere} @media(max-width:750px){main{grid-template-columns:1fr}body{margin:12px}}</style>
+<h1>Live sandbox</h1><p>Local trusted drafts only. Network disabled; each run resets preview state.</p>
+<main><section><label>HTML<textarea id="html"><button id="counter">Count: 0</button></textarea></label><label>CSS<textarea id="css">body {font:20px system-ui;padding:24px} button {padding:16px;background:#fbbf24;border:2px solid #14120e}</textarea></label><label>JavaScript<textarea id="code">let n=0; document.querySelector('#counter').onclick = e => e.target.textContent = 'Count: ' + (++n);</textarea></label><button id="run">Run preview</button> <button id="stop">Stop</button><label><input id="auto" type="checkbox">Auto-run trusted edits (300 ms)</label><pre id="status" role="status" aria-live="polite">Idle</pre></section><section id="preview" aria-label="Preview"></section></main>
+<script>
+(() => {
+ const $=s=>document.querySelector(s); let frame=null, generation=0, timer, watchdog, started=0;
+ const status=$('#status'); const limit=100000; let messages=0;
+ function child(){
+  const id=ID; let used=false;
+  const send=(kind,text)=>parent.postMessage({channel:'vibe-preview',id,kind,text:String(text).slice(0,2000)},'*');
+  addEventListener('error',e=>send('error',e.message||'Resource error'),true);
+  addEventListener('unhandledrejection',e=>send('error',e.reason?.message||String(e.reason)));
+  addEventListener('message',e=>{
+   const d=e.data;
+   if(e.source!==parent||used||!d||d.channel!=='vibe-run'||d.id!==id||![d.html,d.css,d.code].every(x=>typeof x==='string'&&x.length<=100000))return;
+   used=true;
+   const style=document.createElement('style');style.textContent=d.css;document.head.append(style);
+   const root=document.createElement('main');root.innerHTML=d.html;document.body.append(root);
+   const script=document.createElement('script');script.textContent=d.code;document.body.append(script);
+   send('executed',root.textContent);
+  });
+  send('ready','');
+ }
+ addEventListener('message',e=>{
+  const d=e.data;
+  if(!frame||e.source!==frame.contentWindow||e.origin!=='null'||!d||d.channel!=='vibe-preview'||d.id!==generation||!['ready','error','executed'].includes(d.kind)||typeof d.text!=='string'||d.text.length>2000||++messages>100)return;
+  if(d.kind==='ready')frame.contentWindow.postMessage({channel:'vibe-run',id:generation,html:$('#html').value,css:$('#css').value,code:$('#code').value},'*');
+  else {clearTimeout(watchdog);const text=d.kind+': '+d.text; status.textContent=(status.textContent+'\n'+text).slice(-8000);if(status.dataset.kind!=='error')status.dataset.kind=d.kind;status.dataset.elapsed=String(performance.now()-started);}
+ });
+ function stop(){clearTimeout(timer);clearTimeout(watchdog);generation++;frame?.remove();frame=null;status.textContent='Stopped';status.dataset.kind='stopped';}
+ function run(){
+  stop();if(['#html','#css','#code'].some(s=>$(s).value.length>limit)){status.textContent='Input exceeds 100000 characters';return;}
+  started=performance.now();messages=0; status.textContent='Running';status.dataset.kind='running';
+  frame=document.createElement('iframe');frame.title='Isolated live preview';frame.setAttribute('sandbox','allow-scripts');frame.referrerPolicy='no-referrer';
+  const bootstrap='('+child.toString().replace('const id=ID','const id='+generation)+')();';
+  frame.srcdoc='<!doctype html><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\'; style-src \'unsafe-inline\'; img-src data: blob:; connect-src \'none\'; frame-src \'none\'; form-action \'none\'; base-uri \'none\'"><body><script>'+bootstrap+'<\/script>';
+  $('#preview').replaceChildren(frame);
+  watchdog=setTimeout(()=>{status.textContent+='\nNo acknowledgement; Stop and inspect code.';},3000);
+ }
+ $('#run').onclick=run;$('#stop').onclick=stop;
+ for(const node of document.querySelectorAll('textarea'))node.addEventListener('input',()=>{clearTimeout(timer);if($('#auto').checked)timer=setTimeout(run,300)});
+ $('#auto').onchange=()=>clearTimeout(timer);
+})();
+</script></html>

@@ -1,0 +1,96 @@
+{
+  "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+  "checks": [
+    {
+      "name": "silent default",
+      "pass": true
+    },
+    {
+      "name": "invalid event",
+      "pass": true
+    },
+    {
+      "name": "volume clamp",
+      "pass": true
+    },
+    {
+      "name": "invalid volume rejected",
+      "pass": true
+    },
+    {
+      "name": "unsupported stays off",
+      "pass": true
+    },
+    {
+      "name": "success renders bounded signal",
+      "pass": true,
+      "peak": 0.03999999910593033,
+      "rms": 0.01658938429889693,
+      "tail": 0
+    },
+    {
+      "name": "failure renders bounded signal",
+      "pass": true,
+      "peak": 0.03999999910593033,
+      "rms": 0.016593547563236756,
+      "tail": 0
+    },
+    {
+      "name": "closed controller cannot enable",
+      "pass": true
+    },
+    {
+      "name": "trusted click activates",
+      "pass": true
+    },
+    {
+      "name": "build event accepted",
+      "pass": true
+    },
+    {
+      "name": "duplicate rejected",
+      "pass": true
+    },
+    {
+      "name": "burst rejected",
+      "pass": true
+    },
+    {
+      "name": "ended nodes cleaned",
+      "pass": true
+    },
+    {
+      "name": "failure accepted later",
+      "pass": true
+    },
+    {
+      "name": "mute clears and suspends",
+      "pass": true
+    },
+    {
+      "name": "muted events dropped",
+      "pass": true
+    },
+    {
+      "name": "hidden blocks enable",
+      "pass": true
+    },
+    {
+      "name": "hidden blocks cue",
+      "pass": true
+    },
+    {
+      "name": "close releases context",
+      "pass": true
+    }
+  ],
+  "observations": [
+    "Initial trusted click correctly refused while document.hidden=true; Page.bringToFront fixed test precondition without autoplay override"
+  ],
+  "limitations": [
+    "No human listening test",
+    "No real CI runner attached: build events injected via integration API",
+    "Mobile and other browsers not tested",
+    "Mute/unlock race not exercised"
+  ]
+}

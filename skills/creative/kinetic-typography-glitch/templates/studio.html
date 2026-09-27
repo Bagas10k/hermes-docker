@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="id"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kinetic Status | JSON Studio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#faf6ef;color:#1c1915;font:16px system-ui,sans-serif}main{max-width:850px;margin:auto;padding:28px 20px}h1{font-size:clamp(24px,5vw,38px);margin:0 0 12px}p{line-height:1.6}textarea{width:100%;min-height:240px;padding:16px;background:#fff;color:#1c1915;border:1px solid #777;font:16px ui-monospace,monospace;resize:vertical}button{min-height:44px;background:#1c1915;color:#fff;border:0;border-radius:6px;padding:10px 18px;font:inherit;cursor:pointer}label{display:block;margin:16px 0}input{width:20px;height:20px;vertical-align:middle}#status{padding:18px 0;min-height:64px;overflow-wrap:anywhere;border-bottom:1px solid #aaa}#status[data-kind=error]{color:#a21c23}#status[data-kind=success]{color:#13613b}:focus-visible{outline:3px solid #0067ad;outline-offset:3px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#fff;padding:16px;border:1px solid #ccc}
+</style>
+<main><h1>JSON Studio</h1><p>Validasi isi editor. Status tetap terbaca; gerakan pendek hanya aktif jika dipilih.</p><label for="source">Dokumen JSON</label><textarea id="source" spellcheck="false">{"project":"Vibe coding","ready":true}</textarea><label><input id="motion" type="checkbox"> Aktifkan gerakan status</label><button id="validate">Validasi JSON</button><div id="status">Belum divalidasi</div><pre id="output" aria-label="Hasil JSON">Hasil validasi tampil di sini.</pre></main>
+<script src="../scripts/kinetic.js"></script><script>
+window.cue = new KineticStatus(document.querySelector('#status'));
+document.querySelector('#motion').addEventListener('change',e=>cue.setEnabled(e.target.checked));
+document.querySelector('#validate').addEventListener('click',()=>{
+try {const parsed=JSON.parse(document.querySelector('#source').value);document.querySelector('#output').textContent=JSON.stringify(parsed,null,2);cue.update('success','JSON valid. Pratinjau diperbarui.');}
+catch(error){document.querySelector('#output').textContent='Perbaiki sintaks di editor; pratinjau tidak diperbarui.';cue.update('error','JSON tidak valid: '+error.message);}
+});
+window.addEventListener('pagehide',()=>cue.dispose(),{once:true});
+</script></html>

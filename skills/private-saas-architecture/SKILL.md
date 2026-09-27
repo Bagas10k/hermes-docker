@@ -61,6 +61,10 @@ Use this skill when building or extending internal dashboards, modular "command 
        const ws = new WebSocket(wsUrl);
        ```
     This enables the exact same codebase to operate identically on local standalone ports (`http://localhost:3070`) and behind public subpath reverse proxies (`https://domain.com/trading/`).
+- **CRITICAL PITFALL: Multi-Tenant Next.js Asset Route Collision (`/_next/` Collision)**:
+  - **Rule**: When hosting two or more independent Next.js applications (e.g. Supabase Studio on `:8000` and 9Router on `:20128`) behind a single Express/Node reverse proxy gateway, NEVER map `/_next` statically to only one upstream service. Multiplex `/_next` dynamically using context-aware Referer routing with an automated fallback probe, and mount at root level (`app.use(async (req, res, next) => { if (!req.path.startsWith('/_next/')) return next(); ... })`).
+  - **Mechanism**: Every compiled Next.js application serves client chunks at `/_next/static/chunks/`. If the gateway blindly forwards all `/_next` requests to service A, service B's chunks return HTTP 404. Without client scripts, React hydration fails and the page freezes permanently on the initial static server markup (e.g. infinite "Loading..."). Additionally, mounting via `app.use('/_next', proxy)` strips the prefix from `req.url` in Express, causing requests to reach upstreams as `/static/chunks/...` unless mounted at root.
+  - **Action**: Check `req.headers['referer']` to match the initiating subpath/app (`/project` or `/supabase` -> Supabase Studio; `/login` or `/dashboard` -> 9Router). For ambiguous or direct requests, perform a fast HEAD probe to upstream A; if 200 OK proxy to A, otherwise proxy to upstream B. Ensure upstream Basic Auth headers are injected for protected sub-resources.
 - **CRITICAL PITFALL: The Multi-Proxy WebSocket Upgrade Dropping Bug**:
   - **Rule**: When hosting multiple sub-services behind a central Node.js reverse proxy gateway (e.g. `server.js` acting as reverse proxy for `/trading`, `/telemetry`, and `/hermes`), NEVER attach a single proxy instance directly to `server.on('upgrade', proxy.upgrade)`.
   - **Mechanism**: Attaching `server.on('upgrade', hermesProxy.upgrade)` routes EVERY incoming WebSocket handshake exclusively to that single proxy, dropping or rejecting WebSocket handshakes for all other proxied subpaths (`/trading`, `/telemetry`). The frontend REST APIs will return HTTP 200 OK, giving a false sense of health, but live charts, tickers, and WS streams in the browser will silently fail or freeze without errors on the server.
@@ -112,6 +116,14 @@ Use this skill when building or extending internal dashboards, modular "command 
         pathRewrite: (path) => '/fonts' + path
     }));
     ```
+- **CRITICAL PITFALL: Express v5 / Path-to-RegExp Wildcard Proxy Crash (`Missing parameter name at index ...`)**:
+  - **Rule**: In modern Express and `http-proxy-middleware`, NEVER write unparameterized wildcard route arrays like `app.use(['/kanvas', '/kanvas/*'], proxy)`.
+  - **Mechanism**: Modern `path-to-regexp` treats bare `/*` as an invalid anonymous parameter without a capture name, throwing a fatal unhandled startup crash: `PathError: Missing parameter name at index ...`.
+  - **Action**: Simply mount to the root prefix: `app.use('/kanvas', proxy)`. Express middleware mounting automatically catches `/kanvas` and all nested subpaths (`/kanvas/api`, `/kanvas/index.html`) without asterisks.
+- **CRITICAL PITFALL: Hermes Cron Model Pinning Upstream Router Key Injection**:
+  - **Rule**: When overriding or pinning an AI model on a Hermes cron job via CLI (`hermes cron edit <job_id> --model <model>`), ALWAYS explicitly include the provider key (`--provider <custom_provider_key>`, e.g., `--provider custom:lk`).
+  - **Mechanism**: If `--provider` is omitted, Hermes defaults to the unauthenticated bare `custom` provider which injects `"no-key-required"` as the API key. Upstream routers (e.g. 9Router on port 20128) reject this with HTTP 401 (`Invalid API key`), silently activating Hermes's `fallback_providers` and executing a different model than the one selected.
+  - **Action**: Always execute `hermes cron edit <id> --model "<model>" --provider "custom:lk"`. When clearing back to system default, pass empty strings to both: `--model "" --provider ""`.
 - **CRITICAL PITFALL: Multi-Service Cloudflare Ingress Port Identification**:
   - **Rule**: When exposing a new sub-service route (e.g., `/organisasi`), NEVER assume which internal port the public domain/Cloudflare tunnel routes to. Test public ingress directly via `curl -s -i https://domain/subpath` before adding reverse proxy configurations to sibling apps.
   - **Mechanism**: On multi-service VPS environments where multiple node/python servers run concurrently (e.g. port 3000 `jajandigital` vs port 3050 `penelitian-ai`), the Cloudflare tunnel maps the root hostname (`jajandigital.web.id`) to one specific upstream port (3050). Adding reverse proxy rules only on the sibling service (3000) leaves public requests intercepted by the actual ingress server's security boundaries (e.g., `privacy-boundary.js` returning HTTP 401).
@@ -163,6 +175,14 @@ Use this skill when building or extending internal dashboards, modular "command 
 Interfaces must be functional, data-dense, and zero-slop:
 - **Theme**: "Linear/Obsidian" style. Warm Paper (`#FAF6EF` / `#F7F5F0`) and Warm Obsidian black (`#14120E` & `#221E19`) with precise accent colors (`#D97706` amber, `#10B981` emerald).
 - **Dasbor vs Halaman Artikel (Bento Workspace Invariant)**: Jangan pernah mereduksi permintaan dasbor menjadi landing page dokumen/artikel teks panjang statis. Pengguna menuntut arsitektur **Dasbor/Workspace interaktif nyata** (Top App-Bar, Omnibar `⌘K`, kartu telemetri operasional 2x2, serta Bento Grid modular berdensitas tinggi). Format dokumen statis dinilai 1/10.
+- **CRITICAL PITFALL: The True App-Shell vs Double Navigation Trap**:
+  - **Rule**: Never construct a dashboard layout with double navigation (e.g., a top horizontal marketing/landing navbar AND a left app sidebar). A genuine application dashboard uses a **Single Unified Persistent Left Sidebar (100vh)** and a compact **Contextual Action Bar** (~50–56px) for breadcrumbs and global actions. (See `references/app-shell-hierarchy.md` for layout blueprints, vertical allocation formulas, and Anchor Metric rules).
+  - **Mechanism**: Placing a public landing navbar above an app sidebar wastes critical vertical viewport space (~60–80px), forces an awkward internal micro-scroll, and dilutes the visual hierarchy between application tools and public marketing.
+  - **Action**: Lock the desktop viewport to 100vh (`height: 100vh; overflow: hidden;`). Anchor the left sidebar from top to bottom edge, and constrain top KPI metric tiles to <=25% viewport height (~125–140px) so the operational data workspace (ledger/tables) can render 7–10 full rows without micro-scroll clipping.
+- **CRITICAL PITFALL: Holistic Revision Ripple-Effect (Anti-Narrow Patching)**:
+  - **Rule**: When executing a structural layout revision (e.g. adding a 240px sidebar, altering grid columns), NEVER patch only the requested container in isolation. Re-calculate the ripple effect on child container aspect ratios, metric-to-table vertical space allocation, and typography scale across the remaining workspace.
+  - **Mechanism**: Narrowing workspace width from 1440px to 1200px squashes child cards and expands their vertical height. If top metric tiles are not redesigned into compact KPI boxes, they consume >50% of the screen height, choking operational data tables beneath them to only 3-4 visible rows.
+  - **Action**: Re-proportion top KPI cards to compact dimensions, establish an unambiguous Anchor Metric (`24-26px tabular-nums`) as the visual North Star, and allocate >=60% of the vertical canvas to high-utility operational data.
 - **Akses Langsung Layanan Tersemat (9Router / Console)**: Ketika menyematkan layanan internal (seperti 9Router atau console API) ke menu dasbor publik:
   - Sediakan dua lapis akses: modal telemetri ringan tanpa login untuk publik/inspeksi cepat (`/api/9router/models`), dan tombol aksi langsung menuju Web Console UI (`/login` -> `/dashboard`).
   - Jangan membiarkan pengguna mengira harus membuka terminal/SSH untuk mengakses panel yang sudah berjalan lokal di server; jelaskan bahwa rutenya sudah diproxy balik via port web publik.
@@ -189,6 +209,13 @@ Interfaces must be functional, data-dense, and zero-slop:
   3. **Layanan Terpisah (Standalone)**: Projects executed on separate hosts/instances; do not run duplicate processes or proxy to non-existent local ports.
 - **Micro-Status Indicators**: Use tiny 6px status dots paired with clean mono text (`Live`, `Internal`, `Uji Coba`, `Mandiri`), never cluttered multi-badge ribbons.
 - **Responsiveness**: Use an Adaptive Liquid Interface. Desktop gets a Dual-Sidebar; mobile gets a bottom tab-bar (like native apps).
+- **Dual-Editor Focus (Split-Screen) & Mobile Adaptive Single-View Switcher**:
+  - **Rule**: In dense technical workspaces (e.g., Markdown Editor + AI Co-Pilot / PRD Architect), NEVER retain a multi-column flex layout (`flex-direction: row`) on mobile viewports (`<= 768px`).
+  - **Mechanism**: Dividing narrow phone screens (360px–412px) across 2 or 3 columns crushes text inputs to ~180px, breaks word wrapping, and pushes sidebars/AI panels completely off-screen.
+  - **Action**: Implement an adaptive Liquid interface:
+    1. *Desktop*: 3-column split view with draggable resizers and a dedicated **[ZEN FOCUS]** mode toggle (hiding sidebars and centering the editor at max-width ~900px for distraction-free writing).
+    2. *Mobile (`<= 768px`)*: Enforce a clean segmented navigation tab bar (`[CATATAN]`, `[EDITOR]`, `[SCRATCHPAD]`, `[AI ARCHITECT]`) where each view renders at 100% full viewport width with zero horizontal scroll.
+    3. *CSS Flexbox Input Shrink Trap*: Any text `<input>` placed inside a flex row (`display: flex`) alongside buttons MUST specify `min-width: 0; width: 100%;` alongside `flex: 1`. Without `min-width: 0`, the CSS default `min-width: auto` prevents the input from shrinking below its text content, truncating or displacing adjacent action buttons (e.g. `[HAPUS]`).
 - **Mobile Responsive Trading Terminal Architecture**:
   - On screens `<= 900px` (tablets and phones), replace rigid 3-column desktop grids with a native-feeling 5-tab bottom navigation bar (`[CHART]`, `[WATCHLIST]`, `[AI & ORDER]`, `[POSISI]`, `[JURNAL]`).
   - Mobile touch drag on HTML5 Canvas charts: intercept `touchstart`, `touchmove`, `touchend`, `touchcancel` with `e.preventDefault()` to move the crosshair smoothly without triggering browser page scrolling or unwanted zooming.
@@ -206,6 +233,20 @@ Interfaces must be functional, data-dense, and zero-slop:
   - **DataGrids** with pure SVG badges (no neon glows).
   - **Smooth Telemetry Charts** (e.g., Chart.js with dark mode compliance).
 - **Loading States**: Prevent the "broken button illusion" with real-time skeletal loaders and streaming progress text (Server-Sent Events or Socket.IO).
+- **High-Density Terminal Cockpit Architecture (1-Screen Full Viewport Rule)**:
+  - **Rule**: When building an administrative observability radar, AI agent cockpit, or developer monitoring console, DO NOT use airy SaaS marketing layouts with giant banner headers, decorative slogans, or tall cards that force page scrolling.
+  - **Form Factor**: Construct a **1-Screen Full Viewport (100vh) Terminal TUI (Text User Interface)**:
+    - *Single Viewport Invariant*: 100% viewport height (`height: 100vh; overflow: hidden;`), zero body scrollbar on desktop displays.
+    - *Centerpiece Hierarchy (The Process Workflow / DAG is King)*: The active process workflow, DAG execution nodes, and subagent concurrency branch MUST be the absolute central, largest element on the screen (taking ~60-65% width/center).
+    - *Ancillary Compaction*: Information like Scheduled Cron Daemons, Supervisor Sentinels, Tool Telemetry, and Live Event Stream must be compactly docked into side rails or lower docking tiers, NEVER displacing or shrinking the core workflow process graph.
+    - *Typography & Aesthetics*: Pure monospace (`JetBrains Mono`), dense 10-11px sizing, hairline 1px borders (`#1B2438`), dark slate palette (`#03060E` canvas, `#070B16` surface), and 0% emoji.
+- **Interactive Realtime Cabinet Chat & Command Drawer Pattern (Dual-Surface Realtime Architecture)**:
+  - **Rule**: When adding an interactive operator/owner chat channel into high-density TUI cockpits (such as RADAR):
+    - *Dual Surface UX*: Provide BOTH an in-place docked tab inside the Console/Workspace panel (e.g. Panel [06]) for persistent glanceability alongside stdout streams, AND a dedicated full-screen modal/drawer (e.g. Hotkey `F6`) with auto-focused input for deep conversational interaction without disrupting background telemetry monitoring.
+    - *Realtime Duplex with Fallback & State Persistence*: Decouple message submission into Socket.IO duplex event emission (`cabinet_chat_send` -> `cabinet_chat_new_message`) with automatic fallback to REST POST (`/api/radar/chat/messages`) if socket disconnects. Back messages with an append-only SQLite store (`cabinet_chat_messages`) so chat history survives page refreshes and server reboots.
+    - *Intelligent Auto-Responding Agent Personas (Kabinet Musyawarah)*: Programmatically route owner messages to the appropriate autonomous agent persona (General Manager for broad coordination, Si Pengawas for QC/data validation, Si Eksekutor for VPS/RAM/infrastructure, Si Pintar for research/architecture) with a slight asynchronous delay (500–750ms) to simulate real deliberative reflection rather than robotic echo.
+    - *Zero Emoji Invariant*: In terminal/cockpit aesthetic, preserve the Swiss Editorial monospace style: format each agent bubble with distinct left border accent colors (`--bubble-color`), monospace role badges (`[OWNER]`, `[GM]`, `[SI PENGAWAS]`), and pure text without graphic emojis.
+    - *Multi-Input Synchronization*: When rendering both a docked input bar and a modal input bar, ensure event handlers target the active element cleanly without selector collision or double submission.
 - **Multi-Entity Tree / Catalog Propagation**: When providing clone/duplication for nested tree structures (e.g., Menu Trees, interactive flow nodes, or category catalogs) across groups or tenants:
   - Add a dedicated action button in the visual editor toolbar right beside group selection and save controls.
   - Open a modal showing source statistics (source group ID, total node count) and a scrollable target checklist supporting 1-to-many propagation with "Pilih Semua / Batal Semua".

@@ -1,0 +1,16 @@
+{
+  "root": "root",
+  "budget_unit": "tokens",
+  "duration_unit": "seconds",
+  "nodes": [
+    {"id": "root", "children": ["a", "b", "c"], "cost": 1, "duration": 0, "acceptance": null},
+    {"id": "a", "children": [], "cost": 3, "duration": 2, "acceptance": {"metric": "passed_checks", "op": ">=", "threshold": 1, "unit": "count", "evidence": "report-a"}},
+    {"id": "b", "children": [], "cost": 3, "duration": 5, "acceptance": {"metric": "passed_checks", "op": ">=", "threshold": 1, "unit": "count", "evidence": "report-b"}},
+    {"id": "c", "children": [], "cost": 3, "duration": 3, "acceptance": {"metric": "passed_checks", "op": ">=", "threshold": 1, "unit": "count", "evidence": "report-c"}}
+  ],
+  "dependencies": [
+    {"id": "a", "requires": []},
+    {"id": "b", "requires": []},
+    {"id": "c", "requires": ["a", "b"]}
+  ]
+}

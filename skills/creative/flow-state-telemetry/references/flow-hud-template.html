@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Flow State Telemetry HUD</title>
+  <style>
+    :root {
+      --bg: #0B0A10;
+      --card-bg: rgba(22, 20, 31, 0.75);
+      --border: rgba(255, 255, 255, 0.08);
+      --text-head: #FFFFFF;
+      --text-sub: #94A3B8;
+      --accent-idle: #64748B;
+      --accent-cruise: #0EA5E9;
+      --accent-flow: #10B981;
+      --accent-hyper: #F59E0B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-head);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .hud-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 32px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .hud-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .metric {
+      background: rgba(255,255,255,0.03);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .metric-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .flow-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .flow-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-cruise);
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+    .footer-note {
+      margin-top: 14px;
+      font-size: 11px;
+      color: var(--text-sub);
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="hud-card">
+    <div class="hud-header">
+      <span style="font-weight: 600; font-size: 14px;">FLOW KOGNITIF HUD</span>
+      <span id="tier-badge" class="badge">IDLE</span>
+    </div>
+    <div class="grid">
+      <div class="metric">
+        <div class="metric-label">Kecepatan Ketik</div>
+        <div id="wpm-val" class="metric-val">0.0 <span style="font-size: 12px; color: var(--text-sub)">WPM</span></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Fokus Streak</div>
+        <div id="streak-val" class="metric-val">00:00</div>
+      </div>
+    </div>
+    <div class="flow-bar-bg">
+      <div id="flow-bar" class="flow-bar-fill"></div>
+    </div>
+    <div class="footer-note">AUTO-SLEEP: AKTIF (45S)</div>
+  </div>
+
+  <script>
+    let keystrokes = [];
+    let actions = [];
+    let streakStart = null;
+    let sleepMode = true;
+
+    window.addEventListener('keydown', () => {
+      const now = performance.now();
+      keystrokes.push(now);
+      if (!streakStart) streakStart = now;
+      sleepMode = false;
+    });
+
+    function update() {
+      const now = performance.now();
+      keystrokes = keystrokes.filter(t => now - t <= 60000);
+      const latest = keystrokes.length ? Math.max(...keystrokes) : 0;
+      const idleSec = latest > 0 ? (now - latest) / 1000 : 999;
+
+      const badge = document.getElementById('tier-badge');
+      const wpmEl = document.getElementById('wpm-val');
+      const streakEl = document.getElementById('streak-val');
+      const bar = document.getElementById('flow-bar');
+
+      if (idleSec > 45 || latest === 0) {
+        sleepMode = true;
+        streakStart = null;
+        badge.innerText = 'IDLE';
+        badge.style.color = 'var(--accent-idle)';
+        wpmEl.innerHTML = '0.0 <span style="font-size: 12px; color: var(--text-sub)">WPM</span>';
+        streakEl.innerText = '00:00';
+        bar.style.width = '0%';
+        bar.style.background = 'var(--accent-idle)';
+      } else {
+        const wpm = keystrokes.length / 5;
+        wpmEl.innerHTML = wpm.toFixed(1) + ' <span style="font-size: 12px; color: var(--text-sub)">WPM</span>';
+        
+        const streakSec = Math.floor((now - streakStart) / 1000);
+        const m = String(Math.floor(streakSec / 60)).padStart(2, '0');
+        const s = String(streakSec % 60).padStart(2, '0');
+        streakEl.innerText = `${m}:${s}`;
+
+        let tier = 'IDLE', color = 'var(--accent-idle)', pct = 10;
+        if (wpm >= 50) { tier = 'HYPERFLOW'; color = 'var(--accent-hyper)'; pct = 100; }
+        else if (wpm >= 25) { tier = 'FLOW'; color = 'var(--accent-flow)'; pct = 70; }
+        else if (wpm >= 8) { tier = 'CRUISE'; color = 'var(--accent-cruise)'; pct = 40; }
+
+        badge.innerText = tier;
+        badge.style.color = color;
+        bar.style.width = pct + '%';
+        bar.style.background = color;
+      }
+
+      requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  </script>
+</body>
+</html>

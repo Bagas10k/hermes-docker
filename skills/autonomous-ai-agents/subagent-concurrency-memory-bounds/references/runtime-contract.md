@@ -1,0 +1,30 @@
+# Runtime boundary and API contract
+
+## Implemented API
+
+`Ledger(budget, overhead, safety, concurrency, backlog)` takes keyword-only strict Python ints, rejecting bools/floats. Budget is 1..9,000,000,000 decimal bytes; overhead/safety nonnegative and sum less than budget; concurrency 1..1024; backlog 1..10000. Configuration is trusted and must not be mutated directly after construction. Treat exposed capacity/target/backlog as read-only; use set_target for target changes. This is not an adversarial Python-object sandbox.
+
+- submit(worker, reservation): literal ASCII `[A-Za-z0-9_-]{1,64}` ID, strict positive integer bytes <= capacity; duplicate queued/active ID, full queue or closed intake raises ValueError, leaving state unchanged. No blocking, spinning or caller task creation.
+- dispatch(): returns immutable Ticket objects for admitted FIFO items. Reservation is held immediately, before a runtime can launch. Opaque ticket identity prevents reconstructed/stale/foreign tickets from releasing another admission. Store the original object, not a serialized reconstruction.
+- set_target(n): integer 0..initial configured concurrency. Zero pauses. Shrink may leave more active than target while draining; it cannot exceed original configured maximum. Does not launch or kill anything.
+- mark_stopping(ticket): marks intent only, retaining full reservation and slot. Repeated calls are harmless for a live ticket.
+- release(ticket, reaped=bool, empty=bool): requires both exactly True. False evidence returns False and holds charge; nonboolean evidence rejects. The helper trusts the adapter's assertions; it does not inspect any PID or cgroup. Successful release deletes ticket and stopping marker; replay rejects.
+- shutdown(): closes intake irreversibly, discards queued IDs, marks every active ticket stopping and returns active tickets for cleanup. Repetition returns remaining active tickets. It never releases them automatically.
+- snapshot(): copies reserved-byte sum, active count and queue count under the same lock.
+
+One RLock serializes transitions across threads in one process. There are no awaits or callbacks while holding the lock. No persistence or interprocess coordination exists. Workers must not create their own independent ledgers for the same shared budget. All descendant work consumes the worker envelope or uses a separately accounted central admission.
+
+## Required future cgroup adapter — NOT implemented
+
+1. Resolve unified `/proc/self/cgroup` path against the actual cgroup2 mount; inspect mountinfo, controllers, subtree_control, ownership, effective ancestors and finite limits. A writable directory is advisory, not proof of valid delegation. Do not enable controllers or change ancestors without separate deployment authorization.
+2. Use a delegated domain hierarchy with controller process in its own leaf, worker leaves under the resource pool, and no internal-process-rule violation. Bound the aggregate pool as well as each worker. Set/read back memory.max<=reservation, memory.high below max as pressure trigger, memory.swap.max according to explicit policy (zero if swap prohibited), memory.oom.group=1 where appropriate, and pids.max to bound fork growth. Parent O/H and kernel-accounted overhead need their own envelope.
+3. Charge ticket BEFORE launch. Create/configure the worker cgroup before untrusted code starts. Prefer a supported race-free launch primitive such as clone3 CLONE_INTO_CGROUP or a service manager's containment contract, independently verified for target kernel/runtime. Python asyncio alone does not provide this primitive. Launch-then-migrate risks uncontained allocation and must not be presented as hard containment. Block worker ability to migrate itself or descendants out of delegated boundaries.
+4. A spawn exception is not proof that no child exists: reconcile launcher identity and cgroup. Only confirmed never-started+empty may use the same release path with verified-no-process evidence. Otherwise quarantine and retain the ticket. PID reuse requires stable handles/pidfds or equivalent lifecycle ownership, not kill(pid,0).
+5. Shutdown under spike: close producer intake, bound/reject pending input, keep cleanup supervisor alive, send TERM to the owned workload, await monotonic grace deadline, then authorized cgroup.kill as hard fallback. Reap direct children and verify cgroup.events populated=0 for descendants before release. TaskGroup cancellation or process-group TERM alone does not prove all descendants exited. A missing cgroup/permission failure is unknown, not empty.
+6. Drain/discard output with bounded buffers. communicate() over unlimited output can exhaust controller memory. An asyncio task cancellation does not terminate its subprocess. Keep strong references to cleanup tasks; repeated cancellation must not interrupt final reconciliation. Never free reservation just because grace deadline expired.
+7. populated=0 does not imply memory.current=0: cached charges may remain. Aggregate parent memory.max and conservatively reserved headroom remain necessary; remove empty worker cgroups where authorized and account residual/ancestor usage. Kernel memory.max may transiently overshoot; no absolute instantaneous <=9GB physical-RAM guarantee is claimed.
+8. Supervisor restart: freeze admission logically, inventory existing cgroups, rebuild conservative reservations and reconcile unknown workers before accepting new work. This in-memory helper cannot recover after crash. Do not deploy until persistence/ownership/fencing and runtime integration are independently tested.
+
+## Model versus hard enforcement
+
+Model proof obligations: sum(reservations)<=capacity; active<=configured maximum; backlog<=bound; no premature release; validated changes atomic. Test evidence concerns selected traces, not formal proof over every execution. Kernel proof obligations require actual deployment tests and authorization; this research did not write controls, spawn memory-stress workers, deliver signals or induce OOM.

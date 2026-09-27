@@ -1,0 +1,24 @@
+{
+  "agent_id": "worker_db_inspector",
+  "task_id": "audit_sqlite_wal",
+  "candidate_facts": [
+    {
+      "subject": "sqlite_database",
+      "predicate": "journal_mode",
+      "value": "wal",
+      "target_scope": "storage",
+      "relation_mode": "stable",
+      "confidence": 0.98,
+      "observation": "Checked via PRAGMA journal_mode returned wal"
+    },
+    {
+      "subject": "sqlite_database",
+      "predicate": "synchronous",
+      "value": "NORMAL",
+      "target_scope": "storage",
+      "relation_mode": "stable",
+      "confidence": 0.95,
+      "observation": "Checked via PRAGMA synchronous returned 1 (NORMAL)"
+    }
+  ]
+}

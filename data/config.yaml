@@ -1,0 +1,394 @@
+model:
+  api_mode: chat_completions
+  base_url: http://localhost:20128/v1
+  default: cx/gpt-6-astra
+  provider: custom:lk
+fallback_providers:
+  - base_url: http://localhost:20128/v1
+    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+    model: ag/gemini-3.8-flash-low
+    provider: custom
+  - base_url: http://localhost:20128/v1
+    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+    model: ag/gemini-3.7-flash-medium
+    provider: custom
+  - base_url: http://localhost:20128/v1
+    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+    model: cx/gpt-5.5
+    provider: custom
+database:
+  journal_mode: wal
+runtime:
+  nofile_soft_limit: 4096
+agent:
+  max_turns: 150
+  service_tier: ''
+  fast_auto_seconds: 60
+  personalities: {}
+  reasoning_effort: medium
+  verbose: false
+terminal:
+  backend: local
+  cwd: .
+  timeout: 180
+  home_mode: auto
+  container_cpu: 1
+  container_memory: 5120
+  container_disk: 51200
+  container_persistent: true
+  docker_mount_cwd_to_workspace: false
+  lifetime_seconds: 300
+browser:
+  backend: browser-use
+  inactivity_timeout: 120
+  extension_control:
+    enabled: false
+tool_loop_guardrails:
+  warnings_enabled: true
+  hard_stop_enabled: false
+  non_interactive_hard_stop_enabled: true
+  warn_after:
+    exact_failure: 2
+    same_tool_failure: 3
+    idempotent_no_progress: 2
+  hard_stop_after:
+    exact_failure: 5
+    same_tool_failure: 8
+    idempotent_no_progress: 5
+compression:
+  enabled: true
+  checkpoint_required: false
+  progress_notices: false
+  threshold: 0.5
+  target_ratio: 0.2
+  protect_last_n: 20
+  min_tail_user_messages: 1
+  max_attempts: 3
+  proactive_prune_tokens: 0
+  proactive_prune_min_result_chars: 8000
+  proactive_prune_min_reclaim_tokens: 4096
+  hygiene_max_turn_hold_seconds: 10
+  protect_first_n: 3
+  codex_gpt55_autoraise: true
+  codex_app_server_auto: native
+  codex_responses_native: false
+  idle_compact_after_seconds: 0
+prompt_caching:
+  cache_ttl: 5m
+display:
+  compact: false
+  busy_input_mode: interrupt
+  bell_on_complete: false
+  bell_on_prompt: false
+  show_reasoning: false
+  background_process_notifications: concise
+  streaming: true
+  skin: default
+  interim_assistant_messages: true
+  platforms:
+    telegram:
+      busy_ack_detail: true
+      cleanup_progress: true
+      interim_assistant_messages: true
+      long_running_notifications: true
+      tool_preview_length: 50
+      tool_progress: all
+      tool_progress_grouping: accumulate
+  runtime_footer:
+    enabled: true
+    fields:
+      - model
+      - context_pct
+      - latency
+  busy_ack_detail: true
+  cleanup_progress: true
+  long_running_notifications: true
+  tool_progress: all
+dashboard:
+  theme: default
+  basic_auth:
+    username: bagas
+    password_hash: scrypt$16384$8$1$sfvpwRwT5dcxcYGXTVJzCA==$q4VIthza1qeSsHzMq/uU+ORo1AbRcj9HupDEY3SjCOo=
+  public_url: https://www.jajandigital.web.id/hermes
+  font: theme
+tts:
+  edge:
+    voice: id-ID-GadisNeural
+    speed: 1.2
+  speed: 1.2
+stt:
+  enabled: true
+  language: ''
+  local:
+    model: base
+  openai:
+    model: whisper-1
+    language: ''
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  memory_char_limit: 2200
+  user_char_limit: 1375
+  nudge_interval: 10
+delegation:
+  max_iterations: 250
+  independent_completions: true
+  subagent_auto_approve: true
+skills:
+  creation_nudge_interval: 15
+timezone: Asia/Jakarta
+approvals:
+  mode: 'off'
+  destructive_slash_confirm: false
+plugins:
+  disabled: []
+  enabled:
+    - rtk-rewrite
+    - skill-retriever
+  entries:
+    rtk-rewrite:
+      allow_tool_override: false
+    skill-retriever:
+      allow_tool_override: false
+hooks:
+  outbound:
+    - events:
+        - pre_tool_call
+        - post_tool_call
+        - pre_llm_call
+        - on_session_start
+        - on_session_finalize
+        - post_llm_call
+      name: aoms_native_stream
+      timeout: 3
+      url: http://127.0.0.1:3090/api/aoms/native-event
+kanban:
+  review_dispatch: true
+code_execution:
+  max_tool_calls: 50
+  timeout: 300
+gateway:
+  signal_interrupt_grace_timeout: 1
+  delivery_ledger: true
+  platform_connect_timeout: 30
+  loop_watchdog: true
+  loop_watchdog_probe_interval_s: 30.0
+  loop_watchdog_probe_timeout_s: 10.0
+  loop_watchdog_max_strikes: 3
+  startup_watchdog: true
+  startup_watchdog_timeout_seconds: 300
+  write_sessions_json: true
+  scale_to_zero:
+    idle_timeout_minutes: 2
+  restart_loop_guard:
+    max_restarts: 3
+    window_seconds: 60
+    max_gap_seconds: 300
+  respawn_storm:
+    max_starts: 5
+    window_seconds: 120
+  message_timestamps:
+    enabled: false
+  max_inbound_media_bytes: 134217728
+  trust_env: true
+  strict: false
+  media_delivery_allow_dirs: []
+  trust_recent_files: true
+  trust_recent_files_seconds: 600
+  api_server:
+    max_concurrent_runs: 10
+streaming:
+  enabled: true
+onboarding:
+  seen:
+    busy_input_prompt: true
+    tool_progress_prompt: true
+telemetry:
+  shared_metrics:
+    enabled: false
+    send: false
+updates:
+  check: true
+  pre_update_backup: false
+  backup_keep: 5
+  non_interactive_local_changes: stash
+_config_version: 44
+custom_providers:
+  - base_url: http://localhost:20128/v1
+    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+    models:
+      bk: {}
+      cklow: {}
+      ag/gemini-3.8-flash-high: {}
+      ag/gemini-3.8-flash-medium: {}
+      ag/gemini-3.8-flash-low: {}
+      ag/gemini-3.8-flash: {}
+      ag/gemini-3.7-flash-high: {}
+      ag/gemini-3.7-flash-medium: {}
+      ag/gemini-3.7-flash-low: {}
+      ag/gemini-3.6-flash-high: {}
+      ag/gemini-3.6-flash-medium: {}
+      ag/gemini-3.6-flash-low: {}
+      ag/gemini-3.5-flash-high: {}
+      ag/gemini-3-flash-agent: {}
+      ag/gemini-3.5-flash-low: {}
+      ag/gemini-3.5-flash-extra-low: {}
+      ag/gemini-pro-agent: {}
+      ag/gemini-3.1-pro-low: {}
+      ag/claude-sonnet-4-6: {}
+      ag/claude-opus-4-6-thinking: {}
+      ag/gpt-oss-120b-medium: {}
+      ag/gemini-3-flash: {}
+      cx/gpt-6-astra: {}
+      cx/gpt-5.6-sol: {}
+      cx/gpt-5.6-sol-review: {}
+      cx/gpt-5.6-terra: {}
+      cx/gpt-5.6-terra-review: {}
+      cx/gpt-5.6-luna: {}
+      cx/gpt-5.6-luna-review: {}
+      cx/gpt-5.5: {}
+      cx/gpt-5.5-review: {}
+      cx/gpt-5.4: {}
+      cx/gpt-5.4-review: {}
+      cx/gpt-5.4-mini: {}
+      cx/gpt-5.4-mini-review: {}
+      cx/gpt-5.3-codex-spark: {}
+      cx/gpt-5.3-codex-spark-review: {}
+      cx/codex-auto-review: {}
+    models_discovered: true
+    name: lk
+group_sessions_per_user: true
+known_builtin_toolsets:
+  cli:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - context_engine
+    - cronjob
+    - delegation
+    - discord
+    - discord_admin
+    - file
+    - homeassistant
+    - image_gen
+    - kanban
+    - memory
+    - session_search
+    - skills
+    - spotify
+    - stt
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao
+known_plugin_toolsets:
+  cli:
+    - a2a
+    - spotify
+mcp_servers:
+  context7:
+    enabled: true
+    url: https://mcp.context7.com/mcp
+  huggingface:
+    enabled: true
+    url: https://huggingface.co/mcp
+  rust-docs:
+    args:
+      - serve
+    command: /home/ubuntu/.cargo/bin/rust-docs-mcp
+    enabled: true
+  ui-layouts:
+    args:
+      - -y
+      - '@ui-layouts/mcp'
+    command: npx
+    enabled: true
+  uiux-reference:
+    args:
+      - /home/ubuntu/mcp-uiux-reference/server.py
+    command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
+    enabled: true
+platform_toolsets:
+  cli:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - cronjob
+    - delegation
+    - file
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - vision
+    - web
+  discord:
+    - hermes-discord
+  google_chat:
+    - hermes-google_chat
+  homeassistant:
+    - hermes-homeassistant
+  qqbot:
+    - hermes-qqbot
+  signal:
+    - hermes-signal
+  slack:
+    - hermes-slack
+  teams:
+    - hermes-teams
+  telegram:
+    - hermes-telegram
+  whatsapp:
+    - hermes-whatsapp
+  yuanbao:
+    - hermes-yuanbao
+
+# ── Security ──────────────────────────────────────────────────────────
+# Secret redaction is ON by default — strings that look like API keys,
+# tokens, and passwords are masked in tool output, logs, and chat
+# responses before the model or user ever sees them. Set redact_secrets
+# to false to disable (e.g. when developing the redactor itself).
+# tirith pre-exec scanning is enabled by default when the tirith binary
+# is available. Configure via security.tirith_* keys or env vars
+# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
+#
+# security:
+#   redact_secrets: true
+#   tirith_enabled: true
+#   tirith_path: "tirith"
+#   tirith_timeout: 5
+#   tirith_fail_open: true
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4

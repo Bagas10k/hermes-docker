@@ -16,18 +16,23 @@ Skill ini mengkodifikasi sistem operasi kognitif dari vault Obsidian `C:\Users\b
 
 ## 1. Vault Anchor & Navigasi Cepat
 Vault pengetahuan utama berlokasi di:
-`C:\Users\bagas\otak koding`
+`/home/ubuntu/otak-koding` (di server Linux VPS) dan `C:\Users\bagas\otak koding` (di workstation lokal).
 
 Struktur berkas acuan:
 - `SYSTEM/KNOWLEDGE_ENGINE.md` : Protokol evaluasi empiris & status bukti
 - `SYSTEM/AGOTIMA_OPERASIONAL_HERMES.md` : 8 Prinsip Atomik Memori & Workflow UI/UX Reference
 - `KNOWLEDGE/PELAJARAN-UI-UX-NEOBRUTALISME-DAN-AGOTIMA.md` : Pelajaran Teruji Sasis Solid, Zero-Emoji, & Neo-Brutalism
 - `KNOWLEDGE/INDEX.md` : Indeks seluruh pelajaran teruji (TESTED)
+- `references/anti-slop-endorsement-and-catalog-doctrine.md` : Doktrin Anti-Slop Endorsements (Anti-Rainbow Pills), Kanvas Asli Edge-to-Edge, & Integrasi Katalog Portofolio
+- `KNOWLEDGE/REALTIME-COCKPIT-OBSERVABILITY.md` : Standar Terminal TUI 1-Layar, DAG Centerpiece, & Transparansi Sub-100ms
+- `references/high-density-dev-hud-and-pipeline-integrity.md` : Standar HUD Pengembang Ultra-Efisien, Flat 2D Zero-Blur, & Integritas Loop Kognitif Multi-Agen
+- `KNOWLEDGE/3D-CANVAS-BACKGROUND-SCROLL-ISOLATION.md` : Aturan mutlak isolasi gesture 3D canvas latar belakang (zero leak)
 - `KNOWLEDGE/MINDSET-KONTEN-JELAS-RELEVAN-SECUKUPNYA.md` : Aturan konten tajam, poin-poin, anti-fluff
 - `KNOWLEDGE/MINDSET-PERANCANGAN-UI-UX-ENTERPRISE.md` : Standar UI/UX enterprise
 - `KNOWLEDGE/UI-UX/ELEMEN-UI-UX.md` : Prinsip fungsi sebelum dekorasi
 - `KNOWLEDGE/BACKEND/LOGIKA-BACKEND-ENGINEER.md` : 10 pedoman backend berbasis kontrak
 - `KNOWLEDGE/DEBUGGING/PENELUSURAN-SEBAB-MUNDUR-DAN-BERTINGKAT.md` : Pelacakan akar masalah mundur
+- `references/neural-graph-dan-spatial-bg.md` : Arsitektur 3D Neural Knowledge Graph, kanvas latar belakang ambient, scroll angle morphing, dan SSE real-time sync
 
 ---
 
@@ -75,6 +80,7 @@ Setiap tugas teknis wajib mengikuti alur:
   11. *Katalog 6 Arketipe Desain Kreatif Anti-Monoton (Anti-Desain Itu-Itu Terus)*: Pengguna melarang desain web generik yang itu-itu terus. Wajib memanfaatkan 6 arketipe desain kreatif via MCP `uiux-reference` (`uiux_creative_archetypes` & `uiux_get_component_recipe`): (1) Isometric 3D Wireframe (kubus 3D kawat, monokrom minimalis), (2) Playful Storytelling Vector (kurva organik/blob, narasi ramah, palet pastel cerah), (3) Swiss Botanical ASCII (kisi arsitektural Swiss, seni teks botani ASCII, tipografi serba huruf kecil), (4) Neo-Brutalist Glitch (tekstur kertas, CMYK slice accents, transparansi alpha checkerboard), (5) Cyber HUD Cockpit (tachometer sirkular SVG, telemetri dark, synthesizer Web Audio), (6) Warm Paper & Obsidian (lembaran buku taktil, sudut lipatan kertas/paper peel, bayangan jilid).
   12. *Arsitektur Tata Cahaya Lilin Tunggal (The Candle-Lit Principle)*: "Dark is not a color choice, it is a lighting choice." Website gelap kelas dunia tidak sekadar mengganti background ke #000. Tetapkan satu titik sumber cahaya (misal: lilin di kiri atas) dan patuhi hukum fisikanya pada setiap elemen: tidak ada warna putih murni #ffffff (plafon warna terterang adalah pale green-grey #c8ceca), bayangan pekat selalu jatuh ke kanan-bawah, highlight halus hanya di sisi atas-kiri, tipografi digambar seperti label cetak mekanikal (printed label), dan intensitas halaman semakin meredup saat digulir ke bawah.
   13. *Tiga Variasi Arsitektur Kartu Kreatif Modern (A/B/C Creator Card Exploration ala Dribbble/Figma)*: Mencegah komponen kartu profil/produk yang monoton. Kuasai 3 teknik perlakuan visual: (1) Structured Inset (foto sebagai elemen inset mandiri beradius 20px, sasis putih bersih, margin 12px, memisahkan media dan teks secara tegas dengan kontras WCAG AA tertinggi), (2) Soft Vignette Fade (foto membentang ke tepi atas-kiri-kanan dan menyatu mulus ke sasis kartu via CSS mask gradient linear-gradient(to bottom, black 50%, rgba(0,0,0,0.85) 70%, transparent 98%) tanpa garis potong kaku), (3) Full-Bleed Frosted Glassmorphism (foto mengisi 100% container, separuh bawah menggunakan baki frosted glass backdrop-filter: blur(28px) saturate(190%) dengan highlight tepi atas 1px, tipografi terinversi putih bersih, lencana verifikasi frosted monokrom, dan tombol pill putih kontras tinggi dengan teks gelap). Lengkapi dengan fisika 3D perspective tilt (rotateX/Y maks 8-9 deg) dan kilatan specular glare effect reaktif kursor mouse.
+  14. *Replikasi Sci-Fi HUD & Efisiensi 3D WebGL*: Saat mereplikasi antarmuka fiksi ilmiah (J.A.R.V.I.S./Z.E.R.O./HUD) dan optimasi 3D auto-sleep (0% GPU di tab latar belakang/idle 45s), ikuti panduan lengkap di [references/scifi-hud-and-3d-efficiency.md](references/scifi-hud-and-3d-efficiency.md).
 
 ### C. Tipografi & Copywriting (Point-First & Anti-Fluff)
 - **Langsung ke Poin**: Gunakan poin-poin ringkas dan kalimat langsung pada maksudnya. Dilarang menulis paragraf pengantar panjang, slogan marketing kosong, atau kalimat penjelasan bertele-tele khas AI.

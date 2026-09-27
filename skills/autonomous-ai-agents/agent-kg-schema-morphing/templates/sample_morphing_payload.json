@@ -1,0 +1,79 @@
+{
+  "initial_state": {
+    "schema": {
+      "version": 1,
+      "entity_types": {
+        "Agent": { "parent": "Entity", "disjoint_with": ["Resource"] },
+        "Task": { "parent": "Entity", "disjoint_with": [] },
+        "Resource": { "parent": "Entity", "disjoint_with": ["Agent"] },
+        "Tool": { "parent": "Resource", "disjoint_with": [] }
+      },
+      "relation_types": {
+        "EXECUTES": { "domain": "Agent", "range": "Task" },
+        "USES": { "domain": "Agent", "range": "Resource" }
+      }
+    },
+    "graph": {
+      "entities": {
+        "hermes_core": { "type": "Agent" },
+        "subagent_worker_1": { "type": "Agent" },
+        "task_db_migration": { "type": "Task" },
+        "postgres_pool": { "type": "Resource" },
+        "bash_executor": { "type": "Tool" }
+      },
+      "edges": [
+        {
+          "source": "hermes_core",
+          "target": "task_db_migration",
+          "relation": "EXECUTES",
+          "weight": 0.8,
+          "evidence_count": 3,
+          "updated_at": 1700000000.0
+        },
+        {
+          "source": "subagent_worker_1",
+          "target": "postgres_pool",
+          "relation": "USES",
+          "weight": 0.5,
+          "evidence_count": 1,
+          "updated_at": 1700000000.0
+        }
+      ]
+    }
+  },
+  "operations": [
+    {
+      "type": "QUERY",
+      "source": "hermes_core"
+    },
+    {
+      "type": "REWEIGHT",
+      "edge_index": 0,
+      "utility": 0.95,
+      "current_time": 1700086400.0
+    },
+    {
+      "type": "CHECK_COMPATIBILITY",
+      "source_type": "Agent",
+      "relation": "EXECUTES",
+      "target_type": "Resource"
+    },
+    {
+      "type": "STAGE_MORPHISM",
+      "morphism": "SPECIALIZE_RELATION",
+      "parameters": {
+        "base_relation": "USES",
+        "new_sub_relation": "INVOKES_TOOL",
+        "specific_domain": "Agent",
+        "specific_range": "Tool"
+      }
+    },
+    {
+      "type": "COMMIT_MORPHISM",
+      "version": 2
+    },
+    {
+      "type": "QUERY"
+    }
+  ]
+}

@@ -22,6 +22,7 @@ Sebelum mengirimkan hasil rancangan ke pengguna, jalankan inspeksi mandiri via b
 - **DILARANG Kotak Logo Generik:** Gunakan pure typography wordmark minimalis.
 - **DILARANG Bento Simetris Kaku:** Hindari grid kotak 2x2 atau 3x3 seragam yang membosankan. Gunakan bentang kolom asimetris (*interlocking fluid corners*).
 - **DILARANG Teks Menabrak Foto/Elemen Lain:** Pisahkan kontainer teks dan visual secara vertikal atau beri padding batas aman tegas.
+- **DILARANG Kemiringan 3D pada Panel Teks/Kode (Anti-Blur Orthogonal Rule):** Dilarang menerapkan CSS 3D transforms (`rotateY`, `rotateX`, `perspective`) pada kontainer yang memuat teks kode monospace, diff baris, atau log telemetri; transformasi 3D miring memicu cacat anti-aliasing subpixel pada raster font browser yang menyebabkan teks terlihat kabur/buram (*rasterization blur*). Panel data/kode wajib 100% tegak lurus datar (*flat orthogonal*, `transform: translateZ(0)`), dengan elevasi dan kedalaman visual murni dibangun via layered drop-shadows, border hairline 1px, dan kontras aksen semantik.
 
 ## 2. Arsitektur Komponen Inti
 
@@ -92,6 +93,31 @@ Sebelum mengirimkan hasil rancangan ke pengguna, jalankan inspeksi mandiri via b
   - Dilarang mengunduh berkas audio eksternal (`.mp3`/`.wav`) yang rentan gagal muat, membebani bandwidth, atau memicu latensi.
   - Bangun synthesizer audio mikro menggunakan `window.AudioContext` oscillator native browser (`sine`/`square`/`triangle`) dengan envelope pendek (60-120ms) untuk klik tombol, perubahan tab, dan alert. Sediakan tombol mute (`🔊 / 🔈`) persisten di header.
 - **Preset Tema Tri-Mode:** Sediakan tombol beralih tema instan antara *Cyber Arcade* (Dark Neon), *Neo Cockpit* (High-Octane Warm Amber), dan *Warm Obsidian* (Klasik Editorial).
+- **Sensitivitas & Skala Persepsi Non-Linier Equalizer (Anti-Flat VU Meter Rule):**
+  - Pemetaan linier mentah pada beban idle/ringan (CPU 5-10%, Disk 0) di dalam wadah sempit (<30px) menyebabkan grafik volume aktivitas hanya berfluktuasi 1-2 piksel di dasar (*terlalu ceper dan naik-turunnya tidak berasa*).
+  - Wajib menerapkan kurva persepsi non-linier (`Math.pow(cpu, 0.42)` atau akar kuadrat I/O), ketinggian kontainer minimal 40–44px, modulasi gelombang multi-fase (*harmonic wave overlay*), serta *fast attack* dan *smooth gravity decay* agar detak aktivitas 100ms berdenyut elastis dan visceral di rentang 35%–85%.
+- **Penghapusan Ruang Mati & Densitas Maksimal Panel Pemantau (Anti-Void Telemetry Rule):**
+  - DILARANG membiarkan panel log atau tabel telemetri menyisakan 80%+ ruang hitam kosong (*longgar*) dengan placeholder pasif seperti "Menunggu tool call...".
+  - Sediakan:
+    1. *Pita KPI Atas*: Total panggilan, latensi rata-rata, P95, rasio sukses, dan cache hit.
+    2. *Fallback Backfill Riwayat*: Jika trace aktif belum memiliki data, otomatis suntikkan 10–25 riwayat pemanggilan tool atau log event global terakhir dari database SQLite WAL.
+    3. *Pita Distribusi Bawah*: Persentase distribusi tipe tool (Terminal, Patch, Read, Search) dan error rate.
+    4. *Armada Proses & Kernel Watcher*: Manfaatkan margin bawah panel untuk menampilkan kesehatan microservices PM2 fleet serta statistik tasks, threads, dan FDs.
+- **Kelengkapan Fitur Versi Desktop & Paritas Kemampuan (Desktop Mission Control Rule):**
+  - Jangan menyembunyikan subsystem utama (seperti Autopilot Engine atau Knowledge Vault) hanya di cron latar belakang atau versi mobile; versi desktop wajib memiliki kapabilitas lebih lengkap (*rich cockpit*):
+    - *Always-Visible HUD*: Widget ringkas di panel utama dengan badge status, nomor siklus, topik aktif, dan saklar cepat.
+    - *Full Mission Control Deck*: Modal terdedikasi (`[F7]`) dengan split-view explorer dokumen riset lengkap (pembaca Markdown utuh dengan evaluasi Tiga Mindset).
+- **Ergonomi Lebar Topbar & Pencegahan Tombol Terpotong (Anti-Clipping Topbar Rule):**
+  - Pada layar standar 1440px atau 1366px, bilah atas dengan `overflow: hidden` rentan memotong tombol aksi di sisi kanan jika label teks terlalu panjang atau dropdown terlalu lebar.
+  - Ringkas label tombol (`[F1: REPLAY]`, `[F2: SPECS]`, `[F6: CHAT]`, `[F7: AUTOPILOT]`, `[MOBILE]`), rapatkan gap (4px), dan batasi lebar elemen select (<140px) agar total lebar topbar aman di bawah 1200px.
+- **Adaptasi Otomatis Antar-Perangkat Tanpa Setel Ulang (Zero-Friction Auto-Device Engine Rule):**
+  - DILARANG memaksa pengguna melakukan penyesuaian manual (zoom out, pilih resolusi, toggle mode) saat berpindah perangkat (ponsel Android vs laptop vs desktop).
+  - Terapkan deteksi adaptif dua lapis:
+    1. *Deteksi & Pengalihan Cerdas*: Gateway/server dan skrip `<head>` memeriksa User-Agent serta lebar viewport (`window.innerWidth < 768px`). Jika dibuka di ponsel, otomatis alihkan instan ke `/radar/mobile` (antarmuka mobile berbasis kartu & touch-friendly). Jika di PC/Laptop, otomatis sajikan kokpit desktop penuh (`aoms.html`).
+    2. *Preservasi Preferensi Eksplisit*: Jika pengguna di ponsel sengaja memilih `[DESKTOP COCKPIT]`, kunci preferensi ke `localStorage.setItem('radar_force_desktop', 'true')` dengan URL query parameter `?view=desktop` agar tidak memantul (*infinite redirect loop*), dan sediakan tombol kembali `[MOBILE]` di topbar.
+    3. *Layout Elastis Vertikal-Horizontal Multi-Breakpoint*:
+       - Layar laptop pendek (`max-height: 860px` seperti 1366x768 atau 1280x800): Jangan memaksakan `overflow: hidden; height: 100vh;` yang memotong panel bawah. Ubah ke `height: auto; min-height: 100vh; overflow-y: auto;` dengan batas tier minimum.
+       - Layar tablet (`max-width: 1024px`): Rombak grid 3-kolom horizontal menjadi stack vertikal modular yang lapang disentuh.
 
 ### G. Visual Agent Workflow & Parallel Execution Graphs (Pola Estafet Sektoral)
 - **Anti-Linear-Sprawl Doctrine (Bukan Deretan Horizontal Puluhan Kotak):**
@@ -109,6 +135,17 @@ Sebelum mengirimkan hasil rancangan ke pengguna, jalankan inspeksi mandiri via b
 - **Resiliensi Reverse Proxy & API Prefixing:**
   - Pada aplikasi dasbor yang diproxy di bawah sub-rute (misal `/organisasi`), panggilan `fetch()` di frontend wajib menghormati `apiBase` dinamis (`/api/organisasi/...` vs `/api/...`).
   - Reverse proxy gateway wajib membuka whitelist rute publik untuk seluruh namespace API internal yang dipanggil visualizer (`/api/graph`, `/api/organisasi/graph`) agar tidak terblokir dengan HTTP 401 Unauthorized.
+- **Jalur Sirkuit Laser Berkelanjutan Antar-Tahapan (Animated Laser Pipeline Bus vs Static Glyphs):**
+  - DILARANG menggunakan karakter panah teks mati (`↓` atau `-->`) untuk menghubungkan tahapan hierarkis proses pada diagram DAG atau alur agen.
+  - Wajib menggunakan bus sirkuit SVG poligonal beranimasi dinamis yang memancarkan status proses secara fisik:
+    - *Tahap Selesai (DONE)*: Garis laser hijau toska (`#10b981`) solid dan tenang dengan pendaran halus.
+    - *Tahap Sedang Berjalan (ACTIVE / RUNNING)*: Garis laser cyan neon (`#00f0ff`) dengan aliran pulsa partikel energi berkecepatan tinggi (`<animateMotion>` atau running `stroke-dashoffset`) yang mengalir deras ke simpul agen aktif.
+    - *Tahap Menunggu (IDLE / QUEUED)*: Garis sirkuit redup bergaris putus-putus tanpa energi.
+- **Penempatan Jendela HUD Mengambang & Anti-Occlusion (Clear Quadrant Docking):**
+  - Saat merender jendela live action / inspektor kode mengambang yang terhubung ke simpul aktif, DILARANG menaruh posisi jendela dengan offset horizontal sepihak langsung (`node.right + 18px`) jika terdapat simpul lain di sampingnya (misal deretan kartu sub-agen paralel). Hal ini memicu tabrakan dan menutupi kartu agen tetangga (*card occlusion*).
+  - Selalu tambatkan jendela HUD pada kuadran kanvas yang lapang (misal kuadran kanan atas yang kosong), lalu hubungkan titik simpul agen aktif ke jendela HUD melalui kurva dinamis SVG Bézier (`M startX startY C cX1 startY, cX2 endY, endX endY`) dengan pendaran neon cyan dan partikel pulsa bergerak.
+- **Konsolidasi Sub-Halaman Fragmented & Preservasi Mandat:**
+  - Jangan membiarkan rute lama (misal `/organisasi`) berjalan sebagai antarmuka terpisah yang terpecah jika sistem telah berevolusi memiliki cockpit terpadu (`/radar`). Alihkan rute lama secara otomatis via HTTP 302 dan serap seluruh fitur hierarki, mandat organisasi, dan sensor keselamatan (kuota RAM 9.0 GB) ke dalam modal terintegrasi (misal `[F5: KABINET]`).
 
 ### H. Standar & Teknologi Proyek
 - Gunakan arsitektur Vite Multi-Page (MPA) agar setiap modul halaman (`/buttons/`, `/cards/`, `/inputs/`, `/tables/`, `/navigation/`) terisolasi dan cepat dibuka.

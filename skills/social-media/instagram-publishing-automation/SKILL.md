@@ -73,17 +73,26 @@ Masalah repetisi visual (foto yang sama terbit berulang di berita berbeda) merus
 2. **PITFALL URL Variant & Transform Bypass:**
    Pengecekan string persis (`WHERE image_url = ?`) mudah dibobol oleh varian resize CDN atau query params berbeda dari gambar yang sama (misal: `.../SocialShare.max-600x600.webp` vs `.../SocialShare.width-1300.png`, atau `file:///path` vs `/path`).
    - **FIX (Normalisasi & Canonical Matching):** Seluruh URL gambar wajib dinormalisasi sebelum disimpan dan dicek: buang seluruh query parameter (`?width=...`), buang akhiran transformasi resize (`.max-600x600`, `.width-1300`), seragamkan prefiks path lokal (`file://`), dan lakukan pencocokan berbasis nama berkas dasar (*base filename*) di SQL (`OR image_url LIKE ?`).
-6. **Graph API Publishing Flow (Staggered Upload, Edge Delay, & IPv4 Pinning):**
+6. **Graph API Publishing Flow (Single Post vs Carousel, Edge Delay, & IPv4 Pinning):**
+   - **Alur 1: Single Media Post (1 Slide Match Poster / Warta Tunggal):**
+     Ketika merilis poster tunggal (`MATCH_POSTER_SINGLE` / 1 slide), jangan buat carousel container. Kirim langsung media tunggal:
+     1. `POST /v18.0/{account_id}/media` dengan payload `{ image_url, caption, access_token }` (DILARANG menyertakan `is_carousel_item: true`).
+     2. Poll container status `GET /{creation_id}?fields=status_code` hingga `status_code === 'FINISHED'`.
+     3. Beri jeda edge propagation 2.5–3 detik.
+     4. `POST /v18.0/{account_id}/media_publish` dengan payload `{ creation_id: mediaId, access_token }`.
+   - **Alur 2: Multi-Slide Carousel (2 s/d 10 Slide):**
+     1. `POST /v18.0/{account_id}/media` untuk tiap slide dengan `{ image_url, is_carousel_item: true, access_token }`.
+     2. Poll tiap child container hingga `FINISHED`.
+     3. `POST /v18.0/{account_id}/media` untuk carousel wrapper dengan `{ media_type: 'CAROUSEL', children: [id1, id2, ...], caption, access_token }`.
+     4. Poll carousel container hingga `FINISHED`.
+     5. Beri jeda edge propagation 3 detik (bungkus dalam retry loop jika terkena error subcode 2207027).
+     6. `POST /v18.0/{account_id}/media_publish` dengan `{ creation_id: carouselId, access_token }`.
    - **PITFALL IPv6 Dual-Stack Blackhole (ETIMEDOUT / ENETUNREACH):** Node.js secara default mencoba menyelesaikan rute IPv6 lebih dulu (`autoSelectFamily: true`). Pada host cloud/VPS di mana rute IPv6 keluar tidak tersedia (`ENETUNREACH`), pemanggilan `axios` atau `fetch` ke Meta Graph API (`graph.instagram.com`) akan membeku 15–25 detik hingga timeout (`connect ETIMEDOUT 57.144.100.x:443`).
    - **FIX:** Kunci koneksi HTTP client ke protokol IPv4 secara eksplisit menggunakan `https.Agent({ family: 4, keepAlive: true })` (misal: `axios.defaults.httpsAgent = new https.Agent({ family: 4, keepAlive: true })`), sehingga koneksi langsung terarah ke antarmuka IPv4 tanpa hambatan.
    - **PITFALL Spam Penalti:** Mengunggah dan merakit carousel secara instan beruntun tanpa jeda akan dianggap serangan spam (DDoS) oleh mesin Instagram, memicu status *"Action Blocked"* atau *Banned*.
    - **FIX:** Jangan gunakan delay statis 3 detik — gunakan **container status polling** (`waitUntilFinished()`). Setelah upload tiap slide, poll `GET /{container_id}?fields=status_code` sampai `FINISHED` (atau `ERROR`). Ini lebih cepat DAN lebih reliable daripada tebak delay.
-   - `POST /v18.0/...` (Slide 1) → poll `status_code=FINISHED`
-   - `POST /v18.0/...` (Slide 2) → poll `status_code=FINISHED`
-   - `POST /v18.0/...` (Carousel container) → poll `status_code=FINISHED`
    - **PITFALL Meta Subcode 2207027 (Media Belum Siap / Edge Propagation Delay):** Meskipun container carousel telah berstatus `FINISHED`, server edge Meta kerap mengalami latensi propagasi internal. Memanggil `POST /media_publish` seketika akan ditolak dengan error `OAuthException: code 9007, subcode 2207027 ("Media belum siap untuk menerbitkan, tunggu beberapa saat lagi")`.
    - **FIX:** Selalu beri jeda tenggang 3 detik setelah carousel container selesai (`FINISHED`), dan bungkus pemanggilan `POST /media_publish` dalam perulangan *retry* (hingga 5–6 percobaan dengan jeda 4 detik) khusus ketika mendeteksi `error_subcode === 2207027`.
-   - `POST /v18.0/.../media_publish` (Terbitkan ke Feed).
    **Catatan:** Tetap berikan jeda minimal 1 detik antar API call sebagai courtesy rate limit, tapi jangan mengandalkan delay sebagai pengganti polling status.
 
 ## 4. Keamanan Token & Credential
@@ -311,13 +320,14 @@ Selain warta teks resmi, sistem pemantau dapat diperluas untuk menangkap dan men
   - **Prioritas Rekaman Primer:** Cari rekaman mentah/primer asli langsung dari peneliti atau engineer (layar coding, uji lab robotika, percobaan mandiri). Jangan gunakan kompilasi warta generik atau narasi sintetis buatan yang hambar.
   - **Pertahankan Audio Asli:** 100% audio lingkungan/asli rekaman wajib dibiarkan hidup (suara mekanik, reaksi peneliti, ketikan keyboard). Suara natural memberi nyawa dan daya sebar viral jauh lebih tinggi dibanding voiceover AI.
   - **Editing Efisien:** Pemotongan klip (*trimming*) hanya dilakukan bila perlu untuk membuang momen hening (*dead air*) agar alur video padat.
-- **Sasis Video Format Vertikal (9:16 Minimal Swiss via FFmpeg):**
-  Untuk menghindari penalti *unoriginal content* dari algoritma Meta, jangan pernah mengunggah video mentah tanpa nilai tambah editorial. Gunakan filter grafis FFmpeg:
-  - Format 1080×1920 vertikal dengan kanvas obsidian pekat (`#0E0F12`).
-  - *Top Header Pill:* `SEPUTAR AI // @SPUTARAI` (font tebal putih dengan boks hitam semi-transparan `boxcolor=black@0.7:boxborderw=14`).
-  - *Headline Hook:* Judul tebal 2 baris di atas frame video agar penonton langsung menangkap inti warta.
-  - *Center Frame:* Klip video asli diposisikan seimbang di tengah tanpa terpotong atau terdistorsi melar (`scale=1080:-2,pad=1080:1920:0:(1920-ih)/2:color=#0E0F12`).
-  - *Bottom Attribution & Follow CTA:* `Dokumentasi / Cr: @kreator_asli` dan `Follow @sputarai untuk warta 24 jam`.
+- **Sasis Video Format Vertikal (9:16 Minimal Swiss via FFmpeg & HTML Overlay):**
+  Untuk menghindari penalti *unoriginal content* dari algoritma Meta dan TikTok, jangan pernah mengunggah video mentah tanpa nilai tambah editorial. Gunakan perenderan overlay transparan 1080x1920 via Puppeteer/FFmpeg:
+  - Format 1080×1920 vertikal dengan kanvas obsidian pekat (`#0A0B0E` / `#0E0F12`).
+  - *Top Header Safe Zone:* Header (`BRAND // TOPIC`, headline hook, scoreboard/badge) diberi jarak aman dari tepi atas (`padding-top: 120–130px`) agar tidak terpotong kamera punch-hole / notch atau bar status ponsel.
+  - *Center Frame:* Klip video asli diposisikan seimbang di tengah tanpa terpotong atau terdistorsi melar (`scale=1080:608,pad=1080:1920:0:656:color=#0A0B0E`).
+  - *Middle Safe-Zone Footer (Mandat Safe Zone Bawah TikTok & IG Reels):* Area 25–30% terbawah layar ($y > 1550\text{px}$) akan tertimpa antarmuka bawaan aplikasi ponsel (nama akun, caption bawaan, bilah judul audio/lagu, serta tombol interaksi vertikal Like, Comment, Share, Bookmark). DILARANG KERAS menempatkan teks metadata, ringkasan, atau tombol CTA di dasar kanvas. Tempatkan blok footer (kredit sumber, ringkasan 1 baris, dan Follow CTA) **persis di bawah bingkai video** ($y \approx 1280\text{px} - 1500\text{px}$), menyisakan 30% area bawah sebagai latar gelap bersih yang menyerap overlay UI aplikasi secara alami tanpa tabrakan teks.
+  - *Kontras Tipografi Mobile:* Seluruh teks pendukung (pencetak gol, keterangan, menit) wajib menggunakan teks terang kontras tinggi (`#CBD5E1` / `#FFFFFF` ukuran $\ge 14\text{px}$ semi-bold), bukan abu-abu gelap redup agar tetap terbaca jelas di layar kecil smartphone.
+  - *Zero Emoji Compliance:* 100% menggunakan karakter alfanumerik dan indikator CSS/vektor (`•`, dot SVG).
 - **Manajemen Ruang Penyimpanan RDP (Auto-Cleaner 3 Hari):** Berkas MP4 mentah berukuran puluhan MB dapat memenuhi harddisk server. Pasang skrip pembersih berkala (`cleanup_cache(max_age_days=3)`) yang otomatis menghapus berkas raw di folder cache yang berusia lebih dari 72 jam setelah selesai diproses.
 - **Pitfall Datacenter CDN & YouTube Extraction:**
   - Koneksi langsung ke Google Video CDN sering mengalami timeout pada IP datacenter RDP jika tanpa JS runtime. Selalu sertakan flag runtime Node pada `yt-dlp` (`--js-runtimes node:"<PATH_TO_NODE_EXE>"`) atau prioritaskan link langsung / platform terbuka seperti TikTok, Reddit, dan fast edge CDN.
@@ -393,7 +403,10 @@ Untuk media berbasis pertandingan olahraga (seperti sepak bola internasional dan
   - **Generative AI (LLM via 9router):** Hanya menerima sinyal yang sudah lolos seleksi ML untuk meracik naskah kreatif gaya Gen Z, headline provokatif, dan format slide JSON.
 - **Sub-Agent Content Director (Adaptasi Format & Variasi Slide):**
   - Bertindak sebagai pengarah konten yang menentukan format tayangan secara fleksibel:
-    1. *Match Result - Poster Tunggal (1 Slide):* Untuk hasil pertandingan berbobot visual masif. Menampilkan skor besar (54px neon box), kicker tebal, dan foto aksi pemain penentu.
+    1. *Match Result - Poster Tunggal (1 Slide):* Untuk hasil pertandingan berbobot visual masif (FT big match/derbi). Menampilkan skor besar, tipografi bersih, dan foto aksi pemain penentu.
+       - **Elevasi Vertikal Scoreboard:** Papan skor tidak boleh mepet ke batas bawah kanvas. Terapkan padding bawah yang lega (`padding-bottom: 85px–95px`) sehingga blok skor terangkat dan nyaman dibaca tanpa terpotong bezel antarmuka media sosial.
+       - **Anti-AI Slop pada Status Laga:** Dilarang membungkus teks status (misal `FULL TIME`) dengan badge kapsul/pill mengambang hijau/neon. Gunakan estetika arsitektural Swiss: teks monospasi berjarak renggang (`• FULL TIME` dengan `letter-spacing: 0.28em`) diapit garis hairline 1px tipis yang bersih dan profesional.
+       - **Doktrin Foto Kamera Master Langsung (Anti-Screenshot/Cacat):** Wajib menggunakan foto dokumentasi pers asli langsung dari kamera profesional (DSLR/Mirrorless kelas atas seperti Canon EOS, Sony Alpha, atau Nikon dengan lensa telefoto bukaan besar). Foto wajib memiliki ketajaman optik mikro (pori-pori kulit, butiran keringat alami, tekstur jersey tajam). Dilarang keras menggunakan tangkapan layar siaran TV atau foto tribun jarak jauh berpiksel kabur yang tampak cacat.
     2. *Match Result - 2 Slide Recap (`MATCH_RECAP_2SLIDE`):*
        - **Rasionalitas Strategis 2 Slide:** Diterapkan khusus untuk hasil pertandingan (*Full Time score*). Audiens sepak bola di Instagram mencari kepuasan instan: melihat skor akhir dan pencetak gol di Slide 1, lalu menggeser satu kali ke Slide 2 untuk melihat zona debat/ledek rival (*Banter Zone*) dan ajakan repost ke Instagram Story. Format ini menghasilkan *completion rate* / *swipe-through rate* di atas 90%, memicu algoritma Meta untuk melipatgandakan distribusi ke tab *Explore*.
     3. *Warta Harian / Transfer / Timnas (4 Slide Penuh):* Ulasan lengkap 4 slide (Slide 1 Hook, Slide 2 Fakta Kunci + Foto Aksi, Slide 3 Konteks/Dampak, Slide 4 CTA Simpan) dengan aturan wajib: **Slide ke-2 WAJIB memiliki foto aksi pendukung (Supporting Media Box)** di samping ringkasan fakta.

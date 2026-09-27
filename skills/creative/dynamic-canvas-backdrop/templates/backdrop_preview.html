@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Canvas Backdrop Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0B0A10;
+      color: #F8FAFC;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #backdrop-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+    .card {
+      background: rgba(20, 22, 27, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    h1 { font-size: 28px; margin-bottom: 12px; color: #FFFFFF; }
+    p { font-size: 15px; line-height: 1.6; color: #94A3B8; margin-bottom: 20px; }
+    textarea {
+      width: 100%;
+      height: 140px;
+      background: rgba(11, 10, 16, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #F8FAFC;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: vertical;
+      outline: none;
+    }
+    textarea:focus {
+      border-color: #F59E0B;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #F59E0B;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 16px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #F59E0B;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="backdrop-canvas"></canvas>
+
+  <div class="app-container">
+    <div class="card">
+      <h1>Vibe Coding Dynamic Backdrop</h1>
+      <p>Ketikkan kode atau gerakkan mouse untuk memicu reaksi energi pencahayaan latar belakang ambient secara instan. Kanvas akan otomatis tertidur saat idle untuk menghemat 100% komputasi.</p>
+      
+      <textarea id="code-editor" placeholder="// Ketik di sini untuk merasakan lonjakan energi visual..."></textarea>
+      
+      <div>
+        <span class="status-badge" id="engine-status">
+          <span class="status-dot"></span>
+          <span id="status-text">ENGINE ACTIVE (60 FPS)</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('backdrop-canvas');
+    const ctx = canvas.getContext('2d');
+    const statusText = document.getElementById('status-text');
+    const editor = document.getElementById('code-editor');
+
+    let width = 0, height = 0, dpr = 1;
+    let energy = 0.0;
+    let lastActive = Date.now();
+    let isSleeping = false;
+    let animId = null;
+
+    const lights = [
+      { x: 0.25, y: 0.35, baseRadius: 350, currentRadius: 350, color: 'rgba(245, 158, 11, ', speedX: 0.0008, speedY: 0.0012, phase: 0 },
+      { x: 0.75, y: 0.65, baseRadius: 400, currentRadius: 400, color: 'rgba(14, 165, 233, ', speedX: 0.0011, speedY: 0.0009, phase: 2 },
+      { x: 0.50, y: 0.50, baseRadius: 300, currentRadius: 300, color: 'rgba(139, 92, 246, ', speedX: 0.0014, speedY: 0.0007, phase: 4 }
+    ];
+
+    const mouse = { x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5 };
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function wakeUp() {
+      lastActive = Date.now();
+      if (isSleeping) {
+        isSleeping = false;
+        statusText.textContent = 'ENGINE ACTIVE (60 FPS)';
+        render();
+      }
+    }
+
+    function addEnergy(amount = 0.2) {
+      energy = Math.min(1.0, energy + amount);
+      wakeUp();
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.targetX = e.clientX / width;
+      mouse.targetY = e.clientY / height;
+      wakeUp();
+    });
+
+    editor.addEventListener('keydown', () => {
+      addEnergy(0.18);
+    });
+
+    function render() {
+      const now = Date.now();
+      const idleTime = (now - lastActive) / 1000;
+
+      if (idleTime > 45 && energy < 0.005) {
+        isSleeping = true;
+        statusText.textContent = 'ENGINE SLEEPING (0% CPU)';
+        cancelAnimationFrame(animId);
+        return;
+      }
+
+      // Physics update
+      energy *= 0.95;
+      mouse.x += (mouse.targetX - mouse.x) * 0.08;
+      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.globalCompositeOperation = 'screen';
+
+      for (let i = 0; i < lights.length; i++) {
+        const l = lights[i];
+        const time = now * 0.001;
+        const ox = Math.sin(time * 0.5 + l.phase) * 0.08;
+        const oy = Math.cos(time * 0.4 + l.phase) * 0.08;
+
+        const posX = (l.x + ox + (mouse.x - 0.5) * 0.15) * width;
+        const posY = (l.y + oy + (mouse.y - 0.5) * 0.15) * height;
+
+        const pulse = 1.0 + Math.sin(time * 1.5 + l.phase) * 0.05 + energy * 0.35;
+        const radius = l.baseRadius * pulse;
+
+        const alpha = Math.min(0.45, 0.18 + energy * 0.25);
+        const grad = ctx.createRadialGradient(posX, posY, 0, posX, posY, radius);
+        grad.addColorStop(0, l.color + alpha + ')');
+        grad.addColorStop(0.5, l.color + (alpha * 0.4) + ')');
+        grad.addColorStop(1, l.color + '0)');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(posX, posY, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      animId = requestAnimationFrame(render);
+    }
+
+    render();
+  </script>
+</body>
+</html>

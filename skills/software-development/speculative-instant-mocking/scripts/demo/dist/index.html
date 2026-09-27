@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>VIBE-005 Speculative Instant Mocking</title>
+  <style>
+    body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 1.5rem; background: #0f172a; color: #f8fafc; }
+    .badge { display: inline-block; padding: 0.25rem 0.5rem; font-weight: bold; background: #dc2626; color: white; border-radius: 4px; }
+    .controls { display: flex; gap: 0.5rem; margin: 1rem 0; flex-wrap: wrap; }
+    button, select, input { background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 0.5rem; border-radius: 4px; }
+    #records { max-width: 40rem; background: #020617; border: 1px solid #334155; padding: 0.75rem; border-radius: 6px; }
+    .row { display: flex; justify-content: space-between; border-bottom: 1px solid #1e293b; padding: 0.25rem 0; font-size: 0.9rem; }
+  </style>
+  <script type="module" crossorigin src="/assets/index-C4FPQe_F.js"></script>
+</head>
+<body>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h1>Speculative Instant Mocking Lab</h1>
+    <div id="synthetic-badge" class="badge">SYNTHETIC ENVIRONMENT ONLY</div>
+  </div>
+  <p>Zero-backend deterministic streaming and REST interception. Never connect to live accounts or production endpoints.</p>
+
+  <div class="controls">
+    <label>Seed: <input id="seed" type="number" value="7" style="width:5rem;" /></label>
+    <label>Count: <input id="count" type="number" value="8" style="width:4rem;" /></label>
+    <label>Scenario:
+      <select id="scenario">
+        <option value="success">Success</option>
+        <option value="empty">Empty dataset</option>
+        <option value="error">Forced error</option>
+      </select>
+    </label>
+    <button id="btn-fetch-seed">Fetch Seed (MSW)</button>
+    <button id="btn-start">Start Stream</button>
+    <button id="btn-reset">Reset / Replay</button>
+    <button id="btn-abort">Abort</button>
+  </div>
+
+  <div>
+    <strong>Status:</strong> <span id="status">idle</span> |
+    <strong>Run ID:</strong> <span id="run-id">0</span> |
+    <strong>MSW Health:</strong> <span id="msw-status">checking...</span>
+  </div>
+  <div id="error-box" style="color: #ef4444; margin-top: 0.5rem;"></div>
+
+  <h3 style="margin-top:1.5rem;">Bounded Stream View (Max 20 records)</h3>
+  <div id="records"><em>No records loaded.</em></div>
+
+</body>
+</html>

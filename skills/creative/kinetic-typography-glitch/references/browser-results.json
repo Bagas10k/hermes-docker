@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "name": "real JSON syntax error",
+      "pass": true
+    },
+    {
+      "name": "real editor recovery",
+      "pass": true
+    },
+    {
+      "name": "motion default off",
+      "pass": true
+    },
+    {
+      "name": "one bounded effect",
+      "pass": true
+    },
+    {
+      "name": "burst latest wins and cooldown",
+      "pass": true
+    },
+    {
+      "name": "effect naturally terminates",
+      "pass": true
+    },
+    {
+      "name": "diagnostics are text",
+      "pass": true
+    },
+    {
+      "name": "semantic status",
+      "pass": true
+    },
+    {
+      "name": "unsupported API graceful",
+      "pass": true
+    },
+    {
+      "name": "manual disable",
+      "pass": true
+    },
+    {
+      "name": "invalid kind rejected",
+      "pass": true
+    },
+    {
+      "name": "disposed rejects updates",
+      "pass": true
+    }
+  ],
+  "passed": 12,
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+  "390": {
+    "overflow": false,
+    "width": 390
+  },
+  "1440": {
+    "overflow": false,
+    "width": 1440
+  },
+  "reducedMotion": {
+    "matches": true,
+    "animations": 0
+  }
+}

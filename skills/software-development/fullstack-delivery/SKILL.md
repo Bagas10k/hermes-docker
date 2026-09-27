@@ -33,5 +33,11 @@ Discover actual package scripts, lockfiles, CI provider, runtime versions, infra
 - Never modify the running Hermes installation's dependencies as part of an application's setup.
 - Package managers, DB runtimes, and MCP connectors should be installed for a concrete project need, not to inflate the skill catalog.
 
+## Private knowledge-ingestion verification
+- Exercise uploads through an isolated app using the real signed challenge/verify flow with a temporary issuer and database; never insert production sessions for tests.
+- Pair a real tool-free inference smoke test with deterministic adapter tests. Label adapters as test doubles, require a provider-produced result for integration claims, and preserve generic durable failures instead of substituting summaries.
+- Test graph projection on both JSON and SSE with title/path/content canaries; sanitized public geometry must use fresh objects and opaque identifiers, not merely hide UI labels.
+- Browser-click upload controls after generated categories exist: a wrapping topbar and equal-z-index legend can cover an otherwise visible button. Assert hit-testing and desktop/mobile dialog overflow.
+
 ## Verification
 List exact executed commands and their results; distinguish pre-existing failures from regressions. State which services were real, mocked, or unavailable. End with changed behavior, evidence, and remaining risks rather than a replay of the process.

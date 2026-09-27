@@ -1,0 +1,3 @@
+interface:
+  display_name: "UI Layout Intelligence"
+  short_description: "Reason about spacing, layout, grids, rhythm, density, and responsive UI structure."
