@@ -100,5 +100,6 @@ Engine perancangan tata letak bento grid responsif berbasis hierarki visual dete
 ## Verification
 
 - Jalankan pengujian visual pada resolusi 1440px (desktop), 768px (tablet), dan 375px (mobile).
-- Pastikan tidak ada horizontal scroll bar (`overflow-x: hidden`).
+- Pastikan `scrollWidth <= clientWidth` tanpa menyembunyikan overflow root. `overflow-x:hidden` bukan bukti layout benar.
+- Ikuti kontrak browser dan koreksi terbaru di [responsive-shell-evidence.md](references/responsive-shell-evidence.md); kontrak ini menggantikan saran dense packing, fixed-height clipping, dan pemeriksaan geometris saja di atas.
 - Verifikasi kontras teks terhadap kartu memenuhi rasio kontras 4.5:1 (WCAG AA).

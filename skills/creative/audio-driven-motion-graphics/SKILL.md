@@ -144,6 +144,7 @@ node /home/ubuntu/hermes-motion-engine/bin/hermes-theory-motion.js \
 
 ## Creative Styles & References
 
+- See `references/motion-genres-and-techniques.md` for taxonomy and decomposition of kinetic typography, SDF raymarching, creative coding shaders, particle simulations, video reel ffmpeg extraction pipelines, 1-style-per-view multi-chapter architecture, and the Frame 023 high-density motion bento pattern.
 - See `references/theory-motion-pipeline.md` for the 5 Theory Visual Archetypes (`hook`, `metric`, `mechanism`, `comparison`, `outro`), JSON choreography schema, and dynamic Remotion `--props` workflows.
 - See `references/neobrutalism-notebook-style.md` for tactile bento cards, scotch tape textures, graph paper backgrounds, and highlighter animations.
 - See `references/rendering-and-headless-ops.md` for production render flags, PM2 studio management, and multi-core scaling.

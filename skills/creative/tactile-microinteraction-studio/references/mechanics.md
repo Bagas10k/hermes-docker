@@ -28,4 +28,4 @@ Pointer capture requires an active pointer ID; synthetic events alone cannot val
 - https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion : minimizing nonessential motion.
 
 ## Reproduction evidence
-Node-installed Motion 13.4.1; Playwright Chromium 153.0.8010.12. `scripts/verify.cjs` passed at 390, 768, 1440px; page errors empty. Hardware haptics are explicitly stubbed. Production services were not changed. Visual screenshots and real-device validation are not included in this evidence.
+Node-installed Motion 13.4.1; Playwright Chromium 153.0.8010.12. `scripts/verify.cjs` passed at 390, 768, 1440px; page errors empty. Hardware haptics are explicitly stubbed. Production services were not changed. This original run did not include screenshots or real-device validation. For the later implemented tilt, sheen, screenshots and AA checks, read [TREND-003 source and evidence](tilt-evidence.md); real-device validation remains outstanding.

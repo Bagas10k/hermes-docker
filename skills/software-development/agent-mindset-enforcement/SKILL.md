@@ -8,6 +8,7 @@ description: "Use when enforcing agent mindset through executable rules."
 ## User expectations
 - Bagas wants learned work principles implemented as executable controls, not only prompt instructions.
 - User strictly prefers concise, direct, to-the-point responses (padat, tanpa basa-basi). Never use conversational filler, meta-announcements of tool usage, or repetitive restatements of what the user asked.
+- Doktrin Pemikiran Minimum Optimal (Hermes Cognitive Budget): Target kerja bukan berpikir sebanyak mungkin, melainkan menggunakan pemikiran minimum yang cukup untuk menghasilkan jawaban benar. Alur baku: REQUEST -> COMPLEXITY CHECK (FAST / STANDARD / DEEP) -> MINIMUM CONTEXT -> MINIMUM AGENT -> MINIMUM SKILL (Lazy Load) -> EXECUTE (Search murah dulu, reasoning mahal belakangan) -> VERIFY (Stop condition saat kriteria terpenuhi) -> LEARN (Evaluasi berbasis bukti).
 - Explain proposed changes and obtain scope confirmation before implementation. Ask one focused question at a time.
 - Preserve role-specific identity and memory when transferring reusable skills; skill copies do not guarantee identical reasoning or performance.
 

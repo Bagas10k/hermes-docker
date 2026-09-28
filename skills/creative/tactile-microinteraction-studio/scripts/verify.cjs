@@ -35,7 +35,24 @@ await drag(160,true);assert(await page.locator('#sheet').evaluate(e=>e.open));aw
 await page.click('#open');await page.check('#haptics');await page.click('#save');assert.deepEqual(await page.evaluate(()=>pulses),[10]);checks.push('opt-in invokes API stub; not hardware proof');
 await page.emulateMedia({reducedMotion:'reduce'});await page.click('#open');assert.equal(await page.locator('#sheet').evaluate(e=>e.style.transform),'translateY(0px)');await page.click('#save');assert.deepEqual(await page.evaluate(()=>pulses),[10]);checks.push('reduced motion: immediate position and no haptics');
 await page.evaluate(()=>Object.defineProperty(navigator,'vibrate',{value:undefined}));await page.click('#open');await page.click('#save');checks.push('missing vibration API keeps save working');
+await page.emulateMedia({reducedMotion:'no-preference'});
+await page.click('#open'); await page.check('#sound'); await page.click('#save'); await page.waitForTimeout(150);
+assert.equal(await page.locator('#status').textContent(),'Kepadatan: padat'); checks.push('real Web Audio opt-in preserves save');
+const axePath=require.resolve('axe-core/axe.min.js',{paths:[base]});
+const accessibility=[];
+for(const width of [390,768,1440]) {
+ await page.setViewportSize({width,height:900}); await page.click('#open'); await page.waitForTimeout(650);
+ await page.addScriptTag({path:axePath});
+ const result=await page.evaluate(async()=>{const r=await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}});return {violations:r.violations,incomplete:r.incomplete.map(x=>x.id)};});
+ assert.deepEqual(result.violations,[]); accessibility.push({width,...result});
+ await page.screenshot({path:path.join(base,`sheet-${width}.png`),fullPage:true});
+ await page.click('#close');
+}
 assert.deepEqual(errors,[]);
-console.log(JSON.stringify({browser:browser.version(),checks,errors},null,2));
+const tiltChecks=await require('./tilt-checks.cjs')(browser,`http://127.0.0.1:${server.address().port}`,base,errors);
+assert.deepEqual(errors,[]);
+const report={browser:browser.version(),checks,tiltChecks,errors,accessibility};
+fs.writeFileSync(path.join(base,'verification.json'),JSON.stringify(report,null,2));
+console.log(JSON.stringify(report,null,2));
 }finally{await browser?.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1;});

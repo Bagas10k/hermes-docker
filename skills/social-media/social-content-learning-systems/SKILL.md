@@ -42,7 +42,7 @@ For each post, persist:
 
 Use a deterministic content hash to detect accidental changes between channels. Allow deliberate platform-only exceptions only through an explicit, auditable override with a reason; never weaken the default gate silently.
 
-### 3. Run pre-publication QC
+### 3. Run pre-publication QC and approval staging
 
 Score at least these dimensions:
 
@@ -54,6 +54,8 @@ Score at least these dimensions:
 - cross-channel parity where required.
 
 Treat wrong subject, visible watermark, severe blur, face obstruction, and mismatched channel assets as vetoes even if the aggregate score passes.
+
+After QC passes, route autonomous social output to a human approval queue rather than directly publishing. The safe sequence for this user's social systems is `scan -> draft -> render -> QC -> append approval queue -> notify operator`; only an explicit owner approval may unlock `instagram_media_publish`, `tiktok_publish`, or equivalent API calls. Keep the approval item durable and auditable: include domain, draft/publication ID, headline, source, preview URL, QC score, creation time, and the exact next action that becomes legal after approval.
 
 ### 4. Publish and preserve platform adaptations
 
@@ -122,6 +124,7 @@ Keep predictions, observations, decisions, and rule changes traceable so a futur
 - Do not equate platform failure with content failure; login expiry, CAPTCHA, DOM changes, and API processing are operational variables and must be labeled separately.
 - Do not omit a channel from notifications just because its specific post permalink is still pending; operators will assume the channel was skipped or failed.
 - Do not claim continuous learning is active unless collection, staged snapshots, rule updates, and feedback into production are all implemented and exercised.
+- Do not let a background social worker cross the human-in-the-loop boundary after QC; the mechanism is operational, not cosmetic: auto-publish turns a scoring or image-selection bug into a public brand incident before the owner can veto it.
 
 ## Explanation artifact template
 

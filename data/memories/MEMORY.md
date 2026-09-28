@@ -2,7 +2,7 @@ Obsidian vault berlokasi di /home/ubuntu/otak-koding. Rujukan utama: SYSTEM/KNOW
 §
 1. Verifikasi sukses via curl. 2. Proxy existing UIs daripada merakit ulang. 3. Haram localhost/127.0.0.1 di HTML publik. Gunakan Bot 2 untuk tugas bising.
 §
-Format Telegram: spasi lega, poin 1 baris. PANTANGAN: Dilarang emoji di UI/UX. Standar 98/100: 'Warm Paper & Obsidian'.
+Standar 98/100: 'Motion Bento Frame 023' (Warm Paper #EFECE6, Safety Orange, Periwinkle, Chartreuse, Outfit + JetBrains + Playfair).
 §
 Port: RADAR (:3090), jajan (:3000), hermes (:8080/:9119), buku (/buku), telemetry (:8090), penelitian-ai (:3050), 9router (:20128).
 §
@@ -14,7 +14,7 @@ Seluruh notifikasi otomatis (sinyal trading, warta @sputarai, warta SputarBall, 
 §
 SputarBall (:3085, ML :3086): Akun @sputarball. HARAM template lapangan generik berulang & clickbait hoax (skor 3). Wajib foto asli aksi pemain HD anti-watermark. Wajib draf disetujui Mas Bagas sebelum posting.
 §
-Hierarki otonom: Owner Mas Bagas -> GM Hermes -> Asisten Bikagent (@Bekbekk_bot) -> 3 Pilar: 1) Si Pintar (riset/solver), 2) Si Eksekutor (lapangan/tanya jika ragu), 3) Si Pengawas (QC/anti-slop/audit).
+Hierarki otonom: Owner Mas Bagas -> GM Hermes -> Dispatcher Bikagent (@Bekbekk_bot) + Pengawas QC -> 4 Divisi Spesialis: 1) Konten & Social AI (IG/TikTok continuous learning), 2) Web & UI/UX (Motion Bento 9.5), 3) Infra & SysOps, 4) Autopilot Engine.
 §
 Desain visual apparel/produk wajib menerapkan standar Swiss Editorial: hairline 1px, corner pinning, ledger tabular tanpa kartu melayang, crop fisik bersih tanpa teks promosi, format 2 slide padat to the point.
 §
