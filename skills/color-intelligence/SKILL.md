@@ -146,3 +146,16 @@ Before finishing, ask internally:
 - Are text and controls readable?
 - Does the palette still match the requested vibe after accessibility corrections?
 - Are token relationships reusable and coherent?
+
+---
+
+## Harmonic Palette Calibration & Script Helper
+
+Untuk menghasilkan palet triadik atau komplementer yang terkalibrasi secara matematis dengan WCAG AA/AAA:
+```bash
+python3 ~/.hermes/skills/color-intelligence/scripts/palette_calibrator.py "#F59E0B" triadic light
+```
+
+### Fondasi Teruji Light Mode vs Dark Mode:
+- **Light Mode (Warm Paper):** Canvas `#EFECE6` atau `#FAF8F5`, Card `#FFFFFF` (1px `#E2E8F0` border), Heading Text `#0F172A` (WCAG AAA 17.8:1), Body Text `#334155`.
+- **Dark Mode (Obsidian Noir):** Canvas `#0B0A10` atau `#0F172A`, Card `#15131D`, Aksen Tajam: Crimson `#EF4444`, Amber `#F59E0B`, Safety Orange `#FF5C00`.
