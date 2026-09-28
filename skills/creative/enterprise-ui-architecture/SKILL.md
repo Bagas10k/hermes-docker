@@ -22,6 +22,9 @@ Sebelum mengirimkan hasil rancangan ke pengguna, jalankan inspeksi mandiri via b
 - **DILARANG Kotak Logo Generik:** Gunakan pure typography wordmark minimalis.
 - **DILARANG Bento Simetris Kaku:** Hindari grid kotak 2x2 atau 3x3 seragam yang membosankan. Gunakan bentang kolom asimetris (*interlocking fluid corners*).
 - **DILARANG Teks Menabrak Foto/Elemen Lain:** Pisahkan kontainer teks dan visual secara vertikal atau beri padding batas aman tegas.
+- **DILARANG Menumpuk Kartu di Dalam Kartu (Anti-Nested-Card Rule):** Jangan menaruh kartu ber-border dan ber-radius di dalam kartu bento luar (`[nested-cards]`). Gunakan container transparan, button group tanpa border ganda, atau pembatas garis halus 1px.
+- **DILARANG Teks Putih di Atas Tombol Oranye (WCAG Contrast Rule):** Tombol aksi oranye (`#FF5C00` atau `#EA580C`) wajib menggunakan teks arang obsidian gelap (`#0F172A` / `#111318`) yang menghasilkan rasio kontras 8.5:1. Teks putih di atas oranye hanya menghasilkan kontras ~3.55:1 dan melanggar WCAG 2 AA untuk teks normal.
+- **DILARANG Baris Teks Terlalu Lebar (Strict Line Length Rule):** Batasi lebar kontainer teks narasi/penjelas maksimal 58ch–68ch (`max-width: 60ch`) agar panjang baris tidak melebihi 80 karakter (`[line-length]`).
 - **DILARANG Kemiringan 3D pada Panel Teks/Kode (Anti-Blur Orthogonal Rule):** Dilarang menerapkan CSS 3D transforms (`rotateY`, `rotateX`, `perspective`) pada kontainer yang memuat teks kode monospace, diff baris, atau log telemetri; transformasi 3D miring memicu cacat anti-aliasing subpixel pada raster font browser yang menyebabkan teks terlihat kabur/buram (*rasterization blur*). Panel data/kode wajib 100% tegak lurus datar (*flat orthogonal*, `transform: translateZ(0)`), dengan elevasi dan kedalaman visual murni dibangun via layered drop-shadows, border hairline 1px, dan kontras aksen semantik.
 
 ## 2. Arsitektur Komponen Inti
@@ -33,6 +36,16 @@ Sebelum mengirimkan hasil rancangan ke pengguna, jalankan inspeksi mandiri via b
 
 ### B. Interlocking Bento & Real Human Media
 - **Asymmetric Corner Radius:** Terapkan variasi radius berbeda per sudut kartu (`border-radius: 36px 36px 12px 36px`) agar kartu saling mengunci (*interlocking puzzle*).
+- **Asymmetric Dual-Wing Bento Hero Cockpit (65:35 Golden Ratio):**
+  Untuk landing page enterprise dan simulator sistem multi-agen AI:
+  - *Wing Kiri (~60-65% lebar, 1.55fr)*: Menampung judul utama berkontras tinggi (Outfit Black), manifesto sistem, selector skenario/mode eksekusi, kanvas graf fisika pegas 60 FPS (Hooke's Law: $F = -kx - cv$), dan bilah tahapan alur kerja horizontal (*stepper*).
+  - *Wing Kanan (~35-40% lebar, 1fr)*: Diletakkan sejajar horizontal dengan simulator. Menampung tab pemilih agen aktif, parameter alokasi memori tertutup, serta jendela terminal emulator CLI bertema gelap (*noir*) sebagai jangkar bobot visual (*visual counterbalance*).
+  - Menghindari pemotretan vertikal panjang; interaksi dengan kanvas di wing kiri langsung memperbarui telemetri dan log SQL di wing kanan secara real-time tanpa layout shift.
+- **Hierarki Tipografi 4 Lapis Disiplin:**
+  - *Lapis 1 (Primary Display H1)*: Bold/Black sans-serif (Outfit 900), tight tracking `-0.035em`, skala kontras tinggi.
+  - *Lapis 2 (Narrative & Context)*: Teks reguler/medium dengan batas baca ergonomis (`max-width: 58ch`).
+  - *Lapis 3 (Tactical Interactive)*: Label tombol, status stepper, dan tabs berbobot semi-bold dengan kontras fungsional.
+  - *Lapis 4 (Machine Telemetry)*: Tipografi monospasial (JetBrains Mono) eksklusif untuk kode status (`01.`, `02.`), latensi (`p95: 18ms`), stempel waktu milidetik, dan kueri database. Memisahkan secara tegas bahasa manusia dari bahasa mesin.
 - **Real Photography:** Tampilkan foto manusia/kreator nyata beresolusi tinggi dengan pembungkus frame kontras, bukan ilustrasi vektor generik.
 - **Connected Pipeline Node Diagram:** Sajikan alur fitur menggunakan node berpenghubung panah kurva SVG nyata (`Auto-Boosting` ➔ `Analitik`), bukan sekadar bullet list teks.
 

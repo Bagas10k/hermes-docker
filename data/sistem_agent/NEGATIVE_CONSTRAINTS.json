@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.1",
+  "owner": "Bagas Cihuy",
+  "effective_at": "2026-09-28T16:15:00.000Z",
+  "global_rules": [
+    {
+      "id": "QC_GATEKEEPER_AUTONOMOUS_RELEASE",
+      "severity": "hard_veto",
+      "rule": "Publikasi sosial resmi dikawal penuh oleh Agent QC (Invariant Auditor). Draf yang lolos audit (skor >= 80, 0 defect) otomatis terbit; draf dengan skor < 80 atau memiliki cacat visual/fakta otomatis ditolak mutlak.",
+      "domains": [
+        "sputarai",
+        "sputarball",
+        "tiktok",
+        "instagram"
+      ]
+    },
+    {
+      "id": "ZERO_EMOJI_UI_CONTENT",
+      "severity": "hard_veto",
+      "rule": "Production UI/source/design assets must not use Unicode emoji; use SVG/vector or plain text indicators.",
+      "domains": [
+        "web",
+        "social",
+        "design"
+      ]
+    },
+    {
+      "id": "SCORE_LT5_RESET",
+      "severity": "hard_veto",
+      "rule": "If Mas Bagas scores output below 5, do not cosmetic-patch; reset from upstream reference/design/copy research.",
+      "domains": [
+        "web",
+        "social",
+        "design"
+      ]
+    },
+    {
+      "id": "NO_PUBLIC_LOCALHOST_HTML",
+      "severity": "hard_veto",
+      "rule": "Public HTML must not contain localhost/127.0.0.1 URLs.",
+      "domains": [
+        "web"
+      ]
+    }
+  ],
+  "social_rules": [
+    {
+      "id": "SPUTARBALL_NO_GENERIC_PITCH",
+      "severity": "hard_veto",
+      "rule": "SputarBall hero images must not use generic green pitch, 3D cartoon stadium, empty turf, or repeated template fallback."
+    },
+    {
+      "id": "SPUTARBALL_HD_REAL_PHOTO",
+      "severity": "hard_veto",
+      "rule": "SputarBall must use authentic HD match/action/player/kit photos with no watermark and no wrong-subject image."
+    },
+    {
+      "id": "NO_CLICKBAIT_HOAX",
+      "severity": "hard_veto",
+      "rule": "Block sensational clickbait and unverified claims; no official evidence means no publication."
+    },
+    {
+      "id": "SPUTARAI_4_SLIDE_LOGIC",
+      "severity": "hard_veto",
+      "rule": "Sputarai carousel must be exactly 4 slides: headline, facts/analysis, facts/analysis, CTA."
+    }
+  ],
+  "approval_policy": {
+    "gatekeeper_mode": "autonomous_qc_agent",
+    "qc_passing_threshold": 80,
+    "allowed_auto_actions": [
+      "scan",
+      "draft",
+      "render",
+      "qc",
+      "publish_when_qc_passed",
+      "send_success_broadcast_to_telegram",
+      "bayesian_learning_cycle"
+    ],
+    "blocked_auto_actions": [
+      "publish_without_qc_pass",
+      "database_destructive_migration",
+      "third_party_active_security_scan"
+    ]
+  }
+}

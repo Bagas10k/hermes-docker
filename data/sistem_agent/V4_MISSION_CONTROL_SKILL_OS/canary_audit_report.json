@@ -1,0 +1,8 @@
+{
+  "canary_id": "mis_591280cc38f4",
+  "trace_id": "trc_dee860a26f26b1cd",
+  "timestamp": "2026-09-28T15:52:02.783Z",
+  "health_endpoint_status": "DOWN",
+  "audit_verdict": "PASSED",
+  "invariant_delta": 0
+}

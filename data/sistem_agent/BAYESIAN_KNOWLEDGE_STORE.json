@@ -1,0 +1,182 @@
+{
+  "version": "2.0.0",
+  "last_updated": "2026-09-28T17:54:11.129Z",
+  "knowledge_nodes": {
+    "ui.layout.grid_container": {
+      "canonical_key": "ui.layout.grid_container",
+      "version": "3.0.0",
+      "category": "layout",
+      "created_at": "2026-09-28T16:00:00.000Z",
+      "updated_at": "2026-09-28T17:54:11.127Z",
+      "observations_count": 3,
+      "prior_probability": 0.31,
+      "posterior_probability": 0.2385,
+      "latest_score": 2,
+      "latest_verdict": "Input via mission-control CLI: skor 2/10",
+      "active_solutions": [
+        "Matriks Bento 6-Modul Interlocking Frame 023 (Hero Manifesto span 2 rows, Safety Orange pill switch, Donut Gauge Noir, Equalizer TPS, Grand Canvas, Split Terminal Inspector). Menghasilkan 0 Axe violations & 0 Impeccable slop."
+      ],
+      "deprecated_patterns": [
+        "Layout 2-kolom sidebar biasa yang dipaksakan disebut bento."
+      ]
+    },
+    "ui.layout.anti_ai_slop_structure": {
+      "canonical_key": "ui.layout.anti_ai_slop_structure",
+      "version": "2.0.0",
+      "category": "layout",
+      "created_at": "2026-09-28T16:00:00.000Z",
+      "updated_at": "2026-09-29T00:53:42.235640",
+      "observations_count": 2,
+      "prior_probability": 0.5,
+      "posterior_probability": 0.31,
+      "latest_score": 2,
+      "latest_verdict": "Struktur anti-AI slop dinilai 2 karena mengadopsi cetak biru klise SaaS generator AI",
+      "active_solutions": [
+        "Swiss Archival Specification Ledger (SPEC-01 s/d SPEC-04) dengan tabular digits, chip spesifikasi, dan zero card-nesting."
+      ],
+      "deprecated_patterns": [
+        "Template SaaS generik klise (Badge melayang -> Hero bertumpuk -> 3 pilar berjejer -> Box demo statis -> Slider ROI mainan -> 3 kartu pricing -> Contact form)."
+      ]
+    },
+    "ui.motion.spring_physics": {
+      "canonical_key": "ui.motion.spring_physics",
+      "version": "3.0.0",
+      "category": "motion",
+      "created_at": "2026-09-28T16:00:00.000Z",
+      "updated_at": "2026-09-28T17:54:11.128Z",
+      "observations_count": 3,
+      "prior_probability": 0.44,
+      "posterior_probability": 0.414,
+      "latest_score": 4,
+      "latest_verdict": "Input via mission-control CLI: skor 4/10",
+      "active_solutions": [
+        "60 FPS Interactive Hooke's Law spring physics canvas (F = -kx - cv) dengan draggable nodes dan kurva deselerasi exponential cubic-bezier(0.16, 1, 0.3, 1)."
+      ],
+      "deprecated_patterns": [
+        "Animasi CSS setInterval kaku dan bounce-easing berlebihan cubic-bezier(0.34, 1.56, 0.64, 1)."
+      ]
+    },
+    "copy.b2b.architect_voice": {
+      "canonical_key": "copy.b2b.architect_voice",
+      "version": "2.1.0",
+      "category": "copywriting",
+      "created_at": "2026-09-28T16:00:00.000Z",
+      "updated_at": "2026-09-28T17:54:11.128Z",
+      "observations_count": 3,
+      "prior_probability": 0.5,
+      "posterior_probability": 0.5,
+      "latest_score": 5,
+      "latest_verdict": "Input via mission-control CLI: skor 5/10",
+      "active_solutions": [
+        "Suara Principal Systems Architect yang lugas, presisi, berbobot teknis (kompilasi DAG, transaksi ACID PostgreSQL, least-privilege sandbox, zero halusinasi via fail-closed barrier)."
+      ],
+      "deprecated_patterns": [
+        "Klaim pemasaran abstrak dan AI-isms hiperbolik (supercharge, revolusioner, generasi masa depan)."
+      ]
+    },
+    "ui.motion.tactile_smoothness": {
+      "canonical_key": "ui.motion.tactile_smoothness",
+      "version": "2.1.0",
+      "category": "tactile",
+      "created_at": "2026-09-28T16:00:00.000Z",
+      "updated_at": "2026-09-28T17:54:11.128Z",
+      "observations_count": 3,
+      "prior_probability": 0.56,
+      "posterior_probability": 0.586,
+      "latest_score": 6,
+      "latest_verdict": "Input via mission-control CLI: skor 6/10",
+      "active_solutions": [
+        "Kedalaman spasial taktil dengan 3D spatial tilt, umpan balik audio prosedural Web Audio, dan dual-track meter."
+      ],
+      "deprecated_patterns": [
+        "Komponen datar tanpa respon haptik atau feedback audio."
+      ]
+    },
+    "system.release.qc_gatekeeper": {
+      "canonical_key": "system.release.qc_gatekeeper",
+      "version": "2.0.0",
+      "category": "architecture",
+      "created_at": "2026-09-28T14:00:00.000Z",
+      "updated_at": "2026-09-29T00:53:42.235654",
+      "observations_count": 2,
+      "prior_probability": 0.5,
+      "posterior_probability": 0.85,
+      "latest_score": 9,
+      "latest_verdict": "Batalkan approval manual Telegram, biarin tugas bagian agent QC saja",
+      "active_solutions": [
+        "Rilis otonom 100% diputuskan oleh Agent QC (skor >= 80 auto-publish ke IG/TikTok; skor < 80 otomatis di-hard-veto). Telegram steril dari tombol persetujuan manual."
+      ],
+      "deprecated_patterns": [
+        "Bottleneck antrean tombol approval Telegram interaktif untuk Mas Bagas."
+      ]
+    },
+    "system.doctrine.token_efficiency": {
+      "canonical_key": "system.doctrine.token_efficiency",
+      "version": "1.0.0",
+      "category": "architecture",
+      "created_at": "2026-09-28T15:00:00.000Z",
+      "updated_at": "2026-09-29T00:53:42.235657",
+      "observations_count": 1,
+      "prior_probability": 0.5,
+      "posterior_probability": 0.9,
+      "latest_score": 9,
+      "latest_verdict": "Doktrin Pemikiran Minimum Optimal: Targetnya bukan berpikir sebanyak mungkin, tapi pemikiran minimum yang cukup",
+      "active_solutions": [
+        "Alur REQUEST -> COMPLEXITY CHECK (FAST/STANDARD/DEEP) -> MINIMUM CONTEXT -> MINIMUM AGENT -> MINIMUM SKILL -> EXECUTE -> VERIFY -> LEARN. Perintah sepele (<40 karakter) bypass skill (NO_SKILL)."
+      ],
+      "deprecated_patterns": [
+        "Loading semua file skill dan konteks vault tanpa seleksi."
+      ]
+    }
+  },
+  "eval_history": [
+    {
+      "eval_id": "eval_1a0e9272237",
+      "timestamp": "2026-09-28T17:54:11.128Z",
+      "items": [
+        {
+          "key": "ui.layout.grid_container",
+          "score": 2
+        },
+        {
+          "key": "ui.motion.spring_physics",
+          "score": 4
+        },
+        {
+          "key": "copy.b2b.architect_voice",
+          "score": 5
+        },
+        {
+          "key": "ui.motion.tactile_smoothness",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "eval_id": "eval_historical_agent_forge",
+      "timestamp": "2026-09-29T00:53:42.235660",
+      "items": [
+        {
+          "key": "ui.layout.grid_container",
+          "score": 2
+        },
+        {
+          "key": "ui.layout.anti_ai_slop_structure",
+          "score": 2
+        },
+        {
+          "key": "ui.motion.spring_physics",
+          "score": 4
+        },
+        {
+          "key": "copy.b2b.architect_voice",
+          "score": 5
+        },
+        {
+          "key": "ui.motion.tactile_smoothness",
+          "score": 6
+        }
+      ]
+    }
+  ]
+}

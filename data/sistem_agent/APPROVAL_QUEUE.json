@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "items": [
+    {
+      "id": "sputarball-bola-9361d9fe5def-1790612246160",
+      "domain": "sputarball",
+      "status": "PENDING_APPROVAL",
+      "draft_id": "bola-9361d9fe5def",
+      "headline": "Marselino Ferdinan Menuju Persija Jakarta, Jakmania Siap Sambut Wonderkid Garuda?",
+      "source": "Radar Timnas & Pemain Diaspora",
+      "qc_score": 100,
+      "created_at": "2026-09-28T16:17:26.161Z",
+      "required_approval": "Mas Bagas explicit approval",
+      "allowed_next_action": "publishDraftToInstagram('bola-9361d9fe5def') hanya setelah approval manual"
+    },
+    {
+      "id": "sputarball-bola-137675df30eb-1790611290613",
+      "domain": "sputarball",
+      "status": "REJECTED",
+      "draft_id": "bola-137675df30eb",
+      "headline": "Chelsea Siap Ladeni Arsenal, Melvine Malard Bertekad Jadi Legenda Baru",
+      "source": "The Guardian Football",
+      "qc_score": 100,
+      "created_at": "2026-09-28T16:01:30.614Z",
+      "required_approval": "Mas Bagas explicit approval",
+      "allowed_next_action": "publishDraftToInstagram('bola-137675df30eb') hanya setelah approval manual",
+      "rejected_by": "Mas Bagas Saputra",
+      "rejected_reason": "Ditolak via Telegram Interactive Button",
+      "rejected_at": "2026-09-28T16:13:32.773Z"
+    },
+    {
+      "id": "sputarball-bola-3175711801c0-1790610373840",
+      "domain": "sputarball",
+      "status": "PENDING_APPROVAL",
+      "draft_id": "bola-3175711801c0",
+      "headline": "Maarten Paes Tampil Kesurupan, Timnas Indonesia Tahan Malaysia Bermain 10 Orang",
+      "source": "Radar Timnas & Pemain Diaspora",
+      "qc_score": 100,
+      "created_at": "2026-09-28T15:46:13.840Z",
+      "required_approval": "Mas Bagas explicit approval",
+      "allowed_next_action": "publishDraftToInstagram('bola-3175711801c0') hanya setelah approval manual"
+    },
+    {
+      "id": "sputarball-bola-84c596b5d82a-1790609770409",
+      "domain": "sputarball",
+      "status": "REJECTED",
+      "draft_id": "bola-84c596b5d82a",
+      "headline": "Baru 19 Tahun, Lamine Yamal Sudah Angkat Trofi Piala Dunia dan Euro",
+      "source": "The Guardian Football",
+      "qc_score": 100,
+      "created_at": "2026-09-28T15:36:10.409Z",
+      "required_approval": "Mas Bagas explicit approval",
+      "allowed_next_action": "publishDraftToInstagram('bola-84c596b5d82a') hanya setelah approval manual",
+      "rejected_by": "Mas Bagas Saputra",
+      "rejected_reason": "Ditolak via Telegram Interactive Button",
+      "rejected_at": "2026-09-28T17:04:19.245Z"
+    }
+  ],
+  "notes": "Autonomous workers append draft previews here. Only explicit Mas Bagas approval may unlock publication.",
+  "updated_at": "2026-09-28T17:04:19.246Z"
+}
