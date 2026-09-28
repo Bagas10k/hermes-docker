@@ -12,14 +12,14 @@ Pesan log / tool progress bubble di Telegram wajib otomatis dibersihkan (cleanup
 §
 Seluruh notifikasi otomatis (sinyal trading, warta @sputarai, warta SputarBall, & cron scheduler) dialihkan ke grup Telegram BAgent (-1004397580704).
 §
-SputarBall (:3085, ML :3086): Akun @sputarball. HARAM template lapangan generik berulang & clickbait hoax (skor 3). Wajib foto asli aksi pemain HD anti-watermark. Wajib draf disetujui Mas Bagas sebelum posting.
+SputarBall (:3085, ML :3086): @sputarball. HARAM template lapangan generik & clickbait. Wajib foto aksi HD asli. Rilis otonom via QC (skor >= 80 auto-publish, <80 veto total); Telegram steril dari tombol approval.
 §
-Hierarki otonom: Owner Mas Bagas -> GM Hermes -> Dispatcher Bikagent (@Bekbekk_bot) + Pengawas QC -> 4 Divisi Spesialis: 1) Konten & Social AI (IG/TikTok continuous learning), 2) Web & UI/UX (Motion Bento 9.5), 3) Infra & SysOps, 4) Autopilot Engine.
+Hierarki otonom: Owner Mas Bagas -> GM Hermes -> Dispatcher Bikagent + QC -> 4 Divisi: 1) Konten/Social AI, 2) Web UI/UX (Motion Bento 9.5), 3) Infra/SysOps, 4) Autopilot.
 §
 Desain visual apparel/produk wajib menerapkan standar Swiss Editorial: hairline 1px, corner pinning, ledger tabular tanpa kartu melayang, crop fisik bersih tanpa teks promosi, format 2 slide padat to the point.
 §
-Supabase Self-Hosted (:8000, Studio /supabase & /project/default). Blueprint Docker Hermes & JajanDrive terhubung di GitHub Bagas10k via SSH.
+Supabase (:8000, Studio /supabase). Blueprint Docker Hermes & JajanDrive di GitHub Bagas10k via SSH.
 §
 Doktrin Autopilot: Jika hening 30 menit tanpa respons Mas Bagas, otomatis aktifkan autopilot mode slow (interval 30m).
 §
-Skor <5 AURA Weather: HARAM menambal kosmetik jika dinilai <5. Jika referensi hanya 1 kartu/widget, WAJIB riset referensi utuh kelas dunia (Dribbble/Mobbin) sebelum koding; dilarang mengarang sisa layout dasbor sendiri.
+Doktrin Nilai <5 & Bayesian Learner: HARAM tambal kosmetik jika skor <5; wajib riset referensi utuh dari nol. Mutasi data via eval-bayesian-learner (Upsert Canonical Key, anti-duplikasi, prioritas deviasi).
