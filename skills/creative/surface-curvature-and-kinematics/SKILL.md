@@ -62,7 +62,17 @@ Never mutate transform styles directly inside a `pointermove` event listener. Ra
 - **Spring Decay on Pointer Exit**:
   On `pointerleave`, smoothly glide target coordinates back to `(0, 0)` so cards coast into equilibrium rather than snapping abruptly.
 
-See `references/concentric-and-kinematics-cheatsheet.md` for precomputed concentric radius pairings and a reusable DampedSurfacePhysics class.
+### 5. Modular Squircle Soft Tiles & Scheduling Density
+When designing dense calendar, timetable, or agenda matrices, avoid rigid Excel-like table grid lines that cause optical fatigue.
+- **Individual Soft Tiles**: Use distinct modular squircle tiles (`border-radius: 16px - 20px`, `1.5px dashed rgba(0,0,0,0.08)`, `background: rgba(255,255,255,0.85)`) separated by subtle gutters (`4px`) to give each time slot tactile independence.
+- **Multi-Hour Event Span Cards**: Cards spanning multiple rows must use `height: calc(N * 100% + (N - 1) * gutter)` with absolute positioning within their starting grid cell, elevated drop shadows, and subtle multi-stop pastel gradients (`#d9f99d` to `#a7f3d0` or `#c4b5fd` to `#93c5fd`).
+- **Touch-First Mobile Architecture (390px - 768px)**:
+  1. *Day Selector Strip*: Render a horizontal 7-day pill strip at the top for single-thumb day switching (`Sun 02` to `Sat 08`).
+  2. *Dual Display Toggle*: Provide a segmented switch between Week Grid (horizontal scroll) and Day Agenda View (vertical single-column layout with full-width cards per hour).
+  3. *Bottom Sheet Transformation*: Transform floating desktop modals into touch-friendly bottom sheets with a top drag handle (`38px x 4px`).
+  4. *Toolbar Pruning*: Hide non-essential utility icons on narrow viewports to prevent horizontal clipping.
+
+See `references/concentric-and-kinematics-cheatsheet.md` for precomputed concentric radius pairings, modular squircle calendar tiles, and a reusable DampedSurfacePhysics class.
 
 ## Pitfalls & Hard Constraints
 - **Zero Raw Event DOM Writes**: Direct DOM mutations on `pointermove` cause dropped frames under high pointer polling rates (1000Hz gaming mice). Store normalized target coordinates in memory and interpolate inside RAF.

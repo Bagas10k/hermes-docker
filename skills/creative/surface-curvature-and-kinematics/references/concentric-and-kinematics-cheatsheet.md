@@ -100,3 +100,16 @@ When building modern calendar/timetable interfaces (Linear, Arounda standard) in
 | Milestone / Quick Task Pills | `border-radius: 9999px; height: 34px - 36px` | Tactile drop shadow `0 4px 12px rgba(0,0,0,0.1)` |
 | Mobile Bottom Sheet Modal | `border-radius: 28px 28px 0 0` | `box-shadow: 0 -16px 48px rgba(0,0,0,0.6)` + top handle (`38px x 4px`) |
 
+## 5. Master Portfolio Showcase Registration Workflow
+
+Every completed web surface, landing page, or design showcase project must be registered into the master portfolio catalog (`/home/ubuntu/katalog-portofolio-web`, live at `https://www.jajandigital.web.id/portofolio/`):
+
+1. **Register Metadata in `src/main.jsx`**:
+   Append a new object to the `PROJECTS` array with `id`, `title`, `category`, `path`, `year`, `status: 'Live & Produksi'`, `visualKey`, `summary`, `tags`, `palette` (6 hex tokens), `highlights` (5 bullet points), and `role`.
+2. **Craft Semantic SVG Artwork in `src/Art.jsx`**:
+   Add a new `case '<visualKey>':` returning an original SVG illustration (400x240 viewBox) featuring the project's actual squircle geometry, tokens, and layouts. Zero emoji policy applies.
+3. **Update Automated Test Suite in `tests/katalog.spec.js`**:
+   Increment project count assertions (`toHaveCount`), update category count, add specific search string checks, and ensure 0 Axe-Core WCAG AA violations.
+4. **Compile & Deploy**:
+   Execute `npm run build && cp -r dist/* dist-public/`, then verify HTTP 200 via `curl -sI https://www.jajandigital.web.id/portofolio/`.
+
