@@ -37,3 +37,6 @@
   3. *Tampilan Ganda*: Pastikan karya muncul rapi pada mode *Grid View* maupun *Ledger/Table View*.
   4. *Modal Bedah Kasus*: Modal dialog interaktif harus memuat rincian studi kasus, tantangan desain, dan tombol *Buka Live* yang mengarah langsung ke URL aktif (HTTP 200).
   5. *Integritas Uji*: Setiap penambahan proyek wajib melalui uji otomatis Playwright (viewport 390px, 768px, 1440px, 0 overflow horizontal, Zero Emoji, dan 0 pelanggaran Axe Core).
+  6. *Vite Subpath Relative Base (`base: './'`)*: Selalu pastikan `vite.config.js` menyertakan `base: './'`. Jika dibiarkan default `/`, aset JS/CSS akan dimuat dari root host (`/assets/...`) alih-alih subpath (`/portofolio/assets/...`), memicu layar putih kosong (*blank screen*) dan galat MIME type stylesheet pada server reverse proxy.
+  7. *Metrik Statistik Dinamis*: Indikator kuantitas proyek pada header dan *stats-strip* wajib terikat secara reaktif ke `{PROJECTS.length}`, bukan teks angka statis manual, agar total proyek selalu sinkron seketika saat karya baru didaftarkan.
+  8. *Disambiguasi Kueri Pencarian E2E*: Saat menambahkan proyek baru dengan substring judul yang mirip dengan entri lama (misal: "Neraca Akuntansi Frame 023" vs "NERACA OS"), gunakan kueri penelusuran frase spesifik pada Playwright test suite agar ekspektasi jumlah kartu hasil pencarian tidak ambigu.
