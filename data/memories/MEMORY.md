@@ -9,3 +9,5 @@ jajandigital (:3000), hermes-gateway (:8080), hermes-pekerja (@Bekbekk_bot), buk
 Modular RDP tools via Node.js proxy: 1) Hermes (/hermes :9119), 2) 9Router (:20128), 3) PM2, 4) SputarAI (:3050).
 §
 100 aset desain terverifikasi tersimpan di /home/ubuntu/referensi-desain/, dikelola via web https://www.jajandigital.web.id/desain/.
+§
+Standing convention: Setiap projek web, landing page, atau desain baru wajib otomatis didaftarkan ke katalog portofolio Bagas (/portofolio/ di katalog-portofolio-web).

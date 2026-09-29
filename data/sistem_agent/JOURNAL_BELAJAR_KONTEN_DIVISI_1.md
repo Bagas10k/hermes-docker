@@ -276,3 +276,42 @@ Arsip rekaman observasi, kalibrasi Bayesian, dan adaptasi algoritma media sosial
 - **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
 
 ---
+
+### Siklus Belajar Divisi 1 — 2026-09-29T12:52:16.336Z
+- **Total Postingan Dianalisis:** 208
+- **Rata-rata Views Baseline:** 11.7
+- **Rata-rata Engagement:** 1.88%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 8
+  - Aturan Eksperimen : 4
+  - Aturan Dipangkas  : 2
+- **Ringkasan:** Total Aturan: 14 (Aktif: 8, Eksperimen: 4, Dipangkas: 2). Baseline Views: 12
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-09-29T13:53:13.446Z
+- **Total Postingan Dianalisis:** 208
+- **Rata-rata Views Baseline:** 11.7
+- **Rata-rata Engagement:** 1.88%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 8
+  - Aturan Eksperimen : 4
+  - Aturan Dipangkas  : 2
+- **Ringkasan:** Total Aturan: 14 (Aktif: 8, Eksperimen: 4, Dipangkas: 2). Baseline Views: 12
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-09-29T14:53:50.328Z
+- **Total Postingan Dianalisis:** 208
+- **Rata-rata Views Baseline:** 11.7
+- **Rata-rata Engagement:** 1.88%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 8
+  - Aturan Eksperimen : 4
+  - Aturan Dipangkas  : 2
+- **Ringkasan:** Total Aturan: 14 (Aktif: 8, Eksperimen: 4, Dipangkas: 2). Baseline Views: 12
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---

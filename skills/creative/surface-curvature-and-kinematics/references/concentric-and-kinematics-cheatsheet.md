@@ -86,3 +86,17 @@ box-shadow:
   inset 0 0 0 1px rgba(0, 0, 0, 0.05),
   0 12px 32px -8px rgba(0, 0, 0, 0.06);
 ```
+
+## 4. Modular Soft Tile Grids & Calendar Scheduling Curvature
+
+When building modern calendar/timetable interfaces (Linear, Arounda standard) instead of rigid table grids:
+
+| Element | Target Curvature / Geometry | Border Treatment & Specular Depth |
+|---|---|---|
+| Outer Timetable Viewport | `border-radius: 24px - 28px` | `1px solid rgba(0,0,0,0.05)` + diffused float |
+| Individual Time Slots (Grid Cells) | `border-radius: 16px - 18px; margin: 3px` | `1.5px dashed rgba(0,0,0,0.08 - 0.10); bg: rgba(255,255,255,0.7)` |
+| Full-Hour / Multi-Hour Event Cards | `border-radius: 20px - 22px; padding: 12px 14px` | Soft multi-stop pastel gradient + `inset 0 1px 1px rgba(255,255,255,0.7)` |
+| Inner Time-Capsule Badges | `border-radius: 9999px; padding: 4px 10px` | `backdrop-filter: blur(8px); bg: rgba(255,255,255,0.4)` |
+| Milestone / Quick Task Pills | `border-radius: 9999px; height: 34px - 36px` | Tactile drop shadow `0 4px 12px rgba(0,0,0,0.1)` |
+| Mobile Bottom Sheet Modal | `border-radius: 28px 28px 0 0` | `box-shadow: 0 -16px 48px rgba(0,0,0,0.6)` + top handle (`38px x 4px`) |
+
