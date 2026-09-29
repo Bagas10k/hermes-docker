@@ -62,3 +62,4 @@ Sistem pembelajaran otonom berbasis umpan balik nilai numerik (skor 1–10), pem
 - **Multi-Factor Smearing:** Memperbaiki semua aspek sekaligus (mengubah grid, animasi, teks, dan warna dalam 1 perubahan). Wajib mengisolasi perbaikan pada prioritas defisit tertinggi ($\Delta_{\max}$) terlebih dahulu.
 - **Append-Only Context Bloat:** Menulis catatan evaluasi baru di markdown setiap kali ada koreksi tanpa memutasi catatan lama. Gunakan `canonical_key` upsert agar memori dan store tetap steril.
 - **Cosmetic Patching on Score < 5:** Menambal warna atau padding kecil saat skor $< 5$. Skor di bawah 5 mewajibkan pembongkaran total dari referensi utuh, bukan penambalan kosmetik.
+- **Pseudo-Bento 2-Column Trap:** Mengelompokkan antarmuka menjadi 2 kolom raksasa (sidebar 65%/35%) dan menamainya bento. Bento grid sejati membutuhkan interlocking multi-module (hero manifesto, tactical switch card, square micro-tiles, dan full-width anchor).

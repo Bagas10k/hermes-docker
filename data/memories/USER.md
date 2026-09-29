@@ -9,3 +9,7 @@ Milik Bagas @sputarai (auto-post, 100% indo alami). Carousel wajib tepat 4 slide
 Kurasi ide dan catatan dibukukan oleh Bot 2 (@Bekbekk_bot / Bekagent) ke Obsidian BUKU_CATATAN & web /buku. Vault steril murni milik Bagas.
 §
 Strict RAM efficiency. Migrasi 1-klik terpasang otomatis ke path asli; pengiriman berkas Telegram dipecah jika >15MB.
+§
+Pengguna menginginkan estimasi/jumlah token dicantumkan di akhir setiap respon.
+§
+Struktur respon adaptif sesuai konteks (Inti-Penjelas-Aksi, Sebab-Solusi, atau Analogi), bahasa lugas dan mudah dipahami.

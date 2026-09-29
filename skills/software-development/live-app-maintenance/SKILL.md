@@ -624,6 +624,35 @@ Use when updating, bug-fixing, styling, or maintaining an already-running fullst
     - Implement a comprehensive **Case Study / Architecture Modal** per project displaying design philosophy, technical highlights, calibrated hex swatches, tech stack chips, and a direct `[Buka Live]` launch link with focus-trapping and keyboard Escape dismissal.
   2. Maintain strict production invariants: 100% Zero-Emoji compliance (pure SVG icons only), zero horizontal overflow across mobile (390px), tablet (768px), and desktop (1440px), and automated Axe Core WCAG 2.1 AA accessibility verification.
 
+### 51. Permissions-Policy Microphone Delegation & Real-Time Web Telephony Pipeline
+- **Problem**: When deploying browser-based voice assistants, live telephone simulators, or WebRTC/Web-Speech tools on live servers, microphone access is completely blocked or fails silently (`NotAllowedError`), even on HTTPS, without ever displaying a browser permission prompt. Furthermore, AI voice responses feel robotic or un-interruptible when played back in full.
+- **Root Causes & Mechanisms**:
+  1. **Global Security Header Lockout**: Production reverse-proxy middleware (Express/Nginx) often enforces a strict global header: `'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'`. This tells modern browsers (Chrome, Edge, Safari) to strictly forbid microphone capture document-wide, regardless of user consent.
+  2. **Un-Interruptible Monologue**: Playing back audio blobs without tracking active microphone speech input forces the user to listen to the entire generated response before they can speak again, breaking natural conversational cadence.
+- **Rules & Implementation Protocol**:
+  1. **Route-Specific Permissions-Policy Unlocking**:
+     In server middleware, inspect incoming `req.path`. Selectively allow `microphone=(self)` strictly on voice routes while keeping default security headers intact for the rest of the application:
+     ```javascript
+     const isVoiceRoute = req.path.startsWith('/telepon') || req.path.startsWith('/voice') || req.path.startsWith('/api/telepon');
+     res.set({
+       'Permissions-Policy': isVoiceRoute ? 'camera=(), microphone=(self), geolocation=()' : 'camera=(), microphone=(), geolocation=()'
+     });
+     ```
+  2. **Dual-Layer Speech Pipeline (Web Speech API + Fast Model + Edge-TTS)**:
+     - **Client-Side STT**: Use browser-native `webkitSpeechRecognition` (`lang: 'id-ID'`, `continuous: true`, `interimResults: true`) with an 800–1100ms silence timer. This eliminates megabytes of raw audio uploads and achieves ~0ms client transcription latency.
+     - **Voice-Specific System Prompt**: Enforce strict voice constraints in the LLM prompt: *"Maksimal 1-2 kalimat pendek, santai, dan alami. Dilarang menggunakan markdown, tanda bintang, atau bullet points karena teks langsung dibacakan suara telepon."*
+     - **High-Fidelity Audio Streaming**: Stream synthesized audio via Edge-TTS (`id-ID-GadisNeural` / `id-ID-ArdiNeural`) encoded as Base64 MP3, with a client toggle fallback to `window.speechSynthesis` for zero-latency local synthesis.
+  3. **Instant Conversational Interruption**:
+     - Attach an immediate cancellation hook inside the speech recognition `onresult` listener:
+       ```javascript
+       if (isSpeaking && currentAudio) {
+         currentAudio.pause();
+         currentAudio.currentTime = 0;
+         isSpeaking = false;
+       }
+       ```
+     - If the user speaks while the AI is talking, immediately kill the active audio playback, reset the visualizer, and transition the state directly to listening.
+
 
 
 

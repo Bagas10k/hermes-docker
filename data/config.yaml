@@ -315,6 +315,11 @@ mcp_servers:
       - /home/ubuntu/mcp-uiux-reference/server.py
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
     enabled: true
+  sqlite:
+    command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
+    args:
+      - /home/ubuntu/mcp-sqlite/server.py
+    enabled: true
 platform_toolsets:
   cli:
     - browser
