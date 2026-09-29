@@ -40,3 +40,10 @@
   6. *Vite Subpath Relative Base (`base: './'`)*: Selalu pastikan `vite.config.js` menyertakan `base: './'`. Jika dibiarkan default `/`, aset JS/CSS akan dimuat dari root host (`/assets/...`) alih-alih subpath (`/portofolio/assets/...`), memicu layar putih kosong (*blank screen*) dan galat MIME type stylesheet pada server reverse proxy.
   7. *Metrik Statistik Dinamis*: Indikator kuantitas proyek pada header dan *stats-strip* wajib terikat secara reaktif ke `{PROJECTS.length}`, bukan teks angka statis manual, agar total proyek selalu sinkron seketika saat karya baru didaftarkan.
   8. *Disambiguasi Kueri Pencarian E2E*: Saat menambahkan proyek baru dengan substring judul yang mirip dengan entri lama (misal: "Neraca Akuntansi Frame 023" vs "NERACA OS"), gunakan kueri penelusuran frase spesifik pada Playwright test suite agar ekspektasi jumlah kartu hasil pencarian tidak ambigu.
+  9. *Penyelarasan Desain Default DESIGN.md (Motion Bento Frame 023)*:
+     - Terapkan kanvas *Warm Paper / Editorial Cream* (`#EFECE6`), tipografi *Triple-Voice Pairing* (Outfit 900 untuk Display/H1, JetBrains Mono untuk metadata/timecode/status, Playfair Display italic untuk kutipan editorial), dan elemen *Viewfinder HUD Framing* (tanda siku potong sudut `┌ ┐ └ ┘`, timecode pill `TC 00:00:11:14`, dan skala penggaris terkalibrasi).
+  10. *Kepatuhan Kontras Aksesibilitas WCAG AA pada Aksen Terang*:
+     - Warna ber-luminansi tinggi seperti Tangerine Orange (`#FF5C00`) atau Neon Chartreuse (`#84CC16`) jika diberi teks putih (`#FFFFFF`) menghasilkan rasio kontras < 3.5:1 (gagal WCAG AA 4.5:1). Wajib menggunakan teks gelap Carbon Obsidian (`#111318`), yang menghasilkan rasio kontras 5.2:1 (lulus uji ketat WCAG AA).
+  11. *Batas Waktu Pengujian Playwright E2E pada Katalog Visual*:
+     - Ketika katalog memuat 20+ kartu bento dengan vektor SVG dan pengujian menangkap tangkapan layar penuh (`fullPage: true`) di 3 resolusi (390px, 768px, 1440px) beserta audit Axe-Core, tingkatkan timeout di `playwright.config.js` menjadi minimal 60 detik (`timeout: 60000`) agar tidak memicu timeout prematur pada lingkungan headless CPU-constrained.
+
