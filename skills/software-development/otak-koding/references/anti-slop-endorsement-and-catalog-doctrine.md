@@ -69,3 +69,28 @@
 - **Responsivitas Layar Sentuh & Canvas 60 FPS pada Viewport Mobile**:
   - Simulasi canvas spasial desktop (misal: MacBook screen / notch) wajib menghitung rasio skala dinamis `scale = clientWidth / baseWidth` dan memetakan *pointer events* serta *touch events* (`touchstart`, `touchmove`, `touchend`) ke koordinat kanvas virtual (`toScreen(cx, cy)`), memastikan interaksi tetap responsif tanpa distorsi pada layar smartphone (390px).
 
+---
+
+## 6. Doktrin Pendamping AI Layar (Notch HUD) & Keselarasan 1 Tema Terpadu (Unified Design System)
+- **Gejala Slop & Toy Companion yang Ditolak Keras**:
+  - Membuat pendamping/maskot AI hanya sebagai animasi visual terisolasi (*mock tour/toy simulator*) yang terputus dari ekosistem server backend asli.
+  - Tidak memetakan identitas bot nyata, tidak menampilkan pemantauan layanan produksi, atau menggunakan tema warna acak yang bertabrakan dengan sistem yang telah dilatih.
+- **Standar Solusi (Native Embedded Companion HUD & Unified System)**:
+  - **Penanaman Fungsional Nyata (*Native Real-Time Integration*)**:
+    - Sambungkan pendamping AI ke telemetri backend: sediakan endpoint REST API status (`/api/status`), SSE live stream (`/api/live-stream`), dan action gate (`/api/action`).
+    - Reaksi Emosi Karakter Berbasis Beban Komputasi Nyata: Maskot secara otomatis bertransisi status (Idle saat CPU <20%, Thinking saat CPU 20-40%, Working dengan pendaran amber glow saat CPU >40% atau ada eksekusi perintah terminal aktif, serta Alert jika ada layanan PM2 yang restart/error).
+    - Pemetaan Ekosistem Bot & Subagent Transparan: Tampilkan identitas nyata bot (Hermes Cognitive Engine :8080, Worker Daemon / Bot 2 Bekagent @Bekbekk_bot untuk tugas bising & Obsidian /buku, SputarAI 4-slide carousel, SputarBall radar portal :3085) serta 5 pilar Subagent Squad (Frontend, Backend, Database, Radar, Obsidian) lengkap dengan aturan batas keselamatannya.
+    - Uji Interaksi Nyata: Sediakan tombol pengujian yang memicu sinyal nyata (seperti uji ping bot dan health check server) langsung ke backend.
+  - **Keselarasan 1 Tema Terpadu (Bagas Unified Aesthetics 98/100)**:
+    - *Kelengkungan Kontur G2 Continuous Squircle*: Terapkan radius superelips Apple (G2 continuous corner smoothing) pada seluruh modul kartu, pulau notch, tombol pill, hingga dialog popup tanpa sudut patah kaku.
+    - *Palet Warna Warm Paper & Obsidian + Incandescent Solar Flare*:
+      - Kanvas dasar: Deep Obsidian pekat (`#080A0E` dan `#0D1117`) dengan tekstur mikro dot-grid dan pendar foton halus.
+      - Permukaan kartu: Dark Soft Slate (`#161B22` dan `#1F2937`) dipadukan dengan kaca buram (*backdrop-filter: blur(20px)*) dan garis tepi hairline halus (1px `rgba(255,255,255,0.06)`).
+      - Pendar aksen primer: Incandescent Solar Flare Amber Glow (`#F59E0B`, `#FF8500`, `#FFD480`) untuk kontras hangat yang bernas.
+      - Pendar aksen status terukur: Hijau zamrud (`#10B981`) untuk online/sehat, biru elektrik (`#3B9EFF`) untuk Hermes/AI, ungu (`#8B5CF6`) untuk SputarAI, dan rose (`#F43F5E`) untuk peringatan galat.
+    - *Animasi Morphing Halus (*Fluid Kinematics & Spring Physics*)**:
+      - Transisi Dynamic Island notch berpindah mode (*compact*, *peek*, *expanded*) menggunakan kurva pegas mulus `cubic-bezier(0.16, 1, 0.3, 1)`.
+      - Kanvas 60 FPS spring physics: pelacakan tatapan mata 3D sferikal dinamis, kompresi elastis saat diklik (*squash & stretch* dengan lerp damping `sx += (1 - sx) * 0.18`), siklus kedipan organik, dan animasi pusing (*dizzy mode*) saat diketuk berturut-turut.
+    - *Kepatuhan Mutlak Zero-Emoji*: 100% menggunakan vektor SVG murni (Lucide icons), bebas dari karakter emoji Unicode pada antarmuka pengguna.
+
+

@@ -23,7 +23,7 @@ Struktur berkas acuan:
 - `SYSTEM/AGOTIMA_OPERASIONAL_HERMES.md` : 8 Prinsip Atomik Memori & Workflow UI/UX Reference
 - `KNOWLEDGE/PELAJARAN-UI-UX-NEOBRUTALISME-DAN-AGOTIMA.md` : Pelajaran Teruji Sasis Solid, Zero-Emoji, & Neo-Brutalism
 - `KNOWLEDGE/INDEX.md` : Indeks seluruh pelajaran teruji (TESTED)
-- `references/anti-slop-endorsement-and-catalog-doctrine.md` : Doktrin Anti-Slop Endorsements (Anti-Rainbow Pills), Kanvas Asli Edge-to-Edge, Integrasi Katalog Portofolio, Login Mandiri Publish-Ready (Zero Debug Labels), & Dual Audio Architecture
+- `references/anti-slop-endorsement-and-catalog-doctrine.md` : Doktrin Anti-Slop Endorsements, Kanvas Asli Edge-to-Edge, Integrasi Katalog Portofolio, Login Mandiri Publish-Ready, Dual Audio, & Pendamping AI Notch HUD (1 Tema Terpadu)
 - `KNOWLEDGE/REALTIME-COCKPIT-OBSERVABILITY.md` : Standar Terminal TUI 1-Layar, DAG Centerpiece, & Transparansi Sub-100ms
 - `references/high-density-dev-hud-and-pipeline-integrity.md` : Standar HUD Pengembang Ultra-Efisien, Flat 2D Zero-Blur, & Integritas Loop Kognitif Multi-Agen
 - `KNOWLEDGE/3D-CANVAS-BACKGROUND-SCROLL-ISOLATION.md` : Aturan mutlak isolasi gesture 3D canvas latar belakang (zero leak)
