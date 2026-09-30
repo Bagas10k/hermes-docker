@@ -94,7 +94,7 @@ Don't use for:
     * Keyboard shortcuts: Pressing `Enter` without `Shift` fires `submit` and immediately resets the textarea height back to single-line `height: auto;`; pressing `Shift + Enter` cleanly adds a newline and smoothly expands the input container upward.
   - Explicitly override global touch/selection rules on the text field with `user-select: text !important; -webkit-user-select: text !important; touch-action: manipulation;` to prevent mobile WebKit/Safari from blocking keyboard focus and cursor selection.
   - Docked directly above the bottom companion dock for effortless one-handed thumb reach.
-  - Accompanied by horizontal quick-action prompt chips (e.g. `Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`) for instant common commands without typing. Clicking chips auto-populates the input and recalculates height via `adjustInputHeight()`.
+  - **Clean Bottom Tier without Quick-Chip Clutter**: Keep the bottom tier radically uncluttered. Avoid stacking redundant quick-action chip buttons directly beneath the prompt bar—they eat up vertical canvas real estate, produce visual noise, and crowd the dock. The command input bar sits directly and cleanly above the dock in a pure, elegant relationship.
 - **Adaptive Spatial Layout Choreography**:
   - **Idle State**: The living mascot stands proud and centered in the spacious zen canvas (`transform: translate(0, 0) scale(1)`).
   - **Thinking / Processing State (Integrated Exclusively in Dynamic Island)**:
@@ -104,9 +104,9 @@ Don't use for:
       * The Dynamic Island morphs into `.is-thinking` with a pulsing ambient amber glow.
       * Status shifts to `[Agent] • Berpikir di Rumah` with sub-stage feedback (`Menganalisis instruksi...` → `Memanggil kognisi AI...` → `Merumuskan jawaban...`).
       * A neon progress bar (`.island-thinking-bar`) flows across the bottom edge of the island (`25%` → `65%` → `90%` → `100%`), keeping the mascot and chat canvas 100% unobstructed.
-  - **Responded / Chat State**:
-    - The canvas switches to flex-column stacking (`.zen-empty-canvas.has-chat { justify-content: flex-start; }`).
-    - The mascot smoothly morphs into an elegant companion at the top of the canvas (`width: 80px; height: 80px; transform: scale(0.48); margin-top: -24px; margin-bottom: -16px; z-index: 30;`), sitting cleanly above the chat card without overlapping a single character of text.
+  - **Responded / Chat State (Left-Aligned Companion Mascot)**:
+    - The canvas switches to flex-column stacking (`.zen-empty-canvas.has-chat { justify-content: flex-start; align-items: center; }`).
+    - **Left-Aligned Perch**: Instead of centering the companion above the chat card, anchor the mascot to the **top-left corner** directly above the bot's identity badge (`.zen-empty-canvas.has-chat .big-coucou-stage { width: 76px; height: 76px; transform: scale(0.48); transform-origin: left center; align-self: flex-start; margin-left: 16px; margin-top: -18px; margin-bottom: -12px; z-index: 30; }`). This aligns the mascot with the left-aligned message stream, reinforcing the organic metaphor that the companion is actively speaking the response.
     - When expressing curiosity or asking questions, the mascot transitions to `curious` state: tilted head (`rotate(0.12)`), asymmetric eyes (left eye wide and inquisitive, right eye focused with a raised brow curve).
     - The **Chat Response Card** (`.chat-response-card`) smoothly expands upwards ("molor ke atas") into the central viewport:
       ```css
@@ -151,14 +151,25 @@ Don't use for:
     * `+ Baru`: Starts a new clean session, archives the current thread to `localStorage`, collapses the chat card, and springs the mascot back to the center of the zen canvas.
     * `Riwayat`: Opens the slide-up chat history drawer.
     * `Mode Respon`: Instant reasoning style switch (`Mode: Kausal 3-Mindset`, `Mode: Ringkas & Cepat`, `Mode: Kreatif & Eksploratif`) persisted to `localStorage`.
-- **Typewriter Streaming Reveal Animation ("Animasi Ketikan Mengalir")**:
-  - Rather than dumping the entire Markdown response in a single frame (which creates an abrupt, jarring height leap), stream words and tokens sequentially (~18–22ms intervals) with a blinking amber cursor (`▌`).
-  - The chat card smoothly expands in height ("molor ke atas") as sentences flow in, and `body.scrollTop = body.scrollHeight` continuously follows the bottom baseline.
+- **Per-Character Monotonic Streaming Engine ("Animasi Ketikan Mengalir Per Huruf")**:
+  - Rather than jumping word-by-word or executing full markdown regular expressions on every animation tick (which causes layout thrashing and noticeable freeze/stutter as the response lengthens), use a **Text Node Walker** strategy:
+    * Pre-render the full structured Markdown HTML into the chat container once with all styling tags intact (`<p>`, `<strong>`, `<ul>`, `<code>`).
+    * Walk the DOM tree using `document.createTreeWalker(container, NodeFilter.SHOW_TEXT)` to collect all text nodes and cache their complete string contents.
+    * Temporarily clear each text node's `nodeValue = ''`.
+    * Run a monotonic frame loop via `requestAnimationFrame(tick)` with `performance.now()`.
+    * Stream characters sequentially across the DOM nodes at calibrated human typing speed (~85–130 chars/sec) with gentle micro-pauses at punctuation marks (`.` `,` `!` `?`), and position a blinking amber cursor (`▌`).
+    * The chat card smoothly expands in height ("molor ke atas") as sentences flow in, and `body.scrollTop = body.scrollHeight` continuously follows the bottom baseline without a single frame drop or CPU freeze.
   - Rich accessories (link cards, file download cards, and interactive inquiry chips) animate in with a staggered fade-in *only after* typing stream completes.
-- **Slide-up Chat History Drawer & Session Persistence**:
+- **Slide-up Simple Morphing History List ("Daftar Simple Morphi Riwayat")**:
   - House past conversations in `localStorage` under `coucou_chat_sessions` as structured session objects (`{ id, title, preview, time, messages }`).
-  - Render a slide-up G2 squircle sheet (`.history-sheet`) featuring total session counts, formatted timestamps, message quantities, title/preview snippets, individual delete buttons, and a global "Hapus Semua Riwayat" button.
-  - Tapping any session instantly reloads the entire multi-turn thread into the chat card and expands it smoothly into view.
+  - Render an ultra-sleek, minimalist list inside the slide-up G2 squircle sheet (`.history-sheet`):
+    * **Opening Morph**: Sheet opens with spring physics scaling (`transform: translateY(105%) scale(0.96) -> translateY(0) scale(1); opacity: 0 -> 1;`).
+    * **Minimalist Row Layout (`.history-item-simple`)**:
+      - Left: Frosted squircle icon with amber chat bubble (`width: 34px; height: 34px; border-radius: 11px;`).
+      - Center: Bold single-line session title + subtle timestamp on top; single-line truncated preview snippet below with clean CSS ellipsis.
+      - Right: Minimalist delete icon (`✕`) with hover red tint.
+    * **Tactile Spring Squash Feedback**: Tapping an item triggers an instant spring squash (`transform: scale(0.97)`), momentary amber glow border, audio pop, smooth sheet dismissal, and instant thread restoration into the main chat card.
+    * Bottom bar: Clean and unobtrusive "Bersihkan Semua Riwayat" action.
 - **File Attachment with Physical Mascot Reaction**:
   - Mount an attach button (`.cmd-attach-btn`) beside the prompt input wired to a hidden file picker.
   - When a file is selected, an emerald preview pill (`.attached-file-pill`) slides in above the command bar with filename, formatted size, and a remove (`✕`) trigger.
@@ -230,6 +241,41 @@ Don't use for:
     * Modal Expansion: Clicking the surrounding glass container smoothly pops open the full **Enlarged Living Folder Modal** (`@keyframes folderSpringOpen`), displaying large living canvases and complete status diagnostics.
   - Tapping an agent tile triggers tactile squash (`scale(0.92)`), plays that agent's chime signature, smoothly closes the folder, and morphs the main hero mascot to the selected agent.
 
+### 7. Authentic Volumetric Mascot Canvas Engine (Beyond Flat Approximation Trap)
+- **Superellipse Curve Formula ($n = 2.7$)**:
+  - Never use rigid 2D `ctx.roundRect` or circular `ctx.arc` for organic squircle mascots (Mochi).
+  - Trace the perimeter using the superellipse formula over 72 parametric steps to achieve a squishy, dough-like silhouette:
+    ```javascript
+    for (let i = 0; i <= 72; i++) {
+      const a = (i / 72) * Math.PI * 2;
+      const ca = Math.cos(a), sa = Math.sin(a);
+      const px = rx * Math.sign(ca) * Math.pow(Math.abs(ca), 2 / 2.7);
+      const py = ry * Math.sign(sa) * Math.pow(Math.abs(sa), 2 / 2.7);
+      i === 0 ? path.moveTo(px, py) : path.lineTo(px, py);
+    }
+    path.closePath();
+    ```
+- **4-Layer Volumetric Gradient Lighting**:
+  - Layer 1 (Base Tone): Linear gradient from top-right to bottom-left (`createLinearGradient(rx * 0.7, -ry * 0.85, -rx * 0.8, ry * 0.9)`).
+  - Layer 2 (Ambient Bottom Tint): Upward fading gradient reflecting agent energy color (`createLinearGradient(0, ry, 0, -ry * 0.25)`).
+  - Layer 3 (Radial Inner Shadow): Soft occlusion shadow along bottom perimeter (`createRadialGradient(rx * 0.25, -ry * 0.32, R * 0.15, 0, 0, R * 1.25)`).
+  - Layer 4 (Specular Highlight Gloss): Crisp curved gloss reflection at the upper surface (`createRadialGradient(rx * 0.34, -ry * 0.46, 0, rx * 0.34, -ry * 0.46, R * 0.42)`), producing an unmistakable 3D silicone sheen.
+- **3D Spherical Gaze Projection & Perspective Foreshortening**:
+  - Calculate gaze angles with biological saturation roll-off:
+    $$\text{look.x} = \tanh\left(\frac{\Delta x}{260}\right), \quad \text{look.y} = -\tanh\left(\frac{\Delta y}{200}\right)$$
+  - Project eyes across a 3D spherical surface:
+    $$\text{px} = \sin(\text{yaw}) \cdot \cos(\text{pitch}) \cdot r_x, \quad \text{py} = -\sin(\text{pitch}) \cdot r_y$$
+  - Calculate perspective foreshortening scales:
+    $$f_x = \operatorname{lerp}(\max(0.18, \cos(\text{yaw})), 1, 0), \quad f_y = \operatorname{lerp}(\max(0.18, \cos(\text{pitch})), 1, 0)$$
+  - Clip eye rendering to the body path (`ctx.clip(path)`). When the mascot turns sideways, the far eye realistically foreshortens and wraps around the 3D horizon instead of drifting off into empty air.
+- **Kinematic Springs, Organic Breathing & Dynamic Particles**:
+  - Use keyframed tweening arrays (`anim(property, [[target, duration, easingFunc], ...], onComplete)`).
+  - Continuous differential breathing:
+    $$\text{scale}_y = 1 + \sin(t \times 1.8) \times 0.035, \quad \text{scale}_x = 1 - \sin(t \times 1.8) \times 0.02$$
+  - Random double-blinks: when a blink triggers, add a 22% chance of firing an immediate second micro-blink 230ms later.
+  - Procedural particle emitters (`emit(type, count)`) with velocity, gravity decay, and alpha fading for emotional states: hearts on `love`, stars on `proud`, sparkles on `finish`, sweat droplets on `ratelimit`, and Zzz letters on `sleep`.
+  - Waving little hands on greeting (`greet()` sets `s.hands = 1` and oscillates $y$ coordinate by $\sin(t \times 13) \cdot R \times 0.16$).
+
 ## Procedure
 
 1. **Establish Fixed Viewport & Ambient Canvas**:
@@ -256,7 +302,11 @@ Don't use for:
 
 ## Pitfalls
 
+- **The Flat 2D Canvas Approximation Trap (Mascot Feels Stiff and Dead)**: Hand-rolling a companion mascot canvas using standard `ctx.roundRect()` with flat color fills and 2D linear eye translation (`lookX * offset`) results in a stiff, lifeless cartoon look that fails the high-fidelity tactile bar. Always implement the authentic mathematical model: parametric superellipse geometry ($n = 2.7$), 4-layer volumetric lighting (linear base gradient, ambient energy tint, radial inner shadow, specular gloss highlight), 3D spherical eye projection with non-linear `Math.tanh` gaze tracking and perspective foreshortening clipped to the body path, keyframed spring physics with organic breathing differential, and dynamic particle emission.
 - **Cluttered Outside Dock vs Glass Peek Folder Consolidation**: Scattering individual multi-agent buttons across the outer dock while simultaneously providing a squad folder button creates severe visual clutter, exhausts thumb reach on compact mobile viewports (`390px`), and introduces redundant navigation paths. Remove all individual agent buttons from the outside dock and consolidate them into a single **Glass Peek Dock Folder** (`.dock-folder-glass` with a 2x2 grid of mini living Coucous visible from outside) supporting two-tier interaction: direct click on a mini agent triggers a quick switch, while tapping the glass body expands the full enlarged folder modal.
+- **Typewriter Re-parsing Stutter & Word Jumping**: Appending streamed text chunks and re-running markdown parser/regexes on every frame causes exponential CPU overhead, layout thrashing, and noticeable stuttering ("macet") as the message grows. Always pre-render the complete structured HTML once, traverse all `NodeFilter.SHOW_TEXT` nodes, stash their contents, and stream characters monotonically via `requestAnimationFrame(tick)` directly across existing DOM nodes with zero regular expression recalculation per frame.
+- **Quick-Chip Bottom Tier Clutter**: Placing rows of quick suggestion chips directly below the prompt bar crowds the bottom margin of the screen, creating visual friction against the dock in a zero-scroll zen interface. Omit prompt chip rows beneath the input bar to maintain vertical negative space and direct proximity between prompt and dock.
+- **Overcomplicated Multi-Card History Drawer**: Rendering heavy multi-line cards with separate date rows, sub-headers, and borders inside the history sheet makes mobile browsing clunky and slow. Use a sleek, single-row morphing list (`.history-item-simple`: left icon, top bold title + timestamp, bottom 1-line snippet, right delete icon) combined with tactile squash morphing (`scale(0.97)`) on click for seamless thread restoration.
 - **Nested Mini-Button Event Bubbling in Dock Folder**: Nesting clickable mini agent buttons (`.mini-folder-agent`) inside an outer interactive dock folder element (`#btnOpenSquadFolder`) causes clicks on a mini agent to bubble up and trigger the folder's click listener, unintentionally popping open the full folder modal instead of executing a quick switch. Always call `e.stopPropagation()` in the mini agent listener and guard the folder wrapper handler with `if (e.target.closest('.mini-folder-agent')) return;`.
 - **Dead Icon Syndrome in Agent Grouping Containers**: Rendering multi-agent rosters as static SVG icons or flat PNG images inside grouping containers destroys the organic illusion of an autonomous companion ecosystem. When wrapping agents in an OS-style folder or squad grid, mount dedicated independent micro-canvases (`60x60` px) for each agent tile so every mascot remains physically alive (independent eye blinks, breathing bounce, characteristic status emotes, and red notification pills) even while contained inside the folder.
 - **Playwright Strict Mode Locator Collision on Dual Agent Buttons**: Re-using identical data attributes like `data-agent="bekagent"` across both dock buttons and folder tiles causes test locators like `page.locator('button[data-agent="bekagent"]')` to throw strict mode violations (`resolved to 2 elements`). Always namespace container attributes (e.g. `data-folder-agent="bekagent"`) to keep automated testing unambiguous.
