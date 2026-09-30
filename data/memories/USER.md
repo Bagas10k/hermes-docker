@@ -13,3 +13,5 @@ Strict RAM efficiency. Migrasi 1-klik terpasang otomatis ke path asli; pengirima
 Pengguna menginginkan estimasi/jumlah token dicantumkan di akhir setiap respon.
 §
 Struktur respon adaptif sesuai konteks (Inti-Penjelas-Aksi, Sebab-Solusi, atau Analogi), bahasa lugas dan mudah dipahami.
+§
+Preferensi UI pendamping mobile: 1-page non-scrollable (100dvh), kanvas zen 'kosongan' minim teks, objek maskot utama besar di tengah, agen lain berwujud maskot senada, menu pengaturan lengkap disimpan dalam slide-up drawer G2 squircle.
