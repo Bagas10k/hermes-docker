@@ -41,22 +41,27 @@ Don't use for:
   ```
 - No document scrollbar, no bouncing overscroll, no multi-page stacking.
 - Three balanced vertical tiers:
-  1. **Top**: Dynamic Island / Header capsule (live status, identity, expand chevron).
-  2. **Center**: Spacious Zen Canvas ("home kosongan") housing the living central mascot (size ~180x180px, 60 FPS spring physics, continuous eye tracking following touches).
-  3. **Bottom**: Floating Agent Dock housing companion buddies and primary haptic triggers.
+  1. **Top**: Dynamic Island stays **hidden in idle**; reveal it only when chat/work is active, then let it act as the agent status/config home with an in-place morphing expansion. Do not add fake phone chrome such as a clock, signal, Wi-Fi, or battery row—the browser/device already supplies system status and duplicating it makes the product feel like a simulator.
+  2. **Center**: Spacious Zen Canvas ("home kosongan") housing exactly **one** living central mascot in idle (size ~180x180px, 60 FPS spring physics, continuous eye tracking following touches).
+  3. **Bottom**: Clean user command/tool zone: prompt bar, essential session actions, and a minimal utility dock. Do not duplicate the active mascot or scatter agent choices here unless explicitly requested.
 
 ### 2. Multi-Agent Ecosystem Parity ("Agent Lain Itu Maskot Juga")
-- Every bot or subagent in the ecosystem is represented as a first-class mascot buddy, not a raw textual list.
-- Tapping any agent in the bottom dock smoothly morphs:
+- Every bot or subagent in the ecosystem is represented as a first-class selectable companion identity, not a raw textual list.
+- For notch/chat companion UIs, prefer housing the AI agent squad **inside the expanded Dynamic Island** rather than scattering loose agent buttons in the dock:
+  - Idle: no Dynamic Island, no duplicate mini mascot; only the one central living mascot is visible.
+  - Active chat/work: Dynamic Island appears as the agent's home/status beacon.
+  - Expanded Dynamic Island: show a compact 2x2 agent grid (Hermes, Bekagent, SputarAI, SputarBall or project equivalents), response-mode config, and telemetry.
+- Tapping any agent tile smoothly morphs:
   - Central mascot theme color, blush intensity, and characteristic eye traits.
-  - Dynamic Island identity badge, subtitle, and port status.
+  - Dynamic Island identity badge, subtitle, and port/status data.
   - Background radial ambient halo glow.
   - Audio chime signature (e.g. `greet`, `work`, `blip`, `pop`).
 
 ### 3. G2 Squircle Bottom Sheet for Settings ("Menu Pengaturan")
 - Keep the home canvas radically simple and free of data tables.
 - House all rich controls in an off-canvas slide-up drawer:
-  - Character geometry morphing (`mochi` squircle, `galet` pill, `lueur` orb).
+  - Character geometry morphing (`mochi` squircle, `galet` pill, `lueur` orb, plus extended geometric body shapes such as `prism` hexagonal crystal and `capsule` vertical pill).
+  - Procedural character customization: body color palette selector (dynamic 3D gradient recalculation with specular gloss preservation) and zero-emoji procedural accessory layer (e.g. `glasses`, `beret`, `headphone`, `satellite` dish).
   - Eye gaze sensitivity & squash intensity sliders with live numeric feedback.
   - Master volume slider & WAV sound test pads.
   - Instant emote sandbox (happy, wink, proud, surprised, love blush, dizzy).
@@ -97,6 +102,10 @@ Don't use for:
   - **Clean Bottom Tier without Quick-Chip Clutter**: Keep the bottom tier radically uncluttered. Avoid stacking redundant quick-action chip buttons directly beneath the prompt bar—they eat up vertical canvas real estate, produce visual noise, and crowd the dock. The command input bar sits directly and cleanly above the dock in a pure, elegant relationship.
 - **Adaptive Spatial Layout Choreography**:
   - **Idle State**: The living mascot stands proud and centered in the spacious zen canvas (`transform: translate(0, 0) scale(1)`).
+  - **Chat Entry Timing & Character-to-Island Migration**:
+    - Treat the transition from idle to chat as the primary animation, not a fast UI reveal. Use a 1–2 second choreography where the central mascot visibly shrinks/glides into the Dynamic Island before the chat card completes expansion.
+    - Use four named motion roles consistently: **EASING** for opacity/text reveal, **TIMING** for fast button taps, **RHYTHM** for loops such as cursor/loading/breathing, and **SPRING/MORPHI** for large shape/state changes such as idle→DI, compact→expanded island, and chat archive→history.
+    - Keep collapsed Dynamic Island status text simple (short title + one subline); do not crowd it with verbose operational prose.
   - **Thinking / Processing State (Integrated Exclusively in Dynamic Island)**:
     - The mascot tilts eyes upward in deep focus with a pulsing aura.
     - Enforce a **Guaranteed Minimum Thinking Duration** (at least 1200ms) even if the LLM responds faster, preventing jarring visual flickers and letting progressive stages render palpably.
@@ -130,7 +139,9 @@ Don't use for:
       }
       ```
 - **In-Browser Telegram Alternative (Full Markdown Threading)**:
-  - Supports comprehensive multi-turn dialogue with rich formatting: clean paragraphs, numbered and bulleted lists, bold emphasis, and dark monospaced code blocks (`<pre><code>`).
+  - Render the assistant surface as transparent conversation space, not a dense opaque card: keep the outer thread background/border/shadow transparent, use a light user bubble, and let assistant typography sit directly on the ambient canvas. Add top/bottom opacity masks to the internal scroll viewport so long threads remain readable and clearly scrollable.
+  - Support comprehensive multi-turn dialogue with sanitized rich formatting: headings, paragraphs, numbered and bulleted lists, bold, italic, strikethrough, blockquotes, safe links, inline code, and fenced code blocks with language labels.
+  - For real Telegram synchronization, emit bounded server-side activity events from the actual private/group bot handlers (`source`, `agent`, `stage`, `summary`, `status`, `timestamp`) into a shared activity store or bus, expose them through authenticated SSE, and render recent work in the Dynamic Island. Never infer or fabricate bot work from telemetry alone; stale events must expire and secrets/chat identifiers must not enter the payload.
   - **Integrated Action Controls** in the card header:
     - **Copy Button**: Copies full response text to clipboard in 1 tap with momentary visual feedback.
     - **Speech (TTS) Button**: Triggers browser Web Speech Synthesis (`SpeechSynthesisUtterance`) to voice the response.
@@ -139,18 +150,20 @@ Don't use for:
 
 ### 5. Dynamic Island ("Rumah si Agent"), Bottom User Tools & Multimodal Engine
 - **Dynamic Island as the "Agent's Home" (*Rumahnya si Agent*)**:
-  - The Dynamic Island is strictly the active agent's residence and cognitive status beacon—**not a user control toolbar**.
-  - Houses the living micro-mascot in its home stage, live presence status, and telemetry expansion toggle:
+  - The Dynamic Island is hidden during idle zen mode; it appears only after chat/work begins.
+  - It is the active agent's residence, cognitive status beacon, and compact configuration hub—not a duplicate mascot container.
+  - In collapsed state, show only live presence/status and the morph chevron:
     * **Siaga di Rumah**: `[Agent] • Di Rumah` (sub: `Siaga menanti instruksi...` with emerald pulse dot).
     * **Berpikir di Rumah**: `[Agent] • Berpikir di Rumah` (sub: `Menganalisis instruksi...` with amber glow pulse and integrated progress bar).
     * **Merespons**: `[Agent] • Menulis Respon` (sub: `Mengalirkan jawaban ke kartu...`).
     * **Menganalisis Berkas**: `[Agent] • Menganalisis Berkas` (sub: `[nama berkas]`).
-  - Keep the island pristine: zero user action buttons inside the island.
-- **Bottom User Controls & Response Config Strip (*Tools User di Bagian Bawah*)**:
-  - All user controls and response preferences belong at the bottom (`.user-tools-strip`), docked immediately above the command bar for effortless single-handed thumb reach:
-    * `+ Baru`: Starts a new clean session, archives the current thread to `localStorage`, collapses the chat card, and springs the mascot back to the center of the zen canvas.
-    * `Riwayat`: Opens the slide-up chat history drawer.
-    * `Mode Respon`: Instant reasoning style switch (`Mode: Kausal 3-Mindset`, `Mode: Ringkas & Cepat`, `Mode: Kreatif & Eksploratif`) persisted to `localStorage`.
+  - In expanded state, morph in-place and reveal: AI agent squad selection, response mode config (`Kausal 3-Mindset`, `Ringkas & Cepat`, `Kreatif`), and compact telemetry (CPU/RAM/latency). Keep broad session actions (`+ Baru`, `Riwayat`) near the bottom prompt unless the user asks to move them.
+- **Bottom User Controls & Keyboard-Safe Prompt Zone (*Tools User di Bagian Bawah*)**:
+  - Put broad session actions beside the prompt as compact icon buttons, not text-heavy pills. Use icon-only `+`/new-chat and history buttons styled like the utility dock, close enough for thumb reach but never overlapping the input field.
+  - On mobile keyboard focus, move only the prompt/control block above the virtual keyboard; do not translate the whole page or disturb the zero-scroll canvas. Anchor the command wrapper with fixed positioning and safe-area/keyboard inset handling.
+  - `+ Baru`: archives the current thread to `localStorage`, plays a 1–2 second "wrap into history" morph animation, then collapses the chat card and returns to a fresh prompt.
+  - `Riwayat`: opens a DI-like compact history panel showing simple conversation titles/snippets.
+  - `Mode Respon`: keep active reasoning mode available either in the expanded Dynamic Island or a compact bottom control; avoid duplicating it in multiple places unless the user requests both.
 - **Per-Character Monotonic Streaming Engine ("Animasi Ketikan Mengalir Per Huruf")**:
   - Rather than jumping word-by-word or executing full markdown regular expressions on every animation tick (which causes layout thrashing and noticeable freeze/stutter as the response lengthens), use a **Text Node Walker** strategy:
     * Pre-render the full structured Markdown HTML into the chat container once with all styling tags intact (`<p>`, `<strong>`, `<ul>`, `<code>`).
@@ -158,10 +171,11 @@ Don't use for:
     * Temporarily clear each text node's `nodeValue = ''`.
     * Run a monotonic frame loop via `requestAnimationFrame(tick)` with `performance.now()`.
     * Stream characters sequentially across the DOM nodes at calibrated human typing speed (~85–130 chars/sec) with gentle micro-pauses at punctuation marks (`.` `,` `!` `?`), and position a blinking amber cursor (`▌`).
-    * The chat card smoothly expands in height ("molor ke atas") as sentences flow in, and `body.scrollTop = body.scrollHeight` continuously follows the bottom baseline without a single frame drop or CPU freeze.
-  - Rich accessories (link cards, file download cards, and interactive inquiry chips) animate in with a staggered fade-in *only after* typing stream completes.
-- **Slide-up Simple Morphing History List ("Daftar Simple Morphi Riwayat")**:
+    * Anchor each newly submitted turn once at the top of the internal message viewport, then keep `scrollTop` unchanged while characters stream. Never chase `scrollHeight` during typing—the response must grow downward while the user retains manual control of reading position.
+  - Rich accessories such as link cards and file download cards may animate in only after typing completes. Do not append unsolicited follow-up-question chips or recommended replies; they add clutter and undermine the direct conversational flow.
+- **DI-Style Simple Morphing History List ("Daftar Simple Morphi Riwayat")**:
   - House past conversations in `localStorage` under `coucou_chat_sessions` as structured session objects (`{ id, title, preview, time, messages }`).
+  - Present history as a compact Dynamic-Island-like panel rather than a heavy page. Show simple conversation titles/snippets first; detail can load after selection.
   - Render an ultra-sleek, minimalist list inside the slide-up G2 squircle sheet (`.history-sheet`):
     * **Opening Morph**: Sheet opens with spring physics scaling (`transform: translateY(105%) scale(0.96) -> translateY(0) scale(1); opacity: 0 -> 1;`).
     * **Minimalist Row Layout (`.history-item-simple`)**:
@@ -180,10 +194,9 @@ Don't use for:
     * Dynamic Island updates status to `Coucou Menerima Berkas`.
     * Vocal speech bubble asks: *"Wah, ada berkas baru: [filename]! Mau aku analisis apa?"*.
   - When the message is submitted, the attachment metadata is bundled into the API payload so the AI acknowledges and dissects the file with high intellectual curiosity.
-- **High Intellectual Curiosity Persona**: The companion AI acts proactively with high intellectual curiosity—exploring root causes, proposing creative hypotheses, and providing 2–3 thought-provoking follow-up questions.
-- **Link Cards**: Structured preview cards with Lucide external-link SVG icons, title, and direct URL.
+- **High Intellectual Curiosity Persona**: The companion AI may explore root causes and propose hypotheses inside the answer, but it must not render separate recommended-response or follow-up-question chips unless explicitly requested.
+- **Link Cards**: Structured preview cards with SVG external-link icons, title, and direct URL.
 - **File Attachment Cards**: Emerald-tinted file cards (`.chat-file-card`) displaying filename, description, and size. Clicking the download button dynamically synthesizes a `Blob` (`URL.createObjectURL`) for instant, reliable local file download.
-- **Interactive Follow-up Question Chips**: Clickable prompt pills (`.followup-chip`) rendered beneath the bot message. Clicking any chip immediately inputs the question into the command bar and fires the thinking cycle, maintaining continuous effortless dialogue.
 - **Reactive Speech & Thought Bubble**:
   - Floats dynamically directly above the mascot's head during casual interactions with a soft pointing tail and spring scale-in animation.
   - Multi-line formatting (`white-space: normal; width: max-content; min-width: 140px; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`). Never apply `white-space: nowrap` or `text-overflow: ellipsis`.
@@ -280,20 +293,22 @@ Don't use for:
 
 1. **Establish Fixed Viewport & Ambient Canvas**:
    - Set `100dvh` flex column, prevent browser default pull-to-refresh and rubberbanding.
-   - Lay down an ambient radial mesh gradient reflecting the active agent's energy color.
+   - Lay down an orange radial gradient centered above the content, and expose a persisted Settings control that adjusts its opacity/dimming without changing semantic foreground contrast.
 2. **Mount Dual 60 FPS Canvas Objects**:
    - Render the micro-mascot inside the Dynamic Island and the hero living mascot in the central zen canvas.
    - Calculate 3D spherical eye gaze projection:
      $$\text{dx} = \frac{x_{\text{pointer}} - x_{\text{center}}}{w_{\text{window}}}, \quad \text{dy} = \frac{y_{\text{pointer}} - y_{\text{center}}}{h_{\text{window}}}$$
    - Apply spring physics damping for squash & stretch on touch/tap.
-3. **Mount Multi-Agent Dock Switcher**:
-   - Render tactile squircle buttons for each agent.
-   - Bind click/tap events to trigger concurrent canvas morphing, audio chime, and toast notification.
+3. **Mount Gesture-Driven Living Agent Switcher**:
+   - Keep one active hero mascot visible. On a ~500ms hold, reveal the other independently animated mascot canvases fanned behind and beside it; do not replace them with text pills or static icons.
+   - Capture the pointer on press. While held, map pointer coordinates to immutable opening-time agent anchor points, preview the nearest agent continuously, then commit on release. Preserve a tap/click fallback and cancel cleanly on `pointercancel`.
+   - During preview, suppress repetitive toast/audio, optionally provide a bounded haptic tick, and bring only the candidate mascot forward with spring scale/depth. On close, restore the hero to `idle`, explicitly zero current and target tilt, and retain gaze tracking so switching never leaves it permanently leaning or unable to look around.
 4. **Implement Nested Settings Drawer**:
    - Hook settings open button to add `.open` class to drawer and backdrop overlay.
    - Allow dismissal via close button (`✕`), backdrop click, drag handle, or Escape key.
 5. **Mount Spotlight Command Bar & Reactive Speech Bubble**:
-   - Anchor the command bar form directly above the bottom agent dock with quick prompt chips (`Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`).
+   - Anchor the command bar directly above a minimal dock containing only session navigation and settings. Put audio, diagnostics/ping, ambient dimming, and other utilities inside Settings; do not expose unexplained utility icons in the primary dock.
+   - Keep the interaction hint faint and terse (for example, `Sentuh Coucou untuk berinteraksi`) so it does not compete with the mascot.
    - Mount an absolute-positioned speech bubble container above the mascot canvas.
    - Wire submit event to trigger optimistic "thinking" state (upward eye tilt, work chime), call the backend command endpoint asynchronously, and render the vocalized reply with emotional animation.
 6. **Verify Zero-Emoji & Accessibility**:
@@ -310,12 +325,12 @@ Don't use for:
 - **Nested Mini-Button Event Bubbling in Dock Folder**: Nesting clickable mini agent buttons (`.mini-folder-agent`) inside an outer interactive dock folder element (`#btnOpenSquadFolder`) causes clicks on a mini agent to bubble up and trigger the folder's click listener, unintentionally popping open the full folder modal instead of executing a quick switch. Always call `e.stopPropagation()` in the mini agent listener and guard the folder wrapper handler with `if (e.target.closest('.mini-folder-agent')) return;`.
 - **Dead Icon Syndrome in Agent Grouping Containers**: Rendering multi-agent rosters as static SVG icons or flat PNG images inside grouping containers destroys the organic illusion of an autonomous companion ecosystem. When wrapping agents in an OS-style folder or squad grid, mount dedicated independent micro-canvases (`60x60` px) for each agent tile so every mascot remains physically alive (independent eye blinks, breathing bounce, characteristic status emotes, and red notification pills) even while contained inside the folder.
 - **Playwright Strict Mode Locator Collision on Dual Agent Buttons**: Re-using identical data attributes like `data-agent="bekagent"` across both dock buttons and folder tiles causes test locators like `page.locator('button[data-agent="bekagent"]')` to throw strict mode violations (`resolved to 2 elements`). Always namespace container attributes (e.g. `data-folder-agent="bekagent"`) to keep automated testing unambiguous.
-- **Instant Chunk Ingestion Visual Shock (Omitted Streaming Reveal)**: Injecting large Markdown responses in a single DOM update causes the viewport to instantly jump from 0 to full height with no visual continuity. Stream the response tokens word-by-word with an animated cursor (`▌`) and smooth scroll tracking, deferring rich card accessories (links, files, inquiry chips) until the stream finishes.
+- **Streaming Auto-Scroll Reading Theft**: Updating `scrollTop = scrollHeight` on every typewriter frame drags the reader downward and makes earlier lines impossible to inspect. Place the new turn at the top once, stream into prebuilt text nodes without further scroll writes, and keep the internal chat viewport manually scrollable with subtle top/bottom opacity masks.
 - **Lost Chat Sockets Without Local Session Persistence**: In single-page zero-scroll apps, refreshing or starting a new query without persisting past conversations permanently destroys conversational context. Save serialized session arrays (`id`, `title`, `preview`, `time`, `messages`) to `localStorage` under `coucou_chat_sessions`, loadable anytime via a slide-up G2 squircle history drawer with per-session deletion.
 - **Detached File Picker UX Disconnect**: Providing file upload capability without tactile visual feedback or mascot acknowledgment makes the user uncertain whether the file was accepted. Always mount a floating preview pill above the input, update the Dynamic Island live status to `Menerima Berkas`, and trigger a physical mascot reaction (downward eye tracking, surprised squash bounce, and contextual greeting) upon file selection.
 - **Single-Line Prompt Input Horizontal Overflow & Dead Wrapping**: Using a standard `<input type="text">` for user prompts causes longer sentences or multi-clause instructions to scroll horizontally out of view, hiding what the user typed and preventing multi-line drafting. Always use an auto-resizing `<textarea rows="1">` housed in an elastic flex container (`align-items: flex-end; min-height: 44px; max-height: 110px;`), dynamically recalculating `style.height = Math.min(Math.max(scrollHeight, 20), 110) + 'px'` on the `input` event, dispatching submit on `Enter` without `Shift`, and resetting height to `auto` on send.
 - **Absolute Floating Mascot Overlapping Message Body**: Translating a floating companion with static absolute offsets (`translate(...)`) over an expanding chat card inevitably collides with or occludes lines of response text on long replies. Always switch the parent canvas container to flex-column stacking (`.has-chat { justify-content: flex-start; }`), shrink the mascot smoothly to a dedicated top companion slot (`width: 80px; height: 80px; transform: scale(0.48); margin-top: -24px; margin-bottom: -16px;`), and make the chat card relative (`position: relative; flex: 1; max-height: calc(100dvh - 265px);`) so text collision is structurally impossible.
-- **Cluttering Agent's Home with User Actions vs Bottom Tools Ergonomics**: Placing user action buttons (`+ Baru`, `Riwayat`) or full-canvas thinking cards in the Dynamic Island or middle canvas violates the mental model of the Dynamic Island as the "Agent's Home" and obstructs the living mascot. Keep the Dynamic Island strictly as the agent's residence (avatar, home status, and self-contained thinking loading bar), while placing all user controls (`+ Baru`, `Riwayat`, response style configurators) at the bottom right above the input bar for seamless mobile thumb ergonomics.
+- **Duplicate Mascot / Always-Visible Dynamic Island Clutter**: Showing a Dynamic Island in idle mode or placing a second micro-mascot inside it breaks the single-character zen illusion and makes the screen feel busy before any work starts. Hide the Dynamic Island until chat/work is active, keep exactly one visible character in idle, then use the expanded island for agent squad selection, response configuration, and telemetry while keeping broad session actions near the bottom prompt.
 - **Jarring Visual Flicker from Sub-Second Model Responses (Omitted Thinking Phase)**: When an upstream local LLM responds faster than ~500ms, a thinking indicator flashes instantaneously and disappears before the user can perceive cognitive engagement. Always enforce a **Guaranteed Minimum Thinking Duration** (`Math.max(1200, elapsed)` ms) so progressive thought stages and mascot eye-tilt animations register clearly before morphing to the response card.
 - **Dead Attachment Downloads on Static/Proxy Frontends**: Attempting to route file attachment downloads through backend disk endpoints can fail when files are generated dynamically or session state changes. Synthesize downloads client-side via `new Blob([content], { type: 'text/plain;charset=utf-8' })` with `URL.createObjectURL(blob)` for instant, reliable file downloads without round-trip I/O dependencies.
 - **Sequential Model Latency Cascades in Multi-Model Fallbacks**: Chaining reasoning-heavy models sequentially with generous timeouts (e.g. 14s each) in a fallback array causes upstream web clients to hit request timeouts (>15s) when handling long complex answers. Put the fastest reliable model with tight token boundaries (`max_tokens: ~380`, timeout ~8.5s) first to guarantee sub-6s time-to-first-thought while preserving rich formatting.
@@ -328,5 +343,12 @@ Don't use for:
 - **Concurrent Command Submission Race**: Firing new commands while a previous NLP command is in flight causes overlapping speech bubble timers and conflicting emotional states. Disable or throttle the submit trigger until the active bubble finishes or clears.
 - **Nested Toggle Event Bubbling**: Clicking a chevron/collapse button nested inside an expandable parent container bubbles up and fires the parent's click listener, immediately reversing the toggled state. Always call `e.stopPropagation()` on nested toggle actions.
 - **Canvas DPR Blurriness**: Not multiplying canvas dimensions by `Math.min(window.devicePixelRatio, 2)` causes blurry retina rendering.
+- **Procedural Accessory Clipping on Dynamic Morphs**: Mounting accessories as naive absolute overlays causes them to disconnect or distort during squircle/prism body morphs or 3D eye yaw rotations. Always bind accessory drawing directly into the character canvas transform stack using the mascot's head yaw/pitch offsets (`headYaw = Math.sin(s.yaw) * rx * 0.25; headPitch = s.pitch * ry * 0.2;`), preserve 100% SVG/Canvas vector math without emoji glyphs, and conditionally mute default body antennas (like Mochi's top light) when conflicting accessories like satellite dishes are equipped.
 - **Audio Context Suspension**: Modern mobile browsers suspend Web Audio until the first user gesture. Initialize or resume `AudioContext` inside pointer/touch handlers, never automatically on page load.
 - **Viewport Height Shift (Mobile URL Bar)**: Using `100vh` instead of `100dvh` causes the bottom dock to clip beneath mobile browser navigation bars.
+- **Mobile Keyboard Whole-Page Lift**: Letting Android/iOS resize or push the entire app when the keyboard opens breaks the zen composition and can hide bottom controls. Use a fixed command wrapper with `bottom: calc(env(keyboard-inset-height, 0px) + safe-area + offset)` so only the prompt cluster rises.
+- **Bottom Control Overlap / Off-Screen Icons**: Positioning new-chat/history controls below the prompt with absolute negative offsets can hide them under the dock or crop them off-screen. Layout prompt and compact controls in a grid or inline fixed cluster, reserve bottom padding for the dock, and mark hidden sheets `pointer-events: none; visibility: hidden` so invisible panels never intercept taps.
+- **Too-Fast Chat Reveal**: Instantly swapping idle to chat makes the mascot migration feel like a glitch. Give idle→DI→chat card choreography 1–2 seconds and prioritize the character flight into the island before completing the chat expansion.
+- **Sticky Tilt After Agent Switching**: Temporarily assigning a curious/tilted state during a long-press selector can leave both `state` and target tilt latched after release, so the hero remains diagonal and gaze appears broken. Close every commit/cancel path by restoring `idle`, zeroing both rendered and target tilt, releasing pointer capture, and clearing switching classes.
+- **Moving-Target Drag Selection**: Computing nearest-agent hit tests from each tile's live bounding box while the hovered tile springs toward the center changes the target during the gesture and can select a neighbor on release. Snapshot each agent's center when the selector opens and use those immutable anchors for the entire hold-drag-release transaction.
+- **Text-Pill Agent Selector Breaks the Living Metaphor**: Showing agent names in a separate chip row after long press disconnects selection from the mascot system. Reveal living micro-canvases fanned behind the hero, hide the already-active duplicate, and show a name only for the current preview candidate.

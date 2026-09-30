@@ -4,14 +4,18 @@
     {
       "id": "sputarball-bola-9361d9fe5def-1790612246160",
       "domain": "sputarball",
-      "status": "PENDING_APPROVAL",
+      "status": "APPROVED_AND_PUBLISHED",
       "draft_id": "bola-9361d9fe5def",
       "headline": "Marselino Ferdinan Menuju Persija Jakarta, Jakmania Siap Sambut Wonderkid Garuda?",
       "source": "Radar Timnas & Pemain Diaspora",
       "qc_score": 100,
       "created_at": "2026-09-28T16:17:26.161Z",
       "required_approval": "Mas Bagas explicit approval",
-      "allowed_next_action": "publishDraftToInstagram('bola-9361d9fe5def') hanya setelah approval manual"
+      "allowed_next_action": "publishDraftToInstagram('bola-9361d9fe5def') hanya setelah approval manual",
+      "published_id": "17932548882407065",
+      "permalink": "https://www.instagram.com/p/Dd7AB21gbOv/",
+      "approved_by": "Mas Bagas Saputra",
+      "approved_at": "2026-09-30T18:40:54.831Z"
     },
     {
       "id": "sputarball-bola-137675df30eb-1790611290613",
@@ -31,14 +35,18 @@
     {
       "id": "sputarball-bola-3175711801c0-1790610373840",
       "domain": "sputarball",
-      "status": "PENDING_APPROVAL",
+      "status": "APPROVED_AND_PUBLISHED",
       "draft_id": "bola-3175711801c0",
       "headline": "Maarten Paes Tampil Kesurupan, Timnas Indonesia Tahan Malaysia Bermain 10 Orang",
       "source": "Radar Timnas & Pemain Diaspora",
       "qc_score": 100,
       "created_at": "2026-09-28T15:46:13.840Z",
       "required_approval": "Mas Bagas explicit approval",
-      "allowed_next_action": "publishDraftToInstagram('bola-3175711801c0') hanya setelah approval manual"
+      "allowed_next_action": "publishDraftToInstagram('bola-3175711801c0') hanya setelah approval manual",
+      "published_id": "18115122326021572",
+      "permalink": "https://www.instagram.com/p/Dd69tm_AWxW/",
+      "approved_by": "Mas Bagas Saputra",
+      "approved_at": "2026-09-30T18:20:52.901Z"
     },
     {
       "id": "sputarball-bola-84c596b5d82a-1790609770409",
@@ -53,9 +61,9 @@
       "allowed_next_action": "publishDraftToInstagram('bola-84c596b5d82a') hanya setelah approval manual",
       "rejected_by": "Mas Bagas Saputra",
       "rejected_reason": "Ditolak via Telegram Interactive Button",
-      "rejected_at": "2026-09-28T17:04:19.245Z"
+      "rejected_at": "2026-09-30T18:51:01.329Z"
     }
   ],
   "notes": "Autonomous workers append draft previews here. Only explicit Mas Bagas approval may unlock publication.",
-  "updated_at": "2026-09-28T17:04:19.246Z"
+  "updated_at": "2026-09-30T18:51:01.330Z"
 }

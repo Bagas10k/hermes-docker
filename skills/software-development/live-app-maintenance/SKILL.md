@@ -15,6 +15,8 @@ Use when updating, bug-fixing, styling, or maintaining an already-running fullst
 
 ## Core Rules & Workflow
 
+For chat-centric companion interfaces, also read [conversational companion UI](references/conversational-companion-ui.md) before changing streaming, agent switching, activity status, or mobile composer behavior.
+
 ### 1. In-Place Project Directory Locking
 - Immediately navigate (`cd <project_dir>`) and verify working directory at the start of work. Avoid repeatedly specifying long absolute paths when executing multi-step tasks inside a dedicated repo.
 - Verify Git status and remote auth tokens up front (`git remote -v`, `git pull origin <branch>`).
