@@ -174,6 +174,54 @@ Don't use for:
   - Multi-line formatting (`white-space: normal; width: max-content; min-width: 140px; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`). Never apply `white-space: nowrap` or `text-overflow: ellipsis`.
   - Proactive greeting on load (500ms) and playful reactions upon tapping the mascot directly.
 
+### 6. Enlarged Living Agent Folder Container ("Kontainer Pembungkus Agen Hidup")
+- **Mobile OS-Style Squircle Folder Architecture**:
+  - Wrap the entire multi-agent roster into an **Enlarged Frosted Squircle Folder** inspired by smartphone home screen app folders (HyperOS/iOS/ColorOS).
+  - Container box:
+    ```css
+    .agent-folder-box {
+      width: 290px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(36px) saturate(190%);
+      -webkit-backdrop-filter: blur(36px) saturate(190%);
+      border: 1.5px solid rgba(255, 255, 255, 0.22);
+      border-radius: 36px;
+      padding: 22px 18px 20px 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 32px rgba(245, 158, 11, 0.12);
+    }
+    ```
+  - Symmetry label: Place the text `"Folder"` (or squad name) directly beneath the container (`font-size: 15px; font-weight: 500; color: #FFFFFF; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);`) with clean sans-serif typography.
+- **Living Mascot Canvases Inside the Grid ("Agent Tetap Hidup Sesuai Status")**:
+  - Inside the grid (e.g. 2x2), **never use static icons or dead illustrations**.
+  - Mount an independent 60 FPS micro-canvas (`width: 60px; height: 60px;`) for each agent tile:
+    * **Hermes**: White body, glowing amber antenna, focused blush expression, `:80` red badge (*Otak Kognitif*).
+    * **Bekagent**: Ice cyan body, curious tilted head, `2` red badge (*Obsidian Vault*).
+    * **SputarAI**: Lavender violet body, radar scanning expression, `11` red badge (*Media Radar*).
+    * **SputarBall**: Emerald green body, energetic smiling eyes, `:30` red badge (*Portal Skor*).
+  - Every micro-mascot runs its own physical loop: blinking independently, breathing, and looking toward pointer interaction.
+- **Red Notification Badges ("Lencana Notifikasi Merah")**:
+  - Replicate mobile app notification pills mounted at the top-right of each icon wrap (`position: absolute; top: -5px; right: -5px;`):
+    ```css
+    .agent-noti-badge {
+      background: #EF4444;
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 800;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 9px;
+      border: 1.5px solid #0D1117;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.65);
+    }
+    ```
+- **Tactile Pop-in & Switch Interaction**:
+  - Accessible via a dedicated Folder button in the bottom dock (`.folder-trigger-btn` with 4-quadrant mini dots and red count badge) and quick-action chips.
+  - Tapping an agent tile triggers tactile squash (`scale(0.92)`), plays that agent's chime signature, smoothly closes the folder, and morphs the main hero mascot to the selected agent.
+
 ## Procedure
 
 1. **Establish Fixed Viewport & Ambient Canvas**:
@@ -200,6 +248,8 @@ Don't use for:
 
 ## Pitfalls
 
+- **Dead Icon Syndrome in Agent Grouping Containers**: Rendering multi-agent rosters as static SVG icons or flat PNG images inside grouping containers destroys the organic illusion of an autonomous companion ecosystem. When wrapping agents in an OS-style folder or squad grid, mount dedicated independent micro-canvases (`60x60` px) for each agent tile so every mascot remains physically alive (independent eye blinks, breathing bounce, characteristic status emotes, and red notification pills) even while contained inside the folder.
+- **Playwright Strict Mode Locator Collision on Dual Agent Buttons**: Re-using identical data attributes like `data-agent="bekagent"` across both dock buttons and folder tiles causes test locators like `page.locator('button[data-agent="bekagent"]')` to throw strict mode violations (`resolved to 2 elements`). Always namespace container attributes (e.g. `data-folder-agent="bekagent"`) to keep automated testing unambiguous.
 - **Instant Chunk Ingestion Visual Shock (Omitted Streaming Reveal)**: Injecting large Markdown responses in a single DOM update causes the viewport to instantly jump from 0 to full height with no visual continuity. Stream the response tokens word-by-word with an animated cursor (`▌`) and smooth scroll tracking, deferring rich card accessories (links, files, inquiry chips) until the stream finishes.
 - **Lost Chat Sockets Without Local Session Persistence**: In single-page zero-scroll apps, refreshing or starting a new query without persisting past conversations permanently destroys conversational context. Save serialized session arrays (`id`, `title`, `preview`, `time`, `messages`) to `localStorage` under `coucou_chat_sessions`, loadable anytime via a slide-up G2 squircle history drawer with per-session deletion.
 - **Detached File Picker UX Disconnect**: Providing file upload capability without tactile visual feedback or mascot acknowledgment makes the user uncertain whether the file was accepted. Always mount a floating preview pill above the input, update the Dynamic Island live status to `Menerima Berkas`, and trigger a physical mascot reaction (downward eye tracking, surprised squash bounce, and contextual greeting) upon file selection.
