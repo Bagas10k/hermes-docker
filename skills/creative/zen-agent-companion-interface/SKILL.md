@@ -72,22 +72,50 @@ Don't use for:
   }
   ```
 
-### 4. Integrated Command Bar & Self-Expression Loop
+### 4. Integrated Command Bar, Spatial Chat & Telegram Alternative
 - **Floating Spotlight Command Input**:
   - Enclose the input inside a `<form id="cmdForm" action="javascript:void(0);">` so that pressing the virtual software keyboard's "Go", "Search", or "Enter" button on iOS/Android reliably fires the `submit` event.
   - Explicitly override global touch/selection rules on the text field with `user-select: text !important; -webkit-user-select: text !important; touch-action: manipulation;` to prevent mobile WebKit/Safari from blocking keyboard focus and cursor selection.
   - Docked directly above the bottom companion dock for effortless one-handed thumb reach.
   - Accompanied by horizontal quick-action prompt chips (e.g. `Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`) for instant common commands without typing.
+- **Adaptive Spatial Layout Choreography**:
+  - **Idle State**: The living mascot stands proud and centered in the spacious zen canvas (`transform: translate(0, 0) scale(1)`).
+  - **Thinking / Processing State**:
+    - The mascot tilts eyes upward in deep focus with a pulsing amber aura.
+    - A dedicated **Progressive Thinking Card** (`.thinking-card`) smoothly slides up right above the input bar with live stage feedback:
+      * Stage 1: `Menerima pesan & menganalisis instruksi...`
+      * Stage 2: `Memanggil kognisi AI & telemetri sistem...`
+      * Stage 3: `Merumuskan jawaban komprehensif...`
+    - Animated pulsing dots and progress track bar provide immediate tactile reassurance while awaiting model synthesis.
+  - **Responded / Chat State**:
+    - The mascot smoothly glides to the side or top-right corner (`transform: translate(100px, -140px) scale(0.45); z-index: 35 !important;`) using spring physics easing (`cubic-bezier(0.16, 1, 0.3, 1)`), remaining 100% visible, winking, and attentive.
+    - The **Chat Response Card** (`.chat-response-card`) smoothly expands upwards ("molor ke atas") into the central viewport:
+      ```css
+      .chat-response-card {
+        max-height: 0;
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px);
+        transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.35s ease,
+                    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .chat-response-card.expanded {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+        max-height: calc(100dvh - 250px);
+      }
+      ```
+- **In-Browser Telegram Alternative (Full Markdown Threading)**:
+  - Supports comprehensive multi-turn dialogue with rich formatting: clean paragraphs, numbered and bulleted lists, bold emphasis, and dark monospaced code blocks (`<pre><code>`).
+  - **Integrated Action Controls** in the card header:
+    - **Copy Button**: Copies full response text to clipboard in 1 tap with momentary visual feedback.
+    - **Speech (TTS) Button**: Triggers browser Web Speech Synthesis (`SpeechSynthesisUtterance`) to voice the response.
+    - **Reset Button**: Clears the conversation thread.
+    - **Minimize / Close Button**: Smoothly collapses the chat card and glides the living mascot back to the center of the zen canvas.
 - **Reactive Speech & Thought Bubble**:
-  - Floats dynamically directly above the mascot's head with a soft pointing tail and spring scale-in animation (`transform: scale(0.9) translateY(4px)` to `scale(1) translateY(0)`).
-  - Use multi-line formatting (`white-space: normal; width: max-content; min-width: 140px; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`). Never apply `white-space: nowrap` or `text-overflow: ellipsis` to speech bubbles, as conversational replies will be abruptly cut off.
-  - Keep bubble visible for 6-9 seconds for comfortable reading, and keep the "Sedang berpikir..." state active without premature dismissal until the backend query resolves.
-- **Real AI Intelligence Integration**:
-  - Distinguish technical commands from conversational queries: route conversational prompts to a fast, streaming or short-response local LLM/reasoning backend constrained strictly to 1 natural, friendly sentence (maximum ~18 words) with absolute zero-emoji compliance.
-  - Technical commands (`status`, `catat ide`, `ping`) execute live system actions and return both verbal feedback and physical mascot state changes.
-- **Proactive Grounding & Direct Mascot Touch**:
-  - Trigger a proactive sapaan/greeting 500ms after initial page load (e.g. *"Halo Bagas! Ada yang bisa kubantu?"*) so the user immediately sees that the companion is alive and responsive.
-  - Bind tap/click events directly onto the hero mascot canvas so poking or petting the companion elicits an immediate physical spring squash, emotional eye reaction (e.g. wink/smile), and conversational speech bubble remark.
+  - Floats dynamically directly above the mascot's head during casual interactions with a soft pointing tail and spring scale-in animation.
+  - Multi-line formatting (`white-space: normal; width: max-content; min-width: 140px; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`). Never apply `white-space: nowrap` or `text-overflow: ellipsis`.
+  - Proactive greeting on load (500ms) and playful reactions upon tapping the mascot directly.
 
 ## Procedure
 
@@ -115,6 +143,9 @@ Don't use for:
 
 ## Pitfalls
 
+- **Mascot Obscuration by Expanding Chat Card (`z-index` Layering Conflict)**: When an expanding chat card grows upwards (`z-index: 20`), leaving the companion stage with default stacking context (`z-index: 10`) causes the card to visually swallow or occlude the mascot. Always elevate the companion stage's stacking context to `z-index: 35 !important;` and constrain the chat card's maximum height (`max-height: calc(100dvh - 250px)`) so the mascot floats completely unobstructed in its shifted corner.
+- **Sequential Model Latency Cascades in Multi-Model Fallbacks**: Chaining reasoning-heavy models sequentially with generous timeouts (e.g. 14s each) in a fallback array causes upstream web clients to hit request timeouts (>15s) when handling long complex answers. Put the fastest reliable model with tight token boundaries (`max_tokens: ~380`, timeout ~8.5s) first to guarantee sub-6s time-to-first-thought while preserving rich formatting.
+- **Internal vs External Viewport Scrolling Invariant**: When expanding long multi-paragraph responses in a zero-scroll (`100dvh`) viewport, the outer canvas MUST remain `overflow: hidden; touch-action: none;` while the inner message body of the chat card uses `overflow-y: auto; -webkit-overflow-scrolling: touch;`. Never let document body scrollbar leak out when chat expands.
 - **Speech Bubble Ellipsis Truncation**: Setting `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;` on a companion speech bubble truncates multi-word conversational AI replies mid-sentence with `...`. Always use multi-line wrapping with auto-height (`white-space: normal; width: max-content; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`).
 - **Mobile Virtual Keyboard Dead Submit**: Placing a bare `<input>` without an enclosing `<form>` causes mobile virtual keyboards (iOS Safari, Android Chrome) to ignore the "Go", "Search", or "Enter" soft key. Always enclose the input in `<form id="cmdForm" action="javascript:void(0);">` and listen to the `submit` event.
 - **Global `user-select: none` Input Freeze**: Applying `user-select: none` across all elements globally disables cursor placement, text selection, and virtual keyboard focus on mobile WebKit/iOS. Always exempt input elements with `user-select: text !important; -webkit-user-select: text !important; touch-action: manipulation;`.
