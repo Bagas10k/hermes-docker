@@ -81,28 +81,35 @@ Don't use for:
 - **Adaptive Spatial Layout Choreography**:
   - **Idle State**: The living mascot stands proud and centered in the spacious zen canvas (`transform: translate(0, 0) scale(1)`).
   - **Thinking / Processing State**:
-    - The mascot tilts eyes upward in deep focus with a pulsing amber aura.
+    - The mascot enters the thinking phase on EVERY query: tilts eyes upward in deep focus with a pulsing amber aura.
+    - Enforce a **Guaranteed Minimum Thinking Duration** (at least 1200ms) even if the LLM responds faster, preventing jarring visual flickers and letting progressive stages render palpably.
     - A dedicated **Progressive Thinking Card** (`.thinking-card`) smoothly slides up right above the input bar with live stage feedback:
       * Stage 1: `Menerima pesan & menganalisis instruksi...`
       * Stage 2: `Memanggil kognisi AI & telemetri sistem...`
       * Stage 3: `Merumuskan jawaban komprehensif...`
-    - Animated pulsing dots and progress track bar provide immediate tactile reassurance while awaiting model synthesis.
   - **Responded / Chat State**:
-    - The mascot smoothly glides to the side or top-right corner (`transform: translate(100px, -140px) scale(0.45); z-index: 35 !important;`) using spring physics easing (`cubic-bezier(0.16, 1, 0.3, 1)`), remaining 100% visible, winking, and attentive.
+    - The canvas switches to flex-column stacking (`.zen-empty-canvas.has-chat { justify-content: flex-start; }`).
+    - The mascot smoothly morphs into an elegant companion at the top of the canvas (`width: 80px; height: 80px; transform: scale(0.48); margin-top: -24px; margin-bottom: -16px; z-index: 30;`), sitting cleanly above the chat card without overlapping a single character of text.
+    - When expressing curiosity or asking questions, the mascot transitions to `curious` state: tilted head (`rotate(0.12)`), asymmetric eyes (left eye wide and inquisitive, right eye focused with a raised brow curve).
     - The **Chat Response Card** (`.chat-response-card`) smoothly expands upwards ("molor ke atas") into the central viewport:
       ```css
       .chat-response-card {
+        position: relative;
+        width: calc(100% - 16px);
+        max-width: 375px;
         max-height: 0;
         opacity: 0;
-        transform: translateX(-50%) translateY(30px);
-        transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        transform: translateY(20px);
+        transition: max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1),
                     opacity 0.35s ease,
                     transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 20;
       }
       .chat-response-card.expanded {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
-        max-height: calc(100dvh - 250px);
+        transform: translateY(0);
+        max-height: calc(100dvh - 265px);
+        flex: 1;
       }
       ```
 - **In-Browser Telegram Alternative (Full Markdown Threading)**:
@@ -110,8 +117,14 @@ Don't use for:
   - **Integrated Action Controls** in the card header:
     - **Copy Button**: Copies full response text to clipboard in 1 tap with momentary visual feedback.
     - **Speech (TTS) Button**: Triggers browser Web Speech Synthesis (`SpeechSynthesisUtterance`) to voice the response.
-    - **Reset Button**: Clears the conversation thread.
+    - **Reset Button**: Clears the conversation thread and resets the mascot to center stage.
     - **Minimize / Close Button**: Smoothly collapses the chat card and glides the living mascot back to the center of the zen canvas.
+
+### 5. Multimodal Action Cards & Interactive Follow-up Inquiry
+- **High Intellectual Curiosity Persona**: The companion AI acts proactively with high intellectual curiosity—exploring root causes, proposing creative hypotheses, and providing 2–3 thought-provoking follow-up questions.
+- **Link Cards**: Structured preview cards with Lucide external-link SVG icons, title, and direct URL.
+- **File Attachment Cards**: Emerald-tinted file cards (`.chat-file-card`) displaying filename, description, and size. Clicking the download button dynamically synthesizes a `Blob` (`URL.createObjectURL`) for instant, reliable local file download.
+- **Interactive Follow-up Question Chips**: Clickable prompt pills (`.followup-chip`) rendered beneath the bot message. Clicking any chip immediately inputs the question into the command bar and fires the thinking cycle, maintaining continuous effortless dialogue.
 - **Reactive Speech & Thought Bubble**:
   - Floats dynamically directly above the mascot's head during casual interactions with a soft pointing tail and spring scale-in animation.
   - Multi-line formatting (`white-space: normal; width: max-content; min-width: 140px; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`). Never apply `white-space: nowrap` or `text-overflow: ellipsis`.
@@ -143,7 +156,9 @@ Don't use for:
 
 ## Pitfalls
 
-- **Mascot Obscuration by Expanding Chat Card (`z-index` Layering Conflict)**: When an expanding chat card grows upwards (`z-index: 20`), leaving the companion stage with default stacking context (`z-index: 10`) causes the card to visually swallow or occlude the mascot. Always elevate the companion stage's stacking context to `z-index: 35 !important;` and constrain the chat card's maximum height (`max-height: calc(100dvh - 250px)`) so the mascot floats completely unobstructed in its shifted corner.
+- **Absolute Floating Mascot Overlapping Message Body**: Translating a floating companion with static absolute offsets (`translate(...)`) over an expanding chat card inevitably collides with or occludes lines of response text on long replies. Always switch the parent canvas container to flex-column stacking (`.has-chat { justify-content: flex-start; }`), shrink the mascot smoothly to a dedicated top companion slot (`width: 80px; height: 80px; transform: scale(0.48); margin-top: -24px; margin-bottom: -16px;`), and make the chat card relative (`position: relative; flex: 1; max-height: calc(100dvh - 265px);`) so text collision is structurally impossible.
+- **Jarring Visual Flicker from Sub-Second Model Responses (Omitted Thinking Phase)**: When an upstream local LLM responds faster than ~500ms, a thinking indicator flashes instantaneously and disappears before the user can perceive cognitive engagement. Always enforce a **Guaranteed Minimum Thinking Duration** (`Math.max(1200, elapsed)` ms) so progressive thought stages and mascot eye-tilt animations register clearly before morphing to the response card.
+- **Dead Attachment Downloads on Static/Proxy Frontends**: Attempting to route file attachment downloads through backend disk endpoints can fail when files are generated dynamically or session state changes. Synthesize downloads client-side via `new Blob([content], { type: 'text/plain;charset=utf-8' })` with `URL.createObjectURL(blob)` for instant, reliable file downloads without round-trip I/O dependencies.
 - **Sequential Model Latency Cascades in Multi-Model Fallbacks**: Chaining reasoning-heavy models sequentially with generous timeouts (e.g. 14s each) in a fallback array causes upstream web clients to hit request timeouts (>15s) when handling long complex answers. Put the fastest reliable model with tight token boundaries (`max_tokens: ~380`, timeout ~8.5s) first to guarantee sub-6s time-to-first-thought while preserving rich formatting.
 - **Internal vs External Viewport Scrolling Invariant**: When expanding long multi-paragraph responses in a zero-scroll (`100dvh`) viewport, the outer canvas MUST remain `overflow: hidden; touch-action: none;` while the inner message body of the chat card uses `overflow-y: auto; -webkit-overflow-scrolling: touch;`. Never let document body scrollbar leak out when chat expands.
 - **Speech Bubble Ellipsis Truncation**: Setting `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;` on a companion speech bubble truncates multi-word conversational AI replies mid-sentence with `...`. Always use multi-line wrapping with auto-height (`white-space: normal; width: max-content; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`).
