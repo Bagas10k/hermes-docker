@@ -73,11 +73,28 @@ Don't use for:
   ```
 
 ### 4. Integrated Command Bar, Spatial Chat & Telegram Alternative
-- **Floating Spotlight Command Input**:
+- **Floating Spotlight Command Input & Auto-Expanding Prompt**:
   - Enclose the input inside a `<form id="cmdForm" action="javascript:void(0);">` so that pressing the virtual software keyboard's "Go", "Search", or "Enter" button on iOS/Android reliably fires the `submit` event.
+  - Use an auto-resizing `<textarea class="cmd-input" id="cmdInput" rows="1" placeholder="..." autocomplete="off" spellcheck="false"></textarea>` rather than a rigid `<input type="text">` so long prompts flexibly grow upward when text overflows horizontally:
+    * Set the enclosing `.command-bar` to `min-height: 44px; padding: 6px 6px 6px 12px; display: flex; align-items: flex-end; gap: 8px; transition: min-height 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.2s;`.
+    * Set the textarea to `flex: 1; resize: none; overflow-y: hidden; min-height: 20px; max-height: 110px; line-height: 1.4; word-break: break-word; white-space: pre-wrap; padding: 5px 0;`.
+    * Dynamically adjust height on every `input` event:
+      ```javascript
+      const adjustInputHeight = () => {
+        if (!input) return;
+        input.style.height = 'auto';
+        const scrollH = input.scrollHeight;
+        const clampedH = Math.min(Math.max(scrollH, 20), 110);
+        input.style.height = `${clampedH}px`;
+        input.style.overflowY = scrollH > 110 ? 'auto' : 'hidden';
+        const formBar = input.closest('.command-bar');
+        if (formBar) formBar.style.borderRadius = scrollH > 35 ? '18px' : '22px';
+      };
+      ```
+    * Keyboard shortcuts: Pressing `Enter` without `Shift` fires `submit` and immediately resets the textarea height back to single-line `height: auto;`; pressing `Shift + Enter` cleanly adds a newline and smoothly expands the input container upward.
   - Explicitly override global touch/selection rules on the text field with `user-select: text !important; -webkit-user-select: text !important; touch-action: manipulation;` to prevent mobile WebKit/Safari from blocking keyboard focus and cursor selection.
   - Docked directly above the bottom companion dock for effortless one-handed thumb reach.
-  - Accompanied by horizontal quick-action prompt chips (e.g. `Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`) for instant common commands without typing.
+  - Accompanied by horizontal quick-action prompt chips (e.g. `Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`) for instant common commands without typing. Clicking chips auto-populates the input and recalculates height via `adjustInputHeight()`.
 - **Adaptive Spatial Layout Choreography**:
   - **Idle State**: The living mascot stands proud and centered in the spacious zen canvas (`transform: translate(0, 0) scale(1)`).
   - **Thinking / Processing State**:
@@ -156,6 +173,7 @@ Don't use for:
 
 ## Pitfalls
 
+- **Single-Line Prompt Input Horizontal Overflow & Dead Wrapping**: Using a standard `<input type="text">` for user prompts causes longer sentences or multi-clause instructions to scroll horizontally out of view, hiding what the user typed and preventing multi-line drafting. Always use an auto-resizing `<textarea rows="1">` housed in an elastic flex container (`align-items: flex-end; min-height: 44px; max-height: 110px;`), dynamically recalculating `style.height = Math.min(Math.max(scrollHeight, 20), 110) + 'px'` on the `input` event, dispatching submit on `Enter` without `Shift`, and resetting height to `auto` on send.
 - **Absolute Floating Mascot Overlapping Message Body**: Translating a floating companion with static absolute offsets (`translate(...)`) over an expanding chat card inevitably collides with or occludes lines of response text on long replies. Always switch the parent canvas container to flex-column stacking (`.has-chat { justify-content: flex-start; }`), shrink the mascot smoothly to a dedicated top companion slot (`width: 80px; height: 80px; transform: scale(0.48); margin-top: -24px; margin-bottom: -16px;`), and make the chat card relative (`position: relative; flex: 1; max-height: calc(100dvh - 265px);`) so text collision is structurally impossible.
 - **Jarring Visual Flicker from Sub-Second Model Responses (Omitted Thinking Phase)**: When an upstream local LLM responds faster than ~500ms, a thinking indicator flashes instantaneously and disappears before the user can perceive cognitive engagement. Always enforce a **Guaranteed Minimum Thinking Duration** (`Math.max(1200, elapsed)` ms) so progressive thought stages and mascot eye-tilt animations register clearly before morphing to the response card.
 - **Dead Attachment Downloads on Static/Proxy Frontends**: Attempting to route file attachment downloads through backend disk endpoints can fail when files are generated dynamically or session state changes. Synthesize downloads client-side via `new Blob([content], { type: 'text/plain;charset=utf-8' })` with `URL.createObjectURL(blob)` for instant, reliable file downloads without round-trip I/O dependencies.
