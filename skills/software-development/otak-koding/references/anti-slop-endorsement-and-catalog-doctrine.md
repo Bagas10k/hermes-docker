@@ -47,3 +47,25 @@
   11. *Batas Waktu Pengujian Playwright E2E pada Katalog Visual*:
      - Ketika katalog memuat 20+ kartu bento dengan vektor SVG dan pengujian menangkap tangkapan layar penuh (`fullPage: true`) di 3 resolusi (390px, 768px, 1440px) beserta audit Axe-Core, tingkatkan timeout di `playwright.config.js` menjadi minimal 60 detik (`timeout: 60000`) agar tidak memicu timeout prematur pada lingkungan headless CPU-constrained.
 
+---
+
+## 4. Doktrin Halaman Login Mandiri: Layak Publik & Nol Istilah Developer (Zero Debug Labels)
+- **Gejala Slop & Prototype Leak yang Ditolak Keras**:
+  - Menyertakan teks developer/debugging seperti "no validasi", "bypass validasi", "demo mode", atau tombol pintas pengujian di antarmuka publik. Hal ini merusak kredibilitas profesional dan membuat aplikasi tampak seperti prototipe mentah.
+  - Menempelkan nama pengguna bawaan (*pre-populated username*) atau kartu pratinjau identitas pengguna yang berantakan di dalam form login.
+  - Memaksa tampilan login menjadi sekadar tab/menu kecil di bilah sisi dasbor alih-alih halaman mandiri terpisah.
+- **Standar Solusi (Clean Centered Card & Silent Friction-Free Gateway)**:
+  - **Tampilan Kartu Terpusat Elegan**: Gunakan satu kartu masuk minimalis berlatar netral dengan branding resmi, input kosong bersih disertai *placeholder* informatif, tombol intip kata sandi (SVG), dan tombol aksi utama bersih (**Masuk ke Sistem** / **Masuk Terminal**).
+  - **Alur Masuk Cepat di Balik Layar (*Silent Friction-Free Gateway*)**: Jika pengujian atau demonstrasi klien memerlukan akses instan tanpa blokir formulir, jalankan alur tersebut secara senyap di background / *localStorage*, TANPA pernah membocorkan istilah "tanpa validasi" pada antarmuka pengguna.
+  - **Auto-Redirect Gerbang Root (`/app/` -> `/app/login.html`)**: Ketika aplikasi memiliki halaman login mandiri, mengakses URL root wajib langsung dialihkan (HTTP 302/303) ke gerbang login, bukan menampilkan dasbor terbuka tanpa autentikasi atau memaksa pengguna mencari link login manual.
+
+---
+
+## 5. Arsitektur Gateway Reverse Proxy & Dual Audio Web Application
+- **Whitelisting Privacy Boundary Perimeter**:
+  - Pada arsitektur dengan penjaga privasi sentral (`privacy-boundary.js`), perintah `app.use('/rute', express.static(...))` di `server.js` akan tetap memblokir pengunjung publik dengan `401 Unauthorized` jika rute tersebut belum didaftarkan pada ekspresi reguler `isPublic()`. Selalu tambahkan `|| /^\/rute(?:\/.*)?$/.test(p)` pada perimeter sebelum verifikasi curl publik.
+- **Dual Audio Architecture (Authentic WAV + Procedural Web Audio Synthesizer Fallback)**:
+  - Untuk web interaktif yang memerlukan efek suara taktil (seperti maskot desktop, game, atau audio HUD): sediakan berkas statis WAV orisinil untuk keaslian tekstur suara, dipadukan dengan fallback seketika ke *Web Audio API procedural oscillator/synthesizer*. Hal ini menjamin efek suara tetap berbunyi seketika tanpa jeda *buffer* atau kegagalan decodifikasi audio.
+- **Responsivitas Layar Sentuh & Canvas 60 FPS pada Viewport Mobile**:
+  - Simulasi canvas spasial desktop (misal: MacBook screen / notch) wajib menghitung rasio skala dinamis `scale = clientWidth / baseWidth` dan memetakan *pointer events* serta *touch events* (`touchstart`, `touchmove`, `touchend`) ke koordinat kanvas virtual (`toScreen(cx, cy)`), memastikan interaksi tetap responsif tanpa distorsi pada layar smartphone (390px).
+
