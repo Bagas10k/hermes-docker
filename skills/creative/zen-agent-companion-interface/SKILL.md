@@ -218,8 +218,12 @@ Don't use for:
       box-shadow: 0 2px 8px rgba(239, 68, 68, 0.65);
     }
     ```
-- **Tactile Pop-in & Switch Interaction**:
-  - Accessible via a dedicated Folder button in the bottom dock (`.folder-trigger-btn` with 4-quadrant mini dots and red count badge) and quick-action chips.
+- **Tactile Pop-in & Two-Tier Glass Peek Interaction**:
+  - **Prune Loose Outer Buttons ("Yang di Luar Hapus, Yang di Dalam Dilihat dari Luar")**: Avoid scattering individual agent buttons across the dock alongside a separate folder button. Remove all loose outer agent buttons and consolidate them into a single **Glass Peek Dock Folder** (`.dock-folder-glass`, ~52x52px).
+  - **Visible From Outside**: The dock folder features a frosted translucent glass container revealing a 2x2 grid of mini living Coucous directly from the outside, complete with animated eye blinks, signature body colors, active selection ring, and a red notification badge (`4`).
+  - **Two-Tier Interaction Architecture**:
+    * Direct Quick Switch: Clicking a mini Coucou directly inside the dock folder preview switches the active agent immediately without opening the modal.
+    * Modal Expansion: Clicking the surrounding glass container smoothly pops open the full **Enlarged Living Folder Modal** (`@keyframes folderSpringOpen`), displaying large living canvases and complete status diagnostics.
   - Tapping an agent tile triggers tactile squash (`scale(0.92)`), plays that agent's chime signature, smoothly closes the folder, and morphs the main hero mascot to the selected agent.
 
 ## Procedure
@@ -248,6 +252,8 @@ Don't use for:
 
 ## Pitfalls
 
+- **Cluttered Outside Dock vs Glass Peek Folder Consolidation**: Scattering individual multi-agent buttons across the outer dock while simultaneously providing a squad folder button creates severe visual clutter, exhausts thumb reach on compact mobile viewports (`390px`), and introduces redundant navigation paths. Remove all individual agent buttons from the outside dock and consolidate them into a single **Glass Peek Dock Folder** (`.dock-folder-glass` with a 2x2 grid of mini living Coucous visible from outside) supporting two-tier interaction: direct click on a mini agent triggers a quick switch, while tapping the glass body expands the full enlarged folder modal.
+- **Nested Mini-Button Event Bubbling in Dock Folder**: Nesting clickable mini agent buttons (`.mini-folder-agent`) inside an outer interactive dock folder element (`#btnOpenSquadFolder`) causes clicks on a mini agent to bubble up and trigger the folder's click listener, unintentionally popping open the full folder modal instead of executing a quick switch. Always call `e.stopPropagation()` in the mini agent listener and guard the folder wrapper handler with `if (e.target.closest('.mini-folder-agent')) return;`.
 - **Dead Icon Syndrome in Agent Grouping Containers**: Rendering multi-agent rosters as static SVG icons or flat PNG images inside grouping containers destroys the organic illusion of an autonomous companion ecosystem. When wrapping agents in an OS-style folder or squad grid, mount dedicated independent micro-canvases (`60x60` px) for each agent tile so every mascot remains physically alive (independent eye blinks, breathing bounce, characteristic status emotes, and red notification pills) even while contained inside the folder.
 - **Playwright Strict Mode Locator Collision on Dual Agent Buttons**: Re-using identical data attributes like `data-agent="bekagent"` across both dock buttons and folder tiles causes test locators like `page.locator('button[data-agent="bekagent"]')` to throw strict mode violations (`resolved to 2 elements`). Always namespace container attributes (e.g. `data-folder-agent="bekagent"`) to keep automated testing unambiguous.
 - **Instant Chunk Ingestion Visual Shock (Omitted Streaming Reveal)**: Injecting large Markdown responses in a single DOM update causes the viewport to instantly jump from 0 to full height with no visual continuity. Stream the response tokens word-by-word with an animated cursor (`▌`) and smooth scroll tracking, deferring rich card accessories (links, files, inquiry chips) until the stream finishes.
