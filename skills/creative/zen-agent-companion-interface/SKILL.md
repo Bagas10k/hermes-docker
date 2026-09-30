@@ -72,6 +72,19 @@ Don't use for:
   }
   ```
 
+### 4. Integrated Command Bar & Self-Expression Loop
+- **Floating Spotlight Command Input**:
+  - Docked directly above the bottom companion dock for effortless one-handed thumb reach.
+  - Stylized as a minimalist translucent glass bar with G2 squircle curvature, glowing amber border on focus, and tactile circular send button.
+  - Accompanied by horizontal quick-action prompt chips (e.g. `Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`) for instant common commands without typing.
+- **Reactive Speech & Thought Bubble**:
+  - Floats dynamically directly above the mascot's head with a soft pointing tail and spring scale-in animation (`transform: scale(0.9) translateY(4px)` to `scale(1) translateY(0)`).
+  - Keeps text ultra-succinct (1 concise sentence, no robotic AI filler).
+- **Three-Phase Cognitive-Expression Loop**:
+  1. **Thinking Phase**: On command submit, mascot eyes gaze upward, subtle work chime sounds, and bubble displays temporary processing state (*"Sedang memproses..."*).
+  2. **Execution Phase**: Asynchronous command dispatch to backend endpoint (`POST /coucou/api/command`).
+  3. **Expression & Vocalization Phase**: Mascot body squashes/stretches, eye expression shifts to match context (`happy`, `proud`, `wink`, `surprised`, `dizzy`), audio chime confirms resolution, and bubble reveals the response before auto-fading after 4-6 seconds.
+
 ## Procedure
 
 1. **Establish Fixed Viewport & Ambient Canvas**:
@@ -88,12 +101,18 @@ Don't use for:
 4. **Implement Nested Settings Drawer**:
    - Hook settings open button to add `.open` class to drawer and backdrop overlay.
    - Allow dismissal via close button (`✕`), backdrop click, drag handle, or Escape key.
-5. **Verify Zero-Emoji & Accessibility**:
+5. **Mount Spotlight Command Bar & Reactive Speech Bubble**:
+   - Anchor the command bar form directly above the bottom agent dock with quick prompt chips (`Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`).
+   - Mount an absolute-positioned speech bubble container above the mascot canvas.
+   - Wire submit event to trigger optimistic "thinking" state (upward eye tilt, work chime), call the backend command endpoint asynchronously, and render the vocalized reply with emotional animation.
+6. **Verify Zero-Emoji & Accessibility**:
    - 100% SVG vector icons for every glyph.
    - Minimum 44px touch targets on mobile viewports.
 
 ## Pitfalls
 
+- **Speech Bubble Overflow Clipping**: On compact mobile screens, a speech bubble rendered too high can clip underneath the Dynamic Island. Constrain its vertical offset, clamp maximum width (`max-width: min(85vw, 320px)`), and set `pointer-events: none` on the bubble container so it never obstructs touches or dragging on the living mascot canvas.
+- **Concurrent Command Submission Race**: Firing new commands while a previous NLP command is in flight causes overlapping speech bubble timers and conflicting emotional states. Disable or throttle the submit trigger until the active bubble finishes or clears.
 - **Nested Toggle Event Bubbling**: Clicking a chevron/collapse button nested inside an expandable parent container bubbles up and fires the parent's click listener, immediately reversing the toggled state. Always call `e.stopPropagation()` on nested toggle actions.
 - **Canvas DPR Blurriness**: Not multiplying canvas dimensions by `Math.min(window.devicePixelRatio, 2)` causes blurry retina rendering.
 - **Audio Context Suspension**: Modern mobile browsers suspend Web Audio until the first user gesture. Initialize or resume `AudioContext` inside pointer/touch handlers, never automatically on page load.
