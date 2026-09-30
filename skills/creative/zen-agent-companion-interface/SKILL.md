@@ -137,7 +137,34 @@ Don't use for:
     - **Reset Button**: Clears the conversation thread and resets the mascot to center stage.
     - **Minimize / Close Button**: Smoothly collapses the chat card and glides the living mascot back to the center of the zen canvas.
 
-### 5. Multimodal Action Cards & Interactive Follow-up Inquiry
+### 5. Multimodal Action Cards, File Attachment & Dynamic Island Live Status
+- **Dynamic Island Live Mascot Status & Action Bubbles**:
+  - Replace static agent labels in the Dynamic Island with **Real-Time Mascot Cognitive Activity**:
+    * **Siaga**: `Coucou Siaga • Menanti instruksi...` (pulsing emerald beacon dot).
+    * **Berpikir**: `Coucou Berpikir • Menganalisis pola kausal...` (pulsing amber beacon dot).
+    * **Merespons**: `Coucou Merespons • Mengetik jawaban...` (active amber beacon dot).
+    * **Menerima Berkas**: `Coucou Menerima Berkas • [nama berkas]` (pulsing cyan beacon dot).
+  - Embed tactile **Menu Gelembung (*Action Bubble Pills*)** directly inside the Dynamic Island:
+    * `+ Baru`: Starts a new clean session, archives the current thread to `localStorage`, collapses the chat card, and springs the mascot back to the center of the zen canvas.
+    * `Riwayat`: Opens the slide-up chat history drawer.
+- **Typewriter Streaming Reveal Animation ("Animasi Ketikan Mengalir")**:
+  - Rather than dumping the entire Markdown response in a single frame (which creates an abrupt, jarring height leap), stream words and tokens sequentially (~18–22ms intervals) with a blinking amber cursor (`▌`).
+  - The chat card smoothly expands in height ("molor ke atas") as sentences flow in, and `body.scrollTop = body.scrollHeight` continuously follows the bottom baseline.
+  - Rich accessories (link cards, file download cards, and interactive inquiry chips) animate in with a staggered fade-in *only after* typing stream completes.
+- **Slide-up Chat History Drawer & Session Persistence**:
+  - House past conversations in `localStorage` under `coucou_chat_sessions` as structured session objects (`{ id, title, preview, time, messages }`).
+  - Render a slide-up G2 squircle sheet (`.history-sheet`) featuring total session counts, formatted timestamps, message quantities, title/preview snippets, individual delete buttons, and a global "Hapus Semua Riwayat" button.
+  - Tapping any session instantly reloads the entire multi-turn thread into the chat card and expands it smoothly into view.
+- **File Attachment with Physical Mascot Reaction**:
+  - Mount an attach button (`.cmd-attach-btn`) beside the prompt input wired to a hidden file picker.
+  - When a file is selected, an emerald preview pill (`.attached-file-pill`) slides in above the command bar with filename, formatted size, and a remove (`✕`) trigger.
+  - **Mascot Physical Reaction**: The living mascot immediately reacts physically to the file selection:
+    * Eyes tilt downward to look directly at the attachment (`lookY = 1.0`).
+    * Body squashes and bounces with surprised delight (`state = 'surprised'; squash(0.55)`).
+    * Audio chime `pop` fires.
+    * Dynamic Island updates status to `Coucou Menerima Berkas`.
+    * Vocal speech bubble asks: *"Wah, ada berkas baru: [filename]! Mau aku analisis apa?"*.
+  - When the message is submitted, the attachment metadata is bundled into the API payload so the AI acknowledges and dissects the file with high intellectual curiosity.
 - **High Intellectual Curiosity Persona**: The companion AI acts proactively with high intellectual curiosity—exploring root causes, proposing creative hypotheses, and providing 2–3 thought-provoking follow-up questions.
 - **Link Cards**: Structured preview cards with Lucide external-link SVG icons, title, and direct URL.
 - **File Attachment Cards**: Emerald-tinted file cards (`.chat-file-card`) displaying filename, description, and size. Clicking the download button dynamically synthesizes a `Blob` (`URL.createObjectURL`) for instant, reliable local file download.
@@ -173,6 +200,9 @@ Don't use for:
 
 ## Pitfalls
 
+- **Instant Chunk Ingestion Visual Shock (Omitted Streaming Reveal)**: Injecting large Markdown responses in a single DOM update causes the viewport to instantly jump from 0 to full height with no visual continuity. Stream the response tokens word-by-word with an animated cursor (`▌`) and smooth scroll tracking, deferring rich card accessories (links, files, inquiry chips) until the stream finishes.
+- **Lost Chat Sockets Without Local Session Persistence**: In single-page zero-scroll apps, refreshing or starting a new query without persisting past conversations permanently destroys conversational context. Save serialized session arrays (`id`, `title`, `preview`, `time`, `messages`) to `localStorage` under `coucou_chat_sessions`, loadable anytime via a slide-up G2 squircle history drawer with per-session deletion.
+- **Detached File Picker UX Disconnect**: Providing file upload capability without tactile visual feedback or mascot acknowledgment makes the user uncertain whether the file was accepted. Always mount a floating preview pill above the input, update the Dynamic Island live status to `Menerima Berkas`, and trigger a physical mascot reaction (downward eye tracking, surprised squash bounce, and contextual greeting) upon file selection.
 - **Single-Line Prompt Input Horizontal Overflow & Dead Wrapping**: Using a standard `<input type="text">` for user prompts causes longer sentences or multi-clause instructions to scroll horizontally out of view, hiding what the user typed and preventing multi-line drafting. Always use an auto-resizing `<textarea rows="1">` housed in an elastic flex container (`align-items: flex-end; min-height: 44px; max-height: 110px;`), dynamically recalculating `style.height = Math.min(Math.max(scrollHeight, 20), 110) + 'px'` on the `input` event, dispatching submit on `Enter` without `Shift`, and resetting height to `auto` on send.
 - **Absolute Floating Mascot Overlapping Message Body**: Translating a floating companion with static absolute offsets (`translate(...)`) over an expanding chat card inevitably collides with or occludes lines of response text on long replies. Always switch the parent canvas container to flex-column stacking (`.has-chat { justify-content: flex-start; }`), shrink the mascot smoothly to a dedicated top companion slot (`width: 80px; height: 80px; transform: scale(0.48); margin-top: -24px; margin-bottom: -16px;`), and make the chat card relative (`position: relative; flex: 1; max-height: calc(100dvh - 265px);`) so text collision is structurally impossible.
 - **Jarring Visual Flicker from Sub-Second Model Responses (Omitted Thinking Phase)**: When an upstream local LLM responds faster than ~500ms, a thinking indicator flashes instantaneously and disappears before the user can perceive cognitive engagement. Always enforce a **Guaranteed Minimum Thinking Duration** (`Math.max(1200, elapsed)` ms) so progressive thought stages and mascot eye-tilt animations register clearly before morphing to the response card.
