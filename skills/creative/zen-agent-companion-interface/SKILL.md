@@ -74,16 +74,20 @@ Don't use for:
 
 ### 4. Integrated Command Bar & Self-Expression Loop
 - **Floating Spotlight Command Input**:
+  - Enclose the input inside a `<form id="cmdForm" action="javascript:void(0);">` so that pressing the virtual software keyboard's "Go", "Search", or "Enter" button on iOS/Android reliably fires the `submit` event.
+  - Explicitly override global touch/selection rules on the text field with `user-select: text !important; -webkit-user-select: text !important; touch-action: manipulation;` to prevent mobile WebKit/Safari from blocking keyboard focus and cursor selection.
   - Docked directly above the bottom companion dock for effortless one-handed thumb reach.
-  - Stylized as a minimalist translucent glass bar with G2 squircle curvature, glowing amber border on focus, and tactile circular send button.
   - Accompanied by horizontal quick-action prompt chips (e.g. `Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`) for instant common commands without typing.
 - **Reactive Speech & Thought Bubble**:
   - Floats dynamically directly above the mascot's head with a soft pointing tail and spring scale-in animation (`transform: scale(0.9) translateY(4px)` to `scale(1) translateY(0)`).
-  - Keeps text ultra-succinct (1 concise sentence, no robotic AI filler).
-- **Three-Phase Cognitive-Expression Loop**:
-  1. **Thinking Phase**: On command submit, mascot eyes gaze upward, subtle work chime sounds, and bubble displays temporary processing state (*"Sedang memproses..."*).
-  2. **Execution Phase**: Asynchronous command dispatch to backend endpoint (`POST /coucou/api/command`).
-  3. **Expression & Vocalization Phase**: Mascot body squashes/stretches, eye expression shifts to match context (`happy`, `proud`, `wink`, `surprised`, `dizzy`), audio chime confirms resolution, and bubble reveals the response before auto-fading after 4-6 seconds.
+  - Use multi-line formatting (`white-space: normal; width: max-content; min-width: 140px; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`). Never apply `white-space: nowrap` or `text-overflow: ellipsis` to speech bubbles, as conversational replies will be abruptly cut off.
+  - Keep bubble visible for 6-9 seconds for comfortable reading, and keep the "Sedang berpikir..." state active without premature dismissal until the backend query resolves.
+- **Real AI Intelligence Integration**:
+  - Distinguish technical commands from conversational queries: route conversational prompts to a fast, streaming or short-response local LLM/reasoning backend constrained strictly to 1 natural, friendly sentence (maximum ~18 words) with absolute zero-emoji compliance.
+  - Technical commands (`status`, `catat ide`, `ping`) execute live system actions and return both verbal feedback and physical mascot state changes.
+- **Proactive Grounding & Direct Mascot Touch**:
+  - Trigger a proactive sapaan/greeting 500ms after initial page load (e.g. *"Halo Bagas! Ada yang bisa kubantu?"*) so the user immediately sees that the companion is alive and responsive.
+  - Bind tap/click events directly onto the hero mascot canvas so poking or petting the companion elicits an immediate physical spring squash, emotional eye reaction (e.g. wink/smile), and conversational speech bubble remark.
 
 ## Procedure
 
@@ -111,6 +115,10 @@ Don't use for:
 
 ## Pitfalls
 
+- **Speech Bubble Ellipsis Truncation**: Setting `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;` on a companion speech bubble truncates multi-word conversational AI replies mid-sentence with `...`. Always use multi-line wrapping with auto-height (`white-space: normal; width: max-content; max-width: min(85vw, 320px); word-break: break-word; line-height: 1.4;`).
+- **Mobile Virtual Keyboard Dead Submit**: Placing a bare `<input>` without an enclosing `<form>` causes mobile virtual keyboards (iOS Safari, Android Chrome) to ignore the "Go", "Search", or "Enter" soft key. Always enclose the input in `<form id="cmdForm" action="javascript:void(0);">` and listen to the `submit` event.
+- **Global `user-select: none` Input Freeze**: Applying `user-select: none` across all elements globally disables cursor placement, text selection, and virtual keyboard focus on mobile WebKit/iOS. Always exempt input elements with `user-select: text !important; -webkit-user-select: text !important; touch-action: manipulation;`.
+- **Premature Bubble Timeout on Async LLM**: Setting a short (e.g. 3-second) dismissal timer on the "Sedang berpikir..." state while an upstream LLM takes 4-5 seconds causes the speech bubble to vanish prematurely into an empty gap before the reply arrives, misleading the user into thinking the companion failed to respond. Keep the thinking bubble visible until the resolution callback fires.
 - **Speech Bubble Overflow Clipping**: On compact mobile screens, a speech bubble rendered too high can clip underneath the Dynamic Island. Constrain its vertical offset, clamp maximum width (`max-width: min(85vw, 320px)`), and set `pointer-events: none` on the bubble container so it never obstructs touches or dragging on the living mascot canvas.
 - **Concurrent Command Submission Race**: Firing new commands while a previous NLP command is in flight causes overlapping speech bubble timers and conflicting emotional states. Disable or throttle the submit trigger until the active bubble finishes or clears.
 - **Nested Toggle Event Bubbling**: Clicking a chevron/collapse button nested inside an expandable parent container bubbles up and fires the parent's click listener, immediately reversing the toggled state. Always call `e.stopPropagation()` on nested toggle actions.
