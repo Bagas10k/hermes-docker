@@ -97,13 +97,13 @@ Don't use for:
   - Accompanied by horizontal quick-action prompt chips (e.g. `Status`, `Catat Ide`, `Ping All`, `Suara`, `Pusing`) for instant common commands without typing. Clicking chips auto-populates the input and recalculates height via `adjustInputHeight()`.
 - **Adaptive Spatial Layout Choreography**:
   - **Idle State**: The living mascot stands proud and centered in the spacious zen canvas (`transform: translate(0, 0) scale(1)`).
-  - **Thinking / Processing State**:
-    - The mascot enters the thinking phase on EVERY query: tilts eyes upward in deep focus with a pulsing amber aura.
+  - **Thinking / Processing State (Integrated Exclusively in Dynamic Island)**:
+    - The mascot tilts eyes upward in deep focus with a pulsing aura.
     - Enforce a **Guaranteed Minimum Thinking Duration** (at least 1200ms) even if the LLM responds faster, preventing jarring visual flickers and letting progressive stages render palpably.
-    - A dedicated **Progressive Thinking Card** (`.thinking-card`) smoothly slides up right above the input bar with live stage feedback:
-      * Stage 1: `Menerima pesan & menganalisis instruksi...`
-      * Stage 2: `Memanggil kognisi AI & telemetri sistem...`
-      * Stage 3: `Merumuskan jawaban komprehensif...`
+    - **No Middle Canvas Loading Clutter**: Never mount an obstructive floating thinking card in the middle canvas. All cognitive loading is integrated exclusively into the **Dynamic Island ("Rumah si Agent")**:
+      * The Dynamic Island morphs into `.is-thinking` with a pulsing ambient amber glow.
+      * Status shifts to `[Agent] • Berpikir di Rumah` with sub-stage feedback (`Menganalisis instruksi...` → `Memanggil kognisi AI...` → `Merumuskan jawaban...`).
+      * A neon progress bar (`.island-thinking-bar`) flows across the bottom edge of the island (`25%` → `65%` → `90%` → `100%`), keeping the mascot and chat canvas 100% unobstructed.
   - **Responded / Chat State**:
     - The canvas switches to flex-column stacking (`.zen-empty-canvas.has-chat { justify-content: flex-start; }`).
     - The mascot smoothly morphs into an elegant companion at the top of the canvas (`width: 80px; height: 80px; transform: scale(0.48); margin-top: -24px; margin-bottom: -16px; z-index: 30;`), sitting cleanly above the chat card without overlapping a single character of text.
@@ -137,16 +137,20 @@ Don't use for:
     - **Reset Button**: Clears the conversation thread and resets the mascot to center stage.
     - **Minimize / Close Button**: Smoothly collapses the chat card and glides the living mascot back to the center of the zen canvas.
 
-### 5. Multimodal Action Cards, File Attachment & Dynamic Island Live Status
-- **Dynamic Island Live Mascot Status & Action Bubbles**:
-  - Replace static agent labels in the Dynamic Island with **Real-Time Mascot Cognitive Activity**:
-    * **Siaga**: `Coucou Siaga • Menanti instruksi...` (pulsing emerald beacon dot).
-    * **Berpikir**: `Coucou Berpikir • Menganalisis pola kausal...` (pulsing amber beacon dot).
-    * **Merespons**: `Coucou Merespons • Mengetik jawaban...` (active amber beacon dot).
-    * **Menerima Berkas**: `Coucou Menerima Berkas • [nama berkas]` (pulsing cyan beacon dot).
-  - Embed tactile **Menu Gelembung (*Action Bubble Pills*)** directly inside the Dynamic Island:
+### 5. Dynamic Island ("Rumah si Agent"), Bottom User Tools & Multimodal Engine
+- **Dynamic Island as the "Agent's Home" (*Rumahnya si Agent*)**:
+  - The Dynamic Island is strictly the active agent's residence and cognitive status beacon—**not a user control toolbar**.
+  - Houses the living micro-mascot in its home stage, live presence status, and telemetry expansion toggle:
+    * **Siaga di Rumah**: `[Agent] • Di Rumah` (sub: `Siaga menanti instruksi...` with emerald pulse dot).
+    * **Berpikir di Rumah**: `[Agent] • Berpikir di Rumah` (sub: `Menganalisis instruksi...` with amber glow pulse and integrated progress bar).
+    * **Merespons**: `[Agent] • Menulis Respon` (sub: `Mengalirkan jawaban ke kartu...`).
+    * **Menganalisis Berkas**: `[Agent] • Menganalisis Berkas` (sub: `[nama berkas]`).
+  - Keep the island pristine: zero user action buttons inside the island.
+- **Bottom User Controls & Response Config Strip (*Tools User di Bagian Bawah*)**:
+  - All user controls and response preferences belong at the bottom (`.user-tools-strip`), docked immediately above the command bar for effortless single-handed thumb reach:
     * `+ Baru`: Starts a new clean session, archives the current thread to `localStorage`, collapses the chat card, and springs the mascot back to the center of the zen canvas.
     * `Riwayat`: Opens the slide-up chat history drawer.
+    * `Mode Respon`: Instant reasoning style switch (`Mode: Kausal 3-Mindset`, `Mode: Ringkas & Cepat`, `Mode: Kreatif & Eksploratif`) persisted to `localStorage`.
 - **Typewriter Streaming Reveal Animation ("Animasi Ketikan Mengalir")**:
   - Rather than dumping the entire Markdown response in a single frame (which creates an abrupt, jarring height leap), stream words and tokens sequentially (~18–22ms intervals) with a blinking amber cursor (`▌`).
   - The chat card smoothly expands in height ("molor ke atas") as sentences flow in, and `body.scrollTop = body.scrollHeight` continuously follows the bottom baseline.
@@ -261,6 +265,7 @@ Don't use for:
 - **Detached File Picker UX Disconnect**: Providing file upload capability without tactile visual feedback or mascot acknowledgment makes the user uncertain whether the file was accepted. Always mount a floating preview pill above the input, update the Dynamic Island live status to `Menerima Berkas`, and trigger a physical mascot reaction (downward eye tracking, surprised squash bounce, and contextual greeting) upon file selection.
 - **Single-Line Prompt Input Horizontal Overflow & Dead Wrapping**: Using a standard `<input type="text">` for user prompts causes longer sentences or multi-clause instructions to scroll horizontally out of view, hiding what the user typed and preventing multi-line drafting. Always use an auto-resizing `<textarea rows="1">` housed in an elastic flex container (`align-items: flex-end; min-height: 44px; max-height: 110px;`), dynamically recalculating `style.height = Math.min(Math.max(scrollHeight, 20), 110) + 'px'` on the `input` event, dispatching submit on `Enter` without `Shift`, and resetting height to `auto` on send.
 - **Absolute Floating Mascot Overlapping Message Body**: Translating a floating companion with static absolute offsets (`translate(...)`) over an expanding chat card inevitably collides with or occludes lines of response text on long replies. Always switch the parent canvas container to flex-column stacking (`.has-chat { justify-content: flex-start; }`), shrink the mascot smoothly to a dedicated top companion slot (`width: 80px; height: 80px; transform: scale(0.48); margin-top: -24px; margin-bottom: -16px;`), and make the chat card relative (`position: relative; flex: 1; max-height: calc(100dvh - 265px);`) so text collision is structurally impossible.
+- **Cluttering Agent's Home with User Actions vs Bottom Tools Ergonomics**: Placing user action buttons (`+ Baru`, `Riwayat`) or full-canvas thinking cards in the Dynamic Island or middle canvas violates the mental model of the Dynamic Island as the "Agent's Home" and obstructs the living mascot. Keep the Dynamic Island strictly as the agent's residence (avatar, home status, and self-contained thinking loading bar), while placing all user controls (`+ Baru`, `Riwayat`, response style configurators) at the bottom right above the input bar for seamless mobile thumb ergonomics.
 - **Jarring Visual Flicker from Sub-Second Model Responses (Omitted Thinking Phase)**: When an upstream local LLM responds faster than ~500ms, a thinking indicator flashes instantaneously and disappears before the user can perceive cognitive engagement. Always enforce a **Guaranteed Minimum Thinking Duration** (`Math.max(1200, elapsed)` ms) so progressive thought stages and mascot eye-tilt animations register clearly before morphing to the response card.
 - **Dead Attachment Downloads on Static/Proxy Frontends**: Attempting to route file attachment downloads through backend disk endpoints can fail when files are generated dynamically or session state changes. Synthesize downloads client-side via `new Blob([content], { type: 'text/plain;charset=utf-8' })` with `URL.createObjectURL(blob)` for instant, reliable file downloads without round-trip I/O dependencies.
 - **Sequential Model Latency Cascades in Multi-Model Fallbacks**: Chaining reasoning-heavy models sequentially with generous timeouts (e.g. 14s each) in a fallback array causes upstream web clients to hit request timeouts (>15s) when handling long complex answers. Put the fastest reliable model with tight token boundaries (`max_tokens: ~380`, timeout ~8.5s) first to guarantee sub-6s time-to-first-thought while preserving rich formatting.
