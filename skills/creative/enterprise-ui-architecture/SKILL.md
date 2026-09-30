@@ -164,3 +164,28 @@ Sebelum mengirimkan hasil rancangan ke pengguna, jalankan inspeksi mandiri via b
 - Gunakan arsitektur Vite Multi-Page (MPA) agar setiap modul halaman (`/buttons/`, `/cards/`, `/inputs/`, `/tables/`, `/navigation/`) terisolasi dan cepat dibuka.
 - Pastikan ketersediaan dark mode dan light mode dengan kontras slate yang terkalibrasi.
 - Selalu sertakan footer resmi: `APEX DESIGN SYSTEM • Hak Cipta & Arsitektur oleh Bagas Cihuy`.
+
+### I. Pola Prototipe POS & Dasbor Finansial B2B Siap Pitch Klien (Client-Ready Business Systems)
+- **Quick Demo Role Chips pada Dialog Autentikasi / Login:**
+  Saat mempresentasikan prototipe aplikasi bisnis, kasir POS, atau dashboard manajemen langsung ke klien bisnis, DILARANG memaksa demonstrator mengetik kredensial manual atau menghafal password akun demo. Sediakan pil akses cepat 1-klik (`[Demo Kasir]`, `[Demo Kepala Toko/Admin]`) yang otomatis mengisi form login (ID pengguna, PIN, shift kerja) secara instan dan realistis agar momentum presentasi tetap lancar.
+- **Konfigurasi Vite Relative Asset Base (`base: './'`) pada Sub-Rute Reverse Proxy:**
+  Saat membangun aplikasi web statis yang disajikan di bawah sub-rute reverse proxy (misal `/kasir-bangunan/`), Vite WAJIB dikonfigurasi dengan `base: './'` di `vite.config.js`. Base default (`/`) menyebabkan bundler menghasilkan path aset absolut (`/assets/...`) yang langsung diarahkan ke root origin server induk, memicu galat HTTP 401/404 atau MIME type mismatch (`application/json` alih-alih CSS/JS).
+- **Simulasi Struk Thermal 80mm Berstandar Operasional Asli:**
+  Pada sistem kasir retail/grosir, jangan hanya mengandalkan notifikasi toast selesai transaksi. Sediakan dialog struk belanja berformat thermal 80mm monospaced (`JetBrains Mono` / `Courier`) lengkap dengan nomor faktur urut, waktu transaksi, identitas kasir, rincian item, subtotal, potongan diskon volume/kontraktor, PPN, uang diterima tunai, kembalian otomatis, barcode SVG, serta tombol aksi ganda: cetak printer thermal fisik (`window.print()`) dan bagikan struk via WhatsApp Web.
+- **Kalkulator Margin Laba Otomatis pada Formulir Input Master Barang:**
+  Pada form penambahan material/produk baru, selalu sertakan kalkulator margin laba kotor dinamis secara real-time: `Margin = ((Harga Jual - HPP) / Harga Jual) * 100%` dengan pewarnaan semantik (hijau tebal jika >= 15%, amber jika margin tipis < 15%, merah jika negatif/rugi) untuk memberikan feedback nilai bisnis instan kepada klien.
+- **Kontras Warna Badge Status Semantik WCAG AA (>= 4.5:1) pada Latar Pastel:**
+  Hindari menggunakan warna status teks menengah terang (`#10b981`, `#f59e0b`, `#ef4444`) di atas latar belakang kontainer pastel lembut (`#ecfdf5`, `#fffbeb`, `#fef2f2`); kombinasi ini hanya menghasilkan rasio kontras ~2.8:1 dan melanggar audit Axe-Core WCAG AA. Gunakan shade 700/800 yang pekat (Emerald `#047857`, Amber `#b45309`, Red `#b91c1c`) agar kontras rasio minimal 4.5:1 tercapai secara terverifikasi.
+- **Aturan Aksesibilitas ARIA Role pada Kontainer Grafik SVG (`role="img"` / `role="region"`):**
+  DILARANG menyematkan atribut `aria-label` langsung pada elemen `<div>` generik tanpa mendeklarasikan `role` aksesibilitas yang valid. Memberikan `aria-label` pada kontainer grafik tanpa atribut `role="img"` atau `role="region"` memicu pelanggaran `aria-prohibited-attr` pada mesin pemeriksa aksesibilitas otomatis.
+- **Navigasi Bilah Sisi Kiri Vertikal (*Slidebar / Vertical Rail*) vs Topbar Tabs pada Sistem Kasir POS:**
+  Pada sistem kasir POS dan ruang kendali operasional B2B, hindari tab navigasi horizontal di bilah atas (*topbar*) yang sempit dan rentan terpotong. Wajib menggunakan *Vertical Slidebar* (lebar 260–270px) tetap di sisi kiri layar dengan susunan empat kompartemen teratur:
+  1. *Brand Teks Toko*: Identitas tipografi bersih tanpa logo grafis simbolis.
+  2. *Status Shift*: Kartu indikator shift aktif titik hijau dan jam operasional real-time.
+  3. *Navigasi Inti*: Tombol menu vertikal dengan active indicator bar, ikon garis SVG, dan pill counter jumlah item keranjang POS.
+  4. *Sektor Akun & Logout*: Profil kasir bertanda avatar inisial dan tombol aksi **`Logout / Ganti Kasir`** eksplisit di footer sidebar.
+  Pada layar tablet/ponsel (<1024px), sidebar otomatis bertransformasi menjadi laci geser (*slide-over drawer*) dengan tombol hamburger, tombol tutup (`X`), dan layar peredup latar (*scrim backdrop blur*).
+- **Identitas Tipografi Teks Bersih Tanpa Logo Gambar Simbolik (*Pure Typography Wordmark*):**
+  Saat merancang antarmuka untuk presentasi klien yang menginginkan kesederhanaan, DILARANG memaksakan ikon grafis 3D/kubus/simbol generik di header atau dialog login. Gunakan tata letak tipografi sans-serif tebal yang berwibawa (*text-only wordmark*, misal `TOKO BANGUNAN` dengan badge cabang `PT PUTRA BALKOM JAYA • CABANG 01`) untuk menghadirkan kesan rapi, profesional, tidak sesak, dan bebas dari kesan template purwarupa mentah.
+- **Alur Logout Berpaut ke Dialog/Halaman Login untuk Demonstrasi Shift Kasir:**
+  Sertakan tombol Logout yang mudah diakses di area profil kasir (dasar sidebar). Mengklik Logout wajib memicu dialog/halaman login kembali dengan notifikasi toast penjelasan status sesi berakhir, langsung siap menerima pemilihan akun demo baru (*Kasir* vs *Kepala Toko*) secara instan di hadapan klien tanpa perlu me-reload halaman browser.
