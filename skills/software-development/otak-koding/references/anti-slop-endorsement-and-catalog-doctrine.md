@@ -93,4 +93,28 @@
       - Kanvas 60 FPS spring physics: pelacakan tatapan mata 3D sferikal dinamis, kompresi elastis saat diklik (*squash & stretch* dengan lerp damping `sx += (1 - sx) * 0.18`), siklus kedipan organik, dan animasi pusing (*dizzy mode*) saat diketuk berturut-turut.
     - *Kepatuhan Mutlak Zero-Emoji*: 100% menggunakan vektor SVG murni (Lucide icons), bebas dari karakter emoji Unicode pada antarmuka pengguna.
 
+---
+
+## 7. Doktrin Zen Single-Page Zero-Scroll & Living Hero Object pada Mobile HUD
+- **Gejala Slop & Layout Trap yang Ditolak Keras**:
+  - Mengabaikan instruksi "page 1 ngga bisa skrol / home kosongan" dengan tetap memaksakan tata letak vertikal panjang (*multi-screen vertical scroll*) berisi tabel telemetri, daftar proses, dan teks bertele-tele di layar ponsel.
+  - Membiarkan area kanvas tengah kosong melompong (*blank void*) sementara karakter maskot/pendamping hanya muncul sebagai avatar mini 48px di header, padahal pengguna meminta maskot tersebut sebagai objek utama aplikasi.
+- **Standar Solusi (Zen Zero-Scroll Single-Viewport & Living Hero Object)**:
+  1. *Penguncian Viewport Tunggal 100dvh (*Zero-Scroll Guarantee*)**:
+     - Kunci seluruh tata letak dalam satu layar ponsel tanpa *scrollbar*: `height: 100dvh; min-height: 100dvh; max-height: 100dvh; overflow: hidden !important; position: fixed; inset: 0; touch-action: none;`.
+     - Tiga zona proporsional: **Header (Dynamic Island Besar)** di atas, **Kanvas Interaktif Kosongan (Zen Space)** fleksibel di tengah (`flex: 1`), dan **Dermaga Agen (Bottom Dock)** di bawah dengan batas aman (*safe area*).
+  2. *Living Hero Object di Pusat Layar*:
+     - Karakter pendamping utama (misal: Big Coucou/Mochi) wajib hadir besar di pusat kanvas (`180x180 px` / skala proporsional), bukan sekadar ikon mini di header.
+     - Mesin kanvas 60 FPS spring physics: mata sferikal 3D melacak sentuhan jari secara dinamis di seluruh layar, respon kompresi lentur saat diketuk (*squash & stretch*), kedipan mata organik, dan mode pusing (*dizzy*) saat diketuk beruntun.
+  3. *Pola "Agent Lain Itu Coucou Juga" (Multi-Agent Avatar Dock)*:
+     - Jangan menampilkan daftar teks kaku; hadirkan setiap agen otonom sebagai karakter avatar unik di dermaga bawah (*dock*):
+       - Coucou Hermes (Aura Solar Amber `#F59E0B`, *Cognitive Engine*)
+       - Coucou Bekagent (Aura Cyan `#38BDF8`, *Obsidian Vault Clerk*)
+       - Coucou SputarAI (Aura Cosmic Violet `#A855F7`, *Media Radar*)
+       - Coucou SputarBall (Aura Emerald `#10B981`, *Sports Radar*)
+     - Mengetuk avatar agen pada dermaga seketika memicu mutasi pegas (*spring morphing*), lerp warna tubuh/aura, dan bunyi efek audio khas agen tersebut pada Big Coucou di tengah kanvas.
+  4. *Pitfall Penanganan Event Bubbling pada Tombol Toggle Bersarang*:
+     - Jika tombol ciutkan/perluas (misal: chevron `#btnToggleIsland`) berada di dalam kontainer yang juga memiliki event listener klik (`#dynamicIsland`), klik pada tombol dalam akan memicu kedua penangan secara beruntun (*bubbling*). Saat menutup, tombol dalam mengubah `isExpanded = false`, lalu event merembet ke kontainer luar yang melihat `!isExpanded` bernilai `true` dan langsung membuka kembali kontainer tersebut.
+     - *Aturan Wajib*: Selalu sertakan `e.stopPropagation()` pada penangan tombol toggle bersarang agar siklus buka-tutup tidak terpicu ganda.
+
 
