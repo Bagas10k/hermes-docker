@@ -11,3 +11,5 @@ Modular RDP tools via Node.js proxy: 1) Hermes (/hermes :9119), 2) 9Router (:201
 100 aset desain terverifikasi tersimpan di /home/ubuntu/referensi-desain/, dikelola via web https://www.jajandigital.web.id/desain/.
 §
 Standing convention: Setiap projek web, landing page, atau desain baru wajib otomatis didaftarkan ke katalog portofolio Bagas (/portofolio/ di katalog-portofolio-web).
+§
+Permintaan 'page baru' (misal: page login) wajib dibuat sebagai halaman mandiri terpisah (standalone page/route seperti login.html), bukan tab/item di dalam menu sidebar dasbor.
