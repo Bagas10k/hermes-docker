@@ -13,3 +13,9 @@ Modular RDP tools via Node.js proxy: 1) Hermes (/hermes :9119), 2) 9Router (:201
 Standing convention: Setiap projek web, landing page, atau desain baru wajib otomatis didaftarkan ke katalog portofolio Bagas (/portofolio/ di katalog-portofolio-web).
 §
 Permintaan 'page baru' (misal: page login) wajib dibuat sebagai halaman mandiri terpisah (standalone page/route seperti login.html), bukan tab/item di dalam menu sidebar dasbor.
+§
+Coucou HUD & Telegram parity: knowledge terhubung ke vault /home/ubuntu/otak-koding/ (KNOWLEDGE/ & BUKU_CATATAN/), riwayat chat tersinkronisasi terpusat di server (/coucou/api/sessions) untuk seluruh perangkat. Gelembung tool progress di Telegram dibersihkan otomatis (cleanup_progress: true).
+§
+mumu desktop companion Windows (di /home/ubuntu/coucou-desktop, unduhan di /coucou/mumu-desktop-windows-x64.zip): wajib 100% animasi otentik repo Coucou Dynamic Island (expN 2.0/2.7, 28 WAV), autentikasi via X-Mumu-Token pre-baked, kontrol VPS (/sh) & lokal (/win, buka app), shortcut Ctrl+Shift+M.
+§
+Hermes Arena & Kantor Virtual: /kantor/ (:3050 di /home/ubuntu/kantor-hermes-web/dist-public) & pelacak /arena-tracker/. Standar game: aset diorama Cat Tech HQ wajib jadi kanvas hidup otentik, bilah perintah terhubung eksekusi terminal nyata.

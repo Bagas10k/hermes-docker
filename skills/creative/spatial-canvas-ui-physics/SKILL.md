@@ -1,109 +1,70 @@
 ---
 name: spatial-canvas-ui-physics
-description: Use when building 3D spatial canvas and UI card physics.
+description: "Compose 3D spatial canvas and UI card spring physics."
 version: 1.0.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [spatial-physics, canvas-2d, spring-dynamics, tactile-ui, living-interfaces]
+    related_skills: [bento-grid-spatial-composer, tactile-microinteraction-studio, dynamic-canvas-backdrop]
 ---
 
-# Spatial Canvas UI Physics & Studio-Grade Web Craft
+# Spatial Canvas UI Physics Skill
 
-Doktrin dan rekayasa antarmuka web tingkat tinggi (Awwwards / Studio Grade) yang melampaui tata letak statis biasa. Menggabungkan fisika spasial 3D, kanvas atmosferik 60 FPS, momentum scrolling, dan umpan balik akustik multi-nada.
+Engine perancangan antarmuka hidup (*living interfaces*) berbasis kanvas spasial 2D 60 FPS, kinematika pegas teredam multi-body (*damped spring physics*), dan kartu 3D reaktif kursor dengan efisiensi CPU terkendali.
 
----
+## When to Use
 
-## 1. Standar Mutu: Membedakan Skor 6/10 vs 9.8/10
+- Membangun antarmuka landing page, dashboard hero, atau showcase visual dengan efek kedalaman taktil 3D.
+- Menghadirkan dinamika latar belakang hidup tanpa membebani GPU/CPU (<1ms per frame compute, auto-sleep idle 45 detik).
+- Mengintegrasikan interaksi tilt kursor halus pada kartu atau elemen DOM tanpa memicu getaran osilasi (*hunting jitter*).
+- Menjamin kepatuhan aksesibilitas WCAG 2.1 AA dan eliminasi anti-pattern desain generik AI.
 
-Sebuah antarmuka dinilai "hanya bernilai 6/10" apabila sekadar menumpuk blok `<div>` dengan teks dan gambar statis tanpa responsivitas spasial terhadap kehadiran kursor pengguna, atau menggunakan ornamen murah seperti kapsul pill badge mengambang di atas H1.
+Don't use for:
+- Antarmuka dokumen statis atau cetak yang tidak memerlukan interaksi pointer dinamis.
+- Render 3D masif multi-megabyte berbasis WebGL shader berat yang melanggar batas daya perangkat mobile.
 
-Untuk mencapai standar **9.8/10 (Studio of the Day)**, terapkan 5 pilar wajib:
-1. **Respons Spasial 3D (3D Gyro Tilt & Specular Varnish):** Objek utama berotasi secara halus terhadap posisi pointer mouse dengan lapisan kilau cahaya (*specular glare overlay*) yang bergerak melintasi permukaan material.
-2. **Kanvas Atmosferik 60 FPS (Organic Atmospheric Dust):** Latar belakang memiliki partikel mikro mengambang yang hidup di HTML5 Canvas 2D murni (<1% CPU) dan bereaksi lembut terhadap tarikan kursor.
-3. **Presisi Editorial Swiss:** Detail kuratorial fisik berupa tanda pin sudut (*corner cross marks* `+`), nomor katalog arsip (`CAT. NO. 04-PR`), dan pita koordinat studio (`LAT 51.5° N // LON 0.1° W`).
-4. **Resonansi Akustik Multi-Tone (Web Audio API):** Umpan balik taktil berbasis frekuensi analog:
-   - *Mechanical micro-tick* saat beralih antar kartu/item.
-   - *Harmonic pentatonic chord* (akord F-A-C-E hangat) saat inspeksi detail dibuka.
-5. **Momentum Scrolling (Lenis 60 FPS):** Gulir halaman berbobot dengan *reading progress bar* di bagian atas layar (`useScroll` + `useSpring`).
+## Prerequisites
 
----
+- Tidak memerlukan dependensi biner eksternal untuk runtime dasar (menggunakan Canvas 2D murni dan CSS 3D Transforms).
+- Browser modern dengan dukungan HTML5 Canvas dan CSS Custom Properties.
 
-## 2. Aturan Fisika Tumpukan Kartu Kipas (Fanned-Out Deck Physics)
+## Quick Reference
 
-### Pitfall Utama: Hover Jitter & Layer Hopping
-Memaksa kartu miring dalam susunan kipas untuk tegak lurus (`rotate(0deg) !important`) saat di-*hover* akan menggeser sudut geometri kartu puluhan piksel menjauhi kursor mouse. Hal ini membuat status `:hover` terlepas seketika, kartu kembali miring, kursor masuk lagi, dan memicu siklus getaran/hentakan (*infinite hunting oscillation / nyentak-nyentak*). Perubahan `z-index` mendadak juga memicu perebutan layer (*z-fighting*).
+- **Kanvas Partikel Eulerian**:
+  Partikel melayang dengan redaman gesekan viskos $v_{t+1} = v_t 	imes 0.99$ dan pemulihan batas tepi melingkar (*toroidal wrapping*).
+- **Kinematika Sudut Kartu 3D**:
+  Membatasi deviasi sudut rotasi maksimal $7^\circ$ berbasis koordinat pointer ternormalisasi $(-1 \le x, y \le 1)$:
+  `rotateX(-dy * 7deg) rotateY(dx * 7deg) translateZ(8px)`.
+- **Auto-Sleep State Sentinel**:
+  Menghentikan requestAnimationFrame jika tidak ada interaksi kursor selama $>45$ detik untuk menjamin 0% konsumsi CPU latar belakang.
+- **Prefers-Reduced-Motion**:
+  Wajib menonaktifkan transform dan transisi ketika pengguna mengaktifkan mode reduced motion.
 
-### Invarian Fisika Wajib:
-1. **Preserve Natural Arc Angle:** Pertahankan sudut kemiringan alami kartu (`rotate(var(--card-rot))`). Cukup angkat kartu sepanjang sumbu alaminya:
-   ```css
-   transform: translateX(var(--card-spread-x)) translateY(calc(var(--card-trans-y) - 24px)) rotate(var(--card-rot)) scale(1.035);
-   transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease;
-   ```
-2. **Rentang Sebar Horizontal (Proportional Spread):** Berikan jarak sebar sumbu X yang cukup (`spreadX = offset * 110px`) agar setiap kartu memiliki bidang sentuh kursor yang leluasa tanpa tertutup 100% oleh kartu tetangga.
-3. **Kedalaman Deterministik Tanpa Lonjakan Z-Index:** Kunci hierarki kedalaman secara matematis dari jarak ke kartu aktif:
-   ```javascript
-   zIndex: 20 - Math.abs(offset)
-   ```
-   Jangan menaikkan `z-index` secara liar saat `:hover` agar kursor tidak kehilangan target.
-4. **Fokus Meredup Halus (Depth Dimming):** Kartu-kartu di sekitar kartu yang sedang disentuh meredup secara anggun (`opacity: 0.86; filter: saturate(0.92)`).
+## Procedure
 
-*Detail formulasi matematis dan kurva kipas: lihat [references/fanned-deck-kinematics.md](references/fanned-deck-kinematics.md).*
+1. **Kanvas Latar Belakang Tetap**:
+   Inisialisasi kanvas fixed layar penuh berindeks tumpukan `z-index: 0` dengan `pointer-events: none` agar tidak menghalangi klik antarmuka.
+2. **Skalasi Device Pixel Ratio (DPR)**:
+   Kalibrasi ukuran buffer kanvas terhadap `window.devicePixelRatio` untuk ketajaman visual di layar retina.
+3. **Loop Animasi Terikat Anggaran (<16.6ms)**:
+   Batasi jumlah partikel ($16 - 128$) agar komputasi per-frame konsisten di bawah 1.0ms.
+4. **Interaksi Taktil Kartu Reaktif**:
+   Terapkan pendengar event `pointermove` pada elemen kartu untuk menghitung sudut perspektif 3D yang mulus.
+5. **Verifikasi Aksesibilitas**:
+   Uji halaman dengan Axe-Core untuk memastikan rasio kontras warna dan struktur heading memenuhi standar WCAG AA.
 
----
+## Pitfalls
 
-## 3. Resep Kanvas Debu Atmosferik 60 FPS (Canvas 2D Ringan)
+- **Jitter Osilasi Hover**: Memaksa reset sudut miring secara mendadak saat kartu di-hover dapat memicu siklus getaran tanpa akhir. Gunakan redaman easing `cubic-bezier(0.2, 0.8, 0.2, 1)`.
+- **Kebocoran Daya Latar Belakang**: Jangan biarkan loop kanvas terus berputar ketika tab tidak aktif atau pengguna meninggalkan layar. Pasang deteksi inaktivitas 45 detik.
+- **Horizontal Overflow di Mobile**: Pastikan kartu dan grid menggunakan `minmax(min(100%, 240px), 1fr)` agar tidak memicu overflow di layar sempit 320px.
 
-```javascript
-// Partikel debu studio melayang dengan pergeseran pointer halus
-export function AmbientStudioCanvas() {
-  const canvasRef = useRef(null);
+## Verification
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let rafId;
-    let width = (canvas.width = canvas.offsetWidth);
-    let height = (canvas.height = canvas.offsetHeight);
-
-    const particles = Array.from({ length: 32 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 1.5 + 0.5,
-      vx: (Math.random() - 0.5) * 0.25,
-      vy: (Math.random() - 0.5) * 0.25,
-      alpha: Math.random() * 0.4 + 0.1
-    }));
-
-    function render() {
-      ctx.clearRect(0, 0, width, height);
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = width;
-        if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        if (p.y > height) p.y = 0;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
-        ctx.fill();
-      }
-      rafId = requestAnimationFrame(render);
-    }
-    rafId = requestAnimationFrame(render);
-
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
-  return <canvas ref={canvasRef} className="ambient-studio-canvas" aria-hidden="true" />;
-}
-```
-
----
-
-## 4. Uji Aksesibilitas & Zero Emoji
-
-- **Zero Unicode Emoji:** Seluruh visual, status badge, dan ikon wajib menggunakan SVG murni atau `lucide-react`. Larangan mutlak karakter Extended Pictographic.
-- **Pointer & Keyboard Trapping:** Modal inspeksi dialog wajib memiliki trap fokus `Tab` / `Shift+Tab` dan dapat ditutup via tombol keyboard `Escape`.
-- **Axe-Core Compliance:** 0 pelanggaran aksesibilitas WCAG 2.1 AA di seluruh viewport responsif (390px, 768px, 1440px).
+Buktikan keberhasilan implementasi melalui:
+1. Pengujian Playwright di 7 ukuran viewport (320px, 390px, 640px, 768px, 1000px, 1024px, 1440px) dengan `scrollWidth === innerWidth` (nol horizontal overflow).
+2. Audit Axe-Core menghasilkan 0 pelanggaran aksesibilitas WCAG 2.1 AA.
+3. Pemeriksaan Impeccable menghasilkan 0 anti-pattern desain.

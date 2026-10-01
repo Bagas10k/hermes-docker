@@ -1,14 +1,14 @@
 ---
 name: shader-canvas-flow
 description: "Render interactive WebGL GLSL shaders for vibe coding."
-version: 1.0.0
+version: 1.1.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [webgl, glsl, fragment-shader, vibe-coding, flow-state, raymarching, ambient-canvas]
-    related_skills: [dynamic-canvas-backdrop, fluid-interactive-surface, harmonic-palette-studio]
+    related_skills: [dynamic-canvas-backdrop, fluid-interactive-surface, spatial-canvas-ui-physics]
 ---
 
 # Shader Canvas Flow Skill
@@ -66,7 +66,7 @@ $$I_{\text{out}}(x, y) = f(u\_resolution, u\_time, u\_mouse, u\_energy, u\_palet
 - Fallback ekstrem: Jika WebGL hardware acceleration mati total (`null`), sistem fallback mulus ke kanvas 2D procedural radial glow.
 
 ### 3. System Design & Auto-Sleep Guardrail
-- **Zero-Waste Auto-Sleep:** Mengukur delta pergerakan kursor dan laju ketikan. Jika tidak ada intervensi selama 8 detik dan energi internal meluruh di bawah ambang batas $\epsilon = 0.002$, loop `requestAnimationFrame` ditangguhkan otomatis (0% GPU).
+- **Zero-Waste Auto-Sleep:** Mengukur delta pergerakan kursor dan laju ketikan. Jika tidak ada intervensi selama 6 detik dan energi internal meluruh di bawah ambang batas $\epsilon = 0.01$, loop `requestAnimationFrame` ditangguhkan otomatis (0% GPU).
 - **Wake-on-Interaction:** Listener pasif (`mousemove`, `keydown`, `touchmove`, `scroll`) mengaktifkan kembali rendering secara instan tanpa latensi terasa.
 
 ## Procedure
@@ -75,7 +75,7 @@ $$I_{\text{out}}(x, y) = f(u\_resolution, u\_time, u\_mouse, u\_energy, u\_palet
    - Gunakan quad vertikal penuh (-1.0 s/d 1.0) dengan vertex shader 2-segitiga instan.
    - Kompilasi fragment shader dengan pengecekan `gl.getShaderParameter(shader, gl.COMPILE_STATUS)`.
 2. **Koneksi Parameter Uniform Reaktif:**
-   - Bind `u_resolution`, `u_time`, `u_mouse` (vec4: x, y, clickX, clickY), dan `u_energy` (float akumulasi ketikan).
+   - Bind `u_resolution`, `u_time`, `u_mouse` (vec4: x, y, clickX, clickY), `u_energy` (float akumulasi ketikan), `u_warp`, dan `u_palette`.
 3. **Penerapan Palet Warna Terkalibrasi (Inigo Quilez Cosine Palette):**
    - Gunakan formula harmonis:
      $$\text{color}(t) = a + b \cdot \cos(2\pi(c \cdot t + d))$$
@@ -103,3 +103,4 @@ $$I_{\text{out}}(x, y) = f(u\_resolution, u\_time, u\_mouse, u\_energy, u\_palet
 Verifikasi keberhasilan implementasi:
 1. Skrip `test_shader_harness.js` mengeksekusi kompilasi shader offline dan kalkulasi uniform deterministik tanpa error.
 2. Artefak HTML preview memuat canvas WebGL, mengalirkan domain warping 60 FPS, bereaksi terhadap kursor mouse, dan memasuki auto-sleep setelah masa idle.
+3. Suite Playwright Chromium 7-viewport (320px–1440px) lolos 0 Axe violations, 0 horizontal overflow, dan 0 anti-pattern Impeccable.
