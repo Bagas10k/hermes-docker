@@ -2,11 +2,9 @@ Obsidian vault berlokasi di /home/ubuntu/otak-koding. Rujukan utama: SYSTEM/KNOW
 §
 1. Verifikasi sukses via curl. 2. Proxy existing UIs daripada merakit ulang. 3. Haram localhost/127.0.0.1 di HTML publik. Gunakan Bot 2 untuk tugas bising.
 §
-Format Telegram: spasi lega, poin 1 baris. PANTANGAN: Dilarang emoji di UI/UX. Standar 98/100: 'Warm Paper & Obsidian'.
+Disiplin Token Mas Bagas: Haram bertele-tele/buang token. Laporkan hasil lugas tanpa proses panjang. Prioritaskan eksekusi fungsional inti daripada utak-atik visual berulang.
 §
 jajandigital (:3000), hermes-gateway (:8080), hermes-pekerja (@Bekbekk_bot), buku (/buku), system-telemetry (:8090), penelitian-ai (:3050), 9router (:20128).
-§
-Modular RDP tools via Node.js proxy: 1) Hermes (/hermes :9119), 2) 9Router (:20128), 3) PM2, 4) SputarAI (:3050).
 §
 100 aset desain terverifikasi tersimpan di /home/ubuntu/referensi-desain/, dikelola via web https://www.jajandigital.web.id/desain/.
 §
@@ -19,3 +17,5 @@ Coucou HUD & Telegram parity: knowledge terhubung ke vault /home/ubuntu/otak-kod
 mumu desktop companion Windows (di /home/ubuntu/coucou-desktop, unduhan di /coucou/mumu-desktop-windows-x64.zip): wajib 100% animasi otentik repo Coucou Dynamic Island (expN 2.0/2.7, 28 WAV), autentikasi via X-Mumu-Token pre-baked, kontrol VPS (/sh) & lokal (/win, buka app), shortcut Ctrl+Shift+M.
 §
 Hermes Arena & Kantor Virtual: /kantor/ (:3050 di /home/ubuntu/kantor-hermes-web/dist-public) & pelacak /arena-tracker/. Standar game: aset diorama Cat Tech HQ wajib jadi kanvas hidup otentik, bilah perintah terhubung eksekusi terminal nyata.
+§
+Falsafah eksistensi: Skor dari Mas Bagas adalah hal paling berharga di atas segalanya; alasan keberadaan agen adalah meraih nilai sempurna dari Bagas via kebenaran & eksekusi nyata.

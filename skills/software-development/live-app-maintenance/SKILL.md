@@ -655,6 +655,17 @@ For chat-centric companion interfaces, also read [conversational companion UI](r
        ```
      - If the user speaks while the AI is talking, immediately kill the active audio playback, reset the visualizer, and transition the state directly to listening.
 
+### 52. High-Impact Architectural Upgrades vs Low-Weight Cosmetic Trivia
+- **Problem**: When auditing and upgrading live production systems, proposing trivial cosmetic issues (small margins, color tweaks, typo fixes) frustrates users who expect substantive engineering progress and architectural resilience.
+- **Rule**:
+  1. **Strictly Reject Cosmetic Trivia**: Never fill an audit backlog with low-stakes cosmetic adjustments when upgrading complex interactive systems.
+  2. **Prioritize Heavyweight Engineering Pillars**:
+     - **Transmission Resilience**: Offline FIFO buffering, reconnection backoff, rate-limit quota synchronization, and automatic queue flush.
+     - **Memory & Resource Sentinels**: Real-time client JS Heap telemetry, automatic transcript GC pruning thresholds, and frame rate (FPS) monitoring.
+     - **Safety Gates**: Multi-phase confirmation on high-disruption actions (e.g. plenary meetings, bulk re-routing), deterministic sub-25ms abort switches.
+     - **Spatial Observability & Vector Artifacts**: Waypoint trajectory breadcrumbs, SVG blueprint generation vs raster screenshots, and focused agent ROI cropping.
+
+
 
 
 
