@@ -1,0 +1,107 @@
+{
+  "status": "needs_review",
+  "locale": "en_US",
+  "rounding": "ROUND_HALF_UP; line products to 0.01, then sum; exact comparison",
+  "authenticity_verified": false,
+  "fields": {
+    "invoice": {
+      "value": "INV-001",
+      "evidence": [
+        {
+          "page": 1,
+          "line": 1,
+          "raw": "Invoice: INV-001"
+        }
+      ]
+    },
+    "currency": {
+      "value": "USD",
+      "evidence": [
+        {
+          "page": 1,
+          "line": 3,
+          "raw": "Currency: USD"
+        }
+      ]
+    },
+    "subtotal": {
+      "value": "20.00",
+      "evidence": [
+        {
+          "page": 1,
+          "line": 6,
+          "raw": "Subtotal: 20.00"
+        }
+      ]
+    },
+    "tax": {
+      "value": "2.00",
+      "evidence": [
+        {
+          "page": 1,
+          "line": 8,
+          "raw": "Tax: 2.00"
+        }
+      ]
+    },
+    "discount": {
+      "value": "1.00",
+      "evidence": [
+        {
+          "page": 1,
+          "line": 10,
+          "raw": "Discount: 1.00"
+        }
+      ]
+    },
+    "total": {
+      "value": "21.00",
+      "evidence": [
+        {
+          "page": 1,
+          "line": 12,
+          "raw": "Total: 21.00"
+        }
+      ]
+    }
+  },
+  "lines": [
+    {
+      "evidence": [
+        {
+          "page": 1,
+          "line": 5,
+          "raw": "Item: Widget; 2; 10.00; 20.00"
+        }
+      ],
+      "expected_amount": "20.00",
+      "description": "Widget",
+      "quantity": "2",
+      "unit_price": "10.00",
+      "amount": "20.00"
+    }
+  ],
+  "issues": [
+    {
+      "code": "pdf_coverage_unverified",
+      "page": 1
+    }
+  ],
+  "source": {
+    "path": "/home/ubuntu/.hermes/skills/software-development/document-ai-invoice-extractor/artifacts/biz003/scan.pdf",
+    "method": "pdfplumber+ocr",
+    "pages": [
+      {
+        "page": 1,
+        "raw": "Invoice: INV-001\n\nCurrency: USD\n\nItem: Widget; 2; 10.00; 20.00\nSubtotal: 20.00\n\nTax: 2.00\n\nDiscount: 1.00\n\nTotal: 21.00\n\f",
+        "method": "pytesseract",
+        "coverage": "ocr_unverified",
+        "native_raw": "",
+        "image_count": 1,
+        "ocr_reason": "image_bearing"
+      }
+    ],
+    "coverage_complete": false,
+    "coverage_scope": "text extraction only; visual completeness not established"
+  }
+}

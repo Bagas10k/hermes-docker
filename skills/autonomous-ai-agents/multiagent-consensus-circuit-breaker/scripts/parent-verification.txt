@@ -1,0 +1,13 @@
+test_bft_parameter_validation (test_multiagent_consensus_circuit_breaker.TestConsensusCircuitBreaker.test_bft_parameter_validation) ... ok
+test_byzantine_equivocation_detection (test_multiagent_consensus_circuit_breaker.TestConsensusCircuitBreaker.test_byzantine_equivocation_detection) ... ok
+test_byzantine_threshold_breach_trips_circuit (test_multiagent_consensus_circuit_breaker.TestConsensusCircuitBreaker.test_byzantine_threshold_breach_trips_circuit) ... ok
+test_clean_supermajority_consensus (test_multiagent_consensus_circuit_breaker.TestConsensusCircuitBreaker.test_clean_supermajority_consensus) ... ok
+test_half_open_recovery (test_multiagent_consensus_circuit_breaker.TestConsensusCircuitBreaker.test_half_open_recovery) ... ok
+test_max_rounds_hard_timeout (test_multiagent_consensus_circuit_breaker.TestConsensusCircuitBreaker.test_max_rounds_hard_timeout) ... ok
+test_zero_delta_stall_detection (test_multiagent_consensus_circuit_breaker.TestConsensusCircuitBreaker.test_zero_delta_stall_detection) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.003s
+
+OK
+[ALL INVARIANTS VERIFIED DETERMINISTICALLY]

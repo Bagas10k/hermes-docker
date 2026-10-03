@@ -1,0 +1,13 @@
+2026-10-02T22:57:27.423652+00:00
+test_cli_json_demo (test_nash_allocation.DemoTests.test_cli_json_demo) ... ok
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+test_dedup_full_and_tick_validation (test_nash_allocation.ReserveTests.test_dedup_full_and_tick_validation) ... ok
+test_fifo_bound_under_continuous_arrivals (test_nash_allocation.ReserveTests.test_fifo_bound_under_continuous_arrivals) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.175s
+
+OK

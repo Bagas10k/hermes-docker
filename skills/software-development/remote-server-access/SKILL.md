@@ -22,6 +22,18 @@ Verify unfamiliar certificate details with the provider rather than unconditiona
 
 ## SSH
 
+### Zero-Password Security Protocol (Wajib)
+1. **Dilarang Meminta/Menerima Password di Chat**: Password mentah yang diketik di percakapan akan tercatat di riwayat chat, log sesi lokal, dan konteks inferensi model. Selalu gunakan otentikasi kunci kriptografi (*SSH Keypair*).
+2. **Alur Public Key Exchange**:
+   - Periksa atau buat pasangan kunci Ed25519 lokal: `ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519` jika belum ada.
+   - Pastikan izin privat terkunci ketat: `chmod 600 ~/.ssh/id_ed25519`.
+   - Berikan baris isi `~/.ssh/id_ed25519.pub` ke pengguna untuk ditempelkan ke `~/.ssh/authorized_keys` di VPS remote.
+3. **Eksekusi Perintah Non-Interaktif Agen**:
+   - Selalu sertakan flag `-o BatchMode=yes -o ConnectTimeout=10` untuk mencegah agen *hang* tanpa batas saat remote meminta password atau prompt konfirmasi kunci:
+     ```bash
+     ssh -p PORT -o BatchMode=yes -o ConnectTimeout=10 USER@HOST "command"
+     ```
+
 For shell access, use `ssh -p PORT USER@HOST`, with an ASCII hyphen. Do not use `USER@HOST:PORT`: that syntax treats the port as part of the hostname.
 
 Interpret failures at the correct stage:

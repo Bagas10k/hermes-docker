@@ -26,11 +26,14 @@ Don't use for:
 - Koordinasi obrolan teks sandiwara fiktif tanpa komando kerja nyata.
 
 ## Prerequisites
-- Python 3.8+ (tersedia native di lingkungan).
-- Modul internal `scripts/consensus_breaker_engine.py` untuk evaluasi invariansi.
+- Python 3.11+ standard library (`math`, `dataclasses`, `enum`, `json`, `hashlib`).
+- Modul internal:
+  - `scripts/multiagent_consensus_circuit_breaker.py` (BFT bounds & entropy stall breaker)
+  - `scripts/consensus_breaker_engine.py` (Subagent envelope & cascade taint detector)
 
 ## How to Run
 Jalankan uji validasi invariansi multi-agen dan circuit breaker:
+`terminal(command="python3 -m unittest -v test_multiagent_consensus_circuit_breaker", workdir="~/.hermes/skills/autonomous-ai-agents/multiagent-consensus-circuit-breaker/scripts")`
 `terminal(command="python3 ~/.hermes/skills/autonomous-ai-agents/multiagent-consensus-circuit-breaker/scripts/consensus_breaker_engine.py")`
 
 ## Quick Reference

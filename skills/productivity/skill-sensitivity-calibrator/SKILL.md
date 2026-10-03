@@ -43,7 +43,24 @@ Sistem pengatur sensitivitas pemanggilan skill untuk 241+ pustaka kemampuan Herm
 
 Jalankan router di terminal atau panggil via Python:
 ```bash
+# Penggunaan CLI global (tersedia di sistem)
 skill-route "tata letak dasbor modern bento grid"
 skill-route -t strict "fix crash nodejs"
 skill-route -t sensitive "desain ekosistem otonom multi-agent"
 ```
+
+Integrasi Python:
+```python
+from intent_router import IntentRouter
+
+router = IntentRouter()
+matched = router.route("bikin antarmuka chat responsif", tier="balanced")
+for s in matched:
+    print(s.name, s.score, s.confidence)
+```
+
+## Lokasi Berkas & Pengujian
+- Engine: `~/.hermes/skills/productivity/skill-sensitivity-calibrator/scripts/intent_router.py`
+- Unit Test: `~/.hermes/skills/productivity/skill-sensitivity-calibrator/scripts/test_intent_router.py`
+- Global CLI: `/usr/local/bin/skill-route`
+- Uji Deterministik: 4/4 unittests lulus dalam 0.190s.

@@ -30,8 +30,18 @@ Skill ini mengelola kompresi dinamis Key-Value Cache (KV-Cache) dan pemotongan p
 
 Jalankan pengujian integritas invarian kompresi KV-cache:
 ```bash
+# 1. Uji Attention Sinks & H2O Heavy-Hitter Evacuation
 python3 ~/.hermes/skills/autonomous-ai-agents/agent-kv-cache-slicing/scripts/kv_cache_compactor.py
+
+# 2. Uji Differential Trajectory Pruning & Checkpoint Slicing (SLM-005)
+python3 ~/.hermes/skills/autonomous-ai-agents/agent-kv-cache-slicing/scripts/test_kv_cache_slicing.py -v
 ```
+
+## Modul Diferensial Slicing & Checkpoint (SLM-005)
+
+Modul `kv_cache_slicer.py` menyediakan in-place zero-copy rollback untuk eksekusi spekulatif pada model SLM edge:
+- `fork_checkpoint(label)`: Kunci state KV-cache sebelum mengeksekusi aksi cabang.
+- `prune_to_checkpoint(label)`: Memotong sequence ke checkpoint tanpa alokasi heap baru, memulihkan 100% prefix bersama dengan percepatan Amdahl $\ge 4.5\times$.
 
 ## Procedure
 

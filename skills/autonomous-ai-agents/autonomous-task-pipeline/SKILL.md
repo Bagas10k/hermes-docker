@@ -45,6 +45,7 @@ Instructions for building, hardening, and operating multi-agent task execution p
    - Expose a responsive web cockpit (e.g., `/studio/`) with sub-2-second auto-polling or SSE.
    - Provide visibility into the 7-stage kanban pipeline (`planning`, `inbox`, `assigned`, `in_progress`, `testing`, `review`, `done`), specialist fleet status (`ACTIVE` vs `IDLE`), and raw deliverable previews.
    - Include HITL actions (Approve / Request Revision) for tasks in `review` and an interactive dispatch console.
+   - Connect two-way chat parity (e.g., Telegram sync): parse incoming mentions (`@agent`) to automatically route tasks into the worker queue, and transform `MEDIA:...` file tokens into rendered image preview cards with error fallbacks.
 
 6. **Automate Artifact Retention**:
    - Store generated outputs in structured artifact directories (`.runtime/artifacts/`).
@@ -57,3 +58,10 @@ Instructions for building, hardening, and operating multi-agent task execution p
 - Unbounded asynchronous task dispatching triggers VPS memory thrashing and OOM killer termination; always enforce hard worker pool limits (`max_workers=2`).
 - Restricting agent visibility to terminal commands leaves users unaware of background execution status; always expose a lightweight public web cockpit with live status feeds.
 - Rendering raw terminal logs in the web cockpit without stripping ANSI escape codes leaves `\x1b[...]` artifacts; always sanitize string streams with an ANSI regex filter before DOM injection.
+- Unparsed media path tokens (`MEDIA:...`) in web chat feeds render as opaque text strings; always parse media tokens into responsive `<img>` preview cards with fallback error handlers and click-to-expand.
+- Scheduling a one-shot cron deadline with a fixed time-of-day timestamp without comparing against the current system wall clock triggers immediate execution if that hour has already passed today; always advance the target date to tomorrow ($D+1$) when the hour is earlier than the current system time.
+- Scheduling recurring background agent cron jobs with `attach_to_session: true` binds execution to the active interactive user chat session, causing background ticks to stall or get captured by foreground conversation turns; always configure autonomous background cron runners with `attach_to_session: false` so they execute completely detached.
+- Hard-blocking task queues on pending user decisions (`blocks_new_research: true`) causes background cron agents to emit silent no-ops (`[SILENT]`) and stall all work indefinitely; always allow independent pending queue items to proceed autonomously while keeping the escalation gate non-blocking.
+- Waiting passively for user responses during active autopilot mode causes execution stalls; always proactively trigger the next queued research target immediately upon completing the current task.
+- Sharing a single Linux eventfd descriptor for bidirectional request-reply across separate processes causes race conditions where the writer reads back its own counter before the worker wakes up; always allocate paired directional descriptors (e.g. parent-to-child and child-to-parent) for two-way signaling.
+- Halting the task queue or injecting arbitrary multi-choice approval gates ('Pilihan A/B/C') when the target roadmap is empty leaves the autonomous worker idle for hours; always extract open gaps from the latest verified deliverable's Gap List and autonomously append new research targets to keep the pipeline populated without human confirmation.

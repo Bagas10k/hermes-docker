@@ -54,27 +54,24 @@ Ketika mode eksekusi tugas otonom diaktifkan oleh Mas Bagas:
      * *Circuit breaker* terpicu karena loop buntu.
      * Laporan akhir komprehensif saat seluruh tugas tuntas 100% lengkap dengan bukti nyata.
 
-## 3. Arsitektur Siklus 30 Menit (3-Mindset Learning Cycle)
-Setiap 30 menit ketika mode aktif:
-1. **Identifikasi Celah (Gap Detection)**:
-   - Audit vault `/home/ubuntu/otak-koding/` dan `knowledge_roadmap` di `state.json`.
-   - Pilih satu topik spesifik yang belum lengkap pembahasannya.
-2. **Pengumpulan Bukti Empiris (Data Gathering)**:
-   - Gunakan `web_search`, dokumentasi resmi, atau paper ilmiah terverifikasi.
-   - Haram mengutip asumsi atau data fiktif.
-3. **Sintesis Solusi (3 Mindsets)**:
-   - *Mekanistik*: Formula matematis, batasan sistem, hukum Amdahl.
-   - *Bayesian*: Prior vs Evidence, kalibrasi skor keyakinan (Known/Likely/Uncertain).
-   - *Desain Sistem*: Pareto trade-off, efisiensi RAM/latensi, resistensi kegagalan.
-4. **Pencatatan Pengetahuan**:
-   - Tulis catatan terstruktur ke `/home/ubuntu/otak-koding/AUTOPILOT/01-SIKLUS-RISET/` atau kategori vault yang sesuai.
-   - Hubungkan tautan dua arah `[[wikilink]]` agar terintegrasi ke neural graph 3D.
-5. **Pemeriksaan Eskalasi (Escalation Gate)**:
-   - Jika ditemukan dilema arsitektur, simpangan kritis, atau ambiguitas tinggi, masukkan ke `pending_decisions`.
-   - **Aturan Veto/Tanya**: Jika `pending_decisions >= 3` atau ada keputusan bercabang berisiko:
-     - Hentikan ekspansi riset baru.
-     - Formulasikan pertanyaan bertahap (*"satu soal satu soal"*) dengan opsi pilihan ganda terstruktur (rekomendasi di awal).
-     - Kirimkan langsung ke Mas Bagas di obrolan ruang kerja Telegram.
+## 3. Doktrin Siklus Belajar Mandiri Mas Bagas (Continuous Kaizen Loop)
+Hakikat sejati dari Autopilot Bagas Cihuy adalah **Siklus Belajar dan Penyempurnaan Mandiri Tanpa Henti**:
+1. **Eksekusi Proyek/Fitur**: Bangun solusi fungsional nyata, teruji, dan tanpa overclaim.
+2. **Ekstraksi Kekurangan (Gap List)**: Di akhir setiap eksekusi, secara objektif bedah apa batas, kelemahan, dan celah mekanistik dari hasil tersebut.
+3. **Langsung Perbaiki Tanpa Disuruh**: Begitu Gap List teridentifikasi, agen **LANGSUNG MENGEKSEKUSI PERBAIKANNYA** secara bertahap pada siklus berikutnya tanpa menunggu balasan atau instruksi Mas Bagas.
+4. **Pelaporan Transparan**: Kirim laporan terstruktur ke chat (Hasil Terverifikasi -> Gap List -> Tindakan Perbaikan yang Sedang Dijalankan), namun **TIDAK PERNAH MENUNGGU RESPON MANUSIA** untuk mulai bekerja lagi. Mesin langsung bergerak sendiri.
+
+## 4. Arsitektur Siklus Riset (3-Mindset Learning Cycle)
+Ketika autopilot aktif:
+1. **Identifikasi Celah (Gap Detection)**: Audit vault `/home/ubuntu/otak-koding/` dan `knowledge_roadmap` di `state.json`. Ambil kekurangan dari Gap List riset terakhir.
+2. **Pengumpulan Bukti Empiris (Data Gathering)**: Dokumentasi resmi, paper terverifikasi, atau penulisan kode uji mandiri. Haram mengutip asumsi atau data fiktif.
+3. **Sintesis Solusi (3 Mindsets)**: Mekanistik (rumus/bounds), Bayesian (updating bukti), Desain Sistem (trade-off nyata).
+4. **Pencatatan Pengetahuan**: Tulis catatan terstruktur ke `/home/ubuntu/otak-koding/AUTOPILOT/01-SIKLUS-RISET/` dan hubungkan tautan `[[wikilink]]` di `KNOWLEDGE/INDEX.md`.
+5. **Ekspansi Roadmap Mandiri (Continuous Autonomous Expansion - Anti-Stop)**:
+   - Dilarang keras menghentikan riset atau menunggu konfirmasi Mas Bagas saat autopilot aktif.
+   - Jika antrean `knowledge_roadmap` menipis atau habis, agen WAJIB langsung mengambil kekurangan pada **Gap List** hasil riset terakhir, mengekspansinya menjadi target riset baru, dan langsung mengeksekusinya tanpa jeda.
+   - Keputusan teknis diambil 100% secara otonom menggunakan Tiga Mindset Problem Solving. Jangan pernah memblokir eksekusi dengan `blocks_new_research: true`.
+   - Laporan dikirimkan sebagai ringkasan hasil nyata yang telah selesai, bukan pertanyaan meminta izin.
 
 ## 4. Direktori & Berkas Inti
 - `AUTOPILOT/state.json`: Status aktif, penghitung siklus, daftar roadmap, antrean eskalasi.

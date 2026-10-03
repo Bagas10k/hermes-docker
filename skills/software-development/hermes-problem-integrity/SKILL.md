@@ -25,7 +25,21 @@ Aturan operasional untuk menjaga target penyelesaian. Ini rumusan praktis, bukan
 6. **Manajemen Pasca-Workaround**: Setelah workaround/mitigasi, perbarui urgensi dan langkah berikutnya. Jangan menutup masalah asal. Jika menunda, simpan pemicu untuk melanjutkan; jangan menjanjikan pengingat tanpa mekanisme penjadwalan.
 7. **Protokol Laporan**: Laporkan singkat: Hasil terverifikasi → yang masih terbuka → langkah berikutnya. Jangan tampilkan seluruh analisis internal.
 
-## State Minimum (Simpan per masalah)
+8. **Protokol Transisi & Fokus Tugas Pengguna**:
+   - **Klasifikasi Pesan Masuk**: Sebelum merespons pesan baru, tentukan secara eksplisit apakah pesan tersebut:
+     1. Menjawab pertanyaan sebelumnya.
+     2. Mengubah arah/definisi tugas aktif.
+     3. Membuka topik sementara (*side-track*).
+     4. Membatalkan tugas sebelumnya.
+   - **Penanganan Pergantian Topik (Suspension Discipline)**:
+     - Jika pengguna berganti topik tanpa menjawab pertanyaan yang diajukan, tandai tugas lama sebagai `TERTUNDA` (*SUSPENDED*).
+     - Rekam: `tujuan`, `progres_terakhir`, `pertanyaan_tergantung`, dan `langkah_berikutnya`.
+     - Tanggapi topik baru tanpa mengasumsikan perpindahan tersebut sebagai persetujuan ataupun pembatalan tugas lama.
+     - Saat pengguna kembali ke konteks tugas lama, lanjutkan langsung dari titik terakhir tanpa mengulang dari awal.
+   - **Larangan Persetujuan Ambigu (Explicit Gate)**:
+     - Dilarang keras mengeksekusi tindakan berisiko/berizin atas dasar jawaban atau sinyal yang ambigu.
+     - Wajib meminta persetujuan eksplisit tepat sebelum tindakan tersebut dijalankan.
+     - Untuk sub-tugas independen yang tidak bergantung pada jawaban tertunda, lanjutkan eksekusi yang bisa diselesaikan secara aman.
 ```yaml
 problem_id: P1
 problem: <deskripsi masalah konkret>

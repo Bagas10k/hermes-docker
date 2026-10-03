@@ -1,0 +1,466 @@
+CYCLE 1 RED: missing game
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... FAIL
+
+======================================================================
+FAIL: test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 9, in test_frozen_rewards_payoffs_and_exact_potential
+    self.assertIsNotNone(importlib.util.find_spec('nash_allocation'),
+AssertionError: unexpectedly None : game implementation is missing
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
+exit_code=1
+
+CYCLE 1 GREEN
+$ python3 -m unittest -v test_nash_allocation
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+OK
+exit_code=0
+
+CYCLE 2 RED: numeric/dimension/action validation absent
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... 
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([nan], [0], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [nan], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[nan]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], nan)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([inf], [0], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [inf], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[inf]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], inf)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([-inf], [0], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [-inf], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[-inf]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], -inf)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([-1], [0], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [-1], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[-1]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], -1)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1e+101], [0], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [1e+101], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[1e+101]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], 1e+101)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([True], [0], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [True], [[0]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[True]], 0)) ... FAIL
+  test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], True)) ... FAIL
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... FAIL
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([nan], [0], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [nan], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[nan]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], nan))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([inf], [0], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [inf], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[inf]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], inf))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([-inf], [0], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [-inf], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[-inf]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], -inf))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([-1], [0], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [-1], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[-1]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], -1))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1e+101], [0], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [1e+101], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[1e+101]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], 1e+101))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([True], [0], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [True], [[0]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[True]], 0))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) (args=([1], [0], [[0]], True))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 28, in test_bounded_validation_and_underflow
+    with self.subTest(args=args), self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 32, in test_bounded_validation_and_underflow
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.013s
+
+FAILED (failures=25)
+exit_code=1
+
+CYCLE 2 GREEN
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.007s
+
+OK
+exit_code=0
+
+CYCLE 3 RED: solver absent
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... FAIL
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+
+======================================================================
+FAIL: test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 47, in test_exhaustive_regret_and_sequential_equilibria
+    self.assertTrue(hasattr(Game, 'solve'), 'bounded solver missing')
+AssertionError: False is not true : bounded solver missing
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.006s
+
+FAILED (failures=1)
+exit_code=1
+
+CYCLE 3 GREEN
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.055s
+
+OK
+exit_code=0
+
+CYCLE 4 RED: invalid solver config accepted
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... FAIL
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+
+======================================================================
+FAIL: test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 88, in test_caps_certificates_epoch_and_invalid_solver_config
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.056s
+
+FAILED (failures=1)
+exit_code=1
+
+CYCLE 4 GREEN
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.063s
+
+OK
+exit_code=0
+
+CYCLE 5 RED: FIFO reserve absent
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+test_fifo_bound_under_continuous_arrivals (test_nash_allocation.ReserveTests.test_fifo_bound_under_continuous_arrivals) ... FAIL
+
+======================================================================
+FAIL: test_fifo_bound_under_continuous_arrivals (test_nash_allocation.ReserveTests.test_fifo_bound_under_continuous_arrivals)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 101, in test_fifo_bound_under_continuous_arrivals
+    self.assertTrue(hasattr(module, 'ReserveScheduler'), 'reserve scheduler missing')
+AssertionError: False is not true : reserve scheduler missing
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.040s
+
+FAILED (failures=1)
+exit_code=1
+
+CYCLE 5 GREEN
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+test_fifo_bound_under_continuous_arrivals (test_nash_allocation.ReserveTests.test_fifo_bound_under_continuous_arrivals) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.039s
+
+OK
+exit_code=0
+
+CYCLE 6 RED: queue duplicates accepted
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+test_dedup_full_and_tick_validation (test_nash_allocation.ReserveTests.test_dedup_full_and_tick_validation) ... FAIL
+test_fifo_bound_under_continuous_arrivals (test_nash_allocation.ReserveTests.test_fifo_bound_under_continuous_arrivals) ... ok
+
+======================================================================
+FAIL: test_dedup_full_and_tick_validation (test_nash_allocation.ReserveTests.test_dedup_full_and_tick_validation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 125, in test_dedup_full_and_tick_validation
+    self.assertEqual(s.admit('a'), 'duplicate')
+AssertionError: 'admitted' != 'duplicate'
+- admitted
++ duplicate
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.068s
+
+FAILED (failures=1)
+exit_code=1
+
+CYCLE 6 GREEN
+$ python3 -m unittest -v test_nash_allocation
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+test_dedup_full_and_tick_validation (test_nash_allocation.ReserveTests.test_dedup_full_and_tick_validation) ... ok
+test_fifo_bound_under_continuous_arrivals (test_nash_allocation.ReserveTests.test_fifo_bound_under_continuous_arrivals) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.068s
+
+OK
+exit_code=0
+
+CYCLE 7 RED: demo output absent
+$ python3 -m unittest -v test_nash_allocation
+test_cli_json_demo (test_nash_allocation.DemoTests.test_cli_json_demo) ... FAIL
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+test_dedup_full_and_tick_validation (test_nash_allocation.ReserveTests.test_dedup_full_and_tick_validation) ... ok
+test_fifo_bound_under_continuous_arrivals (test_nash_allocation.ReserveTests.test_fifo_bound_under_continuous_arrivals) ... ok
+
+======================================================================
+FAIL: test_cli_json_demo (test_nash_allocation.DemoTests.test_cli_json_demo)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.hermes/skills/autonomous-ai-agents/agent-nash-allocation/scripts/test_nash_allocation.py", line 157, in test_cli_json_demo
+    self.assertTrue(proc.stdout.strip(), 'CLI demo missing')
+AssertionError: '' is not true : CLI demo missing
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.172s
+
+FAILED (failures=1)
+exit_code=1
+
+CYCLE 7 GREEN
+$ python3 -m unittest -v test_nash_allocation
+test_cli_json_demo (test_nash_allocation.DemoTests.test_cli_json_demo) ... ok
+test_bounded_validation_and_underflow (test_nash_allocation.GameTests.test_bounded_validation_and_underflow) ... ok
+test_caps_certificates_epoch_and_invalid_solver_config (test_nash_allocation.GameTests.test_caps_certificates_epoch_and_invalid_solver_config) ... ok
+test_exhaustive_regret_and_sequential_equilibria (test_nash_allocation.GameTests.test_exhaustive_regret_and_sequential_equilibria) ... ok
+test_frozen_rewards_payoffs_and_exact_potential (test_nash_allocation.GameTests.test_frozen_rewards_payoffs_and_exact_potential) ... ok
+test_dedup_full_and_tick_validation (test_nash_allocation.ReserveTests.test_dedup_full_and_tick_validation) ... ok
+test_fifo_bound_under_continuous_arrivals (test_nash_allocation.ReserveTests.test_fifo_bound_under_continuous_arrivals) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.297s
+
+OK
+exit_code=0
+
+FINAL CLI DEMO
+$ python3 nash_allocation.py --demo
+{"reserve": ["oldest", null, null, "next", null, null, null], "rewards": [8.043840552427671, 6.549846024623855], "solution": {"actions": [1, 0, 0], "converged": true, "epoch": 2.0, "max_regret": 0.0, "potential": 18.115606853265362, "updates": 1}}
+exit_code=0
+
+FINAL SYNTAX CHECK
+$ python3 -m py_compile nash_allocation.py test_nash_allocation.py
+
+exit_code=0

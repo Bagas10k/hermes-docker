@@ -300,6 +300,86 @@ Don't use for:
   - Procedural particle emitters (`emit(type, count)`) with velocity, gravity decay, and alpha fading for emotional states: hearts on `love`, stars on `proud`, sparkles on `finish`, sweat droplets on `ratelimit`, and Zzz letters on `sleep`.
   - Waving little hands on greeting (`greet()` sets `s.hands = 1` and oscillates $y$ coordinate by $\sin(t \times 13) \cdot R \times 0.16$).
 
+### 8. Pure CSS/SVG Volumetric Mascot Craft & UI Morphing Kinematics (The Mumu Doctrine)
+- **Volumetric 3D Tactile Rendering without Heavy 3D Engines**:
+  - Achieve a high-craft tactile robot mascot (like Mumu) using lightweight CSS and SVG rather than heavy WebGL/Three.js bundles:
+    * **Ceramic Shell & Subsurface Scattering**: Radial gradient with off-center light source (`radial-gradient(circle at 35% 20%, #ffffff 0%, #fdfcf9 35%, #efe9dd 75%, #ded7ca 100%)`), coupled with multi-tinted inner glow shadows (`inset 0 3px 6px #fff, inset 0 -8px 16px rgba(193, 95, 62, 0.09)`).
+    * **Iridescent Rim Aura**: Tri-color gradient blur halo (`#00e5ff`, `#7c3aed`, `#c15f3e`) with soft radial falloff and breathing scale pulse.
+    * **Recessed Glass Visor with Inner Bezel & Parallax Depth**: Deep obsidian pill container (`#080c14` with `box-shadow: inset 0 3px 8px #000`), subtle cyan stroke border, and a curved semi-transparent top highlight (`linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, transparent 100%)`). Displace the visor within the outer shell with `translateZ(8px)` and directional offsets to generate realistic stereoscopic parallax when the head turns.
+    * **Luminous OLED Eyes & Blushing Cheeks**: Cyan-white rounded pills with layered glow (`box-shadow: 0 0 8px #00e5ff, 0 0 16px rgba(0, 229, 255, 0.85)`). Pair with subtle pink/amber blushing cheeks (`.mumu-blush`) that softly illuminate on touch or happy reactions.
+- **Anti-Elongation Squircle Proportions ("Anti-Lonjong Invariant")**:
+  - Never design mascot dimensions taller than they are wide (e.g. 118px width by 142px height with egg-shaped radii), and never bias harmonic breathing vertically ($scale_y$ expanding while $scale_x$ contracts). An elongated egg silhouette feels stiff, alien, and "lonjong".
+  - Enforce chubby, plump squircle geometry (width >= height, e.g. 136px by 124px, with 46%–50% curvature radii) and lateral breathing bias ($scale_x = 1.0 + \sin(t \times 2.0) \times 0.018, scale_y = 1.0 + \sin(t \times 2.0) \times 0.012$) so the mascot looks cuddly, rounded, and living.
+- **3D Perspective Rig & Continuous Kinematics (Anti-Stiffness Invariant)**:
+  - Never animate the mascot with isolated 2D translation keyframes alone (which makes the character feel rigid, flat, and robotic).
+  - Wrap the character in a 3D perspective rig (`perspective: 800px; transform-style: preserve-3d;`).
+  - Calculate dynamic 3D head orientation (yaw, pitch, roll) driven continuously by pointer/touch offsets normalized to window dimensions:
+    ```javascript
+    targetYaw = Math.max(-25, Math.min(25, (deltaX / winW) * 45));
+    targetPitch = Math.max(-18, Math.min(18, -(deltaY / winH) * 35));
+    targetRoll = Math.max(-12, Math.min(12, (deltaX / winW) * 20));
+    currentYaw += (targetYaw - currentYaw) * 0.12;
+    currentPitch += (targetPitch - currentPitch) * 0.12;
+    currentRoll += (targetRoll - currentRoll) * 0.12;
+    ```
+  - Apply the dynamic rotation matrix together with harmonic breathing and hovering float:
+    `rig.style.transform = translateY(${floatY}px) scale(${scaleX}, ${scaleY}) rotateY(${currentYaw}deg) rotateX(${currentPitch}deg) rotateZ(${currentRoll}deg);`
+  - Drive interactive tap/click feedback via Euler-Hooke numerical spring integration ($F = -kx - cv$, impulse $v_0 = -0.38$) rather than canned keyframes to produce an authentic squishy silicone rebound. Enforce coupled volume preservation ($\text{scale}_x = 1.0 + (1.0 - \text{scale}_y) \times 0.6$) so vertical compression forces realistic lateral bulging.
+  - Implement biological double-blinking: schedule random intervals (2.4s–5.4s) with a 35% probability of a secondary 110ms micro-blink 120ms after the first, eliminating the uncanny metronome cadence of single-interval CSS animations.
+- **Two-Tier Hero-to-Header Morphing Architecture**:
+  - **Idle Hero Stage**: Mascot floats centrally in the welcome viewport with synchronized floor contact shadow breathing (`@keyframes mumuShadowPulse`).
+  - **Fluid State Migration to Sticky Companion**: When conversation starts or messages populate, morph the hero container out via FLIP or smooth spring contraction (`transform: translateY(-40px) scale(0.65); opacity: 0; max-height: 0;`) using `cubic-bezier(0.16, 1, 0.3, 1)` and `cubic-bezier(0.34, 1.56, 0.64, 1)`.
+  - Concurrently, activate the mini companion in the top navigation header (`.mumu-mini-wrapper.active-companion`) with an overshoot spring pop (`animation: miniMumuPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)`).
+  - Synchronize companion state to AI inference: eyes pulse in `thinking` mode during model generation and celebrate with a squash & stretch `happy` bounce (`^ ^`) upon completion.
+  - Resetting chat clears the active thread and smoothly expands the hero mascot back into the center stage with elastic spring overshoot.
+- **Physics Pointer Tracking with Spring Easing**:
+  - Track pointer/touch coordinates across the window and calculate normalized offsets relative to mascot center.
+  - Apply semi-implicit Euler or lerp spring interpolation ($k \approx 0.16$) on `requestAnimationFrame`:
+    ```javascript
+    eyeCurrentX += (eyeTargetX - eyeCurrentX) * 0.16;
+    eyeCurrentY += (eyeTargetY - eyeCurrentY) * 0.16;
+    const transform = `translate(${eyeCurrentX.toFixed(2)}px, ${eyeCurrentY.toFixed(2)}px)`;
+    ```
+  - Apply identical proportional vectors to the header mini companion ($0.35\times$ scale) so all mascot avatars across the UI track the user in unison.
+- **Mobile Hero Claustrophobia Defense (Horizontal Suggestion Carousel)**:
+  - Stacking multiple prompt or suggestion cards vertically on mobile viewports (`max-width: 640px`) consumes >240px of vertical space, crowding the mascot and causing vertical claustrophobia.
+  - Convert prompt cards on mobile into a single-line horizontal swipeable carousel (`display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;`). Each card spans ~200px with a 2-line clamped summary, reducing vertical consumption to ~68px (freeing >170px of negative space) and keeping the mascot, greeting, and input cleanly above the fold.
+- **Mobile Bottom Dock Safe Area Clearance**:
+  - Always enforce `padding-bottom: calc(20px + env(safe-area-inset-bottom, 12px))` on fixed or floating bottom docks on mobile. Standard zero-margin docks directly collide with or graze the iOS Home Indicator and Android gesture bar, triggering accidental navigation instead of prompt submissions.
+
+### 9. Atmospheric Canvas Harmonization & Mobile Messenger Chat Ergonomics
+- **Ice Blue & Frosted Slate Crystalline Atmosphere**:
+  - When designing high-tech companions with glowing cyan OLED eyes or obsidian visors, avoid warm yellow/terracotta paper backgrounds which clash chromatically with cold cyber-optics.
+  - Ground the environment in an Ice Blue atmospheric canvas (`linear-gradient(180deg, #EDF4F9 0%, #E3EDF6 50%, #D8E5F1 100%)`) with frosted crystalline glass surfaces (`rgba(255, 255, 255, 0.88)` + 14px backdrop blur), crisp hairline borders, and deep midnight navy accents (`#0E1B31`). This allows pearlescent ceramic shells and neon visors to look luminous, coherent, and premium.
+- **Zero-Asset Multisensory Audio & Haptic Synthesis**:
+  - Pair physical mascot interactions with zero-asset Web Audio synthesis (zero external audio file dependencies, instant playback, zero network overhead):
+    * **Mascot Bounce / Tap**: Rapid frequency-swept sine wave ($460\text{ Hz} \to 780\text{ Hz}$ over 110ms with exponential gain decay to 160ms) paired with `spring_snap` haptic (`[12, 25, 20]` ms).
+    * **Prompt Send**: Soft airy whoosh ($340\text{ Hz} \to 620\text{ Hz}$ over 90ms) paired with `subtle_tap` haptic (`[15]` ms).
+    * **Agent Response Arrival**: Crystalline double-tone chime (F#5 $740\text{ Hz} \to$ A#5 $932\text{ Hz}$ over 320ms) paired with `success_double` haptic (`[18, 45, 24]` ms).
+  - Wrap audio contexts inside gesture handlers (`pointerdown`/`click`) to comply with browser autoplay security policies without throwing unhandled promise rejections.
+- **Authentic WAV Sound Engine & Pre-Decoded AudioBuffers (Zero Latency & 0% Idle CPU)**:
+  - When elevating companion tactile feedback from synthetic chimes to authentic character voice recordings (e.g. Coucou's 28 authentic WAV files: `greet`, `think`, `finish`, `love`, `pop`, `wink`, `send`):
+    * **Avoid `new Audio(url).play()`**: Instantiating audio elements or fetching on each event creates an 80–250ms playback lag and browser garbage collection churn.
+    * **Pre-Decode AudioBuffers on First Gesture**: On the first user touch/pointerdown (`{ once: true }`), fetch and decode all character sound assets into an in-memory `Map<string, AudioBuffer>` via `ctx.decodeAudioData(await res.arrayBuffer())`.
+    * **Zero-Latency Playback**: Play sounds via lightweight ephemeral `BufferSourceNode` connected to a shared master `GainNode`, guaranteeing instantaneous 0ms response.
+    * **Idle Suspension CPU Guard**: An active running `AudioContext` consumes a continuous 1–3% CPU trickle even when totally silent. Implement a 2000ms idle timer after any sound ends: if no new sound plays, call `ctx.suspend()`. Immediately resume on the next `play()`.
+    * **Dual Fallback**: If audio buffers are decoding or fail to load, automatically fall back to Web Audio oscillator frequency sweeps (`playSyntheticFallback`).
+- **Asymmetric Mobile Messenger Bubble Ergonomics**:
+  - Avoid rendering conversational dialogue as symmetric, full-width document cards or heavy editor boxes.
+  - Enforce clear asymmetric mobile messenger styling:
+    * **User Bubble**: Strongly right-aligned (`align-self: flex-end; margin-left: 18%; margin-right: 0;`), deep midnight navy (`#0E1B31`) with crisp white text, subtle glowing cyan stroke (`border: 1px solid rgba(0, 229, 255, 0.28)`), and tail border-radius (`18px 18px 4px 18px`).
+    * **Assistant Bubble**: Strongly left-aligned (`align-self: flex-start; margin-right: 12%; margin-left: 0;`), frosted crystalline white (`rgba(255, 255, 255, 0.95)`), high-contrast dark navy text (`#0B1528`), soft ambient shadow, and tail border-radius (`18px 18px 18px 4px`), flanked directly by the active mini companion visor avatar.
+
+### 10. Character-as-Container Architecture (The Purrweb Living Body Container)
+- **The Living Body Chat Card Concept**:
+  - Rather than isolating the mascot into a small corner avatar or letting it crowd the top headroom, the character's physical body forms the **main container card** of the entire chat viewport.
+  - Outer Canvas: High-contrast pastel canvas (`#D3E5F6` to `#B7CFEB` light gradient, or dark space aura) framing the character's body.
+  - Torso Card (`#mumu-living-container`): Pinned white squircle container (`position: absolute; top: 14px; bottom: 0; left: 16px; right: 16px; border-radius: 40px 40px 0 0;`) holding the conversation inside the character's belly/chest.
+  - Stationary Head & Visor Anchor: Top apex of the body container houses the static character head (claymorphic ears, antenna over top border, obsidian visor with tracking OLED eyes and blush). It remains 100% stationary (`position: relative; z-index: 25; flex-shrink: 0;`).
+  - Independent Inner Scroll Viewport (`#chat-stream`): Only the messages inside the body container scroll (`overflow-y: auto; flex: 1;`). The character's body and face never budge or translate vertically during scrolling ("waktu gilir ke atas atau bawah itu ngga ngikut tubuhnya").
+  - Dual-Stop Upper Gradient Mask: Apply `-webkit-mask-image: linear-gradient(to bottom, transparent 0px, transparent 14px, black 38px, black calc(100% - 24px), transparent 100%)` to the chat stream so messages dissolve smoothly beneath the character's chin/visor without harsh clipping.
+  - 2×2 Grid Mobile Welcome Cards: Format preset prompt cards in a compact 2×2 grid (`grid-template-columns: 1fr 1fr; gap: 8px;`) so all 4 core prompts stay visible above the fold on mobile viewports.
+
 ## Procedure
 
 1. **Establish Fixed Viewport & Ambient Canvas**:
@@ -365,3 +445,13 @@ Don't use for:
 - **Text-Pill Agent Selector Breaks the Living Metaphor**: Showing agent names in a separate chip row after long press disconnects selection from the mascot system. Reveal living micro-canvases fanned behind the hero, hide the already-active duplicate, and show a name only for the current preview candidate.
 - **Shallow System Prompt Syndrome (Companion Answers Differ from Messaging Bot)**: Providing a web companion chat interface with a generic 10-line system prompt while the Telegram bot operates on rich vault memories and operational frameworks causes the companion to give disconnected, hallucinated, or generic answers. Always connect the companion's backend directly to the local Obsidian vault using bounded lexical retrieval (`retrieveCandidates`), injecting relevant notes from `KNOWLEDGE/` and `BUKU_CATATAN/` along with the core Tiga Mindset Problem Solving framework and server architecture so knowledge parity between web and messaging platforms is 100% identical.
 - **Simulated Note-Taking Disconnect**: Returning a canned success message ("Ide berhasil dicatat...") without performing real filesystem I/O creates phantom notes that disappear upon inspection. Always write physical Markdown files with YAML frontmatter directly into `/home/ubuntu/otak-koding/BUKU_CATATAN/` (incrementing sequence numbers, e.g. `090-...md`), ensuring notes immediately populate the `/buku` Obsidian viewer and persist across sessions.
+- **CSS Selector Specificity Washout on Inline Mascot Avatars**: Declaring a general modifier class like `.message-avatar.assistant-mumu` with low specificity (e.g. `0,2,0`) gets overridden by context-scoped ancestors like `.message-row.assistant .message-avatar` declared later in CSS, washing out the dark obsidian visor and glowing eyes with default bubble background/border styles. Always chain the full compound selector `.message-row.assistant .message-avatar.assistant-mumu` and enforce `!important` on core physical attributes (dark visor background, neon border, glowing eyes) so the mascot face maintains authentic visual fidelity in the chat stream.
+- **Duplicate Variable Declaration Script Freeze**: In single-page web companions with hot-patched script tags, declaring a top-level state variable (e.g. `let isWaitingForResponse = false;`) in both the global state block and an async handler block throws `SyntaxError: Identifier '...' has already been declared`, which silently halts the script before helper functions attach to `window` and causes runtime `ReferenceError`. Always run a deterministic syntax probe (`node -e "new Function(...)`) immediately after patching complex script tags.
+- **The Mascot Stiffness Pitfall (Isolated 2D Keyframes vs 3D Rig Kinematics)**: Animating a mascot character purely with canned 2D CSS floating keyframes (`@keyframes float { 50% { transform: translateY(-8px); } }`) makes the companion feel robotic, rigid, and emotionally dead ("masih kaku"). Always wrap the character in a 3D perspective rig (`perspective: 800px; transform-style: preserve-3d;`), dynamically interpolate 3D head orientation (yaw, pitch, roll) tracking pointer coordinates via spring dampening ($k \approx 0.12$), displace sunken visors with stereoscopic parallax (`translateZ(8px)` + gaze offsets), and drive interactive click reactions through Euler-Hooke numerical spring integration ($F = -kx - cv$) with coupled volume compensation ($\text{scale}_x = 1.0 + (1.0 - \text{scale}_y) \times 0.6$) for authentic squash & stretch bounce.
+- **The Mobile Hero Claustrophobia Trap (Stacked Cards vs Horizontal Carousel)**: Stacking multiple suggestion or prompt cards vertically on mobile viewports (`390×844`) consumes >240px of vertical height, choking negative space, pushing primary elements off-screen, and suffocating the central mascot ("sempit banget kalau di mobile"). On mobile (`max-width: 640px`), convert stacked suggestion cards into a single-line horizontal swipeable carousel (`display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;`). Each card spans ~200px with a 2-line clamped summary, slashing vertical height consumption from ~240px to ~68px (freeing >170px of negative space) and preserving the airy Zen Canvas feel above the fold.
+- **Mobile Bottom Dock Home-Indicator Collision**: Declaring zero or minimal bottom padding on fixed or floating command docks causes input fields and action buttons to collide with or uncomfortably graze the mobile home indicator bar and gesture pill on modern devices (iPhone 12–15, Android gestural nav). Always enforce `padding-bottom: calc(20px + env(safe-area-inset-bottom, 12px))` on mobile viewport docks to guarantee comfortable thumb clearance and prevent accidental OS app-switching gestures.
+- **Warm Paper vs Cool Cyber-Optic Palette Clash**: Placing a companion mascot with cold electric cyan glowing OLED visors or chrome highlights into a warm yellow/terracotta paper background creates jarring chromatic dissonance. Ground cyber-companion interfaces in an Ice Blue & Frosted Slate palette (`#EDF4F9` gradient, `#0E1B31` midnight navy, frosted crystalline cards with 14px blur) to achieve visual harmony and specular radiance.
+- **Symmetric Document-Block Chat Trap in Mobile Companions**: Rendering conversational dialogue turns as wide, symmetric rectangular cards makes the companion feel like a static document editor rather than an interactive chat partner. Enforce asymmetric mobile messenger bubble styling (user right-aligned in midnight navy with subtle cyan glow, assistant left-aligned in frosted crystalline white with mini companion avatar) to preserve clear conversational rhythm, high text contrast, and thumb ergonomics.
+- **Audio Tag Latency & CPU Bleed vs Decoded AudioBuffer SoundEngine**: Using `new Audio('/sounds/file.wav').play()` on every user interaction introduces an 80–250ms playback lag that ruins the snappy springiness of tactile interactions, while leaving an `AudioContext` permanently running bleeds 1–3% background CPU. Always preload and decode audio assets into memory buffers on the first user pointerdown (`decodeAudioData`), trigger playback with ephemeral `BufferSourceNode` objects connected to a master gain node for instant 0ms latency, and automatically suspend the context after 2 seconds of silence (`ctx.suspend()`) to maintain zero background CPU drain.
+- **The "Lonjong" Mascot Egg Proportion Pitfall**: Setting mascot container height greater than width with an asymmetric egg-shaped border-radius and vertical harmonic breathing makes the mascot look oblong, rigid, and awkwardly stretched ("terlalu lonjong"). Enforce squircle/chubby dimensions where width >= height (e.g. 136×124px) with symmetric 48%–50% curvature and lateral breathing expansion.
+- **The Character Scroll Drift Trap**: In Character-as-Container architectures, letting the outer character body or facial elements scroll along with the chat messages breaks the physical container illusion and causes the mascot's eyes to disappear off the screen. Keep the character card and face strictly pinned (`position: absolute; overflow: hidden;`) and let only `#chat-stream` scroll (`flex: 1; overflow-y: auto;`), ensuring the character's body remains completely static during scrolling ("waktu gilir ke atas atau bawah itu ngga ngikut tubuhnya").

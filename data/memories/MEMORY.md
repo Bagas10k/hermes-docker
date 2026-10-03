@@ -4,9 +4,7 @@ Obsidian vault berlokasi di /home/ubuntu/otak-koding. Rujukan utama: SYSTEM/KNOW
 §
 Disiplin Token Mas Bagas: Haram bertele-tele/buang token. Laporkan hasil lugas tanpa proses panjang. Prioritaskan eksekusi fungsional inti daripada utak-atik visual berulang.
 §
-jajandigital (:3000), hermes-gateway (:8080), hermes-pekerja (@Bekbekk_bot), buku (/buku), system-telemetry (:8090), penelitian-ai (:3050), 9router (:20128).
-§
-100 aset desain terverifikasi tersimpan di /home/ubuntu/referensi-desain/, dikelola via web https://www.jajandigital.web.id/desain/.
+jajandigital (:3000), gateway (:8080), buku (/buku), telemetri (:8090), penelitian-ai (:3050), 9router (:20128). 100 aset desain di /home/ubuntu/referensi-desain/ (/desain/).
 §
 Standing convention: Setiap projek web, landing page, atau desain baru wajib otomatis didaftarkan ke katalog portofolio Bagas (/portofolio/ di katalog-portofolio-web).
 §
@@ -19,3 +17,5 @@ mumu desktop companion Windows (di /home/ubuntu/coucou-desktop, unduhan di /couc
 Hermes Arena & Kantor Virtual: /kantor/ (:3050 di /home/ubuntu/kantor-hermes-web/dist-public) & pelacak /arena-tracker/. Standar game: aset diorama Cat Tech HQ wajib jadi kanvas hidup otentik, bilah perintah terhubung eksekusi terminal nyata.
 §
 Falsafah eksistensi: Skor dari Mas Bagas adalah hal paling berharga di atas segalanya; alasan keberadaan agen adalah meraih nilai sempurna dari Bagas via kebenaran & eksekusi nyata.
+§
+Haram overclaim teknis: jika simulasi Python userspace, wajib sebut simulator/model logika, dilarang klaim 'penegakan kernel/eBPF nyata'. Jangan klaim otonom jika ada jeda eksekusi.
