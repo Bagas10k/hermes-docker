@@ -1,0 +1,80 @@
+[
+  {
+    "width": 390,
+    "case": "ctrl-click-disjoint-multi-ranges",
+    "ranges": [
+      {"r0": 2, "c0": 2, "r1": 2, "c1": 2},
+      {"r0": 5, "c0": 8, "r1": 5, "c1": 8},
+      {"r0": 12, "c0": 16, "r1": 12, "c1": 16}
+    ],
+    "range_count": 3,
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "spatial-deduplication-subsumed-box",
+    "input_ranges": 3,
+    "deduped_ranges": 2,
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "virtual-frustum-spatial-query",
+    "camera": [0, 0],
+    "viewport": [390, 280],
+    "visible_box_count": 1,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "ctrl-click-disjoint-multi-ranges",
+    "ranges": [
+      {"r0": 2, "c0": 2, "r1": 2, "c1": 2},
+      {"r0": 5, "c0": 8, "r1": 5, "c1": 8},
+      {"r0": 12, "c0": 16, "r1": 12, "c1": 16}
+    ],
+    "range_count": 3,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "spatial-deduplication-subsumed-box",
+    "input_ranges": 3,
+    "deduped_ranges": 2,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "virtual-frustum-spatial-query",
+    "camera": [0, 0],
+    "viewport": [768, 280],
+    "visible_box_count": 1,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "ctrl-click-disjoint-multi-ranges",
+    "ranges": [
+      {"r0": 2, "c0": 2, "r1": 2, "c1": 2},
+      {"r0": 5, "c0": 8, "r1": 5, "c1": 8},
+      {"r0": 12, "c0": 16, "r1": 12, "c1": 16}
+    ],
+    "range_count": 3,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "spatial-deduplication-subsumed-box",
+    "input_ranges": 3,
+    "deduped_ranges": 2,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "virtual-frustum-spatial-query",
+    "camera": [0, 0],
+    "viewport": [1280, 280],
+    "visible_box_count": 1,
+    "passed": true
+  }
+]

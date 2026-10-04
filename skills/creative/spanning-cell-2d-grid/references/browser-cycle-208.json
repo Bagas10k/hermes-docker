@@ -1,0 +1,164 @@
+[
+  {
+    "width": 390,
+    "case": 1,
+    "state": {
+      "cursor": [
+        3,
+        3
+      ],
+      "owner": "merge-7"
+    },
+    "active": "merge-7",
+    "tabs": 1
+  },
+  {
+    "width": 390,
+    "case": 2,
+    "state": {
+      "cursor": [
+        8,
+        8
+      ],
+      "owner": "cell-8-8"
+    },
+    "active": "cell-8-8",
+    "tabs": 1
+  },
+  {
+    "width": 390,
+    "case": 3,
+    "state": {
+      "cursor": null,
+      "owner": null
+    },
+    "active": "grid",
+    "tabs": 1
+  },
+  {
+    "width": 390,
+    "case": 0,
+    "state": {
+      "cursor": [
+        2,
+        2
+      ],
+      "owner": "merge-7"
+    },
+    "active": "merge-7",
+    "tabs": 1
+  },
+  {
+    "width": 390,
+    "external_focus_preserved": true,
+    "no_overflow": true
+  },
+  {
+    "width": 768,
+    "case": 1,
+    "state": {
+      "cursor": [
+        3,
+        3
+      ],
+      "owner": "merge-7"
+    },
+    "active": "merge-7",
+    "tabs": 1
+  },
+  {
+    "width": 768,
+    "case": 2,
+    "state": {
+      "cursor": [
+        8,
+        8
+      ],
+      "owner": "cell-8-8"
+    },
+    "active": "cell-8-8",
+    "tabs": 1
+  },
+  {
+    "width": 768,
+    "case": 3,
+    "state": {
+      "cursor": null,
+      "owner": null
+    },
+    "active": "grid",
+    "tabs": 1
+  },
+  {
+    "width": 768,
+    "case": 0,
+    "state": {
+      "cursor": [
+        2,
+        2
+      ],
+      "owner": "merge-7"
+    },
+    "active": "merge-7",
+    "tabs": 1
+  },
+  {
+    "width": 768,
+    "external_focus_preserved": true,
+    "no_overflow": true
+  },
+  {
+    "width": 1280,
+    "case": 1,
+    "state": {
+      "cursor": [
+        3,
+        3
+      ],
+      "owner": "merge-7"
+    },
+    "active": "merge-7",
+    "tabs": 1
+  },
+  {
+    "width": 1280,
+    "case": 2,
+    "state": {
+      "cursor": [
+        8,
+        8
+      ],
+      "owner": "cell-8-8"
+    },
+    "active": "cell-8-8",
+    "tabs": 1
+  },
+  {
+    "width": 1280,
+    "case": 3,
+    "state": {
+      "cursor": null,
+      "owner": null
+    },
+    "active": "grid",
+    "tabs": 1
+  },
+  {
+    "width": 1280,
+    "case": 0,
+    "state": {
+      "cursor": [
+        2,
+        2
+      ],
+      "owner": "merge-7"
+    },
+    "active": "merge-7",
+    "tabs": 1
+  },
+  {
+    "width": 1280,
+    "external_focus_preserved": true,
+    "no_overflow": true
+  }
+]

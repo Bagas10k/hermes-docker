@@ -1,0 +1,29 @@
+[
+  {
+    "width": 390,
+    "stale": true,
+    "accepted": true,
+    "duplicate": true,
+    "future": true,
+    "noSteal": true,
+    "oneTab": true
+  },
+  {
+    "width": 768,
+    "stale": true,
+    "accepted": true,
+    "duplicate": true,
+    "future": true,
+    "noSteal": true,
+    "oneTab": true
+  },
+  {
+    "width": 1280,
+    "stale": true,
+    "accepted": true,
+    "duplicate": true,
+    "future": true,
+    "noSteal": true,
+    "oneTab": true
+  }
+]

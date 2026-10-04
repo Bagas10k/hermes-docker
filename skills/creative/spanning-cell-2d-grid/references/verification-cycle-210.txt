@@ -1,0 +1,34 @@
+test_budget_and_invalid (test_dom_adapter.AdapterTests.test_budget_and_invalid) ... ok
+test_coverage_partition (test_dom_adapter.AdapterTests.test_coverage_partition) ... ok
+test_edge_touch (test_dom_adapter.AdapterTests.test_edge_touch) ... ok
+test_empty (test_dom_adapter.AdapterTests.test_empty) ... ok
+test_offscreen_owner_and_geometry (test_dom_adapter.AdapterTests.test_offscreen_owner_and_geometry) ... ok
+test_semantics_template (test_dom_adapter.AdapterTests.test_semantics_template) ... ok
+test_all_arrival_orders (test_revision_gate.RevisionTests.test_all_arrival_orders) ... ok
+test_duplicate_future_unissued (test_revision_gate.RevisionTests.test_duplicate_future_unissued) ... ok
+test_exhaustion (test_revision_gate.RevisionTests.test_exhaustion) ... ok
+test_failure_retry (test_revision_gate.RevisionTests.test_failure_retry) ... ok
+test_old_rejected_before_latest_arrives (test_revision_gate.RevisionTests.test_old_rejected_before_latest_arrives) ... ok
+test_validation (test_revision_gate.RevisionTests.test_validation) ... ok
+test_budget_edge (test_snapshot_schema.SchemaTests.test_budget_edge) ... ok
+test_empty (test_snapshot_schema.SchemaTests.test_empty) ... ok
+test_malformed_matrix (test_snapshot_schema.SchemaTests.test_malformed_matrix) ... ok
+test_nonfinite_and_wrong_types (test_snapshot_schema.SchemaTests.test_nonfinite_and_wrong_types) ... ok
+test_valid_and_immutable (test_snapshot_schema.SchemaTests.test_valid_and_immutable) ... ok
+test_anchor_outside_window_is_retained (test_spanning_grid.SpanTests.test_anchor_outside_window_is_retained) ... ok
+test_half_open_and_empty (test_spanning_grid.SpanTests.test_half_open_and_empty) ... ok
+test_integer_precision (test_spanning_grid.SpanTests.test_integer_precision) ... ok
+test_invalid_contract (test_spanning_grid.SpanTests.test_invalid_contract) ... ok
+test_overlaps_and_duplicate_ids_are_atomic (test_spanning_grid.SpanTests.test_overlaps_and_duplicate_ids_are_atomic) ... ok
+test_seeded_differential (test_spanning_grid.SpanTests.test_seeded_differential) ... ok
+test_clamp (test_window_focus.WindowFocusTests.test_clamp) ... ok
+test_empty (test_window_focus.WindowFocusTests.test_empty) ... ok
+test_exhaustive_bounds (test_window_focus.WindowFocusTests.test_exhaustive_bounds) ... ok
+test_initial (test_window_focus.WindowFocusTests.test_initial) ... ok
+test_invalid_cursor (test_window_focus.WindowFocusTests.test_invalid_cursor) ... ok
+test_overlap (test_window_focus.WindowFocusTests.test_overlap) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.238s
+
+OK

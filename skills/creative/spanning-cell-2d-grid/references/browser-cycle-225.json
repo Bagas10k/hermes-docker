@@ -1,0 +1,43 @@
+[
+  {
+    "width": 390,
+    "stationary_scroll": true,
+    "anchor_fixed": true,
+    "endpoint_tracks_scroll": true,
+    "release_stops": true
+  },
+  {
+    "width": 768,
+    "stationary_scroll": true,
+    "anchor_fixed": true,
+    "endpoint_tracks_scroll": true,
+    "release_stops": true
+  },
+  {
+    "width": 1280,
+    "stationary_scroll": true,
+    "anchor_fixed": true,
+    "endpoint_tracks_scroll": true,
+    "release_stops": true
+  },
+  {
+    "case": "pointercancel",
+    "stopped": true,
+    "synthetic_visibility": false
+  },
+  {
+    "case": "lostcapture",
+    "stopped": true,
+    "synthetic_visibility": false
+  },
+  {
+    "case": "hidden",
+    "stopped": true,
+    "synthetic_visibility": true
+  },
+  {
+    "case": "dispose",
+    "stopped": true,
+    "synthetic_visibility": false
+  }
+]

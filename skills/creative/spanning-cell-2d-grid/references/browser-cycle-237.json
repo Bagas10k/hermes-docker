@@ -1,0 +1,155 @@
+[
+  {
+    "width": 390,
+    "case": "transaction-journal-selective-range-undo",
+    "target_bounding_box": [
+      1,
+      1,
+      2,
+      2
+    ],
+    "cells_undone": [
+      [
+        1,
+        1
+      ]
+    ],
+    "cells_preserved": [
+      [
+        8,
+        8
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "transaction-journal-selective-topology-undo",
+    "target_bounding_box": [
+      10,
+      10,
+      12,
+      12
+    ],
+    "topology_undone": "m_box",
+    "cells_preserved": [
+      [
+        1,
+        1
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "transaction-journal-compressed-delta-persistence",
+    "compression_format": "zlib_base64",
+    "raw_bytes": 1420,
+    "compressed_bytes": 368,
+    "compression_ratio": 0.2592,
+    "roundtrip_integrity_verified": true,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "transaction-journal-selective-range-undo",
+    "target_bounding_box": [
+      1,
+      1,
+      2,
+      2
+    ],
+    "cells_undone": [
+      [
+        1,
+        1
+      ]
+    ],
+    "cells_preserved": [
+      [
+        8,
+        8
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "transaction-journal-selective-topology-undo",
+    "target_bounding_box": [
+      10,
+      10,
+      12,
+      12
+    ],
+    "topology_undone": "m_box",
+    "cells_preserved": [
+      [
+        1,
+        1
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "transaction-journal-compressed-delta-persistence",
+    "compression_format": "zlib_base64",
+    "raw_bytes": 1420,
+    "compressed_bytes": 368,
+    "compression_ratio": 0.2592,
+    "roundtrip_integrity_verified": true,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "transaction-journal-selective-range-undo",
+    "target_bounding_box": [
+      1,
+      1,
+      2,
+      2
+    ],
+    "cells_undone": [
+      [
+        1,
+        1
+      ]
+    ],
+    "cells_preserved": [
+      [
+        8,
+        8
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "transaction-journal-selective-topology-undo",
+    "target_bounding_box": [
+      10,
+      10,
+      12,
+      12
+    ],
+    "topology_undone": "m_box",
+    "cells_preserved": [
+      [
+        1,
+        1
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "transaction-journal-compressed-delta-persistence",
+    "compression_format": "zlib_base64",
+    "raw_bytes": 1420,
+    "compressed_bytes": 368,
+    "compression_ratio": 0.2592,
+    "roundtrip_integrity_verified": true,
+    "passed": true
+  }
+]

@@ -1,0 +1,17 @@
+test_budget_and_invalid (test_dom_adapter.AdapterTests.test_budget_and_invalid) ... ok
+test_coverage_partition (test_dom_adapter.AdapterTests.test_coverage_partition) ... ok
+test_edge_touch (test_dom_adapter.AdapterTests.test_edge_touch) ... ok
+test_empty (test_dom_adapter.AdapterTests.test_empty) ... ok
+test_offscreen_owner_and_geometry (test_dom_adapter.AdapterTests.test_offscreen_owner_and_geometry) ... ok
+test_semantics_template (test_dom_adapter.AdapterTests.test_semantics_template) ... ok
+test_anchor_outside_window_is_retained (test_spanning_grid.SpanTests.test_anchor_outside_window_is_retained) ... ok
+test_half_open_and_empty (test_spanning_grid.SpanTests.test_half_open_and_empty) ... ok
+test_integer_precision (test_spanning_grid.SpanTests.test_integer_precision) ... ok
+test_invalid_contract (test_spanning_grid.SpanTests.test_invalid_contract) ... ok
+test_overlaps_and_duplicate_ids_are_atomic (test_spanning_grid.SpanTests.test_overlaps_and_duplicate_ids_are_atomic) ... ok
+test_seeded_differential (test_spanning_grid.SpanTests.test_seeded_differential) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.090s
+
+OK

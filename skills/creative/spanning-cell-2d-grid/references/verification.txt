@@ -1,0 +1,11 @@
+test_anchor_outside_window_is_retained (test_spanning_grid.SpanTests.test_anchor_outside_window_is_retained) ... ok
+test_half_open_and_empty (test_spanning_grid.SpanTests.test_half_open_and_empty) ... ok
+test_integer_precision (test_spanning_grid.SpanTests.test_integer_precision) ... ok
+test_invalid_contract (test_spanning_grid.SpanTests.test_invalid_contract) ... ok
+test_overlaps_and_duplicate_ids_are_atomic (test_spanning_grid.SpanTests.test_overlaps_and_duplicate_ids_are_atomic) ... ok
+test_seeded_differential (test_spanning_grid.SpanTests.test_seeded_differential) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.122s
+
+OK

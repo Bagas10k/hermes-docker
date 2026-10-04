@@ -1,0 +1,77 @@
+[
+  {
+    "width": 390,
+    "result": {
+      "checks": [
+        {
+          "label": "create_nodes rollback verified",
+          "pass": true
+        },
+        {
+          "label": "dom_mutation rollback verified",
+          "pass": true
+        },
+        {
+          "label": "focus_restore rollback verified",
+          "pass": true
+        },
+        {
+          "label": "retry on same token succeeds",
+          "pass": true
+        }
+      ],
+      "allPassed": true,
+      "tabStops": 1
+    }
+  },
+  {
+    "width": 768,
+    "result": {
+      "checks": [
+        {
+          "label": "create_nodes rollback verified",
+          "pass": true
+        },
+        {
+          "label": "dom_mutation rollback verified",
+          "pass": true
+        },
+        {
+          "label": "focus_restore rollback verified",
+          "pass": true
+        },
+        {
+          "label": "retry on same token succeeds",
+          "pass": true
+        }
+      ],
+      "allPassed": true,
+      "tabStops": 1
+    }
+  },
+  {
+    "width": 1280,
+    "result": {
+      "checks": [
+        {
+          "label": "create_nodes rollback verified",
+          "pass": true
+        },
+        {
+          "label": "dom_mutation rollback verified",
+          "pass": true
+        },
+        {
+          "label": "focus_restore rollback verified",
+          "pass": true
+        },
+        {
+          "label": "retry on same token succeeds",
+          "pass": true
+        }
+      ],
+      "allPassed": true,
+      "tabStops": 1
+    }
+  }
+]

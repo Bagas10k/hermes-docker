@@ -1,0 +1,197 @@
+[
+  {
+    "width": 390,
+    "result": {
+      "checks": [
+        {
+          "label": "bool rows",
+          "pass": true
+        },
+        {
+          "label": "unknown field",
+          "pass": true
+        },
+        {
+          "label": "window reversed",
+          "pass": true
+        },
+        {
+          "label": "area cap",
+          "pass": true
+        },
+        {
+          "label": "missing owner",
+          "pass": true
+        },
+        {
+          "label": "wrong owner",
+          "pass": true
+        },
+        {
+          "label": "duplicate id",
+          "pass": true
+        },
+        {
+          "label": "invalid id",
+          "pass": true
+        },
+        {
+          "label": "negative span",
+          "pass": true
+        },
+        {
+          "label": "geometry mismatch",
+          "pass": true
+        },
+        {
+          "label": "out of bounds",
+          "pass": true
+        },
+        {
+          "label": "bad dimension",
+          "pass": true
+        },
+        {
+          "label": "overlap",
+          "pass": true
+        },
+        {
+          "label": "unknown cell field",
+          "pass": true
+        }
+      ],
+      "retry": true,
+      "tabStops": 1
+    }
+  },
+  {
+    "width": 768,
+    "result": {
+      "checks": [
+        {
+          "label": "bool rows",
+          "pass": true
+        },
+        {
+          "label": "unknown field",
+          "pass": true
+        },
+        {
+          "label": "window reversed",
+          "pass": true
+        },
+        {
+          "label": "area cap",
+          "pass": true
+        },
+        {
+          "label": "missing owner",
+          "pass": true
+        },
+        {
+          "label": "wrong owner",
+          "pass": true
+        },
+        {
+          "label": "duplicate id",
+          "pass": true
+        },
+        {
+          "label": "invalid id",
+          "pass": true
+        },
+        {
+          "label": "negative span",
+          "pass": true
+        },
+        {
+          "label": "geometry mismatch",
+          "pass": true
+        },
+        {
+          "label": "out of bounds",
+          "pass": true
+        },
+        {
+          "label": "bad dimension",
+          "pass": true
+        },
+        {
+          "label": "overlap",
+          "pass": true
+        },
+        {
+          "label": "unknown cell field",
+          "pass": true
+        }
+      ],
+      "retry": true,
+      "tabStops": 1
+    }
+  },
+  {
+    "width": 1280,
+    "result": {
+      "checks": [
+        {
+          "label": "bool rows",
+          "pass": true
+        },
+        {
+          "label": "unknown field",
+          "pass": true
+        },
+        {
+          "label": "window reversed",
+          "pass": true
+        },
+        {
+          "label": "area cap",
+          "pass": true
+        },
+        {
+          "label": "missing owner",
+          "pass": true
+        },
+        {
+          "label": "wrong owner",
+          "pass": true
+        },
+        {
+          "label": "duplicate id",
+          "pass": true
+        },
+        {
+          "label": "invalid id",
+          "pass": true
+        },
+        {
+          "label": "negative span",
+          "pass": true
+        },
+        {
+          "label": "geometry mismatch",
+          "pass": true
+        },
+        {
+          "label": "out of bounds",
+          "pass": true
+        },
+        {
+          "label": "bad dimension",
+          "pass": true
+        },
+        {
+          "label": "overlap",
+          "pass": true
+        },
+        {
+          "label": "unknown cell field",
+          "pass": true
+        }
+      ],
+      "retry": true,
+      "tabStops": 1
+    }
+  }
+]

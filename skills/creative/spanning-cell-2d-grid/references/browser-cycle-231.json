@@ -1,0 +1,92 @@
+[
+  {
+    "width": 390,
+    "case": "retained-visible-cursor",
+    "cursor": [
+      1,
+      1
+    ],
+    "strategy": "retained_visible",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "offscreen-drift-closest-recovery",
+    "cursor": [
+      15,
+      6
+    ],
+    "strategy": "clamped_closest",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "leading-edge-recovery",
+    "cursor": [
+      24,
+      12
+    ],
+    "strategy": "edge_direction_lead",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "retained-visible-cursor",
+    "cursor": [
+      1,
+      1
+    ],
+    "strategy": "retained_visible",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "offscreen-drift-closest-recovery",
+    "cursor": [
+      15,
+      6
+    ],
+    "strategy": "clamped_closest",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "leading-edge-recovery",
+    "cursor": [
+      24,
+      12
+    ],
+    "strategy": "edge_direction_lead",
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "retained-visible-cursor",
+    "cursor": [
+      1,
+      1
+    ],
+    "strategy": "retained_visible",
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "offscreen-drift-closest-recovery",
+    "cursor": [
+      15,
+      6
+    ],
+    "strategy": "clamped_closest",
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "leading-edge-recovery",
+    "cursor": [
+      24,
+      12
+    ],
+    "strategy": "edge_direction_lead",
+    "passed": true
+  }
+]

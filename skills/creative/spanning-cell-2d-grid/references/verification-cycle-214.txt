@@ -1,0 +1,37 @@
+======================================================================
+CYCLE 214 VERIFICATION - UIUX-020
+Collapsible Accordion Column Grouping on Hierarchical Frozen Headers
+Skill: creative/spanning-cell-2d-grid
+Date: 2026-10-04T12:05:00+00:00
+======================================================================
+
+UNITTEST SUITE:
+Command: python3 -m unittest discover -s /home/ubuntu/.hermes/skills/creative/spanning-cell-2d-grid/scripts -p "test_*.py"
+
+Ran 56 tests in 0.272s
+Status: OK (Exit Code 0)
+
+Passed Test Breakdown:
+- test_collapsible_frozen_header.py: 7 tests passed
+  1. test_grid_initialization_and_validation
+  2. test_add_collapsible_nodes_and_containment
+  3. test_single_level_toggle_collapse_geometry
+  4. test_multi_tier_nested_accordion_collapse
+  5. test_spatial_rtree_queries_on_collapse_and_expand
+  6. test_progressive_sticky_offset_recalculation
+  7. test_composite_render_manifest
+- test_hierarchical_frozen_header.py: 7 tests passed
+- test_frozen_span_grid.py: 7 tests passed
+- test_revision_gate.py: 7 tests passed
+- test_window_focus.py: 7 tests passed
+- test_snapshot_schema.py: 7 tests passed
+- test_commit_recovery.py: 7 tests passed
+- test_spanning_grid.py: 7 tests passed
+
+INVARIANTS CONFIRMED:
+1. Dynamic Zero-CLS Column Width Allocation: Collapsing a group shinks internal columns [c0+1..c1-1] to 0px, assigning summary width to c0 without layout shifts.
+2. Recursive Parent-Child Accordion Suppression: Collapsing an ancestor automatically marks all descendant header nodes as hidden (`is_hidden_by_parent: True`) with 0 rendered width.
+3. Real-Time Spatial R-Tree Coordinate Synchronization: Every collapse/expand operation atomatically synchronizes the SQLite R-tree spatial index (`header_rtree`) for instant O(log N) viewport queries.
+4. Progressive Sticky Offset Recalculation: Dynamic title pinning adapts smoothly to collapsed column bounds and clamp constraints.
+5. Deterministic Client Composite Render Manifest: Complete serialized layout geometry ready for virtualized DOM / canvas frontends.
+======================================================================

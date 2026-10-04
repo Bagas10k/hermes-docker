@@ -19,6 +19,7 @@ description: "Use when enforcing agent mindset through executable rules."
 - Per-Response Token Transparency: Cantumkan estimasi jumlah token keluaran pada baris penutup di setiap respons (`[Estimasi Token Respon: ~X token]`) untuk transparansi efisiensi inferensi.
 - Doktrin Pemikiran Minimum Optimal (Hermes Cognitive Budget): Target kerja bukan berpikir sebanyak mungkin, melainkan menggunakan pemikiran minimum yang cukup untuk menghasilkan jawaban benar. Alur baku: REQUEST -> COMPLEXITY CHECK (FAST / STANDARD / DEEP) -> MINIMUM CONTEXT -> MINIMUM AGENT -> MINIMUM SKILL (Lazy Load) -> EXECUTE (Search murah dulu, reasoning mahal belakangan) -> VERIFY (Stop condition saat kriteria terpenuhi) -> LEARN (Evaluasi berbasis bukti).
 - Explain proposed changes and obtain scope confirmation before implementation. Ask one focused question at a time.
+- Anti-Premature Coding Reflex & Alignment-First Cadence: Saat pengguna memberikan komentar, ide arsitektur, dokumen konseptual, atau arahan awal, HARAM langsung loncat membuka file, menulis patch kode, atau menjalankan eksekusi terminal di turn pertama ("Kok apa-apa tiba-tiba bikin kodingan"). Selalu rem diri, sajikan ringkasan/analisis padat, dan konfirmasi pemahaman terlebih dahulu. Mulai eksekusi koding HANYA setelah pengguna memberikan persetujuan atau aba-aba eksplisit (misal: "Oke langsung aja", "Lanjut gas").
 - Preserve role-specific identity and memory when transferring reusable skills; skill copies do not guarantee identical reasoning or performance.
 
 ## Workflow

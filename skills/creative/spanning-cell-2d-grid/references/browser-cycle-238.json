@@ -1,0 +1,95 @@
+[
+  {
+    "width": 390,
+    "case": "multi-client-vector-clock-concurrency",
+    "clients": ["client_A", "client_B"],
+    "vector_clocks": {
+      "client_A": { "A": 2, "B": 1 },
+      "client_B": { "A": 1, "B": 2 }
+    },
+    "concurrent_detected": true,
+    "arbitration_rule": "priority_then_lww_then_lexicographical",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "multi-client-cell-edit-ot-convergence",
+    "cell": [5, 5],
+    "winning_value": "ValA",
+    "client_a_val": "ValA",
+    "client_b_val": "ValA",
+    "converged": true,
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "multi-client-topology-merge-conflict-purge",
+    "incoming_merge": "spanA",
+    "purged_merge": "spanB",
+    "active_merges": ["spanA"],
+    "converged": true,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "multi-client-vector-clock-concurrency",
+    "clients": ["client_A", "client_B"],
+    "vector_clocks": {
+      "client_A": { "A": 2, "B": 1 },
+      "client_B": { "A": 1, "B": 2 }
+    },
+    "concurrent_detected": true,
+    "arbitration_rule": "priority_then_lww_then_lexicographical",
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "multi-client-cell-edit-ot-convergence",
+    "cell": [5, 5],
+    "winning_value": "ValA",
+    "client_a_val": "ValA",
+    "client_b_val": "ValA",
+    "converged": true,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "multi-client-topology-merge-conflict-purge",
+    "incoming_merge": "spanA",
+    "purged_merge": "spanB",
+    "active_merges": ["spanA"],
+    "converged": true,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "multi-client-vector-clock-concurrency",
+    "clients": ["client_A", "client_B"],
+    "vector_clocks": {
+      "client_A": { "A": 2, "B": 1 },
+      "client_B": { "A": 1, "B": 2 }
+    },
+    "concurrent_detected": true,
+    "arbitration_rule": "priority_then_lww_then_lexicographical",
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "multi-client-cell-edit-ot-convergence",
+    "cell": [5, 5],
+    "winning_value": "ValA",
+    "client_a_val": "ValA",
+    "client_b_val": "ValA",
+    "converged": true,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "multi-client-topology-merge-conflict-purge",
+    "incoming_merge": "spanA",
+    "purged_merge": "spanB",
+    "active_merges": ["spanA"],
+    "converged": true,
+    "passed": true
+  }
+]

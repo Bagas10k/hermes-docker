@@ -1,0 +1,86 @@
+[
+  {
+    "width": 390,
+    "case": "transaction-journal-single-cell-invertible-replay",
+    "tx_id": "tx_1",
+    "cell": [2, 2],
+    "value_sequence": ["", "Beta", ""],
+    "undo_succeeded": true,
+    "redo_succeeded": true,
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "transaction-journal-compound-topology-rollback",
+    "tx_id": "tx_2",
+    "unmerged_id": "span1",
+    "merge_bounds": [0, 0, 2, 2],
+    "restored_on_undo": true,
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "transaction-journal-bounded-capacity-eviction",
+    "max_history": 3,
+    "actions_recorded": 5,
+    "effective_undo_count": 3,
+    "oldest_evicted_properly": true,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "transaction-journal-single-cell-invertible-replay",
+    "tx_id": "tx_1",
+    "cell": [2, 2],
+    "value_sequence": ["", "Beta", ""],
+    "undo_succeeded": true,
+    "redo_succeeded": true,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "transaction-journal-compound-topology-rollback",
+    "tx_id": "tx_2",
+    "unmerged_id": "span1",
+    "merge_bounds": [0, 0, 2, 2],
+    "restored_on_undo": true,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "transaction-journal-bounded-capacity-eviction",
+    "max_history": 3,
+    "actions_recorded": 5,
+    "effective_undo_count": 3,
+    "oldest_evicted_properly": true,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "transaction-journal-single-cell-invertible-replay",
+    "tx_id": "tx_1",
+    "cell": [2, 2],
+    "value_sequence": ["", "Beta", ""],
+    "undo_succeeded": true,
+    "redo_succeeded": true,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "transaction-journal-compound-topology-rollback",
+    "tx_id": "tx_2",
+    "unmerged_id": "span1",
+    "merge_bounds": [0, 0, 2, 2],
+    "restored_on_undo": true,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "transaction-journal-bounded-capacity-eviction",
+    "max_history": 3,
+    "actions_recorded": 5,
+    "effective_undo_count": 3,
+    "oldest_evicted_properly": true,
+    "passed": true
+  }
+]

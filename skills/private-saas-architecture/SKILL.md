@@ -362,3 +362,37 @@ When developing these systems, adhere to the "Bagus vs Jelek" integrity standard
   - **Rule**: Never claim a new API route, UI fix, or server deployment is working without self-verifying it first in the terminal.
   - **Mechanism**: RDP/localhost is a blind backend; the user controls you via Telegram. If you add `require('node-fetch')` to `server.js` and restart PM2, you MUST run a local `curl` to ensure it returns 200 OK (not a 500 error due to module conflicts). 
   - **Action**: Always dogfood your own endpoints via `curl -s` or `browser_exec` before telling the user to check their phone. Asking the user to QA untested code is a strict violation of this architecture's standards.
+
+## 6. White-Label Commercial AI SaaS & Dynamic Persona Isolation
+- **The "Client-Owned Personal AI" Illusion & Zero-Leak Invariant**:
+  - **Rule**: When commercializing an internal AI studio into a public quota-selling SaaS where users purchase token allocations, strictly isolate the AI persona between master administrators and external buyers (see `references/white-label-commercial-ai-saas.md` for complete schema, scrypt hashing, and lifecycle hooks).
+  - **Mechanism**: If the prompt system blindly passes internal VPS paths, telemetry port mappings, or personal knowledge vaults (e.g. Obsidian) to public users, users immediately perceive that the AI belongs to someone else and proprietary server topology is leaked.
+  - **Action**: Dynamically bind the system persona to the authenticated user's role:
+    * *Master Admin (`role === 'admin'`)*: Full grounding in internal VPS services, telemetry, and personal knowledge repositories.
+    * *Commercial User (`role === 'user'`)*: Address the user by their registered name, presenting the AI as their 100% exclusive personal assistant, completely scrubbing all mentions of backend infrastructure or server topology.
+- **Real-Time Token Quota Metering & Streaming Deduction**:
+  - Deduct tokens accurately post-stream based on actual response length (`Math.round(fullContent.length / 3.8)` or exact tokenizer count) in an atomic transaction (`token_transactions`).
+  - Cut off inference before calling upstream LLMs if `remaining_tokens <= 0` and emit a structured SSE error event (`data: {"error": "..."}`) that renders a graceful quota-exhaustion banner.
+  - Expose live quota balances in the UI navbar via a dynamic pill badge (`quota-pill`) with semantic warning states (green > 15k, amber <= 15k, red <= 5k).
+- **Standalone Auth Portals over Nested Sidebar Modals**:
+  - **Rule**: User registration and login forms for a public SaaS must live on a dedicated standalone page/route (e.g. `login.html`), not buried inside a dashboard sidebar or drawer.
+- **Dedicated Multi-Format Attachment Architecture**:
+  - Separate attachment controls into distinct Apple SF Symbol icons (e.g. Photo `#btn-attach-photo` with `accept="image/*"` and Document `#btn-attach-doc` with document/code extensions).
+  - Never dump uploaded file names directly into the prompt textarea. Render tactile preview chips inside a dedicated attachment tray (`.dock-attachments-tray`) above the input with file type icons and individual removal buttons (`✕`).
+  - Implement a `paste` event listener on the textarea to automatically intercept clipboard screenshots (`Ctrl+V`) and convert them into preview chips.
+- **Google Sign-In & Zero-Friction Social Onboarding**:
+  - Implement dual-mode Google Identity Services (GIS): verify incoming Google ID Tokens server-side via `https://oauth2.googleapis.com/tokeninfo?id_token=...` without external npm bloat.
+  - Support instant demo fallback mode when Google Cloud Client ID is pending configuration, plus an in-UI Client ID persistence field (`google_auth.json`) that reloads dynamically without process restarts.
+  - Automatically credit new Google sign-ups with initial welcome tokens (50.000 tokens) and bind to dynamic white-label persona (`role === 'user'`).
+- **Multi-Tenant Conversation Persistence & P0–P7 Context Builder Engine**:
+  - **Rule**: Never use a single global chat history file for multi-user/multi-tenant SaaS. Store conversations in isolated SQLite tables (`conversations`, `messages`, `memories`, `user_profiles`) keyed by `user_id`.
+  - **Context Builder Token Budget Ladder (P0–P7)**: Enforce a strict priority ladder before calling LLM completions:
+    * *P0 (System Safety & Output Rules)*: Mandatory clean formatting and platform rules.
+    * *P1 (Persona Isolation)*: Dynamic white-label personal persona for customers vs master admin persona for owner.
+    * *P2 (Current Request)*: User's latest prompt.
+    * *P3 (Task State)*: Active goals and status.
+    * *P4 (Recent Messages)*: Sliding window of recent turns within remaining budget.
+    * *P5 (Conversation Summary)*: Compressed dialogue history for long threads.
+    * *P6 (Semantic Memories)*: Extracted user facts and preferences.
+    * *P7 (RAG & Tools)*: Selective retrieved documents or tool results.
+  - **API & Client Drawer Sync**: Expose `/api/studio/conversations` (list, create, detail, delete) and wire client history slide-over drawers directly to backend SQLite state, ensuring multi-device synchronization and zero cross-tenant contamination.

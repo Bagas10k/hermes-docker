@@ -1,0 +1,65 @@
+[
+  {
+    "width": 390,
+    "case": "repeated-mount-accounting",
+    "remount_renders_delta": 0,
+    "drag_active": true,
+    "has_selection": true,
+    "after_release_active": false,
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "reentrant-down-disposal",
+    "active_after_disposal": false,
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "reentrant-frame-disposal",
+    "active_after_frame_disposal": false,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "repeated-mount-accounting",
+    "remount_renders_delta": 0,
+    "drag_active": true,
+    "has_selection": true,
+    "after_release_active": false,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "reentrant-down-disposal",
+    "active_after_disposal": false,
+    "passed": true
+  },
+  {
+    "width": 768,
+    "case": "reentrant-frame-disposal",
+    "active_after_frame_disposal": false,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "repeated-mount-accounting",
+    "remount_renders_delta": 0,
+    "drag_active": true,
+    "has_selection": true,
+    "after_release_active": false,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "reentrant-down-disposal",
+    "active_after_disposal": false,
+    "passed": true
+  },
+  {
+    "width": 1280,
+    "case": "reentrant-frame-disposal",
+    "active_after_frame_disposal": false,
+    "passed": true
+  }
+]

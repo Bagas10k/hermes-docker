@@ -1,7 +1,7 @@
 ---
 name: document-ai-invoice-extractor
 description: "Use when checking bounded invoice arithmetic."
-version: 1.0.0
+version: 1.6.0
 author: Bagas Cihuy, Hermes Agent
 license: MIT
 platforms: [linux]
@@ -75,7 +75,49 @@ Numbers are nonnegative ASCII decimal strings: up to 12 integer digits and 4 fra
 - Fixed document budgets: 2 MiB input; 20 PDF pages; 12 million pixels per raster or embedded image; 40 million cumulative pixels including rendered pages and each embedded image occurrence; 200,000 cumulative retained text characters (including native and OCR copies). Raster dimensions are checked before rendering; image dimensions before OCR. Text budgets are checked after the library returns text, before parsing/retention. Exceeded budgets return exit 1 without partial JSON.
 - The Linux CLI supervises the entire worker (imports, extraction, OCR, parsing and serialization) with a 60-second wall-clock timeout. Worker and normal OCR descendants share a fresh process group, killed with SIGKILL on timeout and cleaned up on completion. Calling `read_source` directly does not provide the supervisor deadline. The supervisor bounds stdout and stderr capture to 4 MiB each (`MAX_OUTPUT_BYTES`) via non-blocking selectors; excessive worker output immediately triggers process group termination and operational error exit 1. Additionally, at exit 0 and 2, the supervisor strictly validates that stdout parses into a valid JSON object matching the full invoice schema (status, locale, rounding, authenticity_verified=False, fields, lines, issues, source) and asserts exit-code parity (exit 0 requires arithmetic_consistent with 0 issues; exit 2 requires needs_review with >=1 issues). Any schema violation, unparseable JSON, or exit status mismatch is transformed into operational exit 1 with an informative diagnostic on stderr and stdout withheld. The CLI launches through `scripts/worker_limits.py` before extraction imports: Linux RLIMIT_AS 1 GiB, RLIMIT_CPU 45 seconds, RLIMIT_FSIZE 32 MiB, RLIMIT_NOFILE 128, RLIMIT_CORE 0, and Linux `PR_SET_PDEATHSIG` (SIGKILL) parent-death signal configuration. Inherited stricter limits are never raised. These are per-process resource ceilings and lifecycle lifecycle anchors, NOT an aggregate RSS/CPU quota or hostile-PDF security sandbox. Descendants inherit ceilings but CPU consumption is not aggregated; while detached processes could escape naive PGID kills, workers configured with `PR_SET_PDEATHSIG` are automatically terminated by the kernel if the supervisor exits. Direct Python API calls bypass the wrapper. Use an external container/cgroup sandbox for hostile documents.
 - Unsupported layouts and unknown lines fail closed to review. This intentionally rejects most unnormalized commercial invoices and receipts.
-- No seller identity, invoice date, tax-rate validation, bank account extraction, authenticity checks, or duplicate-invoice detection across files.
+- No seller identity extraction, invoice date, tax-rate validation, bank account extraction or authenticity checks. Cross-document review is available only through the separate normalized-input API below; it is not integrated into the extraction CLI.
+
+## Cross-document re-billing review (BIZ-013)
+
+Use `scripts/rebilling.py` with `reconcile(rows, threshold=0.9)` and `fingerprint(row)`. Each row must supply explicit opaque `seller_id`, `document_id`, `line_id`, currency (USD/IDR), description, and canonical nonnegative decimal strings for quantity, unit_price and amount. Quantity must be positive. Preserve original evidence separately; never infer seller identity from description or the invoice number.
+
+The SHA-256 fingerprint includes exact seller/currency scope, canonical decimals and NFKC/casefold/whitespace-normalized description. Reconciliation compares only cross-document rows within equal scope and numeric fields. Fuzzy matching uses the minimum of both directional SequenceMatcher ratios; scores are heuristics, not probabilities. Return pairs rather than transitive clusters, never delete source rows, and route all candidates to review. An exact match is not proof of fraud: legitimate recurring charges can match.
+
+Hard bounds: 500 lines, 256 characters per text field, 12 integer/4 fractional digits, threshold 0.8–1. Worst-case comparisons are quadratic in line count and description length; no latency SLA is claimed. Missing metadata or duplicate document/line references fail closed with ValueError. `no_candidates` does not certify legitimacy. Credit notes, partial quantities and split invoices remain unsupported. Service periods require the explicit opt-in API below.
+
+Verification: `terminal(command=".venv/bin/python -m unittest discover -s tests -v", workdir=skill_dir)`. BIZ-013 adds ten deterministic tests (exact/fuzzy, directional stability, seller/currency/numeric negative controls, invalid input and bounds, immutable source rows). Full suite: 81 passing tests; evidence `artifacts/biz013-tests.log`.
+
+## Service-period review (BIZ-014)
+
+Call `reconcile(rows, service_periods=True)` to validate every supplied `service_period` before comparison. A period is exactly `{"start": "2026-01-01", "end": "2026-01-31"}`: real calendar dates in strict YYYY-MM-DD format, start <= end, both endpoints inclusive. Missing/null periods mean unknown; malformed, partial or reversed periods raise ValueError, even for unmatched rows. Never substitute invoice issue dates for service dates.
+
+Disjoint known periods suppress otherwise matching candidates (recurring-charge negative control). Equal/overlapping periods remain review-only candidates, with `period_relation` equal/overlap and inclusive `overlap_days`. Unknown periods retain candidates with relation unknown and null overlap. This does not certify legitimate billing or fraud. Source rows are unchanged. Legacy default behavior and `fingerprint` remain period-agnostic: never use that fingerprint alone to delete recurring charges. Date extraction from OCR, proration, contract entitlements and credit-note reconciliation remain unsupported.
+
+Verification: `tests/test_biz014_periods.py` covers recurring exclusions, malformed dates, inclusive overlap, leap days, missing periods, order invariance and source preservation. Full suite: 85 tests passed; `artifacts/biz014-tests.log`. Inputs are synthetic fixtures, not a real-invoice accuracy study. Maintain the 500-line cap; no performance improvement is claimed because fuzzy comparison still precedes interval filtering.
+
+## Versioned period identity (BIZ-015)
+
+Call `versioned_fingerprint(row, version='v2')` from `scripts/rebilling.py`. Store the complete envelope (version, algorithm, digest, period_state, period_identity_complete, needs_review), not a bare hash. v2 domain-separates canonical content and explicit inclusive service dates. Missing/null periods use an unknown marker; equal unknown hashes do not establish equal service periods. Invalid periods fail closed. All identities remain review-only, including known equal periods: never delete or approve payments automatically.
+
+For compatibility, `version='v1'` returns the unchanged `fingerprint(row)` digest and reports periods as ignored. Compare only like versions; never rewrite historical hashes in place. Retain original evidence and compute side-by-side v1/v2 envelopes when migrating. Overlapping unequal periods have different v2 digests; continue using `reconcile(..., service_periods=True)` to find overlaps, not equality hashing alone. The local adapters below support in-memory migration and single-writer atomic local snapshots; power-loss durability and OCR date extraction remain unimplemented.
+
+Verification: eight deterministic tests in `tests/test_biz015_fingerprints.py` cover legacy serialization, period separation, canonical equivalence, unknowns, invalid dates, version/scope separation, overlap distinction and input preservation. Full local suite: 93 passing tests; evidence `artifacts/biz015-tests.log`. These fixtures do not measure real-invoice accuracy.
+
+## Local fingerprint record migration (BIZ-016)
+
+Call `migrate_records(records)` from `scripts/fingerprint_migration.py`. Input is a list of at most 500 records, each exactly `{'row': normalized_row, 'fingerprints': [envelope]}`. Rows accept only the eight required re-billing fields and optional service_period. Keep raw evidence outside this bounded adapter. History must contain one or two distinct supported version envelopes. Bare hashes, unknown fields/versions, duplicate seller/document/line references, malformed periods, and envelopes inconsistent with the supplied row raise ValueError; nothing is silently repaired.
+
+Validate all records before copying. Preserve historical v1 envelopes exactly and append v2 only when missing; rerunning produces equal values and independent output objects. Verify exact field types: Python equality alone incorrectly treats True as 1 and False as 0. Unknown periods remain review-only. Hash integrity is not authentication. This pure function does not write files/databases and provides no durable transaction, checkpoint, crash recovery, or cross-process concurrency control. Use immutable input snapshots; concurrent mutation during a call is unsupported.
+
+Verification: `terminal(command=".venv/bin/python -m unittest discover -s tests -v", workdir=skill_dir)`; six BIZ-016 tests cover history preservation, idempotence, envelope tampering/types, schema/bounds, late batch failure without source mutation, known-period drift, and the 500-record boundary. Full suite: 99 tests passed; `artifacts/biz016-tests.log`. Synthetic local fixtures only.
+
+## Atomic local snapshot & directory durability (BIZ-017 / BIZ-018)
+
+Call `save_snapshot(path, records)` from `scripts/fingerprint_snapshot.py` only in a trusted local directory with one writer. It validates and migrates the entire batch before I/O, writes deterministic JSON to a same-directory owner-only temporary file, flushes/fsyncs it, uses `os.replace` to publish, and then opens and fsyncs the parent directory. Reruns preserve historical envelopes and identical serialized bytes. Catch operational exceptions; never report failure as success. Pre-replace exceptions preserve the previous target and clean temporary files when normal cleanup can run.
+
+If parent directory fsync fails after `os.replace`, `SnapshotDurabilityError` is raised. At this state, the snapshot is already published and visible at `path`, but persistence across sudden power loss is not guaranteed by the filesystem. Catch `SnapshotDurabilityError` specifically when handling durability boundaries. Atomic visibility and directory sync do not protect against concurrent writer conflict, hostile-path directory tampering, or power loss during filesystem metadata journaling. Existing file permissions become 0600. Do not use a production database path. The returned object is a detached migrated snapshot, not authentication evidence.
+
+Verification: `tests/test_biz018_durability.py` adds four deterministic tests for directory sync ordering, post-replace directory fsync failure semantics (`SnapshotDurabilityError`), non-directory parents, and input preservation. Full local suite: 111 tests passed; `artifacts/biz018-tests.log`. Synthetic fixtures and temporary directories only; no power-cut testing or performance claim.
 
 ## Verification
 
