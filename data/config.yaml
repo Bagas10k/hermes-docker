@@ -143,6 +143,7 @@ approvals:
 plugins:
   disabled: []
   enabled:
+    - ponytail
     - rtk-rewrite
     - skill-retriever
   entries:

@@ -18,16 +18,23 @@ SKILLS_ROOT = os.path.expanduser("~/.hermes/skills")
 # Kamus Sinonim & Idiom Percakapan Indonesia ke Konsep Teknis
 COLLOQUIAL_MAPPING: Dict[str, List[str]] = {
     "chat": ["chat", "conversation", "messaging", "dialog", "tele", "telegram", "obrolan", "pesan", "companion"],
-    "desain": ["design", "ui", "ux", "layout", "visual", "bento", "grid", "tampilan", "kosongan", "craft", "komponen"],
+    "desain": ["design", "ui", "ux", "layout", "visual", "bento", "grid", "tampilan", "kosongan", "craft", "komponen", "landing", "page", "mockup", "halaman", "web", "warna", "tipografi"],
+    "frontend": ["frontend", "ui", "ux", "antarmuka", "tampilan", "komponen", "css", "html", "react", "styling", "layout", "web", "craft"],
+    "warna": ["color", "colour", "palette", "palet", "tema", "theme", "contrast", "kontras", "warna", "oklch"],
+    "tata_letak": ["layout", "spacing", "grid", "padding", "gap", "margin", "rhythm", "ritme", "spasial", "jarak"],
+    "tipografi": ["typography", "font", "huruf", "text", "copy", "heading", "tulisan", "tipografi", "type"],
+    "animasi": ["motion", "animation", "shader", "canvas", "physics", "spring", "animasi", "gerak", "partikel", "fluid", "pegas"],
     "autopilot": ["autopilot", "autonomous", "self-learning", "riset", "mandiri", "tanpa henti", "siklus", "learner"],
     "backend": ["backend", "server", "api", "database", "pm2", "daemon", "service", "port", "express", "endpoint"],
     "debug": ["debug", "error", "crash", "fix", "rusak", "macet", "benerin", "galat", "symptom", "log"],
     "suara": ["voice", "audio", "speech", "tts", "telepon", "sound", "binaural"],
-    "konten": ["carousel", "post", "social", "instagram", "sputarai", "warta", "berita", "feed"],
+    "konten": ["carousel", "post", "social", "instagram", "ig", "sputarai", "warta", "berita", "feed", "konten", "content", "performa", "analisis", "tiktok"],
     "mobile": ["mobile", "responsive", "responsif", "phone", "touch", "ponsel", "layar", "companion", "zen"],
-    "web": ["web", "frontend", "html", "css", "interface", "halaman", "antarmuka", "site"],
-    "keamanan": ["security", "auth", "sandbox", "token", "rlimit", "guardrail", "aman", "isolasi"],
-    "arsitektur": ["architecture", "arsitektur", "decision", "trade-off", "system", "mindset", "struktur"]
+    "web": ["web", "frontend", "html", "css", "interface", "halaman", "antarmuka", "site", "landing"],
+    "keamanan": ["security", "auth", "sandbox", "token", "rlimit", "guardrail", "aman", "isolasi", "mantis", "audit", "vulnerability", "celah", "threat", "poc"],
+    "arsitektur": ["architecture", "arsitektur", "decision", "trade-off", "system", "mindset", "struktur"],
+    "ponytail": ["ponytail", "lazy", "pemalas", "minimal", "yagni", "oneliner", "bloat", "boilerplate", "overengineering", "simplest"],
+    "tabel": ["spreadsheet", "table", "tabel", "fenwick", "rows", "columns", "sel", "grid", "sheet", "besar", "panes", "virtualize"]
 }
 
 # Akhiran/Stemming umum bahasa Indonesia -> Inggris
@@ -41,7 +48,19 @@ STEM_MAP = {
     "analisis": "analysis",
     "komprehensif": "comprehensive",
     "sistem": "system",
-    "spasial": "spatial"
+    "spasial": "spatial",
+    "bikin": "build",
+    "buat": "create",
+    "bantu": "help",
+    "keren": "modern",
+    "warna": "color",
+    "tema": "theme",
+    "tata": "layout",
+    "huruf": "font",
+    "tulisan": "typography",
+    "jarak": "spacing",
+    "antarmuka": "frontend",
+    "tampilan": "interface"
 }
 
 # Penalti Negatif jika Konteks Bertentangan
@@ -129,7 +148,10 @@ class IntentRouter:
         expanded_intents = set()
         for token in q_tokens:
             for concept, synonyms in COLLOQUIAL_MAPPING.items():
-                if token in synonyms or any(s in token for s in synonyms if len(s) >= 3):
+                if token in synonyms:
+                    expanded_intents.add(concept)
+                    expanded_intents.update(synonyms)
+                elif len(token) >= 4 and any(s == token for s in synonyms):
                     expanded_intents.add(concept)
                     expanded_intents.update(synonyms)
 
@@ -141,27 +163,34 @@ class IntentRouter:
             name_lower = name.lower()
             desc_lower = meta.description.lower()
 
-            # A. Exact name matching (Weight: 0.40)
+            # A. Exact name matching (Weight: 0.50)
             if name_lower in q_lower or any(t == name_lower for t in q_tokens):
-                score += 0.40
+                score += 0.50
                 reasons.append(f"Cocok nama eksplisit '{name}'")
-            elif any(t in name_lower.split("-") for t in q_tokens if len(t) >= 3):
-                score += 0.20
-                reasons.append(f"Sebagian kata nama cocok")
+            else:
+                name_parts = [p for p in name_lower.split("-") if len(p) >= 3]
+                matched_parts = [p for p in name_parts if p in q_tokens or any(p in t for t in q_tokens)]
+                if matched_parts:
+                    ratio = len(matched_parts) / max(1, len(name_parts))
+                    part_score = 0.20 + (0.25 * ratio)
+                    score += part_score
+                    reasons.append(f"Bagian nama cocok ({', '.join(matched_parts)})")
 
-            # B. Description & Trigger 'Use when' matching (Weight: 0.30)
+            # B. Description & Trigger 'Use when' matching (Weight: 0.35)
             use_when_match = re.search(r"use when\s+([^.]+)", desc_lower)
-            trigger_text = use_when_match.group(1) if use_when_match else desc_lower[:70]
+            trigger_text = use_when_match.group(1) if use_when_match else desc_lower[:140]
             matched_desc_tokens = [t for t in q_tokens if len(t) >= 3 and t in trigger_text]
-            if matched_desc_tokens:
-                sub_score = min(0.30, len(matched_desc_tokens) * 0.12)
+            matched_syn_tokens = [c for c in expanded_intents if len(c) >= 3 and c in trigger_text]
+            combined_desc_matches = set(matched_desc_tokens + matched_syn_tokens)
+            if combined_desc_matches:
+                sub_score = min(0.35, len(combined_desc_matches) * 0.12)
                 score += sub_score
-                reasons.append(f"Trigger deskripsi cocok ({', '.join(matched_desc_tokens)})")
+                reasons.append(f"Trigger deskripsi cocok ({', '.join(list(combined_desc_matches)[:3])})")
 
-            # C. Indonesian Colloquial & Synonym Matching (Weight: 0.25)
+            # C. Indonesian Colloquial & Synonym Matching (Weight: 0.30)
             matched_syns = [c for c in expanded_intents if len(c) >= 3 and (c in name_lower or c in desc_lower)]
             if matched_syns:
-                syn_score = min(0.25, len(matched_syns) * 0.08)
+                syn_score = min(0.30, len(matched_syns) * 0.10)
                 score += syn_score
                 reasons.append(f"Kamus dwibahasa cocok: {matched_syns[:3]}")
 

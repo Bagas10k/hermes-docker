@@ -10,15 +10,17 @@ metadata:
     tags: [web-chat, agents, prompt-engineering, ui-ux, claude-style, runtime]
 ---
 
-# Web Agent Chat Runtime & Interface Architecture
+# Web Agent Chat Runtime
 
-Architect and implement robust, bidirectional web chat interfaces and prompt studio environments for autonomous AI agents.
+Bidirectional web chat interfaces and prompt studio environments for autonomous AI agents.
 
 ## When to Use
-- Building, polishing, or debugging web-based chat interfaces (SaaS dashboards, internal tools, companion HUDs) that interact with AI agents.
-- Designing prompt builder/crafter tools integrated directly into an active chat canvas.
-- Integrating external chat bridges (e.g. Telegram parity, WhatsApp, Discord) with local web interfaces without causing identity collisions or loop deadlocks.
-- Engineering resilient SSE streaming runtimes that withstand high Time-to-First-Token (TTFT) and cellular connection drops on mobile web clients.
+- Web chat interfaces (SaaS dashboards, companion HUDs) for AI agents.
+- Prompt builder tools integrated into an active chat canvas.
+- Chat bridges (Telegram, WhatsApp) without loop deadlocks.
+- Resilient SSE streaming (high TTFT, heartbeats, network auto-retry).
+- Eliminating mobile scroll jitter via binary sticky pinning (`isUserPinnedToBottom`) and 60 FPS adaptive typewriter queues.
+- Clean message actions (3-dots popovers) and responsive font controls (segmented buttons).
 
 ## Supporting References
 - `references/sse-resilience-and-claude-reasoning.md`: Detailed specifications for immediate SSE handshakes, keep-alive heartbeat intervals, client-side auto-retry, Claude-style XML block prompt partitioning, response regeneration DB truncation, rAF 60 FPS streaming throttling, mobile IME input safety, drag-and-drop file protection, ObjectURL RAM lifecycle management, and text deliverable anti-HTML wrapping rules with 1-click TXT/DOC export.

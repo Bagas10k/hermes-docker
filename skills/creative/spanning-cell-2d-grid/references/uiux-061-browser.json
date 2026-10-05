@@ -1,0 +1,41 @@
+[
+  {
+    "width": 390,
+    "result": {
+      "matches": [
+        "alpha",
+        "alpha-child"
+      ],
+      "dots": 4,
+      "ready": true,
+      "clear": true,
+      "clusterRestored": true
+    }
+  },
+  {
+    "width": 768,
+    "result": {
+      "matches": [
+        "alpha",
+        "alpha-child"
+      ],
+      "dots": 4,
+      "ready": true,
+      "clear": true,
+      "clusterRestored": true
+    }
+  },
+  {
+    "width": 1280,
+    "result": {
+      "matches": [
+        "alpha",
+        "alpha-child"
+      ],
+      "dots": 4,
+      "ready": true,
+      "clear": true,
+      "clusterRestored": true
+    }
+  }
+]

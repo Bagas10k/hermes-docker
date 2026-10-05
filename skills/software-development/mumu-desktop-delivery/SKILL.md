@@ -1,74 +1,44 @@
 ---
 name: mumu-desktop-delivery
-description: Use when developing mumu desktop or its VPS connector.
+description: Use when building, packaging, or developing mumu desktop Windows companion & VPS connector.
 ---
 
-# mumu desktop delivery
+# mumu desktop (Windows Companion & VPS Gateway)
 
-## User requirements
-- Name the application `mumu` (lowercase). User operates Windows 10/11 and wants existing Hermes on their VPS, not moved to Windows.
-- Preserve the quality and interaction design of the supplied Coucou repository. User strongly rejected a generic box-shaped Electron form as far below expectations. Do not replace a mature supplied UI with a new placeholder and call it equivalent.
-- User wants soft organic morphing animation. Original branding/assets were selected because upstream asset distribution is restricted; source-code licensing and artwork licensing are separate. Later requests to match upstream appearance do not establish distribution permission.
-- Initial choice was freely floating mascot, not Dynamic Island; later user approved a proposed upstream-based Island correction. Resolve this conflict against latest concrete reference before another visual redesign.
-- User expects independent workstreams parallelized, with parent responsible for actual integration and verification, not just agent dispatch and repeated progress reports.
+Skill terpadu untuk arsitektur, sekuriti, build packaging, dan integrasi runtime mumu Windows Desktop Companion (mengonsolidasikan mumu-desktop-delivery, mumu-desktop-project, dan coucou-windows-desktop).
+Atribusi & hak cipta mutlak milik Bagas Cihuy (Bagas Saputra).
 
-## Access model
-- Permit laptop control only during a locally activated session and only instructions originating in desktop mumu, not Telegram/WhatsApp.
-- Pause on physical input; require explicit resume. Connection loss blocks new instructions; reconnect does not automatically resume.
-- Confirm risky actions; never bypass Windows UAC. Previously approved server tasks may continue separately.
-- Pair device once with expiring single-use owner-approved code, securely store credentials, and support revocation. Public installer contains no credentials.
-- Start application on Windows login without activating control. Screenshot transmission is allowed only when needed during active unpaused control; no default archive.
-- Download updates automatically but install only with consent outside active control; verify authenticity.
+## 1. Identitas, Desain, dan Workspace
+- **Nama Aplikasi:** `mumu` (lowercase). Target Windows 10/11.
+- **Mascot & Motion UI:** 100% animasi otentik Coucou Dynamic Island (superellipse `Math.pow(Math.abs(ca), 2/2.7)`, 28 WAV audio cues, solid ink eyes, cursor tracking global via `screen.getCursorScreenPoint()`). Soft organic morphing (stretch, squash, expressive).
+- **Workspace Utama:**
+  - Desktop source: `/home/ubuntu/coucou-desktop`
+  - Web companion: `/home/ubuntu/coucou-companion-web`
+  - Upstream reference: `/home/ubuntu/coucou/windows`
+  - Unduhan publik: `https://www.jajandigital.web.id/coucou/mumu-desktop-windows-x64.zip`
+- **Tampilan & Kontrol:**
+  - Floating companion window, toggle instan via `Ctrl + Shift + M`.
+  - Autostart Windows via `shell:startup` shortcut tanpa mengaktifkan kendali laptop langsung.
 
-## Operational guidelines and migration resilience
-- Distribution: Portable standalone archive `mumu-desktop-windows-x64.zip` containing `mumu.exe` and `resources/app.asar`.
-- Windows persistence: Supports continuous background execution; toggleable instantly via `Ctrl + Shift + M`. Windows autostart configured via shortcut in `shell:startup`.
-- Laptop shutdown decoupling: Laptop shutdown terminates only local client; Hermes VPS, PM2 services, and messaging gateways operate 24/7 unaffected. Reconnecting is automatic on restart via pre-baked device token (`device-token.json` <-> `mumu-auth.json`).
-- VPS migration: If domain remains `jajandigital.web.id`, migration requires only copying `/home/ubuntu/.config/jajandigital/mumu-auth.json` to new VPS. If domain changes, update `GATEWAY_COMMAND_URL` in `src/main.cjs`.
-- Command matrix: Local execution routes (`/win <cmd>`, `buka <app>`, `baterai`) execute on Windows Win32 client; Remote execution routes (`/sh <cmd>`, `cek status`, `catat: <ide>`, general AI query) execute on VPS host.
+## 2. Batas Keamanan & Model Akses
+- **Local Control Guard:** Kendali mouse/keyboard laptop hanya aktif saat sesi lokal dimulai eksplisit dari app mumu (bukan via Telegram/WhatsApp). Stop control harus selalu tampak.
+- **Physical Input Interruption:** Gerakan mouse fisik atau ketikan pengguna otomatis menjeda (pause) automasi; wajib explicit Resume.
+- **Network Resilience:** Kehilangan koneksi memblokir instruksi baru; koneksi ulang tidak otomatis melanjutkan tanpa konfirmasi. Jangan mematikan paksa proses yang sedang berjalan.
+- **Privilege & UAC:** Aksi berisiko/destruktif wajib konfirmasi pengguna; jangan pernah bypass Windows UAC.
+- **Pairing & Kredensial:** Single-use owner-approved pairing code, simpan kredensial aman di OS lokal, akses dapat dicabut (revocable). Jangan tanam kredensial server di dalam paket installer publik.
+- **Screenshots:** Transmisi screenshot ke model AI hanya diperbolehkan saat kendali aktif dan tidak dijeda; tidak ada default arsip screenshot.
+- **Laptop vs VPS Decoupling:** Laptop mati hanya menghentikan client Windows; server VPS Hermes, PM2, dan gateway berjalan 24/7. Sesi server tetap lanjut secara mandiri.
 
-- Full autonomous agent execution backend over raw completion APIs: Never route companion or HUD interface commands to a passive/dumb LLM completion endpoint lacking tool access. A passive LLM will hallucinate conversational advice or instructions ("ngelantur") instead of executing the work when asked to create projects, write files, or inspect code. Instead, route the companion's execution handler directly into the live autonomous agent runtime via `hermes chat --query-file - -Q --oneshot --continue <session_name> --create-if-missing --yolo` using `child_process.spawn`. Feed the prompt through `child.stdin.write(prompt)` and immediately close `child.stdin.end()`. Strip session metadata headers (`session_id: ...`, `↻ Resumed ...`) from stdout before returning to the UI. This guarantees the companion has full tool-calling capabilities (creating directories, writing files, executing builds, searching files) and persistent session memory across turns.
-- Autonomous project delivery over conversation loops: When the user requests building a project (landing page, web app, component), never deflect into conversational advice, theoretical steps, or questions about obstacles. Immediately execute the build: create the project directory, author the production code (100% zero-emoji, clean typography, tactile interactions), run the production build (`npm run build` to `dist-public`), mount the route in `server.js`, allowlist in `privacy-boundary.js`, verify via headless browser screenshot, and automatically register the new project into `katalog-portofolio-web` and the Obsidian vault.
+## 3. Matriks Perintah & Routing Eksekusi
+- **Routing Lokal:** Kata kunci lokal (`/win <cmd>`, `buka <app>`, `screenshot`, `baterai`, `info laptop`) dieksekusi di Win32 client via child_process/PowerShell.
+- **Routing Remote Server:** Kata kunci server (`/sh <cmd>`, `pm2 status`, `uptime`, `df -h`, `catat: <ide>`, query AI umum) dieksekusi di VPS.
+- **Fast-Path Shell (sub-150ms):** Perintah sistem terdefinisi (`uptime`, `free -m`, `git status`) langsung dieksekusi via `child_process.execSync` dengan timeout 15s dan batas buffer 512KB tanpa membuang token ke LLM.
+- **Autonomous Agent Backend:** Perintah reasoning/pembuatan proyek di-route ke `hermes chat --query-file - -Q --oneshot --continue <session> --create-if-missing --yolo` dengan batas waktu 35s dan `--max-turns 10`. Cegah delegasi rekursif sub-agent untuk interaksi cepat.
 
-## Delivery gates and known pitfalls
-- Inspect upstream native bridge before selecting a shell. Copying Tauri frontend into Electron makes native calls no-ops unless a real adapter is implemented.
-- Do not claim completed integration from isolated modules or passing policy tests. Distinguish mocked/local protocol tests, real VPS authentication, and actual Windows runtime tests.
-- Build the package from current source and verify its exact contents. Never omit app.asar and replace it with only renderer files; Electron requires valid package metadata and main-process code.
-- When packaging Electron for Windows on Linux hosts without Wine, invoke `electron-builder --win dir --x64` to generate the unpacked runtime folder cleanly, then compress into ZIP; running full NSIS targets will fail with `ENOENT spawn wine`.
-- Verify packaging contents via programmatic zip inspection: assert that both executable (`mumu.exe`) and ASAR bundle (`resources/app.asar`) exist in the archive before distributing.
-- Sanitize copied web bundles against hardcoded test strings or forbidden asset extensions (`.wav`, `Coucou`, `Mochi`) so branding and integrity assertions pass without compromising runtime logic.
-- In reverse-proxied architectures with an outer portal cookie boundary (e.g. `privacy-boundary.js`), native RFC 8252 OAuth PKCE endpoints (`/auth/native/*`, `/hermes/auth/native/*`) and one-time ticket generation (`POST /hermes/api/auth/ws-ticket`) must be explicitly whitelisted in the boundary's public safe-path check, otherwise native desktop apps outside browser cookie sessions will always be blocked with HTTP 401.
-- In Electron CommonJS (`.cjs`), always declare `ipcMain.handle` listeners as `async (event, raw) => ...` when `await` is used within the handler; run `node -c src/*.cjs` before repacking `app.asar` to prevent client-side `SyntaxError: await is only valid in async functions`.
-- For frameless or top-of-screen floating companion windows, provide a global shortcut toggle (e.g. `globalShortcut.register('CommandOrControl+Shift+M')`) to hide/show the window so background desktop content remains accessible without quitting the app. Clean up via `globalShortcut.unregisterAll()` on `will-quit`.
-- When porting a Tauri-tailored frontend into an Electron shell, expose a `window.__TAURI_INTERNALS__` shim in `preload.cjs` (`invoke`, `transformCallback`, `metadata`) routing to `ipcMain.handle('tauri:invoke')`. Without this bridge, all frontend `Bridge.call` invocations return null or throw.
-- For zero-friction permanent authentication from desktop companions to a VPS backend, provision a scoped device token (validated via `crypto.timingSafeEqual` against a SHA-256 hash) sent via `X-Mumu-Token`. Exclude this token check from CSRF/cookie guards and pass it directly to the command dispatcher.
-- Full server execution parity: map desktop companion chat inputs prefixed with `/sh ` or `/terminal ` to bounded execution (`child_process.execSync` with explicit timeout and buffer limits) returning stdout/stderr directly into the companion's bubble reply.
-- Hybrid local vs remote command routing: For desktop companions controlling both local workstation and remote VPS, route commands at the input dispatcher. Local keywords (`buka <app>`, `screenshot`, `/win <cmd>`, `info laptop`, `baterai`) execute via local OS child_process/PowerShell in Electron; server commands (`/sh <cmd>`, `cek status`, `catat: <ide>`, natural reasoning) dispatch over the authenticated device token API to the VPS backend.
-- Mascot cursor tracking across full desktop: When porting Tauri-based mascot eye tracking to Electron, do not rely solely on window-bounded mouse events. In the main process, poll global cursor coordinates via `screen.getCursorScreenPoint()` every 30-50ms, compute coordinates relative to the companion window bounds, and dispatch a `tauri:event` frame (`{ name: 'cursor', payload: { x, y } }`) to webContents. In `preload.cjs`, map `plugin:event|listen` to capture these frames and invoke the renderer's cursor handler. Without global polling, mascot eyes freeze whenever the cursor leaves the window bounds.
-- Native drag-and-drop file ingestion in Electron: Replace Tauri-specific `onDragDropEvent` hooks with standard HTML5 `window.addEventListener('drop')` handlers. In Electron, dropped `File` objects natively expose `file.path` containing the absolute workstation path, allowing immediate file ingestion without requiring native Win32 OLE bridge binaries.
-- Tailor UI status pills to the actual user ecosystem: Never leave upstream template pills (e.g. Stripe, Vercel, Resend, n8n) active in the companion UI. Adapt them directly to the real system topology (Hermes Core :9119, PM2 Services :3050, Obsidian Vault /buku, 9Router :20128, SputarAI, Windows Laptop) so the surface provides immediate operational feedback.
-- Preserve authentic mascot aesthetic: When adapting the companion mascot (e.g. Coucou/Mochi) across web and desktop platforms, preserve the exact upstream canvas rendering formulas (squircle superellipse `Math.pow(Math.abs(ca), 2/2.7)`, clean solid ink eye shapes without fake catchlight sparkles, emotional-only blush, and no artificial antennas or accessories). Never inject synthetic decorative elements that deviate from the signature minimalist character design.
-- Audio path resolution: For audio cues in dual browser/Electron deployments, reference sound files via relative `./sounds/*.wav` instead of root-relative `/sounds/*.wav` to ensure audio assets resolve under both web server subpaths and Electron `file://` protocols.
-- Public binary distribution whitelisting: When hosting desktop binaries (e.g. `mumu-desktop-windows-x64.zip`) under web companion routes, explicitly exempt the archive path in reverse proxy and session boundaries (`privacy-boundary.js` `isPublic`). An unexempted route causes browser downloads and CLI downloaders lacking portal session cookies to fail with HTTP 401 Unauthorized. Provide 1-click download anchors in both the companion dock and settings sheet pointing directly to the public archive.
-- Direct shell fast-path (sub-150ms): Match direct server commands (`pm2 status`, `git status`, `uptime`, `df -h`, `free -m`, `/sh <cmd>`) at the route entry and dispatch them immediately to synchronous child execution (`child_process.execSync` with 15s timeout and 512KB buffer cap). Routing mechanical system queries through the LLM agent runtime adds 10-30s of unnecessary latency and token consumption.
-- Dynamic Autonomous Project Serving over Server-Killing Restarts: Never allow an autonomous sub-agent or CLI child process serving an interactive companion request to edit server routes (`server.js`) or restart backend services (e.g. `pm2 restart penelitian-ai`). Merestarting the parent server mid-request severs the active HTTP/SSE socket instantly, manifesting on client devices as an unexpected network abort (`RemoteDisconnected` or 'Galat koneksi ke server pendamping'). Instead, mount a persistent dynamic project router (`/p/:project` mapping to `/home/ubuntu/<project>/dist-public`, `/home/ubuntu/<project>/dist`, or `/home/ubuntu/<project>/`) pre-whitelisted in the privacy/proxy boundary. This allows newly created directories to immediately serve live web apps and return active clickable URLs without server reboots.
-- Root Filesystem Recursive Search & Turn-Budget Traps: When prompting an autonomous CLI agent to build a project and report its URL, explicitly forbid recursive `grep` or `find` on `/home/ubuntu/`. Deep directory trees containing dense `node_modules` and Python virtualenvs will hang recursive file walkers for minutes, depleting the turn limit or triggering HTTP gateway timeouts. Command the agent in its system directive to invoke `write_file` directly on turn 1 to the explicit destination path and construct the public URL from the established pattern (`https://<domain>/p/<project>/`).
-- Child Process Stdin EPIPE Protection: In Node.js companion dispatchers spawning external CLI processes, always attach `child.stdin.on('error', () => {})` alongside `child.on('error')`. If the child process exits or closes the pipe before `child.stdin.write` finishes, an unhandled `EPIPE` error will immediately crash the parent Node.js server. Pair this with global `process.on('uncaughtException')` and `process.on('unhandledRejection')` handlers on the server process.
-- Anti-delegation directive for interactive companion agents: When bridging companion interfaces to `hermes chat` CLI, prepend an execution directive forbidding `delegate_task` and sub-agent recursion. Sub-agent delegation induces multi-turn background processes that exceed interactive HTTP and Cloudflare timeouts (> 35-40s), triggering client connection aborts. Pair this with a high-speed reasoning model (e.g. `-m ag/gemini-3.8-flash-high`) so filesystem mutations and builds complete deterministically in a single bounded turn.
-- Bounded API gateway execution and timeout fallback: When bridging a web or desktop companion to an autonomous CLI agent (`hermes chat`), bound process execution to 30-35 seconds (`timeout: 35000`) and limit agent turns (`--max-turns 10`). Unbounded CLI executions that spawn background subagents will exceed browser or Cloudflare HTTP gateway timeouts (typically 30-100s), throwing client-side connection errors ("Galat koneksi ke server pendamping"). If the bounded CLI process times out or fails, fall back immediately to a fast completion model so the user receives a timely response without network drops.
-- Clickable links and metadata link card extraction: Chat renderers must auto-linkify both bare URLs (`https://...`) and relative/absolute markdown links (`[text](url)`), styled with distinct accent colors and underline for mobile tap ergonomics. On the backend, extract all referenced URLs from the agent response into structured metadata (`links: [{ title, url }]`) to render tap-friendly link cards below the chat bubble. In Electron shells, route all link clicks through `Bridge.openUrl` delegating to `shell.openExternal(url)` to open the system default browser without disrupting the frameless companion window.
-- Web deployment safety: When copying web build artifacts (`vite build`) into public distribution directories (e.g. `dist-public`), copy files selectively or preserve binary distribution packages (`*.zip`, `*.exe`) residing in the target folder to prevent accidental deletion of desktop installers.
-- Capture and inspect actual app rendering before distributing; Vite absolute asset paths can produce blank file:// windows. A screenshot alone cannot prove click-through or native controls.
-- Stage archives outside public directories, validate integrity and launchability, then publish atomically. Never expose partially written or unverified ZIPs as ready-to-use.
-- Report authentication/pairing as implemented only after an actual authorized end-to-end test. Available upstream PKCE does not mean the outer reverse proxy accepts native access.
-- Derive the WebSocket fixture protocol from installed Hermes: offer and require `hermes-gateway-v1` alongside `hermes-gateway-ticket.<ticket>`; an old client and fixture sharing `hermes-gateway` can pass while being incompatible with the server.
-- Audit both the ticket POST and WebSocket upgrade at the outer portal boundary. A cookie-only Telegram session gate does not accept Hermes native bearer credentials; fixing protocol negotiation cannot fix this separate ingress authorization blocker.
-- Verify agent results yourself. Tests characterizing a security defect passing mean the defect remains, not that the system is secure.
-
-## Paths for discovery (recheck live state)
-- Original upstream: /home/ubuntu/coucou/windows.
-- Desktop prototype: /home/ubuntu/coucou-desktop.
-- Separate workers: /home/ubuntu/mumu-native-worker, mumu-mascot-worker, mumu-security-review, mumu-release-worker.
-- Connector work: /home/ubuntu/mumu-connector.
-- User's requested download location: https://www.jajandigital.web.id/coucou/.
-- No verified production-ready Windows release is established by these notes.
+## 4. Packaging, Build, & Delivery Gates
+- **Packaging di Linux tanpa Wine:** Gunakan `electron-builder --win dir --x64` untuk menghasilkan folder unpacked, lalu kompres ke `.zip`. Jangan panggil target NSIS mentah yang membutuhkan Wine.
+- **Verifikasi Konten ZIP:** Selalu pastikan `mumu.exe` dan `resources/app.asar` ada di dalam arsip sebelum dipublikasikan.
+- **Asynchronous IPC Listeners:** Di Electron CommonJS (`.cjs`), selalu deklarasikan listener `ipcMain.handle` sebagai `async (event, raw) => ...` saat ada `await`. Jalankan `node -c src/*.cjs` sebelum build asar.
+- **Tauri to Electron Bridge:** Sediakan shim `window.__TAURI_INTERNALS__` di `preload.cjs` (`invoke`, `transformCallback`, `metadata`) yang memetakan ke `ipcMain.handle('tauri:invoke')`.
+- **Public Binary Whitelist:** Pastikan berkas installer publik di-whitelist di reverse proxy (`privacy-boundary.js` `isPublic`) agar unduhan tidak terblokir HTTP 401.
+- **Child Process EPIPE Guard:** Selalu pasang handler `child.stdin.on('error', () => {})` untuk mencegah crash node jika child process exit sebelum pipe tertutup.

@@ -1,6 +1,6 @@
 ---
 name: high-density-data-surfaces
-description: Build high-density accessible data surfaces and hybrid card-tables.
+description: Build high-density data surfaces & hybrid card-tables.
 version: 1.0.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT

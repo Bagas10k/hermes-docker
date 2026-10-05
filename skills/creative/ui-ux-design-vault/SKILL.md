@@ -1,6 +1,6 @@
 ---
 name: ui-ux-design-vault
-description: "Master Component Bank, Surface Archetypes & Anti-Template UI/UX Quality Gates. Use when designing web components, buttons, cards, forms, inputs, and layouts."
+description: Use when crafting anti-template web UI & component bank.
 version: 2.0.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT

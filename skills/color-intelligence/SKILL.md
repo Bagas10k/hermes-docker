@@ -1,6 +1,12 @@
 ---
 name: color-intelligence
-description: Advanced color reasoning and customization for visual design. Use when Hermes must analyze, choose, adapt, repair, or implement colors for UI/UX, websites, apps, dashboards, posters, HMI/SCADA, branding, data visualization, illustrations, screenshots, reference images, light/dark themes, design systems, CSS, Tailwind, or design tokens. Trigger on requests about palette, theme, vibe, recoloring, contrast, accessibility, color hierarchy, semantic states, gradients, neutral scales, brand color, reference matching, or making an existing design feel more premium, calm, playful, technical, elegant, industrial, modern, or readable.
+description: Use when choosing or tuning UI colors, themes & palettes.
+version: 1.0.0
+author: Hermes Agent
+metadata:
+  hermes:
+    tags: [color, theme, palette, contrast, oklch, dark-mode, ui, ux, warna]
+    category: creative
 ---
 
 # Color Intelligence

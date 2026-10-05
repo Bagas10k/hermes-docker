@@ -66,3 +66,11 @@ Dokumen acuan untuk perancangan antarmuka observabilitas pengembang, HUD aksi re
   3. *Kondisi Server & Vitals:* Alokasi RAM VPS terhadap batas aman 9.0 GB (*headroom safe limit*), CPU load, dan grid layanan PM2.
   4. *Musyawarah Kabinet:* Chat interaktif realtime via WebSocket dengan kolom input di dasar layar.
 - **Kepatuhan Mutlak Doktrin Nol Emoji:** Seluruh antarmuka mobile wajib 100% menggunakan karakter tipografis/ASCII terkalibrasi (`[●]`, `[>>]`, `[==]`, `[||]`, `[^^]`, `[ONLINE]`), bukan emoji grafis.
+
+## 8. Protokol Eksekusi Beruntun Tanpa Over-Searching (Anti-Looping Tool Iteration)
+- **Mandat "Eksekusi Looping Tanpa Bertanya":**
+  Saat pengguna memberikan perintah eksekusi penuh ("eksekusi looping aja, ngga perlu bertanya-tanya, eksekusi sampai token habis"):
+  1. *Satu Kali Inspeksi Cukup:* Hindari melakukan query direktori/file pencarian berulang kali (misal memindai `BUKU_CATATAN` atau `katalog-portofolio` dengan berbagai variasi regex/glob tanpa perubahan state sistem).
+  2. *Lompat Langsung ke Builder/Compiler:* Setelah berkas proyek diekstrak dan PRD dipahami, langsung susun berkas kode, pipeline build, test suite, dan server route secara bertahap.
+  3. *Hentikan Polling Tanpa Progres:* Jika suatu berkas belum ada (seperti nomor catatan baru `100`), jangan terus mencari file-file serupa; langsung buat nomor catatan berikutnya dan lanjutkan pekerjaan fisik produk.
+

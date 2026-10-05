@@ -43,5 +43,13 @@ class TestIntentRouter(unittest.TestCase):
         sensitive_res = self.router.route(query, tier="sensitive")
         self.assertLessEqual(len(strict_res), len(sensitive_res))
 
+    def test_05_frontend_ui_ux_routing(self):
+        """Kueri frontend antarmuka wajib merekomendasikan frontend-agent-craft."""
+        query = "bikin tampilan frontend antarmuka yang rapi dan responsif"
+        results = self.router.route(query, tier="balanced")
+        matched_names = [r.name for r in results]
+        self.assertIn("frontend-agent-craft", matched_names)
+        self.assertGreaterEqual(results[0].score, 0.40)
+
 if __name__ == "__main__":
     unittest.main()

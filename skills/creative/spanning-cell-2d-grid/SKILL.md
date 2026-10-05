@@ -1,13 +1,13 @@
 ---
 name: spanning-cell-2d-grid
 description: Use when indexing merged cells in virtual grids.
-version: 0.37.0
+version: 0.49.0
 author: Bagas Cihuy, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
-    tags: [uiux, virtualization, merged-cells, spatial-index, frozen-panes, nested-headers, accordion-columns, spring-physics, webgl-instancing, glyph-atlas, gesture-arbitration, pinch-to-zoom, msdf-fonts, sdf-shaders, selection-box, marquee-drag, multi-touch-pan, rotation-disambiguation, kerning-pairs, subpixel-typography, keyboard-navigation, roving-tabindex, multi-range-selection, disjoint-selection, clipboard-paste, tabular-paste, formula-translation, merge-arbitration, undo-redo-journal, transaction-history, vector-clock, operational-transformation, conflict-resolution]
+    tags: [uiux, virtualization, merged-cells, spatial-index, frozen-panes, nested-headers, accordion-columns, spring-physics, webgl-instancing, glyph-atlas, gesture-arbitration, pinch-to-zoom, msdf-fonts, sdf-shaders, selection-box, marquee-drag, multi-touch-pan, rotation-disambiguation, kerning-pairs, subpixel-typography, keyboard-navigation, roving-tabindex, multi-range-selection, disjoint-selection, clipboard-paste, tabular-paste, formula-translation, merge-arbitration, undo-redo-journal, transaction-history, vector-clock, operational-transformation, conflict-resolution, dag-visualization, svg-topology, click-to-checkout, diff-badge, hover-diff-inspector, spatial-navigation, popover-tooltip, breadcrumbs-trail, viewport-auto-centering, minimap-radar, drag-viewport-pan, collapsible-minimap, breadcrumb-shortcuts, breadcrumb-badges, localstorage-persistence, minimap-scale-presets, clipboard-export, search-omnibar, filter-highlight]
     related_skills: [dynamic-fenwick-2d-grid, unified-2d-virtual-panes]
 ---
 
@@ -163,6 +163,38 @@ Require trusted regular-file paths, stable caller-owned parent directories and o
 
 Run via `terminal`: `python3 -m unittest discover -s <skill-dir>/scripts -q`. Evidence in `references/uiux-048-tests.json`: 279 Python tests pass, including 13 filesystem tests with real temporary-directory IO and injected file-fsync, replace and directory-fsync failures. Existing 39 Node cases pass but do not exercise the new storage layer. Next: process-termination boundary tests and orphan-temp recovery policy.
 
+## Process termination and orphan recovery (UIUX-049)
+Use `scripts/history_recovery.py`: `guarded_save` and `recover_orphans` share a nonblocking POSIX flock on a stable per-target lock inode. Every writer must opt in; legacy `save_file` bypasses the lock. Never unlink the lock file. Require a stable trusted local directory and no forked children retaining its descriptor. On contention, propagate BlockingIOError rather than delete an active writer's temporary file.
+
+Recovery removes only matching regular temporary files under the exclusive lock, skips symlinks/directories/other targets, and never promotes unfinished data. No PID-age heuristic proves a file is orphaned. Cleanup is idempotent; deletion is not directory-fsynced. Hostile directory mutation, network filesystem locking, power loss and durable cleanup are outside the contract. This extension is POSIX-only; other skill geometry modules remain cross-platform.
+
+Run via `terminal`: `python3 -m unittest discover -s <skill-dir>/scripts -q` and `node <skill-dir>/scripts/test_browser_clock.cjs`. Evidence `references/uiux-049-tests.json`: 287 Python methods pass, including eight new tests. Real isolated child processes handshake before file sync, before replacement and after replacement; SIGKILL preserves old/old/new valid targets respectively. Recovery refuses live writers, then removes orphans after child exit and permits a new save. Existing 39 Node cases pass but do not test storage or browser rendering. Next gap: lock ownership across fork/inherited descriptors and explicit child-process lifetime policy.
+
+## Fork descriptor ownership (UIUX-050)
+Use `scripts/history_lock_owner.py` for explicit POSIX lock ownership. Create `HistoryLockOwner(stable_lock_path)` in the writer; call `assert_owner()` before protected operations. In an `os.fork` child call `detach_child()` immediately, then exit or independently acquire a new lock before unrelated work. Never resume the inherited writer critical section. Detachment closes only the child's descriptor; never issue LOCK_UN, which would unlock the shared open file description. Non-inheritable descriptors protect exec, not fork. Parent death alone does not release a lock retained by a child.
+
+This opt-in helper does not change `guarded_save`: that API still prohibits children retaining its descriptor. It does not intercept arbitrary writes, install at-fork hooks, kill children or support multi-threaded fork. Require trusted stable local paths; never unlink a lock inode. Explicit child detach is idempotent; owner close is strict. Use context-manager cleanup on exceptions.
+
+Run via `terminal`: `python3 -m unittest discover -s <skill-dir>/scripts -q` and `node <skill-dir>/scripts/test_browser_clock.cjs`. UIUX-050 verifies 292 Python methods (five new), plus 39 existing Node fake-DOM cases. Real Linux fork tests use pipe barriers and an isolated child subreaper to reap descendants: inherited lock survives owner exit; child detach permits acquisition only after the live owner has also released. No sleep-based ordering, production changes, browser rendering, power-loss or latency claims. Evidence: `references/uiux-050-tests.json`. Next gap: accessible browser history navigation; backend lock research does not verify the UI.
+
+## Accessible browser branch-history navigation and focus continuity (UIUX-051)
+Use `scripts/history_browser.py`: `export_manifest(history)` and `render(history)`. Exports the in-memory branch DAG into a self-contained, read-only preview HTML artifact. Cells and JSON data are escaped (`<` to `\\u003c`) to prevent script breakout. Native buttons provide standard keyboard navigation (Tab, Shift+Tab, Enter, Space) and screen-reader accessibility without fragile roving tabIndex trees.
+
+The browser adapter (`scripts/history_browser.js`):
+- Explicit branch choices: lists each child branch under the active node as a native button; leaves branches empty when at a leaf.
+- Focus restoration: when navigating via Undo (`#undo`) back to parent, focus dynamically targets the button corresponding to the branch previously viewed (`preferred`), preserving orientation during exploration.
+- Screen reader status: updates polite live region (`#status`) with active version ID and available child branch count.
+- Read-only preview: displays active branch snapshot without mutating the shared live document or underlying history instance.
+
+Run via `terminal`: `python3 -m unittest discover -s <skill-dir>/scripts -q` and `node <skill-dir>/scripts/test_history_browser.cjs`. UIUX-051 evidence: 295 Python tests pass (3 new browser history tests), 39 Node fake-DOM cases in `test_browser_clock.cjs`, and full Node DOM assertion in `test_history_browser.cjs`.
+
+## Minimap search and cluster synchronization (UIUX-061)
+Use `compute_branch_clusters` in `scripts/branch_dag_topology.py` for root-child partitions: descendants inherit a palette token; sorted root children determine colors, with five-color wrap. Colors are not unique branch identifiers and can change when earlier-sorting siblings are inserted. Use a deque for breadth-first traversal, avoiding list front-removal cost. Search classes derive from the main DAG match set; clearing search preserves cluster fills, while checkout temporarily gives the active node cyan.
+
+Set SVG rectangle geometry with `setAttribute`; never assign `SVGRectElement.x` or `.width`, which are read-only SVGAnimatedLength properties. Fake DOM writable properties can hide an initialization crash. Isolate each Node test's starting cursor before asserting active-state styling.
+
+Verification: 320 Python tests, history Node assertions and 39 Node clock cases pass. Actual Chromium at widths 390/768/1280 verifies initialization, search matches, clear, checkout and cluster-color restoration; see `references/uiux-061-browser.json`. No FPS, latency, visual quality, screen-reader or full mobile-layout claim. Existing minimap scale/viewBox coordinate consistency still needs browser testing. Next target: scaled radar geometry and non-color branch identification.
+
 ## Bounds and Trade-offs
 SQLite R-tree prunes spatial searches without expanding each covered cell. Storage is O(M) for M merges, independent of span area. Pathological queries can visit O(M); sorting K hits adds O(K log K). No unconditional logarithmic bound or FPS guarantee is claimed. The connection is in-memory, single-thread-owned, and nonpersistent.
 
@@ -309,3 +341,138 @@ Verification v0.32.0 (UIUX-043): 228 Python unittest methods pass in 0.329s (3 n
   * Preserves convergence invariants: all clients cross-propagating operations reach identical cell stores and merge layouts ($S_A = S_B$) regardless of arrival order.
 
 Verification v0.33.0 (UIUX-044): 232 Python unittest methods pass in 0.350s (4 new tests in test_tabular_ot_engine.py covering vector clock causality, independent cell edit convergence, concurrent collision arbitration, and topology merge conflict purge). 39 Node VM cases pass in test_browser_clock.cjs, and 9 Chromium records verified in references/browser-cycle-238.json. Exit code 0.
+
+## Visual DAG Branch Topology SVG Rendering & Branch Pruning Mechanics (v0.40.0 / UIUX-052)
+`render_dag_svg` and `prune_abandoned_branches` (scripts/branch_dag_topology.py) provide deterministic visual tree rendering and bounded memory management for multi-branch history:
+- Visual DAG Branch Topology SVG:
+  * Generates clean, accessible, zero-dependency SVG diagram representing the complete DAG branch hierarchy.
+  * Topological layout: X-axis represents tree depth while Y-axis uses post-order recursive spatial centering to eliminate branch collisions.
+  * Smooth cubic bezier curves with active path highlight: connects parent nodes to children with distinct visual styling for active lineage.
+  * Integrated into `history_browser.py` standalone HTML preview container with accessible ARIA labeling.
+- Deterministic Branch Pruning Mechanics:
+  * Identifies abandoned branch subtrees unreferenced by the active cursor lineage or explicit preservation sets.
+  * Invariant-driven safety boundary: 'root' node and the entire ancestor path of the active cursor are strictly immutable and protected against pruning.
+  * Bounded memory eviction (`max_retained_nodes`): prunes deepest unreferenced candidate subtrees bottom-up to keep total node count strictly within budget.
+
+Verification v0.40.0 (UIUX-052): 299 Python unittest methods pass in 1.532s (4 new tests in test_branch_dag_topology.py covering SVG XML structure, active cursor styling, root/lineage protection, explicit retention sets, and capacity budget pruning). Exit code 0. Node browser history runner passes 100%.
+
+## Interactive SVG Node Click-to-Checkout & Branch Diff Metrics Badge (v0.41.0 / UIUX-053)
+`compute_node_diff`, enhanced `render_dag_svg`, and browser client integration (scripts/branch_dag_topology.py, scripts/history_browser.js):
+- Interactive SVG Node Click-to-Checkout:
+  * Browser SVG `.node-item` elements are wired with click and keyboard (Enter / Space) listeners in `history_browser.js`.
+  * Clicking any SVG node in `#dag-view` immediately transitions active history cursor (`cursor = id`), updates preview cells and button list, and highlights the active SVG node (`active` class on circle and text) without full page reload.
+  * Exposes programmatic `window.historyPreview.checkout(id)` API for zero-friction branch navigation.
+- Branch Diff Metrics Badge:
+  * `compute_node_diff(history, node_id)` calculates mutations relative to parent: `added`, `deleted`, `modified`, `total_mutations`, and compact formatted `badge_text` (`+N`, `~M`, `-K`).
+  * SVG nodes render a dedicated pill badge overlay (`.diff-badge`) at the top-right of the circle indicating mutations.
+  * Accessible ARIA labels on `.node-item` incorporate mutation counts (e.g. `aria-label="Node b1, ~1 mutations"`).
+
+Verification v0.41.0 (UIUX-053): 302 Python unittest methods pass in 1.667s (covering diff metrics calculation, root zero-diff invariance, add/delete/modify delta counting, and SVG diff badge rendering). Node VM browser unit checks pass 100% (covering SVG click checkout, programmatic checkout API, and active styling sync). Exit code 0.
+
+## DAG Interactive Node Hover Diff Inspector & Arrow Key Spatial Navigation (v0.42.0 / UIUX-054)
+`compute_node_diff_details`, `format_diff_tooltip_text`, floating `#dag-diff-popover`, and 2D spatial navigation (scripts/branch_dag_topology.py, scripts/history_browser.js, scripts/history_browser.py):
+- Detailed Node Diff Computation (`compute_node_diff_details`):
+  * Computes granular per-cell dictionary deltas: `added` (`{key: val}`), `deleted` (`{key: old_val}`), and `modified` (`{key: {'old': v0, 'new': v1}}`) relative to parent revision.
+  * Formats human-readable multi-line summary via `format_diff_tooltip_text` for native SVG `<title>` element.
+  * Embeds serialized JSON delta (`data-diff-json`) and spatial coordinates (`data-cx`, `data-cy`) directly onto `.node-item` SVG groups.
+- Floating Interactive Diff Popover (`#dag-diff-popover`):
+  * High-contrast Dark Obsidian popover (`#0F172A` background, `#F8FAFC` mono text) anchored dynamically beside hovered/focused SVG nodes.
+  * Renders color-coded semantic diff lines: Emerald green (`.diff-item-added` for additions), Amber yellow (`.diff-item-modified` for modifications), and Coral red (`.diff-item-deleted` for deletions).
+  * Automatically handles mouse hover (`mouseenter` / `mouseleave`) and keyboard focus (`focus` / `blur`) with full ARIA live-region compliance (`aria-hidden` toggling).
+- 2D Spatial Arrow-Key Navigation (`findSpatialNeighbor`):
+  * Implements weighted distance metric ($d = \Delta_{	ext{primary}} + 1.5 |\Delta_{	ext{orthogonal}}|$) across nodes in the SVG coordinate plane.
+  * Arrow keys (`ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`) seamlessly shift focus between parents, children, and parallel sibling branches based on physical layout geometry.
+  * Exposes programmatic APIs `window.historyPreview.navigate(direction)` and `window.historyPreview.popoverFor(id)`.
+
+Verification v0.42.0 (UIUX-054): 305 Python unittest methods pass in 1.732s (covering detailed diff calculation, key-level delta extraction, format tooltip strings, spatial attributes, and popover container markup). Node VM browser unit checks pass 100% (covering popover display/hide on hover and focus, directional arrow key spatial navigation, and public navigation API). Exit code 0.
+
+## Visual DAG Breadcrumb Lineage Trail & Viewport Auto-Centering (v0.43.0 / UIUX-055)
+`compute_node_lineage`, dynamic `#dag-breadcrumbs` navigation bar, and smooth auto-centering viewport synchronization (scripts/branch_dag_topology.py, scripts/history_browser.js, scripts/history_browser.py):
+- Deterministic Ancestor Lineage Extraction (`compute_node_lineage`):
+  * Walks parent pointers backwards from target node to 'root' in $O(H)$ time and returns reversed topological lineage array `['root', 'parent', ..., 'cursor']`.
+  * Included in `export_manifest()` payload and exposed via client API `window.historyPreview.lineage(id)`.
+- Interactive Breadcrumb Lineage Trail Bar (`#dag-breadcrumbs`):
+  * Renders a dedicated horizontal breadcrumbs navigation bar directly above `#dag-view`.
+  * Displays clickable interactive pills (`.dag-breadcrumb-item`) for each ancestor node separated by chevron indicators (`>`).
+  * Highlights the current active version with `.active` styling and accessible ARIA attributes.
+  * Clicking any breadcrumb ancestor triggers instant checkout and redraws the graph to that point in history.
+- Dynamic Viewport Auto-Centering on Active Cursor (`autoCenterViewport`):
+  * Computes horizontal center displacement $S_X = \max(0, c_X - W_{	ext{container}} / 2)$ using node SVG metadata `data-cx`.
+  * Automatically invokes smooth scrolling (`scrollTo({ left: targetScrollLeft, behavior: 'smooth' })`) whenever cursor transitions to keep the focused branch centered within user view.
+  * Preserves horizontal alignment during deep keyboard arrow navigations and programmatic checkout.
+  * Exposes client helpers: `window.historyPreview.breadcrumbs()` and `window.historyPreview.viewportScrollLeft()`.
+
+Verification v0.43.0 (UIUX-055): 307 Python unittest methods pass in 1.955s (covering ancestor lineage computation, root boundary paths, manifest export integration, and breadcrumbs HTML container rendering). Node VM browser unit checks pass 100% (covering breadcrumb pill rendering, breadcrumb click-to-checkout, ancestor trail synchronization, and auto-centering scrollLeft calculation). Exit code 0.
+
+## Interactive SVG Mini-Map Radar & Drag Viewport Pan (v0.44.0 / UIUX-056)
+`render_dag_minimap_svg`, corner `#dag-minimap-wrap`, draggable `#minimap-viewport-frame`, and bi-directional viewport pan synchronization (scripts/branch_dag_topology.py, scripts/history_browser.js, scripts/history_browser.py):
+- Proportional Miniature SVG Radar Minimap (`render_dag_minimap_svg`):
+  * Generates a lightweight proportional miniature SVG canvas ($180 \times 90\text{px}$) docked at the bottom-right of the DAG container (`#dag-minimap-wrap`).
+  * Emits scaled branch edges (`.minimap-edge`), node dots (`.minimap-node` with active cursor highlighted in cyan `#38BDF8`), and background radar plate (`.minimap-bg`).
+  * Encodes world topology bounds (`data-world-width`, `data-world-height`) and scaling factors (`data-scale-x`, `data-scale-y`) directly into SVG XML attributes.
+- Interactive Draggable Viewport Bounding Frame (`#minimap-viewport-frame`):
+  * SVG rectangle with semi-transparent cyan fill (`rgba(56, 189, 248, 0.15)`) and grab/grabbing cursor states.
+  * Dynamically matches visible viewport proportion: $\text{width} = \min(W_{\text{map}}, W_{\text{container}} \times \text{scale}_X)$ and $\text{x} = \text{scrollLeft} \times \text{scale}_X$.
+  * Direct mouse drag on the minimap radar updates container `scrollLeft` instantaneously and auto-clamps within bounds.
+  * Scrolling `#dag-view` automatically updates the minimap frame position via event listener.
+- Dynamic Zoom & Viewport Percentage Indicator (`#dag-minimap-status`):
+  * Header label computes visible coverage ratio $\min(100, \text{round}(W_{\text{container}} / W_{\text{world}} \times 100\%))$.
+  * Client API exposes: `window.historyPreview.minimapFrameBounds()` and `window.historyPreview.minimapPan(scrollLeft)`.
+
+Verification v0.44.0 (UIUX-056): 309 Python unittest methods pass in 1.751s (covering minimap SVG generation, proportional scale attributes, viewport frame rect structure, active node dot styling, and manifest export integration). Node VM browser unit checks pass 100% (covering initial minimap frame bounds, drag pan synchronization, scrollLeft tracking, and viewport coverage percentage). Exit code 0.
+
+## Minimap Collapsible Toggle & Keyboard Quick-Jump Navigation (v0.45.0 / UIUX-057)
+`#dag-minimap-toggle`, collapsible `.dag-minimap-container.collapsed`, Alt+Number numeric keyboard shortcuts, and `breadcrumbJump` (scripts/history_browser.js, scripts/history_browser.py):
+- Minimap Collapsible Toggle (`#dag-minimap-toggle`):
+  * Header button toggle allowing users to minimize/expand the radar canvas on small viewports without losing spatial position.
+  * Toggles `.collapsed` class on `#dag-minimap-wrap`, hiding the SVG radar canvas (`display:none`) while preserving the header status bar and toggle trigger.
+  * Updates accessible attributes: `aria-expanded="false"` / `"true"` and text label ("Buka" / "Tutup").
+  * Exposes programmatic APIs: `window.historyPreview.toggleMinimap(force)` and `window.historyPreview.isMinimapCollapsed()`.
+- Keyboard Quick-Jump Ancestor Shortcuts (`Alt + Digit1..Digit9`):
+  * Global keydown event listener binds `Alt + Digit1` through `Alt + Digit9` to directly checkout the $N$-th ancestor in the current lineage path.
+  * `Alt+1` jumps instantly to `root` (index 0), `Alt+2` to the first child along the current branch lineage, and so forth.
+  * Exposes programmatic API `window.historyPreview.breadcrumbJump(indexOrDigit)`.
+  * Safe validation prevents out-of-bounds jumps, preserving current focus without error.
+
+Verification v0.45.0 (UIUX-057): 310 Python unittest methods pass in 1.846s (covering minimap toggle button presence, collapsed class styles, aria-expanded attributes, and template rendering). Node VM browser unit checks pass 100% (covering toggle button click, programmatic collapse/expand, aria state sync, breadcrumb jump to ancestors, out-of-bounds guard, and Alt+Digit keyboard shortcuts). Exit code 0.
+
+## Breadcrumb Visual Shortcut Badges & Minimap LocalStorage Persistence (v0.46.0 / UIUX-058)
+`dag-breadcrumb-badge`, `localStorage` key `'dag_minimap_collapsed'`, and instant pre-load state hydration (scripts/history_browser.js, scripts/history_browser.py):
+- Visual Numeric Shortcut Badges (`.dag-breadcrumb-badge`):
+  * Injects compact monospace badges (`[1]`, `[2]`, ..., `[9]`) into ancestor breadcrumb buttons for the first 9 lineage nodes.
+  * Provides immediate discoverability for `Alt+1` .. `Alt+9` quick-jump keyboard shortcuts without requiring hidden menu discovery.
+  * Badges dynamically adapt styling on active nodes (`.dag-breadcrumb-item.active .dag-breadcrumb-badge`), maintaining WCAG contrast and unified visual hierarchy.
+  * Public API exposes: `window.historyPreview.breadcrumbBadges()` for automated testing and status auditing.
+- Minimap LocalStorage Persistence:
+  * Automatically writes collapsed/expanded boolean state to browser `localStorage` under key `'dag_minimap_collapsed'` on user toggle.
+  * Hydrates saved state upon initial page load (`setupMinimapToggle()`), restoring collapsed styling and ARIA attributes seamlessly prior to initial user interaction.
+  * Resilient fallback gracefully degrades when `window.localStorage` is unavailable or restricted.
+
+Verification v0.46.0 (UIUX-058): 311 Python unittest methods pass in 1.814s (covering breadcrumb badge CSS rules, minimap toggle markup, and manifest rendering). Node VM browser unit checks pass 100% (covering visual shortcut badge rendering `['[1]', '[2]', '[3]']`, breadcrumb items structure, localStorage sync on toggle, and pre-load storage hydration). Exit code 0.
+
+## Minimap Scale Preset Multipliers & Breadcrumb Lineage Clipboard Export (v0.47.0 / UIUX-059)
+`#dag-minimap-scale-controls`, `dag-breadcrumb-copy-btn`, multiplier presets (1x, 1.5x, 2x), and clipboard lineage serialization (scripts/history_browser.js, scripts/history_browser.py):
+- Minimap Zoom Ratio Scale Presets (`#dag-minimap-scale-controls`):
+  * Segmented button group (`1x`, `1.5x`, `2x`) allowing users to scale the minimap canvas ($180 \times 90\text{px}$, $270 \times 135\text{px}$, $360 \times 180\text{px}$) for high-density, sprawling DAG topologies with hundreds of nodes.
+  * Dynamically resizes the miniature SVG canvas while maintaining exact world coordinate proportions, boundary clamping, and drag-pan synchronization.
+  * Persists selected multiplier in `localStorage` under key `'dag_minimap_scale'` with seamless rehydration across page reloads.
+  * Programmatic APIs: `window.historyPreview.minimapScale()` and `window.historyPreview.setMinimapScale(multiplier)`.
+- One-Click Breadcrumb Lineage Clipboard Export (`.dag-breadcrumb-copy-btn`):
+  * Dedicated "Salin Rute" button embedded in the breadcrumbs bar (`#dag-breadcrumbs`) that formats the active branch ancestry path into human-readable lineage syntax (e.g., `root > alpha > alpha_child`).
+  * Interacts with `navigator.clipboard.writeText` with fallback to `document.execCommand('copy')`.
+  * Provides transient tactile visual feedback (`Tersalin!` green badge) with automated reset after 1.5s.
+  * Programmatic API: `window.historyPreview.copyLineage()`.
+
+Verification v0.47.0 (UIUX-059): 312 Python unittest methods pass in 1.685s (covering minimap scale controls markup, copy button presence, CSS rules, and manifest rendering). Node VM browser unit checks pass 100% (covering lineage clipboard export formatting, visual feedback, 1x/1.5x/2x scale multiplier switching, SVG dimensions recalculation, drag pan tracking, and localStorage scale persistence). Exit code 0.
+
+## Interactive Node Search & Filter Omnibar on Visual DAG Viewer (v0.48.0 / UIUX-060)
+`#dag-search-bar`, `#dag-search-input`, `.node-item.search-match`, `.node-item.search-dim`, match counter, and camera auto-focus (scripts/history_browser.js, scripts/history_browser.py):
+- Interactive Search & Filter Omnibar (`#dag-search-bar`):
+  * Dedicated search input bar mounted directly above the SVG DAG container with live match badge (`#dag-search-count`) and clear button (`#dag-search-clear`).
+  * Instant sub-millisecond filtering across node IDs and granular diff JSON metadata (`diff.summary`, `diff.added`, `diff.modified`, `diff.deleted`).
+  * Dynamic visual state discrimination: matches receive prominent amber glow halos (`.search-match` with stroke `#f59e0b` and drop-shadow) while non-matching nodes are dimmed smoothly (`.search-dim` with opacity `0.25`).
+  * Camera auto-centering smoothly pans the SVG viewport to the first matched node upon query change.
+  * Keyboard accessibility: pressing `Escape` clears active search and restores full graph visibility immediately.
+  * Public APIs: `window.historyPreview.search(query)` and `window.historyPreview.searchQuery()`.
+
+Verification v0.48.0 (UIUX-060): 313 Python unittest methods pass in 1.424s (covering search omnibar controls markup, input presence, count badge, clear button, CSS highlight/dim rules, and manifest rendering). Node VM browser unit checks pass 100% (covering search query initialization, ID filtering, diff metadata mutation matching, DOM class list updates, clear trigger, Escape key dismissal, and public API search state). Exit code 0.

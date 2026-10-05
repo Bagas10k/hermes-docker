@@ -1,6 +1,12 @@
 ---
 name: typography-ux-copy
-description: Professional UI typography and UX copywriting intelligence for product interfaces. Use when designing, reviewing, or rebuilding web, mobile, dashboard, SaaS, ecommerce, HMI, onboarding, forms, settings, landing pages, or design systems that need type hierarchy, font sizing, line-height, readable text layout, responsive typography, labels, buttons, helper text, empty states, errors, notifications, onboarding copy, descriptions, value propositions, offers, CTAs, voice and tone, or copy adapted from a screenshot/reference. Supports Bahasa Indonesia and English, accessibility, localization, CSS/Tailwind/design-token implementation, and expert-level critique.
+description: Use when crafting UI typography, font scales & UX copy.
+version: 1.0.0
+author: Hermes Agent
+metadata:
+  hermes:
+    tags: [typography, font, copy, copywriting, ux-copy, hierarchy, text, ui, ux, tipografi]
+    category: creative
 ---
 
 # Typography & UX Copy Intelligence

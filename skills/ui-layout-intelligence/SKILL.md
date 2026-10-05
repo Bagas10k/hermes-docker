@@ -1,6 +1,12 @@
 ---
 name: ui-layout-intelligence
-description: Teach an AI agent to reason about UI/UX spatial layout and spacing systems, including margin, padding, gap, grids, containers, alignment, whitespace, density, responsive behavior, touch targets, visual rhythm, and reference-based spacing adaptation. Use when creating, reviewing, redesigning, or implementing interfaces from prompts, screenshots, mockups, design references, CSS, Tailwind, design tokens, dashboards, mobile apps, websites, HMI panels, or component systems where layout quality and spacing consistency matter.
+description: Use when designing UI spacing, layouts, grids & rhythm.
+version: 1.0.0
+author: Hermes Agent
+metadata:
+  hermes:
+    tags: [layout, spacing, grid, rhythm, padding, gap, margin, ui, ux, tata-letak]
+    category: creative
 ---
 
 # UI Layout Intelligence

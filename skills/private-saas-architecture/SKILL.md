@@ -396,3 +396,24 @@ When developing these systems, adhere to the "Bagus vs Jelek" integrity standard
     * *P6 (Semantic Memories)*: Extracted user facts and preferences.
     * *P7 (RAG & Tools)*: Selective retrieved documents or tool results.
   - **API & Client Drawer Sync**: Expose `/api/studio/conversations` (list, create, detail, delete) and wire client history slide-over drawers directly to backend SQLite state, ensuring multi-device synchronization and zero cross-tenant contamination.
+
+## 7. High-Compliance B2B / EdTech SaaS & Autonomous Blueprint Execution
+- **Autonomous Blueprint Looping Invariant**:
+  - When given an end-to-end blueprint or PRD with an instruction to execute autonomously in loops ("eksekusi looping, ngga perlu bertanya-tanya"), decompose the blueprint into ordered functional layers (DB schema -> Backend endpoints -> Self-verification -> Frontend views -> Administrative telemetry).
+  - Execute each layer end-to-end and test via `curl` immediately. Never halt execution for cosmetic approval or trivial decisions when the specification already dictates the architecture.
+- **Zero-PII Compliance Invariant (Student & Sensitive Data Protection)**:
+  - **Rule**: When engineering SaaS platforms that process student assessments, gradebooks, or classroom rosters under privacy regulations (e.g. UU PDP No. 27/2022 Tier C), NEVER store student Personally Identifiable Information (real names, NIK, NISN, phone, address). (See `references/edtech-compliance-saas.md` for complete schema and implementation patterns).
+  - **Mechanism**: Storing raw PII on third-party AI or multi-tenant SaaS databases violates data localization and privacy mandates, exposing institutions to severe regulatory liability.
+  - **Action**: Anonymize rosters to deterministic opaque codes (`std_cls_viii_a_01`) and neutral labels (`Siswa #01`), isolating learning profiles (e.g. visual/kinesthetic indicators) completely from real-world identities.
+- **Human-in-the-Loop AI Grading & Immutable Audit Trail**:
+  - **Rule**: In compliance-bound SaaS (education, healthcare, legal), AI must NEVER commit authoritative final decisions, official student grades, or disciplinary marks autonomously.
+  - **Mechanism**: Hallucination risks and regulatory statutes require human legal accountability for consequential evaluations.
+  - **Action**: Return AI evaluations strictly as `suggested_score` with `evidence_citation` (referencing specific rubric criteria). Provide explicit "Setujui Nilai" controls for the teacher/evaluator. Every mutation, evaluation, export, or deletion must be written synchronously to an append-only `audit_logs` / `audit_events` table recording user ID, action, resource type/ID, and timestamp.
+- **Scope-Aware Contextual Copilot & Interactive Action Bridges**:
+  - **Rule**: In multi-entity workspaces (e.g. Class VIII-A, Project X), embed an interactive floating/docked copilot that carries the active entity scope into every prompt.
+  - **Mechanism**: Ambiguous user commands (e.g. 'buat kuis mendadak', 'cek siswa remedial') fail or hallucinate if disconnected from active entity metrics.
+  - **Action**: Inject active context (`class_id`, subject, learning gaps) into copilot requests. Structure copilot responses to return actionable bridges (`suggested_actions` with action type and target view) that trigger frontend workflows (e.g., opening Question Bank or switching to Content Studio) in 1 click.
+- **Native Binary Office Document Export (`.docx`) in Node/Express**:
+  - **Rule**: When generating official, print-ready administrative documents (e.g., RPP/LKPD for school district compliance), export genuine binary `.docx` buffers instead of converting raw HTML strings.
+  - **Mechanism**: Word processors distort pasted HTML or print CSS, breaking official government letterheads, signature blocks, and tabular assessment rubrics.
+  - **Action**: Use the `docx` library (`Document`, `Packer`, `Paragraph`, `Table`) to construct formal documents. Stream the buffer directly to the client with `Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document` and `Content-Disposition: attachment; filename="..."`.
