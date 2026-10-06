@@ -689,6 +689,21 @@ For chat-centric companion interfaces, also read [conversational companion UI](r
      - Over 90% of teacher-student-parent communication in Indonesia occurs in WhatsApp groups.
      - Provide an instant `[📲 Salin WhatsApp]` endpoint and clipboard trigger that converts structured educational materials into clean, emoji-accented WhatsApp markdown (`*bold*`, section dividers `━━━━━━━━`, and structured action lists) ready for instant mobile pasting.
 
+### 54. Safe Bulk Cleanup of Throwaway/Prototype Workspaces & Reverse Symlink Audit
+- **Problem**: When cleaning up accumulated exploratory/prototype repositories or static mockup workspaces to free disk space, executing bulk `rm -rf` indiscriminately breaks production daemons or core apps. This happens because previous setup scripts often created chained `node_modules` symlinks across projects (e.g. `core-app/node_modules -> prototype-A/node_modules -> prototype-B/node_modules`), silently destroying dependencies of retained services.
+- **Rules & Protocol**:
+  1. **Pre-Deletion Reverse Symlink Trace**: Before deleting any workspace directory, run an exhaustive audit of all incoming symlinks across the entire environment:
+     `find /home/ubuntu -maxdepth 3 -type l -exec ls -l {} +`
+     Identify every symlink in retained/production projects that resolves into candidate deletion targets.
+  2. **Physical Dependency Adoption (Decoupling Before Deletion)**:
+     - Remove the symlink in the retained project (`rm <core_app>/node_modules`).
+     - Physically move the real directory into the retained project (`mv <target>/node_modules <core_app>/node_modules`).
+     - Verify the retained project is 100% self-contained (`ls -ld <core_app>/node_modules`).
+  3. **Multi-Layer Route & Service Verification**:
+     - Check reverse proxies and server routers (`grep -rn "dist-public" ...`) to ensure no active PM2 or Express service crashes on missing paths.
+     - Execute deletion on confirmed throwaway directories only after dependencies are secured.
+     - Post-cleanup verification: run `pm2 status` and issue HTTP status probes (`curl -s -o /dev/null -w "%{http_code}\n" ...`) on all retained application routes.
+
 
 
 

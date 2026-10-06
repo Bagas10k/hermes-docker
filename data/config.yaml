@@ -143,6 +143,7 @@ approvals:
 plugins:
   disabled: []
   enabled:
+    - flash-review
     - ponytail
     - rtk-rewrite
     - skill-retriever
@@ -150,6 +151,8 @@ plugins:
     rtk-rewrite:
       allow_tool_override: false
     skill-retriever:
+      allow_tool_override: false
+    flash-review:
       allow_tool_override: false
 hooks:
   outbound:

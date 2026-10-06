@@ -21,8 +21,10 @@ Vault pengetahuan utama berlokasi di:
 Struktur berkas acuan:
 - `SYSTEM/KNOWLEDGE_ENGINE.md` : Protokol evaluasi empiris & status bukti
 - `SYSTEM/AGOTIMA_OPERASIONAL_HERMES.md` : 8 Prinsip Atomik Memori & Workflow UI/UX Reference
-- `KNOWLEDGE/PELAJARAN-UI-UX-NEOBRUTALISME-DAN-AGOTIMA.md` : Pelajaran Teruji Sasis Solid, Zero-Emoji, & Neo-Brutalism
 - `KNOWLEDGE/INDEX.md` : Indeks seluruh pelajaran teruji (TESTED)
+- `BUKU_CATATAN/102-kristalisasi-canon-design-md-frame023-enterprise-dan-pembersihan-technical-debt-proyek.md` : Pelajaran Teruji Pembersihan Technical Debt Proyek & Kanon DESIGN.md Frame 023
+- `02-Rekayasa-Frontend/Arsitektur-Standar-Design-MD-dan-UX-Canon-Frame-023-Enterprise.md` : Standar Baku Token Mesin, Sasis Komponen, dan 6 Hukum Interaksi UX
+- `KNOWLEDGE/PELAJARAN-UI-UX-NEOBRUTALISME-DAN-AGOTIMA.md` : Pelajaran Teruji Sasis Solid, Zero-Emoji, & Neo-Brutalism
 - `references/anti-slop-endorsement-and-catalog-doctrine.md` : Doktrin Anti-Slop Endorsements, Kanvas Asli Edge-to-Edge, Integrasi Katalog Portofolio, Login Mandiri Publish-Ready, Dual Audio, & Pendamping AI Notch HUD (1 Tema Terpadu)
 - `KNOWLEDGE/REALTIME-COCKPIT-OBSERVABILITY.md` : Standar Terminal TUI 1-Layar, DAG Centerpiece, & Transparansi Sub-100ms
 - `references/high-density-dev-hud-and-pipeline-integrity.md` : Standar HUD Pengembang Ultra-Efisien, Flat 2D Zero-Blur, & Integritas Loop Kognitif Multi-Agen
