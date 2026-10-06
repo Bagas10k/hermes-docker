@@ -75,6 +75,12 @@ pm2 jlist | jq '.[] | {name: .name, status: .pm2_env.status, mem_mb: (.monit.mem
    pm2 save
    ```
 
+## 9router runtime and combo checks
+
+- Resolve the actual Node executable before writing a unit: `/usr/bin/node` can be obsolete even when interactive `node` is current. Check both versions; use the verified absolute executable path. Avoid competing CLI and systemd listeners on port 20128; stop only the identified old process before starting the unit.
+- Probe `/v1/models`, not just the dashboard. In 9router 0.5.95, object-valued combo models can raise `b.includes is not a function`; normalize model objects to routedModel/fullModel/provider+model in the shared combo reader, preserving stored configuration. The installed regression check is `app/check-combo-models.cjs`; compiled bundle patches can be overwritten by upgrades and must be rechecked afterwards.
+- Hermes only follows combo changes when its selected model is the exact combo name, not a direct provider/model ID. Set the default with `hermes config set model.default NAME`, verify via a fresh one-shot plus router usage records, and distinguish this from an already-running session's model selection. Do not modify other profiles or cron snapshots implicitly.
+
 ## Pitfalls
 
 - **Mass Restart Starvation**: Never run `pm2 restart all` blindly on production servers. Restart services individually to prevent memory spikes and connection dropouts.

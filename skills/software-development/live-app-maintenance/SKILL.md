@@ -665,6 +665,30 @@ For chat-centric companion interfaces, also read [conversational companion UI](r
      - **Safety Gates**: Multi-phase confirmation on high-disruption actions (e.g. plenary meetings, bulk re-routing), deterministic sub-25ms abort switches.
      - **Spatial Observability & Vector Artifacts**: Waypoint trajectory breadcrumbs, SVG blueprint generation vs raster screenshots, and focused agent ROI cropping.
 
+### 53. EdTech & Institutional School Workflows (Audit-Ready Docs, PMM Alignment & Field Realities)
+- **Problem**: EdTech apps for teachers frequently fail user adoption because they ignore the non-negotiable bureaucratic and physical constraints of school environments: documents without principal signatures are rejected by school supervisors/auditors, long documents exceed school paper/photocopy quotas, lesson plans ignore official government teacher performance appraisal (PMM) rubrics, and teachers cannot easily distribute tasks to classroom WhatsApp groups.
+- **Rules & Implementation Protocol**:
+  1. **Dual-Column Official Signature Table in Word DOCX Exports**:
+     - Teachers live in Microsoft Word (`.docx`). Never export bare educational text without official administrative sign-offs.
+     - Store school identity: Teacher NIP, Principal Name & NIP, School Name, and Regency/City.
+     - Append an authentic 2-column signature block at the document footer (`Mengetahui, Kepala Sekolah ... | Guru Mata Pelajaran ...`) with standard zero-border tables in `docx`. Without this, supervisors flag lesson plans (RPP/Modul Ajar) as non-compliant.
+  2. **Platform Merdeka Mengajar (PMM) Performance Observation Alignment**:
+     - Map lesson plans directly to the 8 official government teacher performance indicators: *Aktivitas Interaktif*, *Instruksi yang Adaptif*, *Umpan Balik Konstruktif*, *Keteraturan Suasana Kelas*, *Penerapan Disiplin Positif*, *Ekspektasi pada Peserta Didik*, *Perhatian dan Kepedulian*, and *Instruksi Pembelajaran*.
+     - Explicitly inject observable teacher actions matching the selected indicator into the core activities (Kegiatan Inti) of the lesson plan, and print a dedicated `TARGET OBSERVASI KINERJA PMM (KEPALA SEKOLAH)` callout in exports so supervisors immediately see alignment with their inspection rubrics.
+  3. **Emergency Quick-Prep Mode ("15 Minutes Before the Bell Rings")**:
+     - Provide a prominent 1-click quick-generation pipeline for urgent pre-class preparation (`POST /api/.../quick-prep`). Given a single topic and class, it immediately synthesizes and returns download links for the 3 core classroom assets: Modul Ajar RPP, 3-Tier Differentiated Worksheet (LKPD), and 5 HOTS Questions in under 2 seconds.
+  4. **Human-in-the-Loop Official Verification Gate**:
+     - Never label AI output as final without explicit teacher endorsement.
+     - Display a visible status badge: `🟡 Status Draf: Rekomendasi AI (Menunggu Verifikasi & Pengesahan Guru)` paired with a 1-click verification action (`[✓ Sahkan Dokumen Ini Secara Resmi]`).
+     - Once signed off, stamp the verification timestamp and teacher credentials onto the live preview and exported documents to protect teachers professionally against scrutiny.
+  5. **Photocopy-Ready Eco-Print Layout (1–2 Pages A4 Dense 2-Column)**:
+     - School photocopy quotas and paper rationing are hard physical constraints. Standard multi-page printouts waste paper and cost teachers out of pocket.
+     - Implement a dedicated `@media print` layout: A4 portrait, 10–12mm margins, 10pt compact serif typography, 2-column content flow, compact student identity header box (*Nama, Kelas, No. Absen, Nilai/Paraf*), and 0 background color fills, ensuring student worksheets fit cleanly on 1 sheet (or 2 sides) without trailing onto an extra page.
+     - See detailed domain notes in [indonesian-edtech-standards](references/indonesian-edtech-standards.md).
+  6. **WhatsApp Group (WAG) Auto-Formatter**:
+     - Over 90% of teacher-student-parent communication in Indonesia occurs in WhatsApp groups.
+     - Provide an instant `[📲 Salin WhatsApp]` endpoint and clipboard trigger that converts structured educational materials into clean, emoji-accented WhatsApp markdown (`*bold*`, section dividers `━━━━━━━━`, and structured action lists) ready for instant mobile pasting.
+
 
 
 

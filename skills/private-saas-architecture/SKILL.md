@@ -413,7 +413,94 @@ When developing these systems, adhere to the "Bagus vs Jelek" integrity standard
   - **Rule**: In multi-entity workspaces (e.g. Class VIII-A, Project X), embed an interactive floating/docked copilot that carries the active entity scope into every prompt.
   - **Mechanism**: Ambiguous user commands (e.g. 'buat kuis mendadak', 'cek siswa remedial') fail or hallucinate if disconnected from active entity metrics.
   - **Action**: Inject active context (`class_id`, subject, learning gaps) into copilot requests. Structure copilot responses to return actionable bridges (`suggested_actions` with action type and target view) that trigger frontend workflows (e.g., opening Question Bank or switching to Content Studio) in 1 click.
+- **Multi-Output Package Generator (Bundled Teaching Kit Pattern)**:
+  - **Rule**: When teachers or content creators request curriculum materials, provide a 1-click bundled generation that concurrently synthesizes all 4 interconnected artifacts: Lesson Plan (RPP 2 JP), Investigation Worksheet (LKPD), Bloom HOTS Question Set & Rubric (C1-C6), and Slide Presentation Deck (5 structured frames: Hook, Concept Map, Case Study, Misconception, Exit Ticket).
+  - **Mechanism**: Generating assets individually forces redundant parameter entries and leads to topic drift across teaching documents.
+  - **Action**: Execute atomic generation under one transaction, save each item into `artifacts`, and track aggregated token consumption in `background_jobs`.
+- **Narrative Competency Report Cards & Zero-Negative-Labeling Invariant (PPA 2026)**:
+  - **Rule**: When synthesizing narrative report cards from student assessment logs under Kurikulum Merdeka (PPA 2026), strictly enforce Zero-Negative-Labeling.
+  - **Mechanism**: Evaluative deficit labels (e.g. 'anak lambat belajar', 'kurang fokus') stigmatize students, violate pedagogical ethics, and invite regulatory censure.
+  - **Action**: State factual achievements, provide specific constructive growth recommendations, attach portfolio evidence citations, and require explicit teacher review (`teacher_reviewed = 1`) before final export.
 - **Native Binary Office Document Export (`.docx`) in Node/Express**:
   - **Rule**: When generating official, print-ready administrative documents (e.g., RPP/LKPD for school district compliance), export genuine binary `.docx` buffers instead of converting raw HTML strings.
   - **Mechanism**: Word processors distort pasted HTML or print CSS, breaking official government letterheads, signature blocks, and tabular assessment rubrics.
   - **Action**: Use the `docx` library (`Document`, `Packer`, `Paragraph`, `Table`) to construct formal documents. Stream the buffer directly to the client with `Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document` and `Content-Disposition: attachment; filename="..."`.
+- **Client-Facing Tenant Identity & Anti-Internal Jargon Invariant (Dasbor Klien)**:
+  - **Rule**: When engineering a client-facing or tenant-facing SaaS dashboard (dasbor untuk klien), NEVER hardcode placeholder institution/client names (e.g., "SMP Negeri 01 Unggulan") or developer pilot/system capacity jargon (e.g., "1 Guru (Pilot Tahap 1) / 1 / 1.000 Guru", "Max 1.000 Teachers • SQLite WAL Mode") in titles, topbars, hero banners, or metric cards.
+  - **Mechanism**: The client expects the workspace to represent THEIR institution or team. Displaying another institution's name or developer-centric testing stats ("Pilot Stage 1", backend storage mode) destroys the commercial credibility of the product and makes it look like an unfinished internal staging mockup.
+  - **Action**:
+    1. *Universal, Professional Titling*: Name panels by their functional capability (e.g., "Pusat Kendali Pembelajaran & Kurikulum", "Panel Kurikulum & Rombel") rather than hardcoded client names.
+    2. *Client-Relevant Operational Metrics*: Replace developer capacity counters with operational client metrics (e.g., "Rombongan Belajar (Rombel): 3 Rombel Terkelola / 96 Murid Terdaftar", "Alokasi Kuota Token AI", "Total Dokumen Ajar").
+    3. *Self-Serve Identity Customization*: Provide a dynamic profile modal/endpoint (`POST /api/guru/admin/school-profile`) so clients can update their institution name and instructor credentials on the fly, immediately synchronizing to topbars, sidebars, and official exported document letterheads (kop dinas).
+    4. *Clean Topbar & Navigation*: Keep topbar pills focused on operational status (e.g., "🏫 Sekolah Mitra Terdaftar", "Kurikulum Merdeka 2026") rather than database storage modes or tenant capacity ceilings.
+- **Automated Multi-Format Document Ingestion for RAG Grounding (`.pdf`, `.docx`, `.txt`)**:
+  - **Rule**: When allowing clients or teachers to provide reference materials for strict AI RAG grounding, accept direct `.pdf` and `.docx` file uploads in addition to manual text.
+  - **Mechanism**: Expecting non-technical users to manually copy-paste multi-page textbook chapters or syllabus documents results in text truncation, missing tables, and resistance to grounding features.
+  - **Action**: Accept file uploads via base64 JSON payload or multipart (`POST /api/.../sources/upload`), extract raw text server-side using `pdf-parse` (for PDF) and `mammoth` (for DOCX), normalize whitespace, partition into semantic chunks (~500 characters), and record in `source_documents` with full audit logging.
+- **Headless Chromium Server-Side Official PDF Generation (Puppeteer A4)**:
+  - **Rule**: Provide a direct 1-click server-side `.pdf` download endpoint (`GET /api/.../export/pdf`) rather than relying exclusively on browser `window.print()` (Ctrl+P).
+  - **Mechanism**: Mobile browsers and in-app webviews (Telegram, WhatsApp) do not support desktop print dialogs reliably, often dropping print CSS backgrounds, headers, and page breaks.
+  - **Action**: Launch headless Chromium via Puppeteer (`--no-sandbox`, `--disable-setuid-sandbox`, `--disable-dev-shm-usage`), inject an official A4 document template with institutional headers and metadata, render `@page { size: A4; margin: 20mm 15mm; }`, and stream the binary buffer with `Content-Type: application/pdf`.
+- **The "Dead-End Dashboard Artifact" Trap & Context-Reuse Action Bridges**:
+  - **Rule**: Never render recent project artifacts, lesson plans, or generated outputs on dashboard overviews as static text with mere status badges. Always provide direct contextual action bridges (e.g., "Buka di Studio", "Buat Kuis dari Materi Ini", and instant DOCX/PDF export).
+  - **Mechanism**: Showing generated artifacts without actionable next steps breaks the core pedagogical product loop (`PLAN → CREATE → TEACH → ASSESS`), forcing users to re-enter parameters manually from scratch.
+  - **Action**: Bind 1-click action triggers on each artifact card that pre-fill subsequent creation prompts, inherit the active class/topic scope, and navigate to the target workspace smoothly (see Section 11 in `references/edtech-compliance-saas.md`).
+- **Differentiated Grouping & 4-Scale Performance Rubrics (Permendikdasmen No. 11/2025)**:
+  - **Rule**: Support automated student grouping from verified gradebooks into Heterogeneous (serpentine peer-tutoring) and Homogeneous (readiness tiers) with targeted scaffolding strategies, generate 4-scale analytic rubrics with score conversion formulas, and accept bulk Non-PII CSV roster ingestion (see Sections 13–15 in `references/edtech-compliance-saas.md`).
+- **Class Mastery Heatmap & Remedial Action Bridges**:
+  - **Rule**: Track and visualize real-time mastery across specific learning objectives (Tujuan Pembelajaran / TP) per cohort (`GET /api/.../mastery-heatmap`). Provide 1-click action triggers on lagging indicators to generate targeted remedial modules directly in Content Studio.
+  - **Mechanism**: Showing aggregate scores without indicator-level breakdown obscures which specific competency needs intervention, forcing teachers to manually diagnose gaps.
+- **Formative Feedback Co-Authoring & Class Pedagogical Memory**:
+  - **Rule**: AI assessment evaluation must draft actionable qualitative formative feedback (`formative_feedback`) alongside quantitative scores, and classes must retain persistent pedagogical memories (`classes.class_memory`) detailing cohort learning traits, pacing, and retention gaps (see Sections 16–17 in `references/edtech-compliance-saas.md`).
+  - **Mechanism**: Numerical marks alone provide zero diagnostic benefit to learners under Kurikulum Merdeka 2026. Storing class pedagogical memory prevents the AI from resetting to generic recommendations on subsequent instructional planning cycles.
+- **Task-Oriented over Feature-Oriented Dashboard Paradigm**:
+  - **Rule**: Never construct an education/client dashboard as a cluttered feature-dump. Anchor the workspace homepage around a single operational question: *"Hari ini mau mengerjakan apa, [Nama]?"* with 5 primary task-action cards (Persiapkan Mengajar, Buat Asesmen, Periksa Hasil Siswa, Buat Remedial, Tanya Copilot).
+  - **Mechanism**: Showing dozens of disparate tools simultaneously causes choice overload and disorientation for new users. Structuring around primary workflows guides the teacher's natural daily mindset.
+  - **Action**: Place the 5 task cards at the top focal point, followed immediately by an AI command input. Prioritize urgent action items ("Yang Perlu Diselesaikan Guru Pekan Ini": students needing remedial, unconfirmed formative submissions, sessions missing lesson plans) and the next class schedule over passive, abstract metric cards.
+- **AI Copilot as Central Orchestrator (Single-Command Multi-Feature Synthesis)**:
+  - **Rule**: The AI Copilot must act as the primary operational engine of the platform, not an ancillary corner chat bubble. Enable direct execution of multi-step feature workflows from a single natural command.
+  - **Mechanism**: Requiring users to navigate separate sub-menus and manually re-enter parameters to build a full teaching kit introduces friction and limits AI adoption.
+  - **Action**: Implement command intent detection (e.g. "Buat persiapan mengajar [topik] [kelas]"). Copilot automatically parses topic/cohort and returns a structured multi-output proposal (RPP Merdeka 2026, LKPD 3 Tingkat, 5 Soal HOTS, Slide Tayang, Rubrik 4-Skala) with a 1-click execution bridge (`execute_package_now`) that synthesizes the entire bundle atomically.
+- **Zero Developer Jargon in Client Applications (Native Educator Language)**:
+  - **Rule**: Strictly eliminate developer-facing engineering terminology from client UI copy, tool labels, and system status badges.
+  - **Mechanism**: Exposing technical AI/backend abstractions creates cognitive friction and makes the product feel like a raw software prototype rather than an intuitive, professional teaching tool.
+  - **Action**: Replace developer terms with educator-friendly equivalents:
+    * *RAG Context* -> **Sumber Materi**
+    * *Strict Grounding* -> **Gunakan hanya materi saya (Anti-Halusinasi)**
+    * *Suggested Grading Engine* -> **Bantu Periksa Jawaban Siswa**
+    * *Audit Trail & Telemetry* -> **Riwayat Aktivitas & Keamanan Data Siswa**
+    * *Token Quota Meters* -> Tangible client efficiency metrics: **Dokumen Siap Cetak Dihasilkan** and **Estimasi Jam Kerja Dihemat**.
+- **Strict Decoupling of Marketing Landing Page & Application Workspace**:
+  - **Rule**: When delivering commercial or multi-tenant SaaS products, completely separate the public marketing landing page (`index.html`) from the application workspace (`app.html` or `/app`).
+  - **Mechanism**: Directing first-time visitors straight into a complex workspace causes immediate drop-off because the value proposition and workflow were never explained.
+  - **Action**: The landing page must lead with a clear, benefit-driven headline (*"Satu Copilot untuk Seluruh Pekerjaan Guru"*), outline the 5-step workflow (Rencana -> Mengajar -> Asesmen -> Analisis -> Remedial), showcase concrete time savings and regulatory compliance, and provide prominent 1-click CTAs (*Coba Demo Langsung*, *Masuk Ruang Kerja*), devoid of technical jargon.
+- **Mobile Ergonomics for Daily Educator Workflows (Thumb-Zone & 5-Tab Dock)**:
+  - **Rule**: Mobile must not be a mere scaled-down desktop with squeezed sidebars. Design mobile interfaces specifically for rapid daily educator actions.
+  - **Mechanism**: Shrinking multi-column desktop layouts forces micro-scrolling, causes persistent floating buttons to overlap cards, and makes action buttons impossible to tap reliably with one hand.
+  - **Action**: Enforce a dedicated 5-tab bottom navigation dock (*Beranda*, *Kelas*, *Copilot*, *Dokumen*, *Profil*) anchored at the bottom edge (`natural thumb zone`). Suppress persistent floating desktop copilot bubbles on mobile viewports (`<= 768px`) to prevent visual collision, provide >=90px bottom clearance, and prioritize the immediate next teaching schedule and urgent tasks on the mobile home screen.
+- **First-Time User Guided Onboarding Wizard**:
+  - **Rule**: Greet new users with a lightweight, modal onboarding wizard before presenting the full workspace.
+  - **Action**: Prompt for Primary Subject, Grade/Cohort level, Curriculum Standard, and Immediate Weekly Need (Lesson Prep, Exam Creation, Remedial, or Grading). Persist the selection to local storage and user profile, automatically scoping subsequent content studio prompts and dashboard filters to the educator's specific domain.
+- **Closed Pedagogical Remedial Feedback Loop**:
+  - **Rule**: Assessment analytics must directly trigger remediation workflows without manual intervention.
+  - **Action**: In the learning gap / mastery view, highlight the single lowest-performing objective across the cohort and present 3 direct 1-click action buttons: *✦ Buat Modul Remedial* (targeted scaffolding for at-risk students), *✦ Buat Pengayaan* (advanced inquiry for master students), and *✦ Penjelasan Alternatif* (concrete everyday analogies for difficult concepts).
+- **Dynamic Multi-Jenjang & Multi-Fase Calibration (Anti-Substring Collision Trap)**:
+  - **Rule**: In educational SaaS, dynamically calibrate lesson duration (PAUD 150m, SD 35m/JP, SMP 40m/JP, SMA/SMK 45m/JP), cognitive depth (Bloom C1-C3 vs C3-C5 vs C4-C6 HOTS), and prompt scaffolding to the class's educational phase (see Section 19 in `references/edtech-compliance-saas.md`).
+  - **Mechanism / Pitfall**: Evaluating grade levels via naive string matching (`grade.includes('kelas 1')`) causes catastrophic substring collisions on high school classes (`'kelas 10'.includes('kelas 1') === true`), erroneously forcing elementary school durations and child-level language onto senior cohorts.
+  - **Action**: Evaluate level matching strictly in descending specificity: PAUD -> SMA/SMK (Kelas 10-12, Fase E-F) -> SD (Fase A-C with regex word boundary `/\bkelas [1-6]\b/`) -> SMP (Fase D).
+- **Modal Sticky Footer & Overflow Pinning Pattern**:
+  - **Rule**: Complex multi-field creation modals must lock container height (`max-height: 88vh; display: flex; flex-direction: column;`), encapsulate form inputs inside a scrollable body (`overflow-y: auto; flex: 1;`), and anchor action buttons in a pinned footer (`border-top: 1px solid ...; margin-top: auto;`).
+  - **Mechanism / Pitfall**: On standard laptop viewports (800–900px), multi-field forms push the primary CTA buttons (`Batal` / `Simpan`) below the screen fold or clip them within modal card overflow, creating a severe UX blocker where users cannot submit their data without zooming out.
+- **B2B / SaaS Landing Page & Trust Conversion Architecture (Proof-over-Promise)**:
+  - **Rule**: Landing pages for institutional clients (Schools, Government, Enterprise) require empirical trust architectures rather than empty marketing slogans (see Section 20 in `references/edtech-compliance-saas.md`).
+  - **Proof-over-Promise Math**: Claims like "Hemat ~10 Jam/Minggu" must provide transparent per-task time breakdowns (RPP 180m -> 15m, Soal 150m -> 10m, Remedial 270m -> 15m).
+  - **Single Primary CTA**: Eliminate ambiguous duplicate buttons ("Coba Demo" vs "Masuk Ruang Kerja" to same target); use 1 primary action `[ ✦ Coba Demo Gratis (Tanpa Daftar & Tanpa Kartu) ]` with beta status indicators.
+  - **Show, Don't Tell**: Feature a working browser mockup of the actual active dashboard at first-fold showing live action cards and 1-click generation outputs.
+  - **Humanized Security Copy**: Translate developer jargon into user-friendly terms: Zero-PII -> "Data siswa tidak dikirim ke AI eksternal"; Model Non-Retention -> "Guru memegang kendali 100% hak ekspor/hapus"; Automated Grading -> "Prinsip Human-in-the-Loop: AI hanya draf saran, Guru yang mengesahkan".
+  - **Diagnostic Gap Spotlight**: Render actual gap cards ("12 dari 32 Siswa Belum Paham X") with immediate 1-click action triggers `[ ✦ Buat Remedial ]`.
+  - **Closed Continuous Teaching Loop**: Extend the 5-step workflow to 6 steps ending in "Evaluasi & Siklus Lanjutan" so the loop is continuous.
+  - **Adaptive Mobile Sticky CTA**: Hide bottom sticky CTA on initial mobile load (`scrollY = 0`), and trigger slide-up smoothly only after user scrolls past the hero CTA (`scrollY > 280px`) with min 48px touch targets.
+  - **Institutional Branding & Copyright Harmony**: Use professional organization branding (e.g. *Jajan Digital EdTech*) in topbars/footers while preserving creator copyright attribution.
+  - **Official Administrative Compliance (Lembar Pengesahan Siap Audit)**: In Indonesian educational and institutional SaaS, exported lesson plans (RPP/Modul Ajar) and exam documents require formal 2-column borderless signature blocks with teacher NIP, headmaster name/NIP, and municipality date (see Section 21 in `references/edtech-compliance-saas.md`). Using bare paragraphs or tab characters causes layout collapse across MS Word versions; always construct a 100%-width borderless table (`Table`, `BorderStyle.NONE`).
+  - **Emergency 5-Minute Ready-to-Print Kit (`/quick-prep`)**: Critical educator friction occurs 10–15 minutes before the bell. Provide a 1-click single-topic endpoint (`POST /quick-prep`) that concurrently synthesizes RPP, 3-tier LKPD, and HOTS questions in <2 seconds with direct Word `.docx` download buttons (see Section 22 in `references/edtech-compliance-saas.md`).
+  - **Human-in-the-Loop Official Sign-off Gate**: Prevent educator liability fears with an explicit 2-phase state machine (`🟡 Draf Rekomendasi AI` -> `✓ Telah Disahkan Resmi oleh Guru Pengampu`). The sign-off endpoint (`POST /artifacts/:id/verify`) writes to immutable audit logs and stamps the verification seal directly into exported Word/PDF files (see Section 23 in `references/edtech-compliance-saas.md`).

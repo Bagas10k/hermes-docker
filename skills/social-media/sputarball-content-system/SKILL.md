@@ -7,6 +7,13 @@ author: Bagas & Hermes Agent
 
 # SputarBall Content System
 
+## Content cleanup scope and inventory
+- Before destructive cleanup, resolve the account and whether the request means local assets, live platform posts, or both; do not infer SputarBall from a generic carousel request when multiple brands exist.
+- Inventory candidates read-only before deleting: join drafts to each platform's publication records by draft ID, include format, slide count, publication status, exact post ID, and permalink. Filter carousel candidates separately from single-image posters and reels; a published status alone does not identify a carousel.
+- Save the candidate inventory to a working JSON/CSV file and print only grouped counts plus a small sample; full publication dumps overwhelm context and conceal scope errors.
+- Treat SUBMITTED records and profile-only permalinks as unresolved, not verified live posts. Reconcile them to exact posts on the confirmed account before any deletion; a profile URL cannot identify a deletion target.
+- When both remote posts and local data are in scope, retain the local ID/permalink mapping until remote removal is verified. Authentication blockers are not a reason to erase the remaining reconciliation evidence or claim completion.
+
 ## Cross-channel parity
 - Keep Instagram and TikTok identical in visual assets, slide order/count, topic, headline, and publication window.
 - Keep captions platform-adapted: Instagram may be detailed; TikTok must remain the shorter version of the same headline/topic.
