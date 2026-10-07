@@ -85,3 +85,5 @@ The signature UI/dashboard chapter from high-end motion showreels employs an asy
 - **No Undersized UI Text**: All technical micro-labels, HUD timecodes, and chip texts must stay at or above `12px` to prevent high-DPI legibility failures.
 - **Intentional Canvas Palette**: When using warm paper/cream backgrounds, calibrate contrast against `#EFECE6` or `#F3F4F6` so that muted text passes WCAG AA (>= 4.5:1 ratio).
 - **Zero-Emoji Rule**: Exclusively use precision SVG icons (`lucide-react`). Unicode emojis in technical/motion UI are strictly prohibited.
+- **Non-Monotonous Subtitle Dynamics**: Avoid uniform bounce/glow animations on every token. Keep connective words quiet, and apply a single purposeful variation (subtle scale pop, hairline underline sweep, accent tint, or vertical position shift) strictly to verified emphatic words or numbers. Constrain to 2 lines max within mobile safe areas without obscuring speaker faces.
+- **SVG-First Concrete Subject Vectors**: Represent abstract concepts (signals, databases, metrics, workflows) using clean procedural or stroked SVGs rather than random unverified raster images or generic wireframe cards.

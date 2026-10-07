@@ -1,5 +1,6 @@
 """Export trusted local history into a standalone, read-only browser preview with SVG DAG topology."""
 import json
+from html import escape
 from pathlib import Path
 from branch_history import BranchHistory
 from branch_dag_topology import (
@@ -8,7 +9,8 @@ from branch_dag_topology import (
     prune_abandoned_branches,
     compute_node_diff_details,
     compute_node_lineage,
-    compute_branch_clusters
+    compute_branch_clusters,
+    compute_branch_roots
 )
 
 
@@ -20,6 +22,7 @@ def export_manifest(history):
         'cursor': history.cursor,
         'lineage': lineage,
         'branch_clusters': branch_clusters,
+        'branch_roots': compute_branch_roots(history),
         'svg_topology': render_dag_svg(history),
         'svg_minimap': render_dag_minimap_svg(history),
         'nodes': {
@@ -35,6 +38,15 @@ def export_manifest(history):
 def render(history):
     manifest = export_manifest(history)
     svg_topo = manifest.pop('svg_topology')
+    # Full textual membership stays readable even when palette colors wrap.
+    roots = manifest['branch_roots']
+    members = {}
+    for node, owner in roots.items():
+        members.setdefault(owner, []).append(node)
+    legend = '<ul id="branch-root-labels" aria-label="Branch roots">' + ''.join(
+        '<li data-branch-root="' + escape(root, quote=True) + '">Branch root: ' +
+        escape(root) + ' — Nodes: ' + escape(', '.join(sorted(members[root]))) + '</li>'
+        for root in sorted(members)) + '</ul>'
     data = json.dumps(manifest, ensure_ascii=True).replace('<', '\\u003c')
     script = Path(__file__).with_name('history_browser.js').read_text()
     return '''<!doctype html><html lang="id"><meta charset="utf-8">
@@ -43,7 +55,7 @@ def render(history):
 <style>body{font:16px system-ui;margin:20px;background:#faf6ef;color:#14120e}
 main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;overflow-wrap:anywhere}
 :focus-visible{outline:3px solid #1669e8;outline-offset:3px}pre{white-space:pre-wrap;overflow-wrap:anywhere}
-.dag-container{position:relative;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:16px;margin:16px 0;overflow-x:auto;scroll-behavior:smooth}
+.dag-container{position:relative;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:0;margin:16px 0;overflow-x:auto;scroll-behavior:auto}
 .dag-breadcrumbs-bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:8px 12px;margin:12px 0;font-family:ui-monospace,monospace;font-size:12px;color:#334155}
 .dag-breadcrumb-copy-btn{display:inline-flex;align-items:center;background:#e2e8f0;border:1px solid #94a3b8;border-radius:4px;padding:3px 7px;cursor:pointer;color:#334155;font-size:10px;font-family:inherit;font-weight:600;margin-left:auto;transition:all 0.15s ease;line-height:1}
 .dag-breadcrumb-copy-btn:hover{background:#cbd5e1;color:#0f172a}
@@ -61,7 +73,7 @@ main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;
 .diff-item-modified{color:#fbbf24}
 .diff-item-deleted{color:#f87171}
 .diff-item-empty{color:#94a3b8;font-style:italic}
-.dag-minimap-container{position:absolute;bottom:12px;right:12px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:6px;box-shadow:0 10px 25px -5px rgba(0,0,0,0.4);z-index:90;user-select:none;transition:all 0.2s cubic-bezier(0.16,1,0.3,1)}
+.dag-minimap-container{position:relative;width:fit-content;max-width:100%;box-sizing:border-box;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:6px;box-shadow:0 10px 25px -5px rgba(0,0,0,0.4);z-index:90;user-select:none;transition:all 0.2s cubic-bezier(0.16,1,0.3,1)}
 .dag-minimap-container.collapsed .dag-minimap-radar{display:none}
 .dag-minimap-container.collapsed .dag-minimap-scale-group{display:none}
 .dag-minimap-container.collapsed{padding:4px 8px}
@@ -72,7 +84,7 @@ main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;
 .dag-minimap-scale-btn.active{background:#1669e8;color:#fff;border-color:#3b82f6;font-weight:700}
 .dag-minimap-toggle-btn{background:#1e293b;border:1px solid #475569;color:#cbd5e1;border-radius:4px;font-size:9px;padding:2px 6px;cursor:pointer;font-family:inherit;line-height:1}
 .dag-minimap-toggle-btn:hover{background:#334155;color:#f8fafc}
-.dag-minimap-radar{display:block;cursor:crosshair;overflow:hidden;border-radius:4px}
+#branch-root-labels{overflow-wrap:anywhere}.dag-minimap-header{flex-wrap:wrap}.dag-minimap-svg{display:block;max-width:100%}.dag-minimap-radar{display:block;cursor:crosshair;overflow:hidden;border-radius:4px}
 .dag-search-omnibar{display:flex;align-items:center;gap:8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;padding:6px 10px;margin:8px 0;font-family:ui-monospace,monospace;font-size:12px}
 .dag-search-input{flex:1;background:#fff;border:1px solid #94a3b8;border-radius:4px;padding:4px 8px;font-family:inherit;font-size:12px;color:#0f172a;outline:none;transition:border-color 0.15s ease}
 .dag-search-input:focus{border-color:#1669e8;box-shadow:0 0 0 2px rgba(22,105,232,0.2)}
@@ -90,8 +102,8 @@ main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;
 <h2>Topologi Cabang (Visual DAG)</h2>
 <div id="dag-search-bar" class="dag-search-omnibar" role="search" aria-label="Pencarian Simpul DAG"><input type="search" id="dag-search-input" class="dag-search-input" placeholder="Cari simpul (ID atau diff)..." aria-label="Cari simpul"><span id="dag-search-count" class="dag-search-count" aria-live="polite"></span><button type="button" id="dag-search-clear" class="dag-search-clear-btn" aria-label="Hapus pencarian">Batal</button></div>
 <nav id="dag-breadcrumbs" class="dag-breadcrumbs-bar" aria-label="Jejak silsilah cabang"></nav>
-<div id="dag-view" class="dag-container">''' + svg_topo + '''<div id="dag-diff-popover" class="diff-popover" role="tooltip" aria-hidden="true"></div><div id="dag-minimap-wrap" class="dag-minimap-container" aria-label="Radar Mini-Map"><div class="dag-minimap-header"><span>RADAR MINI-MAP</span><div style="display:flex;align-items:center;gap:6px"><span id="dag-minimap-status">100%</span><div id="dag-minimap-scale-controls" class="dag-minimap-scale-group" role="group" aria-label="Skala Mini-Map"><button type="button" class="dag-minimap-scale-btn active" data-scale="1" aria-pressed="true">1x</button><button type="button" class="dag-minimap-scale-btn" data-scale="1.5" aria-pressed="false">1.5x</button><button type="button" class="dag-minimap-scale-btn" data-scale="2" aria-pressed="false">2x</button></div><button type="button" id="dag-minimap-toggle" class="dag-minimap-toggle-btn" aria-label="Kecilkan atau buka Radar Mini-Map" aria-expanded="true">Tutup</button></div></div><div id="dag-minimap-radar" class="dag-minimap-radar">''' + manifest.get('svg_minimap', '') + '''</div></div></div>
-<h2>Pilih cabang lanjutan</h2><div id="branches"></div>
+<div id="dag-view" class="dag-container">''' + svg_topo + '''<div id="dag-diff-popover" class="diff-popover" role="tooltip" aria-hidden="true"></div></div><div id="dag-minimap-wrap" class="dag-minimap-container" aria-label="Radar Mini-Map"><div class="dag-minimap-header"><span>RADAR MINI-MAP</span><div style="display:flex;align-items:center;gap:6px"><span id="dag-minimap-status">100%</span><div id="dag-minimap-scale-controls" class="dag-minimap-scale-group" role="group" aria-label="Skala Mini-Map"><button type="button" class="dag-minimap-scale-btn active" data-scale="1" aria-pressed="true">1x</button><button type="button" class="dag-minimap-scale-btn" data-scale="1.5" aria-pressed="false">1.5x</button><button type="button" class="dag-minimap-scale-btn" data-scale="2" aria-pressed="false">2x</button></div><button type="button" id="dag-minimap-toggle" class="dag-minimap-toggle-btn" aria-label="Kecilkan atau buka Radar Mini-Map" aria-expanded="true">Tutup</button></div></div><div id="dag-minimap-radar" class="dag-minimap-radar">''' + manifest.get('svg_minimap', '') + '''</div></div>
+''' + legend + '''<h2>Pilih cabang lanjutan</h2><div id="branches"></div>
 <h2>Isi pratinjau</h2><pre id="preview"></pre></section></main>
 <script type="application/json" id="history-data">''' + data + '''</script><script>''' + script + '''</script></html>'''
 

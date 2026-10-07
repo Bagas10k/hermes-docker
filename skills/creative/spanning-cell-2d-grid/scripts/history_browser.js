@@ -20,6 +20,29 @@
   let cursor = history.cursor;
   let activeSearchQuery = '';
   let isDraggingMinimap = false;
+  let minimapDisposed = false;
+  let minimapObserver = null;
+  const minimapListeners = [];
+
+  function listenMinimap(target, type, callback) {
+    const guarded = (event) => { if (!minimapDisposed) callback(event); };
+    target.addEventListener(type, guarded);
+    minimapListeners.push([target, type, guarded]);
+  }
+
+  // Minimap only: history/search/shortcuts/popover remain live. No remount.
+  function disposeMinimap() {
+    if (minimapDisposed) return false;
+    minimapDisposed = true;
+    isDraggingMinimap = false;
+    if (minimapObserver) minimapObserver.disconnect();
+    minimapObserver = null;
+    for (const [target, type, callback] of minimapListeners) {
+      target.removeEventListener(type, callback);
+    }
+    minimapListeners.length = 0;
+    return true;
+  }
   const MINIMAP_STORAGE_KEY = 'dag_minimap_collapsed';
   const MINIMAP_SCALE_STORAGE_KEY = 'dag_minimap_scale';
   let minimapScale = (() => {
@@ -41,6 +64,7 @@
   })();
 
   function setMinimapScale(multiplier) {
+    if (minimapDisposed) return minimapScale;
     const val = parseFloat(multiplier);
     if (val !== 1 && val !== 1.5 && val !== 2) return minimapScale;
     minimapScale = val;
@@ -78,7 +102,7 @@
       minimapSvg.setAttribute('width', String(scaledW));
       minimapSvg.setAttribute('height', String(scaledH));
       minimapSvg.style.width = `${scaledW}px`;
-      minimapSvg.style.height = `${scaledH}px`;
+      minimapSvg.style.height = 'auto';
     }
     syncMinimapViewport();
     return minimapScale;
@@ -88,7 +112,7 @@
     if (!minimapScaleControls) return;
     const btns = minimapScaleControls.querySelectorAll('.dag-minimap-scale-btn');
     btns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      listenMinimap(btn, 'click', (e) => {
         if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
         const targetScale = parseFloat(btn.dataset.scale);
         if (!isNaN(targetScale)) {
@@ -100,45 +124,81 @@
     setMinimapScale(minimapScale);
   }
 
-  function copyLineageToClipboard() {
-    const lineage = computeLineagePath(cursor);
-    const formatted = lineage.join(' > ');
+  let clipboardDisposed = false;
+  let clipboardRequest = null;
+  let clipboardTimer = null;
+  let clipboardButton = null;
+  let clipboardClick = null;
+
+  function invalidateClipboard() {
+    clipboardRequest = null;
+    if (clipboardTimer !== null) clearTimeout(clipboardTimer);
+    clipboardTimer = null;
+  }
+
+  // Clipboard-only ownership; pending OS writes cannot be cancelled.
+  function disposeClipboard() {
+    if (clipboardDisposed) return false;
+    clipboardDisposed = true;
+    invalidateClipboard();
+    if (clipboardButton) {
+      clipboardButton.removeEventListener('click', clipboardClick);
+      clipboardButton.disabled = true;
+      clipboardButton.textContent = 'Salin Rute';
+      clipboardButton.classList.remove('copied');
+    }
+    return true;
+  }
+
+  async function copyLineageToClipboard() {
+    const formatted = computeLineagePath(cursor).join(' > ');
+    if (clipboardDisposed) return {text: formatted, success: false};
+    invalidateClipboard();
+    const request = clipboardRequest = {};
+    const button = clipboardButton;
+    const owns = () => !clipboardDisposed && clipboardRequest === request &&
+      clipboardButton === button && button && breadcrumbsBar.contains(button);
+    if (owns()) {
+      button.textContent = 'Menyalin…';
+      button.classList.remove('copied');
+    }
     let success = false;
     try {
       if (typeof navigator !== 'undefined' && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-        navigator.clipboard.writeText(formatted);
+        await navigator.clipboard.writeText(formatted);
         success = true;
-      } else if (typeof document !== 'undefined' && typeof document.execCommand === 'function') {
+      } else if (typeof document.execCommand === 'function') {
+        const active = document.activeElement;
         const ta = document.createElement('textarea');
-        ta.value = formatted;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        success = document.execCommand('copy');
-        document.body.removeChild(ta);
-      }
-    } catch (_) {}
-
-    // Visual feedback on copy button if present
-    if (breadcrumbsBar) {
-      const copyBtn = breadcrumbsBar.querySelector('.dag-breadcrumb-copy-btn');
-      if (copyBtn) {
-        copyBtn.textContent = 'Tersalin!';
-        copyBtn.classList.add('copied');
-        if (typeof setTimeout === 'function') {
-          setTimeout(() => {
-            copyBtn.textContent = 'Salin Rute';
-            copyBtn.classList.remove('copied');
-          }, 1500);
+        try {
+          ta.value = formatted;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          success = document.execCommand('copy') === true;
+        } finally {
+          ta.remove();
+          if (active && active.isConnected) active.focus({preventScroll: true});
         }
       }
+    } catch (_) { success = false; }
+    if (owns()) {
+      button.textContent = success ? 'Tersalin!' : 'Gagal menyalin';
+      if (success) button.classList.add('copied');
+      clipboardTimer = setTimeout(() => {
+        if (!owns()) return;
+        clipboardTimer = null;
+        clipboardRequest = null;
+        button.textContent = 'Salin Rute';
+        button.classList.remove('copied');
+      }, 1500);
     }
-    return formatted;
+    return {text: formatted, success};
   }
 
   function toggleMinimap(forceCollapse = null) {
-    if (!minimapWrap) return isMinimapCollapsed;
+    if (minimapDisposed || !minimapWrap) return isMinimapCollapsed;
     isMinimapCollapsed = (forceCollapse !== null) ? Boolean(forceCollapse) : !isMinimapCollapsed;
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
@@ -170,7 +230,7 @@
       minimapToggle.textContent = 'Buka';
       minimapToggle.setAttribute('aria-expanded', 'false');
     }
-    minimapToggle.addEventListener('click', (e) => {
+    listenMinimap(minimapToggle, 'click', (e) => {
       if (e && typeof e.stopPropagation === 'function') {
         e.stopPropagation();
       }
@@ -203,18 +263,20 @@
   }
 
   function syncMinimapViewport() {
+    if (minimapDisposed) return;
     const mmFrame = document.getElementById('minimap-viewport-frame') || minimapFrame;
     if (!dagView || !mmFrame) return;
     const minimapSvg = (typeof mmFrame.closest === 'function' ? mmFrame.closest('svg') : null) || mmFrame.parentElement || (dagView.querySelector ? dagView.querySelector('svg.dag-minimap-svg') : null);
     if (!minimapSvg) return;
     const worldWidth = parseFloat(minimapSvg.dataset ? minimapSvg.dataset.worldWidth : minimapSvg.getAttribute('data-world-width')) || 300;
-    const mapWidth = parseFloat(minimapSvg.getAttribute('width')) || Math.round(180 * minimapScale);
+    // Frame attributes are viewBox units, never scaled CSS pixels.
+    const mapWidth = parseFloat((minimapSvg.getAttribute('viewBox') || '0 0 180 90').split(/\s+/)[2]);
     const scaleX = mapWidth / worldWidth;
 
     const containerWidth = dagView.clientWidth || 400;
     const scrollLeft = dagView.scrollLeft || 0;
 
-    const frameWidth = Math.min(mapWidth, Math.max(16, containerWidth * scaleX));
+    const frameWidth = Math.min(mapWidth, containerWidth * scaleX);
     const maxFrameX = Math.max(0, mapWidth - frameWidth);
     const frameX = maxFrameX > 0 ? Math.max(0, Math.min(maxFrameX, scrollLeft * scaleX)) : 0;
 
@@ -234,6 +296,7 @@
     if (!minimapSvg) return;
 
     function handlePan(clientX) {
+      if (minimapDisposed) return;
       const rect = (typeof minimapSvg.getBoundingClientRect === 'function') 
         ? minimapSvg.getBoundingClientRect() 
         : { left: 0, width: parseFloat(minimapSvg.getAttribute('width')) || 180 };
@@ -243,7 +306,7 @@
       const scaleX = mapWidth / worldWidth;
 
       const clickX = Math.max(0, Math.min(mapWidth, clientX - rect.left));
-      const frameWidth = Math.min(mapWidth, Math.max(16, containerWidth * scaleX));
+      const frameWidth = Math.min(mapWidth, containerWidth * scaleX);
       // Center frame at clickX
       const targetFrameX = Math.max(0, Math.min(mapWidth - frameWidth, clickX - frameWidth / 2));
       const targetScrollLeft = targetFrameX / scaleX;
@@ -256,28 +319,36 @@
       syncMinimapViewport();
     }
 
-    minimapSvg.addEventListener('mousedown', (e) => {
+    listenMinimap(minimapSvg, 'mousedown', (e) => {
+      if (e.button !== 0) return;
+      e.preventDefault();
       isDraggingMinimap = true;
       handlePan(e.clientX || 0);
     });
 
     if (typeof window.addEventListener === 'function') {
-      window.addEventListener('mousemove', (e) => {
+      listenMinimap(window, 'mousemove', (e) => {
         if (isDraggingMinimap) {
           handlePan(e.clientX || 0);
         }
       });
 
-      window.addEventListener('mouseup', () => {
+      listenMinimap(window, 'blur', () => { isDraggingMinimap = false; });
+      listenMinimap(window, 'resize', syncMinimapViewport);
+      listenMinimap(window, 'mouseup', () => {
         isDraggingMinimap = false;
       });
     }
 
-    dagView.addEventListener('scroll', () => {
+    listenMinimap(dagView, 'scroll', () => {
       if (!isDraggingMinimap) {
         syncMinimapViewport();
       }
     });
+    if (typeof ResizeObserver === 'function') {
+      minimapObserver = new ResizeObserver(syncMinimapViewport);
+      minimapObserver.observe(dagView);
+    }
   }
 
   function computeLineagePath(targetId) {
@@ -293,6 +364,9 @@
   }
 
   function renderBreadcrumbs(activeId) {
+    invalidateClipboard();
+    if (clipboardButton) clipboardButton.removeEventListener('click', clipboardClick);
+    clipboardButton = null;
     if (!breadcrumbsBar) return;
     const lineage = computeLineagePath(activeId);
     if (!lineage.length) {
@@ -345,10 +419,13 @@
     copyBtn.textContent = 'Salin Rute';
     copyBtn.title = 'Salin jejak silsilah rute ke clipboard';
     copyBtn.setAttribute('aria-label', 'Salin seluruh jejak silsilah rute ke clipboard');
-    copyBtn.addEventListener('click', (e) => {
+    copyBtn.disabled = clipboardDisposed;
+    clipboardButton = copyBtn;
+    clipboardClick = (e) => {
       if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
       copyLineageToClipboard();
-    });
+    };
+    if (!clipboardDisposed) copyBtn.addEventListener('click', clipboardClick);
     items.push(copyBtn);
 
     breadcrumbsBar.replaceChildren(...items);
@@ -393,6 +470,7 @@
       }
     });
 
+    if (minimapDisposed) return;
     // Synchronize minimap active cursor dot & cluster color
     const mmFrame = document.getElementById('minimap-viewport-frame') || minimapFrame;
     const minimapSvg = mmFrame ? (typeof mmFrame.closest === 'function' ? mmFrame.closest('svg') : (mmFrame.parentElement || (dagView && dagView.querySelector ? dagView.querySelector('svg.dag-minimap-svg') : null))) : null;
@@ -632,7 +710,7 @@
     const nodeItems = dagView.querySelectorAll('.node-item');
     const mmFrame = document.getElementById('minimap-viewport-frame') || minimapFrame;
     const minimapSvg = mmFrame ? (typeof mmFrame.closest === 'function' ? mmFrame.closest('svg') : (mmFrame.parentElement || (dagView && dagView.querySelector ? dagView.querySelector('svg.dag-minimap-svg') : null))) : null;
-    const minimapNodes = minimapSvg && minimapSvg.querySelectorAll ? minimapSvg.querySelectorAll('.minimap-node') : [];
+    const minimapNodes = !minimapDisposed && minimapSvg && minimapSvg.querySelectorAll ? minimapSvg.querySelectorAll('.minimap-node') : [];
 
     if (!activeSearchQuery) {
       // Clear search highlights and dimming
@@ -813,8 +891,10 @@
         width: parseFloat(wVal) || 0
       };
     },
+    // Disposed minimap APIs are inert; read APIs retain the last values.
+    disposeMinimap,
     minimapPan: (scrollLeft) => {
-      if (dagView) {
+      if (!minimapDisposed && dagView) {
         if (typeof dagView.scrollTo === 'function') {
           dagView.scrollTo({ left: scrollLeft, behavior: 'auto' });
         } else {
@@ -828,6 +908,7 @@
     isMinimapCollapsed: () => isMinimapCollapsed,
     minimapScale: () => minimapScale,
     setMinimapScale: (multiplier) => setMinimapScale(multiplier),
+    disposeClipboard,
     copyLineage: () => copyLineageToClipboard(),
     search: (query) => searchNodes(query),
     searchQuery: () => activeSearchQuery,

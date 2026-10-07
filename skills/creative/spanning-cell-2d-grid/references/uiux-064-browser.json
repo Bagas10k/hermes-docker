@@ -1,0 +1,816 @@
+{
+  "kind": "real Chromium / Playwright mouse",
+  "records": [
+    {
+      "width": 390,
+      "scale": 1,
+      "geometry": {
+        "world": 1676,
+        "client": 348,
+        "scroll": 265,
+        "map": {
+          "x": 27,
+          "y": 1009.6875,
+          "width": 180,
+          "height": 90
+        },
+        "frame": {
+          "x": 28.5,
+          "width": 37.400001525878906
+        },
+        "units": {
+          "x": 28.5,
+          "width": 37.4
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 999,
+        "expected": 999.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "scale": 1.5,
+      "geometry": {
+        "world": 1676,
+        "client": 348,
+        "scroll": 252,
+        "map": {
+          "x": 27,
+          "y": 964.6875,
+          "width": 270,
+          "height": 135
+        },
+        "frame": {
+          "x": 40.650001525878906,
+          "width": 56.099998474121094
+        },
+        "units": {
+          "x": 27.1,
+          "width": 37.4
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 999,
+        "expected": 999.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "scale": 2,
+      "geometry": {
+        "world": 1676,
+        "client": 348,
+        "scroll": 252,
+        "map": {
+          "x": 27,
+          "y": 931.6875,
+          "width": 336,
+          "height": 168
+        },
+        "frame": {
+          "x": 50.586669921875,
+          "width": 69.81332397460938
+        },
+        "units": {
+          "x": 27.1,
+          "width": 37.4
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 998,
+        "expected": 999.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "scale": 1,
+      "geometry": {
+        "world": 1676,
+        "client": 726,
+        "scroll": 266,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 180,
+          "height": 90
+        },
+        "frame": {
+          "x": 28.599998474121094,
+          "width": 78.00000762939453
+        },
+        "units": {
+          "x": 28.6,
+          "width": 78
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 810,
+        "expected": 810.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "scale": 1.5,
+      "geometry": {
+        "world": 1676,
+        "client": 726,
+        "scroll": 252,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 270,
+          "height": 135
+        },
+        "frame": {
+          "x": 40.650001525878906,
+          "width": 116.99999237060547
+        },
+        "units": {
+          "x": 27.1,
+          "width": 78
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 810,
+        "expected": 810.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "scale": 2,
+      "geometry": {
+        "world": 1676,
+        "client": 726,
+        "scroll": 250,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 360,
+          "height": 180
+        },
+        "frame": {
+          "x": 53.599998474121094,
+          "width": 156
+        },
+        "units": {
+          "x": 26.8,
+          "width": 78
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 810,
+        "expected": 810.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "scale": 1,
+      "geometry": {
+        "world": 1676,
+        "client": 818,
+        "scroll": 258,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 180,
+          "height": 90
+        },
+        "frame": {
+          "x": 27.700000762939453,
+          "width": 87.90000915527344
+        },
+        "units": {
+          "x": 27.7,
+          "width": 87.9
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 764,
+        "expected": 764.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "scale": 1.5,
+      "geometry": {
+        "world": 1676,
+        "client": 818,
+        "scroll": 250,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 270,
+          "height": 135
+        },
+        "frame": {
+          "x": 40.19999694824219,
+          "width": 131.84999084472656
+        },
+        "units": {
+          "x": 26.8,
+          "width": 87.9
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 764,
+        "expected": 764.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "scale": 2,
+      "geometry": {
+        "world": 1676,
+        "client": 818,
+        "scroll": 252,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 360,
+          "height": 180
+        },
+        "frame": {
+          "x": 54.19999694824219,
+          "width": 175.8000030517578
+        },
+        "units": {
+          "x": 27.1,
+          "width": 87.9
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 764,
+        "expected": 764.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "browser": "153.0.8010.12",
+  "pass": true,
+  "lifecycle": {
+    "kind": "native ResizeObserver + instrumented callback replay / Chromium",
+    "records": [
+      {
+        "width": 390,
+        "sizes": [
+          {
+            "client": 191,
+            "world": 1676,
+            "scroll": 15,
+            "units": {
+              "x": 1.6,
+              "width": 20.5
+            },
+            "screenWidth": 20.499998092651367,
+            "mapWidth": 180,
+            "screenX": 1.6000003814697266,
+            "resize": 0,
+            "scrollEvents": 3,
+            "deliveries": 2
+          },
+          {
+            "client": 295,
+            "world": 1676,
+            "scroll": 15,
+            "units": {
+              "x": 1.6,
+              "width": 31.7
+            },
+            "screenWidth": 31.69999885559082,
+            "mapWidth": 180,
+            "screenX": 1.6000003814697266,
+            "resize": 0,
+            "scrollEvents": 3,
+            "deliveries": 3
+          }
+        ],
+        "disposed": {
+          "results": [
+            true,
+            false
+          ],
+          "targets": [
+            [
+              "dag-view"
+            ]
+          ],
+          "disconnects": [
+            1
+          ],
+          "listeners": [
+            {
+              "target": "svg",
+              "type": "mousedown",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "mousemove",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "blur",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "resize",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "mouseup",
+              "removed": 1
+            },
+            {
+              "target": "dag-view",
+              "type": "scroll",
+              "removed": 1
+            },
+            {
+              "target": "dag-minimap-toggle",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            }
+          ],
+          "beforeDeliveries": 3,
+          "mutations": 0,
+          "unchanged": true,
+          "panUnchanged": true,
+          "historyLive": true,
+          "searchLive": true
+        },
+        "pass": true
+      },
+      {
+        "width": 768,
+        "sizes": [
+          {
+            "client": 399,
+            "world": 1676,
+            "scroll": 16,
+            "units": {
+              "x": 1.7,
+              "width": 42.9
+            },
+            "screenWidth": 42.90000534057617,
+            "mapWidth": 180,
+            "screenX": 1.7000007629394531,
+            "resize": 0,
+            "scrollEvents": 3,
+            "deliveries": 2
+          },
+          {
+            "client": 617,
+            "world": 1676,
+            "scroll": 16,
+            "units": {
+              "x": 1.7,
+              "width": 66.3
+            },
+            "screenWidth": 66.30000305175781,
+            "mapWidth": 180,
+            "screenX": 1.7000007629394531,
+            "resize": 0,
+            "scrollEvents": 3,
+            "deliveries": 3
+          }
+        ],
+        "disposed": {
+          "results": [
+            true,
+            false
+          ],
+          "targets": [
+            [
+              "dag-view"
+            ]
+          ],
+          "disconnects": [
+            1
+          ],
+          "listeners": [
+            {
+              "target": "svg",
+              "type": "mousedown",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "mousemove",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "blur",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "resize",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "mouseup",
+              "removed": 1
+            },
+            {
+              "target": "dag-view",
+              "type": "scroll",
+              "removed": 1
+            },
+            {
+              "target": "dag-minimap-toggle",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            }
+          ],
+          "beforeDeliveries": 3,
+          "mutations": 0,
+          "unchanged": true,
+          "panUnchanged": true,
+          "historyLive": true,
+          "searchLive": true
+        },
+        "pass": true
+      },
+      {
+        "width": 1280,
+        "sizes": [
+          {
+            "client": 449,
+            "world": 1676,
+            "scroll": 17,
+            "units": {
+              "x": 1.8,
+              "width": 48.2
+            },
+            "screenWidth": 48.20000076293945,
+            "mapWidth": 180,
+            "screenX": 1.7999992370605469,
+            "resize": 0,
+            "scrollEvents": 3,
+            "deliveries": 2
+          },
+          {
+            "client": 695,
+            "world": 1676,
+            "scroll": 17,
+            "units": {
+              "x": 1.8,
+              "width": 74.6
+            },
+            "screenWidth": 74.60000610351562,
+            "mapWidth": 180,
+            "screenX": 1.7999992370605469,
+            "resize": 0,
+            "scrollEvents": 3,
+            "deliveries": 3
+          }
+        ],
+        "disposed": {
+          "results": [
+            true,
+            false
+          ],
+          "targets": [
+            [
+              "dag-view"
+            ]
+          ],
+          "disconnects": [
+            1
+          ],
+          "listeners": [
+            {
+              "target": "svg",
+              "type": "mousedown",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "mousemove",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "blur",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "resize",
+              "removed": 1
+            },
+            {
+              "target": "window",
+              "type": "mouseup",
+              "removed": 1
+            },
+            {
+              "target": "dag-view",
+              "type": "scroll",
+              "removed": 1
+            },
+            {
+              "target": "dag-minimap-toggle",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            },
+            {
+              "target": "BUTTON",
+              "type": "click",
+              "removed": 1
+            }
+          ],
+          "beforeDeliveries": 3,
+          "mutations": 0,
+          "unchanged": true,
+          "panUnchanged": true,
+          "historyLive": true,
+          "searchLive": true
+        },
+        "pass": true
+      }
+    ]
+  },
+  "clipboard": {
+    "kind": "controlled clipboard promises, execCommand and timers / real Chromium DOM (not OS clipboard)",
+    "records": [
+      {
+        "width": 390,
+        "checks": [
+          {
+            "name": "pending-fulfillment-reset",
+            "pass": true
+          },
+          {
+            "name": "rejection",
+            "pass": true
+          },
+          {
+            "name": "synchronous-write-throw",
+            "pass": true
+          },
+          {
+            "name": "fallback-true",
+            "pass": true
+          },
+          {
+            "name": "fallback-false",
+            "pass": true
+          },
+          {
+            "name": "fallback-throw",
+            "pass": true
+          },
+          {
+            "name": "unavailable",
+            "pass": true
+          },
+          {
+            "name": "overlap-and-old-timer",
+            "pass": true
+          },
+          {
+            "name": "rerender",
+            "pass": true
+          },
+          {
+            "name": "disposal",
+            "pass": true
+          },
+          {
+            "name": "dispose-active-feedback-timer",
+            "pass": true
+          }
+        ],
+        "pass": true
+      },
+      {
+        "width": 768,
+        "checks": [
+          {
+            "name": "pending-fulfillment-reset",
+            "pass": true
+          },
+          {
+            "name": "rejection",
+            "pass": true
+          },
+          {
+            "name": "synchronous-write-throw",
+            "pass": true
+          },
+          {
+            "name": "fallback-true",
+            "pass": true
+          },
+          {
+            "name": "fallback-false",
+            "pass": true
+          },
+          {
+            "name": "fallback-throw",
+            "pass": true
+          },
+          {
+            "name": "unavailable",
+            "pass": true
+          },
+          {
+            "name": "overlap-and-old-timer",
+            "pass": true
+          },
+          {
+            "name": "rerender",
+            "pass": true
+          },
+          {
+            "name": "disposal",
+            "pass": true
+          },
+          {
+            "name": "dispose-active-feedback-timer",
+            "pass": true
+          }
+        ],
+        "pass": true
+      },
+      {
+        "width": 1280,
+        "checks": [
+          {
+            "name": "pending-fulfillment-reset",
+            "pass": true
+          },
+          {
+            "name": "rejection",
+            "pass": true
+          },
+          {
+            "name": "synchronous-write-throw",
+            "pass": true
+          },
+          {
+            "name": "fallback-true",
+            "pass": true
+          },
+          {
+            "name": "fallback-false",
+            "pass": true
+          },
+          {
+            "name": "fallback-throw",
+            "pass": true
+          },
+          {
+            "name": "unavailable",
+            "pass": true
+          },
+          {
+            "name": "overlap-and-old-timer",
+            "pass": true
+          },
+          {
+            "name": "rerender",
+            "pass": true
+          },
+          {
+            "name": "disposal",
+            "pass": true
+          },
+          {
+            "name": "dispose-active-feedback-timer",
+            "pass": true
+          }
+        ],
+        "pass": true
+      }
+    ]
+  }
+}

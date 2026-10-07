@@ -22,7 +22,7 @@ Cetak biru arsitektur percakapan suara real-time tingkat tinggi yang meniru dina
 - Model LLM mengalirkan token (*token streaming*) dengan `stream: true`.
 - Mesin penyaring memecah aliran teks berdasarkan klausa gramatikal (tanda koma, titik, tanda tanya, titik koma).
 - Setiap klausa matang langsung disintesis menjadi paket audio dan dialirkan ke klien.
-- Menghasilkan *Time-to-First-Audio* (TTFA) sub-500ms, bukan menunggu seluruh paragraf selesai digenerate.
+- Dapat mengurangi waktu tunggu dibanding menunggu seluruh paragraf; angka TTFA perlu diukur end-to-end termasuk jaringan, antrean, dan pemutaran audio.
 
 ## 5. Turn-Taking Cerdas
 - Membedakan jeda berpikir sejenak pembicara dengan akhir pembicaraan sejati.

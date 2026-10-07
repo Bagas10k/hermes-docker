@@ -292,6 +292,18 @@ def compute_node_lineage(history, node_id: str) -> List[str]:
     return path
 
 
+def compute_branch_roots(history) -> Dict[str, str]:
+    """Stable root-child IDs, independent of palette, insertion order or cursor."""
+    roots = {'root': 'root'}
+    queue = deque(['root'])
+    while queue:
+        parent = queue.popleft()
+        for child in history.children(parent):
+            roots[child] = child if parent == 'root' else roots[parent]
+            queue.append(child)
+    return roots
+
+
 def compute_branch_clusters(history) -> Dict[str, str]:
     """
     Compute lineage branch cluster hues for nodes in BranchHistory.
@@ -369,6 +381,7 @@ def render_dag_minimap_svg(
     nodes = history._nodes
     cursor = history.cursor
     clusters = compute_branch_clusters(history)
+    branch_roots = compute_branch_roots(history)
     
     depths: Dict[str, int] = {'root': 0}
     def _assign_depths(n: str, d: int):
@@ -480,6 +493,8 @@ def render_dag_minimap_svg(
             'class': 'minimap-node active' if is_cursor else 'minimap-node',
             'data-node': n,
             'data-cluster-color': cluster_color,
+            'data-branch-root': branch_roots[n],
+            'aria-label': f'Node {n}; branch root {branch_roots[n]}',
             'style': f"fill: {cluster_color};" if not is_cursor else "fill: #38BDF8;"
         }
         ET.SubElement(nodes_g, 'circle', node_elem_attrs)
@@ -580,8 +595,8 @@ def render_dag_svg(
     svg = ET.Element('svg', {
         'xmlns': 'http://www.w3.org/2000/svg',
         'viewBox': f'0 0 {width} {height}',
-        'width': '100%',
-        'height': 'auto',
+        'width': str(width),
+        'height': str(height),
         'role': 'img',
         'aria-label': 'Visual DAG Branch Topology',
         'class': 'branch-dag-svg'

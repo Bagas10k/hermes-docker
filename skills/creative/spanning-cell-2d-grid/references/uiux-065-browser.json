@@ -1,0 +1,196 @@
+{
+  "kind": "native headless Chromium clipboard; loopback secure context; CDP permission intervention",
+  "limitations": [
+    "Not physical system clipboard or cross-application paste integration",
+    "No permission prompt UI, other browser, screen-reader or performance claim"
+  ],
+  "records": [
+    {
+      "width": 390,
+      "case": "granted-exact-route",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "native": {
+        "secure": true,
+        "focused": true,
+        "write": "function writeText() { [native code] }",
+        "read": "function readText() { [native code] }",
+        "own": false
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "copied": true
+      },
+      "text": "root > alpha > anak-雪",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "denied-write-retains-clipboard",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "rejection": {
+        "name": "NotAllowedError",
+        "message": "Failed to execute 'writeText' on 'Clipboard': Write permission denied."
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "copied": false
+      },
+      "text": "root > alpha > anak-雪",
+      "result": {
+        "text": "root > beta & <baru>",
+        "success": false
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "permission-recovery-new-route",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "copied": true
+      },
+      "text": "root > beta & <baru>",
+      "result": {
+        "text": "root > beta & <baru>",
+        "success": true
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "granted-exact-route",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "native": {
+        "secure": true,
+        "focused": true,
+        "write": "function writeText() { [native code] }",
+        "read": "function readText() { [native code] }",
+        "own": false
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "copied": true
+      },
+      "text": "root > alpha > anak-雪",
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "denied-write-retains-clipboard",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "rejection": {
+        "name": "NotAllowedError",
+        "message": "Failed to execute 'writeText' on 'Clipboard': Write permission denied."
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "copied": false
+      },
+      "text": "root > alpha > anak-雪",
+      "result": {
+        "text": "root > beta & <baru>",
+        "success": false
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "permission-recovery-new-route",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "copied": true
+      },
+      "text": "root > beta & <baru>",
+      "result": {
+        "text": "root > beta & <baru>",
+        "success": true
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "granted-exact-route",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "native": {
+        "secure": true,
+        "focused": true,
+        "write": "function writeText() { [native code] }",
+        "read": "function readText() { [native code] }",
+        "own": false
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "copied": true
+      },
+      "text": "root > alpha > anak-雪",
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "denied-write-retains-clipboard",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "rejection": {
+        "name": "NotAllowedError",
+        "message": "Failed to execute 'writeText' on 'Clipboard': Write permission denied."
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "copied": false
+      },
+      "text": "root > alpha > anak-雪",
+      "result": {
+        "text": "root > beta & <baru>",
+        "success": false
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "permission-recovery-new-route",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "copied": true
+      },
+      "text": "root > beta & <baru>",
+      "result": {
+        "text": "root > beta & <baru>",
+        "success": true
+      },
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "origin": "http://127.0.0.1:38221",
+  "browser": "153.0.8010.12",
+  "pass": true
+}

@@ -41,6 +41,12 @@ function createFakeDOM(initialData, svgContent = '', initialStorage = new Map())
         if (!this.listeners[type]) this.listeners[type] = [];
         this.listeners[type].push(fn);
       },
+      removeEventListener(type, fn) {
+        this.listeners[type] = (this.listeners[type] || []).filter(cb => cb !== fn);
+      },
+      isConnected: true,
+      select() { doc.activeElement = this; },
+      remove() { if (this.parentElement) this.parentElement.children = this.parentElement.children.filter(c => c !== this); },
       dispatchEvent(type, eventObj = {}) {
         const ev = { preventDefault: () => {}, ...eventObj };
         (this.listeners[type] || []).forEach(fn => fn(ev));
@@ -70,6 +76,7 @@ function createFakeDOM(initialData, svgContent = '', initialStorage = new Map())
         this.textContent = nodes.map(n => n.textContent || '').join(' ');
       },
       appendChild(node) {
+        node.parentElement = this;
         this.children.push(node);
         this.textContent = (this.textContent ? this.textContent + ' ' : '') + (node.textContent || '');
       },
@@ -125,6 +132,7 @@ function createFakeDOM(initialData, svgContent = '', initialStorage = new Map())
     }
   };
 
+  doc.body = makeElement('body');
   elements['history-data'] = {
     textContent: JSON.stringify(initialData)
   };
@@ -284,7 +292,8 @@ function createFakeDOM(initialData, svgContent = '', initialStorage = new Map())
     Array: Array,
     Math: Math,
     parseFloat: parseFloat,
-    setTimeout: (cb, ms) => { if (typeof cb === 'function') cb(); },
+    setTimeout: () => 1,
+    clearTimeout: () => {},
     console: console
   };
 
@@ -527,8 +536,8 @@ assert.ok(copyBtn, 'Copy route button must be present in breadcrumbs bar');
 assert.strictEqual(copyBtn.textContent, 'Salin Rute');
 
 const exportedLineage = dom1.sandbox.window.historyPreview.copyLineage();
-assert.strictEqual(exportedLineage, 'root > alpha > alpha_child');
-assert.ok(copyBtn.textContent === 'Tersalin!' || copyBtn.textContent === 'Salin Rute');
+assert.ok(typeof exportedLineage.then === 'function');
+assert.strictEqual(copyBtn.textContent, 'Gagal menyalin');
 
 // 2. Minimap Scale Presets (1x, 1.5x, 2x)
 assert.strictEqual(dom1.sandbox.window.historyPreview.minimapScale(), 1);
@@ -677,5 +686,25 @@ assert.strictEqual(mmAlpha.classList.contains('search-match'), false);
 assert.strictEqual(mmAlpha.classList.contains('search-dim'), false);
 assert.strictEqual(mmBeta.classList.contains('search-match'), false);
 assert.strictEqual(mmBeta.classList.contains('search-dim'), false);
+
+// UIUX-062: CSS scale must not multiply SVG user-space frame geometry.
+for (const scale of [1, 1.5, 2]) {
+  dom1.sandbox.window.historyPreview.setMinimapScale(scale);
+  dom1.sandbox.window.historyPreview.minimapPan(200);
+  assert.strictEqual(dom1.sandbox.window.historyPreview.minimapFrameBounds().x, 45);
+  assert.strictEqual(dom1.sandbox.window.historyPreview.minimapFrameBounds().width, 90);
+}
+
+const clipboardChecks = require('./clipboard_checks.cjs');
+const clipDOM = createFakeDOM(data1);
+clipDOM.sandbox.navigator = {};
+vm.runInContext('(' + clipboardChecks.toString() + ')()', clipDOM.sandbox).then(async records => {
+  const timerDOM = createFakeDOM(data1);
+  timerDOM.sandbox.navigator = {};
+  records.push(...await vm.runInContext('(' + clipboardChecks.toString() + ')(true)', timerDOM.sandbox));
+  assert.equal(records.length, 11);
+  fs.writeFileSync(path.join(__dirname, '../references/uiux-064-node.json'), JSON.stringify({pass:true, records}, null, 2) + '\n');
+  console.log('OK: 11 deterministic clipboard scenarios');
+}).catch(e => { console.error(e); process.exitCode = 1; });
 
 console.log('OK: all Node DOM browser history unit checks passed (including hover diff inspector, spatial arrow navigation, breadcrumbs, auto-centering, minimap radar, collapsible quick-jump navigation, visual shortcut badges, localStorage persistence, scale presets, clipboard export, search omnibar & minimap search/clustering indicators)');

@@ -1,0 +1,49 @@
+{
+  "pass": true,
+  "records": [
+    {
+      "name": "pending-fulfillment-reset",
+      "pass": true
+    },
+    {
+      "name": "rejection",
+      "pass": true
+    },
+    {
+      "name": "synchronous-write-throw",
+      "pass": true
+    },
+    {
+      "name": "fallback-true",
+      "pass": true
+    },
+    {
+      "name": "fallback-false",
+      "pass": true
+    },
+    {
+      "name": "fallback-throw",
+      "pass": true
+    },
+    {
+      "name": "unavailable",
+      "pass": true
+    },
+    {
+      "name": "overlap-and-old-timer",
+      "pass": true
+    },
+    {
+      "name": "rerender",
+      "pass": true
+    },
+    {
+      "name": "disposal",
+      "pass": true
+    },
+    {
+      "name": "dispose-active-feedback-timer",
+      "pass": true
+    }
+  ]
+}

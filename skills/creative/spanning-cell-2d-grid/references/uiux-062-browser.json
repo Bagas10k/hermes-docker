@@ -1,0 +1,332 @@
+{
+  "kind": "real Chromium / Playwright mouse",
+  "records": [
+    {
+      "width": 390,
+      "scale": 1,
+      "geometry": {
+        "world": 1676,
+        "client": 348,
+        "scroll": 265,
+        "map": {
+          "x": 27,
+          "y": 1009.6875,
+          "width": 180,
+          "height": 90
+        },
+        "frame": {
+          "x": 28.5,
+          "width": 37.400001525878906
+        },
+        "units": {
+          "x": 28.5,
+          "width": 37.4
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 999,
+        "expected": 999.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "scale": 1.5,
+      "geometry": {
+        "world": 1676,
+        "client": 348,
+        "scroll": 250,
+        "map": {
+          "x": 27,
+          "y": 964.6875,
+          "width": 270,
+          "height": 135
+        },
+        "frame": {
+          "x": 40.19999694824219,
+          "width": 56.099998474121094
+        },
+        "units": {
+          "x": 26.8,
+          "width": 37.4
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 999,
+        "expected": 999.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "scale": 2,
+      "geometry": {
+        "world": 1676,
+        "client": 348,
+        "scroll": 250,
+        "map": {
+          "x": 27,
+          "y": 931.6875,
+          "width": 336,
+          "height": 168
+        },
+        "frame": {
+          "x": 50.02666473388672,
+          "width": 69.8133316040039
+        },
+        "units": {
+          "x": 26.8,
+          "width": 37.4
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 998,
+        "expected": 999.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "scale": 1,
+      "geometry": {
+        "world": 1676,
+        "client": 726,
+        "scroll": 266,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 180,
+          "height": 90
+        },
+        "frame": {
+          "x": 28.599998474121094,
+          "width": 78.00000762939453
+        },
+        "units": {
+          "x": 28.6,
+          "width": 78
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 810,
+        "expected": 810.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "scale": 1.5,
+      "geometry": {
+        "world": 1676,
+        "client": 726,
+        "scroll": 250,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 270,
+          "height": 135
+        },
+        "frame": {
+          "x": 40.19999694824219,
+          "width": 117.00001525878906
+        },
+        "units": {
+          "x": 26.8,
+          "width": 78
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 810,
+        "expected": 810.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "scale": 2,
+      "geometry": {
+        "world": 1676,
+        "client": 726,
+        "scroll": 252,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 360,
+          "height": 180
+        },
+        "frame": {
+          "x": 54.19999694824219,
+          "width": 156
+        },
+        "units": {
+          "x": 27.1,
+          "width": 78
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 810,
+        "expected": 810.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "scale": 1,
+      "geometry": {
+        "world": 1676,
+        "client": 818,
+        "scroll": 258,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 180,
+          "height": 90
+        },
+        "frame": {
+          "x": 27.700000762939453,
+          "width": 87.90000915527344
+        },
+        "units": {
+          "x": 27.7,
+          "width": 87.9
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 764,
+        "expected": 764.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "scale": 1.5,
+      "geometry": {
+        "world": 1676,
+        "client": 818,
+        "scroll": 252,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 270,
+          "height": 135
+        },
+        "frame": {
+          "x": 40.650001525878906,
+          "width": 131.85000610351562
+        },
+        "units": {
+          "x": 27.1,
+          "width": 87.9
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 764,
+        "expected": 764.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "scale": 2,
+      "geometry": {
+        "world": 1676,
+        "client": 818,
+        "scroll": 252,
+        "map": {
+          "x": 27,
+          "y": 900.6875,
+          "width": 360,
+          "height": 180
+        },
+        "frame": {
+          "x": 54.19999694824219,
+          "width": 175.8000030517578
+        },
+        "units": {
+          "x": 27.1,
+          "width": 87.9
+        },
+        "scrollWidth": 1676
+      },
+      "drag": {
+        "actual": 764,
+        "expected": 764.1999999999998,
+        "edges": true,
+        "released": true
+      },
+      "labels": {
+        "stable": true,
+        "count": 7,
+        "roots": true
+      },
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "browser": "153.0.8010.12",
+  "pass": true
+}

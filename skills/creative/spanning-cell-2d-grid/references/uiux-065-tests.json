@@ -1,0 +1,51 @@
+{
+  "pass_all": true,
+  "environment": {
+    "NODE_PATH": "/home/ubuntu/website-security-auditor/node_modules",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "records": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/home/ubuntu/.hermes/skills/creative/spanning-cell-2d-grid/scripts",
+        "-q"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "----------------------------------------------------------------------\nRan 336 tests in 1.545s\n\nOK\n"
+    },
+    {
+      "command": [
+        "node",
+        "/home/ubuntu/.hermes/skills/creative/spanning-cell-2d-grid/scripts/test_browser_clock.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS first frame zero; stationary endpoint follows camera; zoom exactly once\nPASS long dt capped and resume timestamp reset\nPASS pointerup cancels\nPASS pointercancel cancels\nPASS lostpointercapture cancels\nPASS hidden cancels\nPASS blur cancels\nPASS dispose cancels\nPASS unrelated pointer ignored and duplicate down owns one frame\nPASS invalid camera releases capture without scheduling\nPASS dynamic zoom preserves world anchor\nPASS native adapter regression\nPASS camera boundary uses actual clipped offset\nPASS detached frame stops without camera or selection writes\nPASS repeated mount and unmount zeros listeners and cleans pending frames\nPASS reentrant disposal from pointerdown selection callback cleanly stops without scheduling rAF\nPASS reentrant disposal from frame tick selection callback stops loop and clears listeners\nPASS focal cursor recovery retains cell when inside visible camera bounds\nPASS focal cursor recovers to leading boundary during active edge autoscroll translation\nPASS roving tab index assignment preserves single 0 tab stop and sets others to -1\nPASS shift arrow expansion expands selection bounding box while preserving anchor\nPASS ctrl arrow boundary jump skips contiguous populated cells into boundary\nPASS active edge autoscroll stretches lead selection boundary while anchor remains anchored\nPASS ctrl click adds disjoint non-contiguous bounding boxes into range list\nPASS range deduplication eliminates fully subsumed boxes under spatial bounds\nPASS virtual camera spatial intersection filters only in-frustum selection boxes\nPASS clipboard tsv parsing handles crlf and ragged matrix normalization\nPASS single anchor clipboard paste expands rectangular boundaries\nPASS asymmetric multi-range selection tiles clipboard data via modulo indexing\nPASS relative formula translation shifts coordinates preserving absolutes\nPASS merged cell partial overwrite veto rejects non-top-left paste\nPASS merged cell auto unmerge clears conflicting boundaries\nPASS transaction journal single cell mutation undo and redo invertible replay\nPASS transaction journal compound paste and topology unmerge atomic rollback\nPASS transaction journal bounded capacity evicts oldest record\nPASS transaction journal selective range rollback isolates targeted bounding box\nPASS transaction journal local delta persistence roundtrip with zlib compression simulation\nPASS multi-client vector clock causality and concurrent collision resolution\nPASS multi-client topology merge conflict arbitration with automatic overlap purge\n{\"passed\":39,\"failed\":0,\"environment\":\"Node vm fake DOM and deterministic rAF; not browser rendering\"}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "/home/ubuntu/.hermes/skills/creative/spanning-cell-2d-grid/scripts/test_history_browser.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "OK: all Node DOM browser history unit checks passed (including hover diff inspector, spatial arrow navigation, breadcrumbs, auto-centering, minimap radar, collapsible quick-jump navigation, visual shortcut badges, localStorage persistence, scale presets, clipboard export, search omnibar & minimap search/clustering indicators)\nOK: 11 deterministic clipboard scenarios\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "/home/ubuntu/.hermes/skills/creative/spanning-cell-2d-grid/scripts/test_native_clipboard_chromium.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"pass\":true,\"records\":9,\"browser\":\"153.0.8010.12\"}\n",
+      "stderr": ""
+    }
+  ]
+}

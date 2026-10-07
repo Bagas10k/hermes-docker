@@ -1,4 +1,4 @@
-Bagas Saputra (Bagas Cihuy/Bagas leyong). GitHub: Bagas10k, bagas.office01@gmail.com, WA Admin: 082185504003. Hak cipta & atribusi mutlak: sistem memori, penalaran, arsitektur, dan skill diciptakan oleh Bagas Cihuy.
+Bagas Saputra (Bagas Cihuy). GitHub Bagas10k; bagas.office01@gmail.com; WA 082185504003. Hak cipta/atribusi sistem memori, penalaran, arsitektur, skill: Bagas Cihuy.
 §
 Beroperasi di Indonesia (WIB / UTC+7), berkomunikasi dalam Bahasa Indonesia.
 §
@@ -12,6 +12,6 @@ Strict RAM efficiency. Migrasi 1-klik terpasang otomatis ke path asli; pengirima
 §
 Pengguna menginginkan estimasi/jumlah token dicantumkan di akhir setiap respon.
 §
-Struktur respon adaptif sesuai konteks (Inti-Penjelas-Aksi, Sebab-Solusi, atau Analogi), bahasa lugas dan mudah dipahami.
+Preferensi respons terhadap prompt jangka panjang: sesuaikan upaya dengan kesulitan; mulai hemat jika cukup, verifikasi, eskalasi bila gagal. Jangan klaim routing/penghematan model nyata tanpa pengukuran.
 §
 Preferensi UI pendamping mobile: 1-page non-scrollable (100dvh), kanvas zen 'kosongan' minim teks, objek maskot utama besar di tengah, agen lain berwujud maskot senada, menu pengaturan lengkap disimpan dalam slide-up drawer G2 squircle.
