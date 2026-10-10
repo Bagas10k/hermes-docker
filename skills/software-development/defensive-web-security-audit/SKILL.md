@@ -60,6 +60,15 @@ When building a small tool, implement it as a passive auditor:
 - Do not advise "stay undetected" techniques; that changes a defensive request into evasion-oriented activity.
 - Do not infer exact WordPress core or plugin versions from query-string hints alone; label them as asset version hints unless verified by admin-side evidence.
 
+## Production hardening on an authorized server
+
+1. Establish a baseline: confirm repository status, actual running configuration, public HTTPS status/headers, direct-origin exposure, container port bindings, and whether secrets are tracked in Git. Distinguish current failure from historical logs before changing anything.
+2. Make one reversible change at a time. For Dockerized Nginx, compare host and container bind-mounted config after editing: replacing a mounted file by atomic rename changes the host inode while the running container still sees the old inode. Validate with `docker exec WEB nginx -t`, then recreate only the web service if the mount is stale; a reload alone cannot remount it.
+3. To close a Cloudflare Tunnel origin bypass, verify tunnel ingress resolves to the web container on a shared Docker network; change the host binding from `80:80` to `127.0.0.1:80:80`, recreate only web, then verify HTTPS via tunnel and test direct-origin access from a separate machine. Keep SSH untouched.
+4. Consolidate duplicated CSP headers cautiously: retain the stricter functioning policy, remove the redundant one, check Nginx syntax, and confirm exactly one header on the public response. Test actual application pages for blocked assets; an HTTP 200 alone does not prove CSP compatibility.
+5. Move embedded tunnel credentials to an ignored, mode-600 env file scoped to the tunnel service. Validate Compose without printing resolved secrets; recreating the tunnel may briefly return 502/530, so check registered connections and repeated public HTTP success before declaring completion. Rotate a previously exposed token separately with a rollback path.
+6. Verify file modes, Compose validity, container state, public response, header count, and clean/separately documented Git state. If files use skip-worktree, say changes are local to the deployment and may be overwritten by a future deploy.
+
 ## Verification
 
 A completed safe audit must include:
