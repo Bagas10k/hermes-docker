@@ -22,6 +22,9 @@ Apply to visual direction, graphic design, UI, image-generation briefs, isolated
 - Inspect the actual images before describing their visual properties. Do not infer colors or composition from titles or numbers alone.
 - User wants breadth in image styles, attention to no-background object assets, and a broad font repertoire.
 
+## Motion signature approved by Bagas
+For subsequent theory-motion generation, read `/home/ubuntu/theory-motion/VISUAL_STYLE_SIGNATURE.md` before designing. User selected https://pin.it/3TAsCe1g9 as standing signature: cream/light warm canvas, teal/coral accents, chunky rounded cards/pills, bold friendly geometric typography, playful original vectors, restrained depth. Palette tokens are approximations and the source is static, so motion is an adaptation. Do not copy reference artwork or claim legal patent/ownership. Latest brief overrides; existing videos are not retroactively overwritten.
+
 ## Procedure
 1. Establish medium, audience, intended feeling, and technical constraints. Avoid unnecessary questions when a reasonable reversible choice suffices.
 2. If references are available, inspect them. Separate observed features from inferred preferences: palette, lighting, material, texture, framing, perspective, spacing, typography, and mood. Record each numbered reference accurately.

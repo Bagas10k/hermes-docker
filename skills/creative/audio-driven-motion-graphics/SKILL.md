@@ -55,7 +55,19 @@ Keep source footage, render drafts, candidate manifests, and test fixtures outsi
 ## Standard Video Specifications
 
 - **Default format:** Vertical 9:16 (`1080 x 1920`); let an editing canvas select other ratios explicitly.
-- **Framerate:** 30 FPS (`1 second = 30 frames`).
+- **Portrait 4:5 variant:** `1080 x 1350`, 60 FPS, for Instagram/feed use. Re-layout components natively for portrait — do not letterbox or crop a landscape composition. Use camera keyframes (translateX/Y + scale interpolation) for zoom-in to focused cards and zoom-out overview beats. Gate inactive card opacity to zero during focused camera shots to prevent distracting partial remnants at frame edges. Reserve 80px header and 60px footer safe zones for persistent UI chrome.
+- **PULSE-style visual energy (for premium feel):** Apply these techniques to prevent compositions from feeling flat/lifeless:
+  - *Layered shadows:* 3-tier box-shadow (tight 4px/medium 32px/diffuse 50-80px) on every card — one shadow looks fake.
+  - *Edge glow:* `0 0 ${spread*active}px ${color}` on active cards, modulated by a slow sine beat (~1.5Hz) for ambient breathing.
+  - *Spring overshoot on entries:* Zero-dep formula: `const spring=(f,a,b)=>{const p=t(f,a,b);return p<=0?0:p>=1?1:p+.12*Math.sin(Math.PI*p*2.2)*Math.max(0,1-p*1.1);};` — 12% elastic overshoot via stdlib Math.
+  - *Gradient backgrounds:* Use 2-3 stop linear-gradient instead of flat color (#f5f8f1→#edf2e8→#e8eee2).
+  - *Traveling connector dots:* Animated glowing circles on SVG connector paths during data transfers.
+  - *Scan glow:* Left-to-right gradient sweep across text rows during processing phases.
+  - *Scale energy:* Fact chips/traveling objects scale up 5-8% during flight (`1 + .06*inFlight`).
+  - *Slide-up text entries:* Phase titles translateY 10-14px on entrance, not just opacity fade.
+  - *Gradient card fills:* Recipe/workspace cards use subtle directional gradients, not flat white.
+  Ref: x0a.studio PULSE SaaS reel — dark glass-morphism with scale-bounce, parallax depth, kinetic typography, glow gradients, snappy 200-300ms micro-interactions.
+- **Framerate:** 30 FPS default (`1 second = 30 frames`); 60 FPS for premium/portrait compositions.
 - **Duration Formula:** `totalFrames = Math.ceil(audioDurationSeconds * fps)`.
 - **Audio Alignment:** Never guess audio duration; inspect metadata with `ffprobe` before declaring composition duration.
 
@@ -73,6 +85,8 @@ const DURATION_SECONDS = 30.5; // from ffprobe
 const TOTAL_FRAMES = Math.ceil(DURATION_SECONDS * FPS); // 915 frames
 ```
 *Pitfall:* Never set composition duration shorter than audio duration; Remotion truncates audio tracks that exceed composition frame bounds.
+
+For a fixed-length reel with one voice clip per beat, measure each synthesized clip separately before placing it. If a line overruns its beat, shorten and regenerate the wording while preserving the visible facts instead of forcing 1.2×–1.25× tempo to fit; faster speech erodes clarity even when pitch is preserved. Keep a timing manifest with exact text, voice, start frame and measured duration, then allow natural breath before the next beat. Probe the final mix for video/audio streams, duration, integrated loudness and true peak, and listen to representative clips for pronunciation and SFX masking; metadata alone cannot establish that the voice sounds good.
 
 ### Step 2: Storyboard Planning & Scene Timing
 For a narrated reel, synthesize the final spoken script first, inspect its actual duration, then derive scene boundaries from reviewed audio timestamps before designing transitions. If TTS emits no word boundaries and STT mishears names, use STT only to locate approximate phrase times, correct the words against the actual script/audio, and label cues as reviewed estimates rather than exact word synchronization. Use one boundaries array for headline, shape morph, secondary diagrams, and subtitle timing: separate `frame / fixedSceneLength` calculations drift as soon as voice-paced scenes vary. Keep each caption short enough to read on a phone and check a still from every scene plus transition frames for collisions.
@@ -124,10 +138,13 @@ Render final MP4 directly on the server:
 ```bash
 npx remotion render src/index.ts <CompositionId> output/final.mp4 \
   --gl=angle \
-  --concurrency=4 \
+  --concurrency=2 \
   --quality=85
 ```
+*Note:* Use `--concurrency=2` for compositions with heavy glow/shadow/SVG filters (OOM at 4). Simple compositions can use 4. For long renders (>1000 frames), use `terminal(background=true, notify=["Rendered"])` then `process_manage(action="wait")` — foreground timeout caps at 600s which is too short for 1800-frame compositions (~6 min).
 *Pitfall:* On headless Linux servers without discrete GPUs, Chromium crashes during WebGL context creation unless `--gl=angle` or `--gl=swiftshader` is passed. Always use `--gl=angle`.
+
+*Pitfall (Remotion `interpolate()` String Prohibition):* `interpolate()` only works with numeric values. Attempting to interpolate between CSS color strings (e.g. `interpolate(p, [0,1], ['#d8e0d4','#a8c4b4'])`) throws `Non-numeric strings can only be interpolated using Easing.step1`. Use a ternary threshold instead: `t(f,0,90) > .5 ? '#a8c4b4' : '#d8e0d4'`. For smooth color transitions, interpolate RGB channels individually or use opacity crossfade between two colored elements.
 
 ## Autonomous End-to-End CLI & REST API
 
@@ -160,6 +177,8 @@ node /home/ubuntu/hermes-motion-engine/bin/hermes-theory-motion.js \
 
 ## Critical Pitfalls & Engineering Gates
 
+*Pitfall (AAC Container Duration Padding):* When asserting video duration via ffprobe, check the video **stream** duration (`streams[0].duration`) for exact match, not `format.duration` — AAC encoder tail adds ~0.06s padding to the container. QA assertions must allow `abs(format_duration - target) < 0.1` while keeping stream duration exact.
+
 *Pitfall (Headless Render Command Timeout):* For long compositions (>1,000 frames or >30 seconds), Remotion headless render takes ~2 to 3 minutes on CPU/ANGLE. Shell commands running the render must specify an explicit generous timeout (e.g. `timeout=600`) to prevent the automation runner from killing the command prematurely with exit code 124.
 
 *Pitfall (Domain Label Hardcoding in Visual Archetypes):* Never hardcode domain-specific labels (e.g. "air", "lambung kapal", "fluida") inside generic archetype views (`ForceVectorsView`, `CrossSectionView`). Always bind labels to dynamic semantic beat props (`leftEntity`, `rightEntity`, `formula`, `visualHeadline`) so that non-fluid theories (mechanics, rocketry, data pipelines) do not display mismatched fluid diagrams.
@@ -187,6 +206,21 @@ node /home/ubuntu/hermes-motion-engine/bin/hermes-theory-motion.js \
 *Pitfall (Word-Level Karaoke Chunking & Mobile Screen Congestion):* Grouping more than 4–6 words per dialogue event in `.ass` files crowds vertical phone screens and causes text wrapping that obscures the speaker; chunk word timestamps into 3–5 word phrases with `BorderStyle=3` background boxes and `MarginV=220` (on 1080x1920) within the safe area.
 
 *Pitfall (SVG Alpha Burn-In Pixel Format Mismatch):* Overlaying rendered vector assets without explicit alpha pixel formatting (`format=rgba`) causes black borders around transparent vector graphics; always normalize overlay inputs with `format=rgba` before chaining into the FFmpeg `overlay` filter.
+
+## Deterministic SFX Generation (No External Dependencies)
+
+Generate event-specific SFX WAVs using Python stdlib only (`wave`, `struct`, `math`, `random`) — no new npm or pip packages needed:
+- **Pop/pluck** (card entrance): short sine burst with fast exponential decay, ~0.06s
+- **Airy whoosh** (camera pan/transition): bandpass filtered noise sweep with pitch bend, ~0.3s
+- **Bass thud** (element landing): low-frequency sine with sub-bass harmonic, fast decay, ~0.15s
+- **Tick** (text/label reveal): single-sample click impulse with short ring, ~0.03s
+- **Rising tone** (zoom-in): ascending sine sweep with volume swell, ~0.25s
+- **Descending tone** (zoom-out): descending sweep with fade, ~0.25s
+- **Chime** (completion/result): two harmonically related sines with slow decay, ~0.4s
+
+Map SFX types to visual events, not generic triggers. Use the reference-video workflow: when the user provides a TikTok/Instagram/video link as a style reference, inspect the actual clip (screenshot + description), extract the motion grammar and SFX texture vocabulary (what sounds accompany what visual events), then synthesize matching WAVs deterministically.
+
+Volume hierarchy: voice-over at 0.85–0.90, whoosh/rise/descend at 0.25–0.35, pop/tick at 0.35–0.45, thud at 0.3, chime at 0.25–0.35. SFX must duck below voice, never compete.
 
 ## Creative Styles & References
 

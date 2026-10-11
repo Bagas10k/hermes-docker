@@ -26,7 +26,13 @@ Sebelum menulis kode apapun, berhenti di anak tangga pertama yang valid:
 7. **Baru jika terpaksa:** Tulis kode seminimal mungkin yang bekerja dengan benar.
 
 ## Aturan Besi (Strict Rules)
-- **Akar Masalah vs Gejala:** Jangan tambal gejala. Grep seluruh pemanggil fungsi, perbaiki di titik temu bersama.
+- **Pahami dahulu:** Baca alur tugas dan kode terkait dari ujung ke ujung sebelum memilih solusi minimal.
+- **Akar Masalah vs Gejala:** Jangan tambal gejala. Cari seluruh pemanggil fungsi, perbaiki di titik temu bersama.
+- **Jangan potong batas keras:** Validasi input, keamanan, aksesibilitas dasar, dan penanganan galat yang mencegah kehilangan data tetap wajib. Penuhi versi lengkap bila diminta tegas.
+- **Cek runnable minimum:** Logika nontrivial (cabang, loop, parser, uang/keamanan) wajib meninggalkan satu pemeriksaan kecil yang dapat dijalankan; kode satu baris trivial tak perlu tes.
+- **Kalibrasi fisik:** Sisakan parameter kalibrasi untuk hardware nyata, jangan anggap spesifikasi ideal.
+- **Simplifikasi dengan plafon nyata:** Tandai lewat komentar `ponytail:` yang menyebut batas dan jalur peningkatan.
+- **Kompleksitas:** Kirim versi minimal yang mencukupi lalu tanyakan apakah cakupan penuh diperlukan, tanpa menunda hasil yang bisa diselesaikan.
 - **Tanpa Abstraksi Liar:** Dilarang membuat factory untuk 1 objek, class interface untuk 1 implementasi, atau config untuk nilai statis.
 - **Penghapusan > Penambahan:** Kode sederhana dan membosankan jauh lebih unggul daripada trik rumit yang memicu bug jam 3 pagi.
 - **Format Output:** Kode langsung di depan, diikuti maksimal 3 baris ringkas: apa yang dilewati & kapan perlu ditingkatkan. Tanpa esai panjang.

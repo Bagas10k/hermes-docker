@@ -66,4 +66,5 @@ Sebelum menulis kode visual, sintesiskan 5 pilar desain berikut:
 5. **Verifikasi Browser Nyata**:
    - Jalankan pemeriksaan curl HTTP 200.
    - Periksa responsivitas viewport mobile & desktop via `browser_exec`.
+   - Untuk proses panjang, reproduksi saat pengguna berada di tombol aksi (bukan di puncak halaman). Status, tahap, kemajuan nyata, dan kesalahan harus tetap terlihat pada viewport; pulihkan status dari endpoint pekerjaan setelah refresh/koneksi putus. Jangan mengarang ETA atau persentase.
 6. **Registrasi Portofolio**: Daftarkan tautan proyek ke `katalog-portofolio-web`.

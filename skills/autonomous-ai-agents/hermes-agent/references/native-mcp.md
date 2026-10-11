@@ -335,6 +335,10 @@ Servers can also include `tools` in sampling requests for multi-turn tool-augmen
 
 Disable sampling for untrusted servers with `sampling: { enabled: false }`.
 
+## Creator MCP local-browser caveat
+
+For `@lottiefiles/creator-mcp`, use `hermes mcp add` for non-catalog custom stdio registration. `hermes mcp test` proves tool discovery, not a Creator tab connection. Creator's **Enable Local MCP** opens a WebSocket to `127.0.0.1:3847` from the browser; Chrome may block it with `ERR_BLOCKED_BY_LOCAL_NETWORK_ACCESS_CHECKS`. Grant the Creator origin Local Network Access permission in a local browser and confirm `read_scene` succeeds through the same MCP process. Do not kill an existing listener on 3847 unless its ownership is verified; it may be the gateway's active MCP child. A remote browser's localhost is not necessarily the VPS localhost.
+
 ## Notes
 
 - MCP tools are called synchronously from the agent's perspective but run asynchronously on a dedicated background event loop

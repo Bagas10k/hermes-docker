@@ -33,6 +33,14 @@ Untuk video edukasi bagi orang awam. Panduan produksi, bukan janji retensi. Dasa
 - Pakai pembanding familiar hanya bila kemiripannya membantu dan batasnya jelas: “seperti meja kerja bercabang” menjelaskan pembagian tugas, bukan berarti agen adalah manusia sungguhan. Hindari analogi yang mengubah mekanisme.
 - Uji tanpa label dan tanpa suara: minta penonton menunjuk objek, bagian yang bergerak, dan hasilnya. Jika hanya bisa menjawab “ada kartu dan panah”, revisi aset/shot menjadi objek atau antarmuka yang dikenali. Lalu uji audio tanpa gambar: pendengar harus bisa membayangkan bentuk dan perubahan penting tanpa dijejali deskripsi panjang.
 
+## Pola referensi akun @zeinersyad (contoh, bukan template salin)
+- Buka dengan **benda/angka/kontras konkret** yang membuat penonton bertanya, bukan definisi abstrak: tagihan besar di atas bukti tagihan, atau harga sama dengan jatah berbeda. Setelah itu baru sebut konteks produk dan istilah teknis.
+- Bangun rantai pertanyaan audiens: `apa bendanya? → mengapa janggal/penting? → mekanisme apa yang menyebabkannya? → apa bukti pada layar? → apa akibat atau batasnya?`. Satu beat harus membayar pertanyaan sebelumnya dan memancing berikutnya.
+- Pertahankan jangkar presenter/identitas visual dan headline editorial besar; ganti bukti yang relevan (UI, grafik, potongan dokumentasi) di area tetap. Lingkari/sorot **bagian yang membuktikan ucapan**, bukan menempel screenshot penuh sebagai dekorasi. Caption lisan pendek mengikuti satu gagasan, tidak mengulang seluruh headline.
+- Eskalasi klaim dengan bukti yang bertahap: objek nyata → perbandingan atau tindakan → mekanisme → konsekuensi spesifik. Angka/screenshot di video referensi adalah *klaim yang ditampilkan*, bukan verifikasi independen; untuk produksi sendiri cek sumber dan beri label contoh bila ilustratif.
+- Variasikan bobot adegan dengan palet dan kepadatan sesuai argumen (mis. terang untuk konteks, gelap untuk konsekuensi), bukan mengubah gaya acak. Uji frame berurutan untuk gerak dan timing; contact sheet berjeda hanya membuktikan urutan visual.
+- Untuk video produk tanpa presenter manusia, gantikan fungsi presenter dengan objek antarmuka yang persisten dan voice-over singkat. Tanyakan kepada penonton awam sesudah menonton: “Apa yang dibuat? Bagian mana yang berubah? Bukti mana yang membuatmu percaya?”
+
 ## QC sebelum kirim
 - Matriks: `rentang audio terukur | ucapan | satu aksi visual | teks layar <= satu frasa | klaim/bukti`.
 - Tonton tanpa suara: apakah sebab-akibat terbaca? Dengar tanpa gambar: apakah cerita utuh? Periksa tiap klaim.

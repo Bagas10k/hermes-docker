@@ -24,10 +24,10 @@ agent:
   max_turns: 150
   service_tier: ''
   fast_auto_seconds: 60
+  verify_on_stop: true
   personalities: {}
   reasoning_effort: medium
   verbose: false
-  verify_on_stop: true
 terminal:
   backend: local
   cwd: .
@@ -128,6 +128,7 @@ stt:
 memory:
   memory_enabled: true
   user_profile_enabled: true
+  write_approval: false
   memory_char_limit: 2200
   user_char_limit: 1375
   nudge_interval: 10
@@ -330,6 +331,122 @@ mcp_servers:
     args:
       - /home/ubuntu/mcp-sqlite/server.py
     enabled: true
+  lottiefiles-creator:
+    command: /home/ubuntu/.local/bin/node
+    args:
+      - /home/ubuntu/.local/share/lottie-creator-mcp/node_modules/@lottiefiles/creator-mcp/dist/index.mjs
+    connect_timeout: 15.0
+    tools:
+      include:
+        - read_scene
+        - apply_keyframes
+        - apply_motion_preset
+        - apply_motion_path
+        - set_anchor_point
+        - create_shape
+        - bend_shape
+        - create_text
+        - create_text_group
+        - create_button
+        - create_reference_board
+        - set_text
+        - set_text_style
+        - measure_text_units
+        - split_text
+        - stagger_layers
+        - animate_entrance
+        - list_fonts
+        - center_layer
+        - set_fill
+        - set_stroke
+        - animate_paint
+        - animate_property
+        - set_blend_mode
+        - add_drop_shadow
+        - add_blur
+        - add_color_overlay
+        - add_tint
+        - add_tritone
+        - list_layer_effects
+        - remove_layer_effect
+        - update_layer_effect
+        - list_themes
+        - list_slots
+        - list_motion_system_items
+        - link_slot_to_layer
+        - create_slot
+        - create_slot_from_value
+        - update_slot_value
+        - unlink_slot
+        - add_theme
+        - select_theme
+        - remove_theme
+        - list_segments
+        - add_segment
+        - rename_segment
+        - remove_segment
+        - select_segment
+        - list_state_machines
+        - add_state_machine
+        - set_active_state_machine
+        - remove_state_machine
+        - list_states
+        - add_state
+        - add_global_state
+        - remove_state
+        - update_state
+        - set_state_actions
+        - set_initial_state
+        - add_transition
+        - remove_transition
+        - list_interactions
+        - add_pointer_interaction
+        - add_state_interaction
+        - remove_interaction
+        - list_inputs
+        - add_input
+        - update_input
+        - remove_input
+        - import_asset
+        - vectorize_image
+        - remove_keyframes
+        - duplicate_layer
+        - tile_layer
+        - reorder_layer
+        - group_layers
+        - create_shape_group
+        - add_shape_to_layer
+        - set_group_transform
+        - reorder_shape
+        - set_layer_time
+        - retime_keyframes
+        - delete_layer
+        - create_mask
+        - update_mask
+        - remove_mask
+        - set_matte
+        - remove_matte
+        - rename_node
+        - set_layer_visibility
+        - set_layer_lock
+        - flip_layer
+        - align_layer
+        - align_layers
+        - layout
+        - read_keyframes
+        - copy_animation
+        - list_scenes
+        - create_scene
+        - switch_scene
+        - set_current_frame
+        - set_scene_background
+        - set_scene_settings
+        - create_scene_layer
+        - break_scene_layer
+        - apply_bounce
+        - apply_squash
+        - apply_coupled_shadow
+    enabled: true
 platform_toolsets:
   cli:
     - browser
@@ -369,3 +486,41 @@ platform_toolsets:
     - hermes-whatsapp
   yuanbao:
     - hermes-yuanbao
+
+# ── Security ──────────────────────────────────────────────────────────
+# Secret redaction is ON by default — strings that look like API keys,
+# tokens, and passwords are masked in tool output, logs, and chat
+# responses before the model or user ever sees them. Set redact_secrets
+# to false to disable (e.g. when developing the redactor itself).
+# tirith pre-exec scanning is enabled by default when the tirith binary
+# is available. Configure via security.tirith_* keys or env vars
+# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
+#
+# security:
+#   redact_secrets: true
+#   tirith_enabled: true
+#   tirith_path: "tirith"
+#   tirith_timeout: 5
+#   tirith_fail_open: true
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4
