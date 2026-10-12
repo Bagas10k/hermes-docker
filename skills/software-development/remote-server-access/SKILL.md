@@ -57,6 +57,10 @@ Interpret failures at the correct stage:
 
 Do not continue varying SSH flags after the user identifies RDP as the intended service; switch clients because the protocols are different.
 
+## Teaching manual data entry on a managed VPS
+
+When Bagas asks how to populate company master data, explain in plain Indonesian with one concrete entity before using terms such as schema, seed, or import pipeline. The company fills a template supplied by the developer; the developer validates and enters it via an operator-only process on the VPS, not necessarily a website upload. Inspect the actual model, form validation, SQL table definition, uniqueness, and existing identifiers before giving commands. Start with a read-only `SELECT`; for a manual SQL exercise use a disposable database or an explicit transaction with `ROLLBACK` by default, and explain that raw SQL bypasses application validation and audit hooks. Never supply a production `COMMIT` for dummy examples. Ask one short question at a time when the data source or authorization is unclear.
+
 ## Migration and System Backup
 
 When backing up or migrating a Windows RDP server, Hermes Agent installation, and project workspaces to a new device or VPS, use a single-execution automated bundle with a zero-friction installer. See [references/rdp-migration-backup.md](references/rdp-migration-backup.md) for the exact directory map, one-click restore script pattern, and Windows file-system pitfalls (reserved device names like `NUL`, ACL buffer sanitation, and archive exclusions).
