@@ -1,0 +1,12 @@
+---
+name: pbj-isolated-business-tests
+description: Use when running isolated PBJ business regression tests.
+---
+
+# Isolated PBJ tests
+
+Use a dedicated worktree without .env; never live vendor or DB. Reuse scripts/test-business-isolated.py and guarded scripts/business-test-fixtures.php after reading them. Install locked Composer dev deps with --no-scripts under review PHP image. PHPUnit 12.5 requires PHP >=8.3. Use private internal network, unpublished MariaDB tmpfs, explicit DB URL/socket overrides and nonexistent config/route cache paths. Verify config and SELECT DATABASE() before migrations/tests. Run native baseline plus pending migrations and existing Feature suite; enable zend.assertions=1 and assert.exception=1 for payroll scripts. Legacy scripts swallow Throwable: reject [ERROR] even when exit is zero. Compare empty baseline with dummy fixtures; authenticate valid identities rather than relaxing security middleware for old session-only tests. Parse JUnit totals programmatically, retain commands/logs/readback and clean only unique test containers/network. No main merge, push or live deployment without separate authorization.
+
+For fresh-install audits, build a uniquely tagged image from the target worktree. Legacy `scripts/test-deployment.py` and `database/test_migrations.py` default to live `pbj_db`: always override `PBJ_TEST_DB_CONTAINER` to a newly created tmpfs MariaDB on a unique internal network, and override `PBJ_TEST_IMAGE`. Docker internal networks may not publish requested ports; keep the network private and adapt the smoke HTTP reader in an external evidence copy to `docker exec APP curl -i http://WEB/path` instead of weakening DB isolation. Record that adapter and the original failure. Verify role counts and all three identity tables (`account`, `super_account`, `users`); schema success alone does not prove reference-data provisioning or browser authentication.
+
+For a real login followed by a protected request in Laravel Feature tests, explicitly carry the login session cookie with `withCookie(config('session.cookie'), session()->getId())`; the test client does not retain response cookies like a browser, so omitting it can falsely trigger single-session rejection. Never fix that harness failure by clearing the account's active session or disabling middleware. Distinguish fixture DB inserts from HTTP account-provisioning coverage: verify a newly created account's role/hash, then login and access a protected route.

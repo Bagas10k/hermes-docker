@@ -17,13 +17,15 @@ Protokol resmi orkestrasi sub-agent otonom untuk tugas tingkat menengah dan komp
 
 ## 1. Lingkup Penerapan (Scope & Bounds)
 
-### Kapan Diaktifkan:
-- Tugas rekayasa fitur baru, refaktorisasi arsitektur, riset multi-sumber mendalam, audit sistem, dan perbaikan bug multi-modul.
-- Instruksi yang membutuhkan ketelitian tinggi atau memiliki dampak luas pada sistem.
+### Sensitivitas Pemicu: Menengah (pilihan Bagas)
+- Aktifkan `delegate_task` bila tugas memerlukan beberapa langkah yang dapat dipisah menjadi alur kerja independen dengan penalaran, atau membutuhkan audit/QC independen: fitur baru, refaktorisasi, riset multi-sumber, audit sistem, dan bug multi-modul.
+- Untuk dampak besar atau risiko tinggi, aktifkan pengawas independen meskipun langkah eksekusinya sedikit. Tetapkan kriteria penerimaan dan batas tugas sebelum delegasi.
+- Jangan delegasikan hanya karena jumlah langkah banyak: bila alurnya mekanis, saling bergantung erat, atau berupa beberapa panggilan alat tanpa penalaran terpisah, kerjakan langsung (gunakan `execute_code` untuk batch mekanis).
 
-### Kapan Dilewati (Bypass / Direct Execution):
+### Kapan Dilewati (Bypass / Direct Execution)
 - Tugas mikro dan operasional sepele: membaca 1 berkas singkat, memeriksa status port/service, kueri satu baris, atau pengecekan waktu.
-- Dieksekusi langsung oleh General Manager (Hermes Utama) tanpa memicu overhead sub-agent demi efisiensi token dan latensi.
+- Satu panggilan alat, atau tugas yang memerlukan klarifikasi/interaksi pengguna: panggil alat langsung atau tanyakan ke Bagas; sub-agent tidak dapat meminta klarifikasi.
+- General Manager mengeksekusi langsung bila manfaat pemeriksaan paralel tidak melebihi biaya token, latensi, dan koordinasi.
 
 ---
 

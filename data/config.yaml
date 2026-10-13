@@ -106,12 +106,12 @@ display:
   long_running_notifications: true
   tool_progress: all
 dashboard:
-  theme: default
+  theme: midnight
   basic_auth:
     username: bagas
     password_hash: scrypt$16384$8$1$sfvpwRwT5dcxcYGXTVJzCA==$q4VIthza1qeSsHzMq/uU+ORo1AbRcj9HupDEY3SjCOo=
   public_url: https://www.jajandigital.web.id/hermes
-  font: theme
+  font: jetbrains-mono
 tts:
   edge:
     voice: id-ID-GadisNeural

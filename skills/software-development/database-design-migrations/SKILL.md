@@ -28,6 +28,7 @@ Read existing migrations, ORM configuration, database engine/version declaration
 
 ## Pitfalls
 - Successful schema generation is not a successfully applied migration.
+- For Laravel snapshot baselines, use native `database/schema/<connection>-schema.sql` loading before pending-file calculation; inserting history inside an old importer cannot stop its already-calculated replay list. Preserve historical PHP files and test both a fresh MariaDB install and an existing-history upgrade, including duplicate history rows. Native MySQL schema loading requires the `mysql` client; compare full DDL in addition to pending counts.
 - SQLite-only tests cannot prove PostgreSQL/MySQL locking, enum, or index behavior.
 - ORM validation cannot replace uniqueness under concurrent requests.
 - Docker CLI availability does not imply a running engine. Verify `docker info` through `terminal`; if unavailable, report the blocker or use an approved existing local database. Never silently change the production database choice.
