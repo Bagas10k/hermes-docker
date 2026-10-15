@@ -17,6 +17,10 @@ Use when updating, bug-fixing, styling, or maintaining an already-running fullst
 
 For chat-centric companion interfaces, also read [conversational companion UI](references/conversational-companion-ui.md) before changing streaming, agent switching, activity status, or mobile composer behavior.
 
+- Preserve existing route, title, and rendered-copy contracts: inspect tests before changing UI labels, then run the full test suite after edits.
+- Verify the live render only after reloading/restarting its serving process; otherwise an HTTP 200 may be the stale page. Parse the returned HTML for key landmarks and responsive regions, and use a real browser at desktop/mobile widths when available. Static CSS/markup checks do not prove the visual layout.
+- Verify the user's actual route, including its authenticated proxy/public edge when relevant. Keep credentials out of command output; report local success separately from an unreachable or unverified public domain.
+
 ### 1. In-Place Project Directory Locking
 - Immediately navigate (`cd <project_dir>`) and verify working directory at the start of work. Avoid repeatedly specifying long absolute paths when executing multi-step tasks inside a dedicated repo.
 - Verify Git status and remote auth tokens up front (`git remote -v`, `git pull origin <branch>`).

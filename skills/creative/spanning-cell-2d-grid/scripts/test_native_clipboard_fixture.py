@@ -30,6 +30,23 @@ class NativeClipboardFixtureTests(unittest.TestCase):
         self.assertEqual(fixture(), fixture())
         self.assertEqual(json.loads(json.dumps(fixture())), fixture())
 
+    def test_keyboard_metadata_and_accessible_markup(self):
+        data = fixture()
+        kb = data['keyboard']
+        self.assertEqual(kb['activation_keys'], ['Enter', 'Space'])
+        self.assertEqual(kb['copy_button_selector'], '.dag-breadcrumb-copy-btn')
+        self.assertEqual(kb['status_selector'], '#status')
+        html = data['html']
+        self.assertIn('id="status" role="status" aria-live="polite"', html)
+        self.assertIn('.dag-breadcrumb-copy-btn:focus-visible', html)
+        self.assertIn('outline:2px solid #2563eb', html)
+
+    def test_native_button_no_redundant_keyboard_listeners(self):
+        script = Path(__file__).with_name('history_browser.js').read_text()
+        self.assertNotIn("copyBtn.addEventListener('keydown'", script)
+        self.assertNotIn("copyBtn.addEventListener('keyup'", script)
+        self.assertNotIn("data-key-activated", script)
+
 
 if __name__ == '__main__':
     unittest.main()

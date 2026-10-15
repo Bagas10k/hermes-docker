@@ -7,7 +7,7 @@
       "geometry": {
         "world": 1676,
         "client": 348,
-        "scroll": 265,
+        "scroll": 288,
         "map": {
           "x": 27,
           "y": 1009.6875,
@@ -15,11 +15,11 @@
           "height": 90
         },
         "frame": {
-          "x": 28.5,
+          "x": 30.900001525878906,
           "width": 37.400001525878906
         },
         "units": {
-          "x": 28.5,
+          "x": 30.9,
           "width": 37.4
         },
         "scrollWidth": 1676
@@ -43,7 +43,7 @@
       "geometry": {
         "world": 1676,
         "client": 348,
-        "scroll": 252,
+        "scroll": 250,
         "map": {
           "x": 27,
           "y": 964.6875,
@@ -51,11 +51,11 @@
           "height": 135
         },
         "frame": {
-          "x": 40.650001525878906,
+          "x": 40.19999694824219,
           "width": 56.099998474121094
         },
         "units": {
-          "x": 27.1,
+          "x": 26.8,
           "width": 37.4
         },
         "scrollWidth": 1676
@@ -223,7 +223,7 @@
       "geometry": {
         "world": 1676,
         "client": 818,
-        "scroll": 258,
+        "scroll": 267,
         "map": {
           "x": 27,
           "y": 900.6875,
@@ -231,11 +231,11 @@
           "height": 90
         },
         "frame": {
-          "x": 27.700000762939453,
+          "x": 28.700000762939453,
           "width": 87.90000915527344
         },
         "units": {
-          "x": 27.7,
+          "x": 28.7,
           "width": 87.9
         },
         "scrollWidth": 1676
@@ -327,7 +327,7 @@
     }
   ],
   "errors": [],
-  "browser": "153.0.8010.12",
+  "browser": "156.0.8078.4",
   "pass": true,
   "lifecycle": {
     "kind": "native ResizeObserver + instrumented callback replay / Chromium",
@@ -338,14 +338,14 @@
           {
             "client": 191,
             "world": 1676,
-            "scroll": 15,
+            "scroll": 24,
             "units": {
-              "x": 1.6,
+              "x": 2.6,
               "width": 20.5
             },
             "screenWidth": 20.499998092651367,
             "mapWidth": 180,
-            "screenX": 1.6000003814697266,
+            "screenX": 2.6000003814697266,
             "resize": 0,
             "scrollEvents": 3,
             "deliveries": 2
@@ -353,14 +353,14 @@
           {
             "client": 295,
             "world": 1676,
-            "scroll": 15,
+            "scroll": 24,
             "units": {
-              "x": 1.6,
+              "x": 2.6,
               "width": 31.7
             },
             "screenWidth": 31.69999885559082,
             "mapWidth": 180,
-            "screenX": 1.6000003814697266,
+            "screenX": 2.6000003814697266,
             "resize": 0,
             "scrollEvents": 3,
             "deliveries": 3
@@ -455,7 +455,7 @@
             "mapWidth": 180,
             "screenX": 1.7000007629394531,
             "resize": 0,
-            "scrollEvents": 3,
+            "scrollEvents": 2,
             "deliveries": 2
           },
           {
@@ -470,7 +470,7 @@
             "mapWidth": 180,
             "screenX": 1.7000007629394531,
             "resize": 0,
-            "scrollEvents": 3,
+            "scrollEvents": 2,
             "deliveries": 3
           }
         ],

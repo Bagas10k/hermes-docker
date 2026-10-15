@@ -73,6 +73,12 @@ Ketika autopilot aktif:
    - Keputusan teknis diambil 100% secara otonom menggunakan Tiga Mindset Problem Solving. Jangan pernah memblokir eksekusi dengan `blocks_new_research: true`.
    - Laporan dikirimkan sebagai ringkasan hasil nyata yang telah selesai, bukan pertanyaan meminta izin.
 
+## Finalisasi Siklus Terjadwal yang Dapat Diverifikasi
+- Eksekusi satu target pending per pemanggilan cron; antrekan Gap List berikutnya tanpa membuat/mengubah scheduler atau memperluas pekerjaan tanpa batas dalam satu run.
+- Baca ulang target berdasarkan ID sebelum finalisasi. Jika penulis lain sudah menyelesaikan ID yang sama, rekonsiliasi bukti secara idempoten; jangan menambah cycle_count atau completed_researches kedua kali dan jangan menimpa state dari snapshot lama.
+- Verifikasi ulang artefak pekerja dengan runner nyata. Pisahkan jumlah unit test, skenario terkontrol, browser native, dan pemeriksaan AX; DOM/AX tidak membuktikan pengumuman screen-reader. Simpan perintah, exit code, batas klaim, serta hash sumber yang diuji.
+- Perluas skill yang sudah menaungi target; jangan membuat skill duplikat demi menambah hitungan. Simpan prosedur ringkas di SKILL.md dan rincian eksperimen di references.
+
 ## 4. Direktori & Berkas Inti
 - `AUTOPILOT/state.json`: Status aktif, penghitung siklus, daftar roadmap, antrean eskalasi.
 - `AUTOPILOT/01-SIKLUS-RISET/`: Berkas catatan hasil riset mandiri per siklus.

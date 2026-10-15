@@ -1,0 +1,187 @@
+{
+  "kind": "Chromium headless accessibility audit; focus-visible contrast and prefers-reduced-motion",
+  "causalModel": "outcome = f(focus owner, promise generation, media preference, computed styles)",
+  "limitations": [
+    "Not an official WCAG certification or compliance endorsement",
+    "No screen reader speech or synthetic audio announcement claim",
+    "No GPU, FPS, or compositor frame timing claim",
+    "Contrast evaluated on opaque rendered surfaces without gradient blending"
+  ],
+  "browser": "156.0.8078.4",
+  "records": [
+    {
+      "type": "focus_visible",
+      "viewport": 390,
+      "target": ".dag-breadcrumb-copy-btn",
+      "focused": true,
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(37, 99, 235)",
+      "outlineOffset": "2px",
+      "adjacentBg": "rgb(241, 245, 249)",
+      "buttonBg": "rgb(226, 232, 240)",
+      "buttonColor": "rgb(51, 65, 85)"
+    },
+    {
+      "type": "motion_styles",
+      "viewport": 390,
+      "preference": "no-preference",
+      "styles": {
+        "btnTransition": "0.15s",
+        "itemTransition": "0.15s",
+        "minimapTransition": "0.2s",
+        "searchTransition": "0.15s",
+        "containerScrollBehavior": "auto"
+      }
+    },
+    {
+      "type": "motion_styles",
+      "viewport": 390,
+      "preference": "reduce",
+      "styles": {
+        "matchesMedia": true,
+        "btnTransition": "1e-05s",
+        "itemTransition": "1e-05s",
+        "minimapTransition": "1e-05s",
+        "searchTransition": "1e-05s",
+        "containerScrollBehavior": "auto"
+      }
+    },
+    {
+      "type": "native_scroll_audit",
+      "viewport": 390,
+      "jsCall": "dagView.scrollTo({ left: 200, behavior: \"smooth\" })",
+      "reducedMotionEmulated": true,
+      "result": {
+        "max": 156,
+        "target": 100,
+        "immediate": 0,
+        "after": 100,
+        "expected": 156,
+        "guardedImmediate": 156,
+        "guardedAfter": 156
+      },
+      "contractNote": "Injected width ensures positive scroll range; direct smooth bypass is the negative control, actual checkout is immediate under reduce."
+    },
+    {
+      "type": "focus_visible",
+      "viewport": 768,
+      "target": ".dag-breadcrumb-copy-btn",
+      "focused": true,
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(37, 99, 235)",
+      "outlineOffset": "2px",
+      "adjacentBg": "rgb(241, 245, 249)",
+      "buttonBg": "rgb(226, 232, 240)",
+      "buttonColor": "rgb(51, 65, 85)"
+    },
+    {
+      "type": "motion_styles",
+      "viewport": 768,
+      "preference": "no-preference",
+      "styles": {
+        "btnTransition": "0.15s",
+        "itemTransition": "0.15s",
+        "minimapTransition": "0.2s",
+        "searchTransition": "0.15s",
+        "containerScrollBehavior": "auto"
+      }
+    },
+    {
+      "type": "motion_styles",
+      "viewport": 768,
+      "preference": "reduce",
+      "styles": {
+        "matchesMedia": true,
+        "btnTransition": "1e-05s",
+        "itemTransition": "1e-05s",
+        "minimapTransition": "1e-05s",
+        "searchTransition": "1e-05s",
+        "containerScrollBehavior": "auto"
+      }
+    },
+    {
+      "type": "native_scroll_audit",
+      "viewport": 768,
+      "jsCall": "dagView.scrollTo({ left: 200, behavior: \"smooth\" })",
+      "reducedMotionEmulated": true,
+      "result": {
+        "max": 156,
+        "target": 100,
+        "immediate": 0,
+        "after": 100,
+        "expected": 156,
+        "guardedImmediate": 156,
+        "guardedAfter": 156
+      },
+      "contractNote": "Injected width ensures positive scroll range; direct smooth bypass is the negative control, actual checkout is immediate under reduce."
+    },
+    {
+      "type": "focus_visible",
+      "viewport": 1280,
+      "target": ".dag-breadcrumb-copy-btn",
+      "focused": true,
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(37, 99, 235)",
+      "outlineOffset": "2px",
+      "adjacentBg": "rgb(241, 245, 249)",
+      "buttonBg": "rgb(226, 232, 240)",
+      "buttonColor": "rgb(51, 65, 85)"
+    },
+    {
+      "type": "motion_styles",
+      "viewport": 1280,
+      "preference": "no-preference",
+      "styles": {
+        "btnTransition": "0.15s",
+        "itemTransition": "0.15s",
+        "minimapTransition": "0.2s",
+        "searchTransition": "0.15s",
+        "containerScrollBehavior": "auto"
+      }
+    },
+    {
+      "type": "motion_styles",
+      "viewport": 1280,
+      "preference": "reduce",
+      "styles": {
+        "matchesMedia": true,
+        "btnTransition": "1e-05s",
+        "itemTransition": "1e-05s",
+        "minimapTransition": "1e-05s",
+        "searchTransition": "1e-05s",
+        "containerScrollBehavior": "auto"
+      }
+    },
+    {
+      "type": "native_scroll_audit",
+      "viewport": 1280,
+      "jsCall": "dagView.scrollTo({ left: 200, behavior: \"smooth\" })",
+      "reducedMotionEmulated": true,
+      "result": {
+        "max": 156,
+        "target": 100,
+        "immediate": 0,
+        "after": 100,
+        "expected": 156,
+        "guardedImmediate": 156,
+        "guardedAfter": 156
+      },
+      "contractNote": "Injected width ensures positive scroll range; direct smooth bypass is the negative control, actual checkout is immediate under reduce."
+    }
+  ],
+  "jsCoordinationContract": {
+    "requiresJsMatchMediaGuard": true,
+    "targetFile": "scripts/history_browser.js",
+    "functionsAudited": [
+      "autoCenterViewport",
+      "search"
+    ],
+    "finding": "Explicit smooth bypasses CSS auto; guarded application navigation is verified separately on a scrollable container."
+  },
+  "errors": [],
+  "origin": "http://127.0.0.1:45917",
+  "pass": true
+}

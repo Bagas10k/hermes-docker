@@ -1,0 +1,407 @@
+{
+  "kind": "Chromium clipboard focus continuity, repeated same-route status DOM/AX, and deterministic pending promise control",
+  "target": "UIUX-067",
+  "limitations": [
+    "Not physical system clipboard or cross-application OS paste integration",
+    "No native OS permission prompt UI, Firefox/WebKit engines, or audio screen-reader speech output claims",
+    "Repeated live-region DOM/AX updates verify DOM textContent and computed accessibility tree nodes, not AT audio speech synthesis or announcement coalescing",
+    "Controlled promise tests use deterministic interception on navigator.clipboard.writeText, explicitly distinguished from the native OS clipboard API",
+    "Native writeText remains non-cancellable without an AbortSignal; no Escape handler is implemented for clipboard"
+  ],
+  "categories": {
+    "native_api": "Real navigator.clipboard.writeText / readText with CDP permissions; no stubs",
+    "controlled_promise": "Deterministic promise holding to test user focus shifts while pending, settlement, refresh, and dispose",
+    "lifecycle_focus": "Differential focus restoration on refresh (only restored if old copy button held focus)",
+    "motion": "Verification of matchMedia prefers-reduced-motion in autoCenterViewport and search camera scrolling"
+  },
+  "records": [
+    {
+      "width": 390,
+      "case": "repeated-same-route-success-dom-ax",
+      "category": "native_api",
+      "controlledPromise": false,
+      "activations": 2,
+      "route": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true,
+        "disabled": false
+      },
+      "focusPreserved": true,
+      "atSpeechClaim": false,
+      "note": "Repeated same-route DOM and AX status updates verified; not screen-reader speech output",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "repeated-same-route-denial-dom-ax",
+      "category": "native_api",
+      "controlledPromise": false,
+      "activations": 2,
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true,
+        "disabled": false
+      },
+      "clipboardRetained": true,
+      "focusPreserved": true,
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "native-permission-recovery-search-regression",
+      "category": "native_api",
+      "controlledPromise": false,
+      "completed": true,
+      "searchEscapePreserved": true,
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "controlled-pending-tab-focus-settlement-no-theft",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "activeWhilePending": {
+        "tag": "g",
+        "id": null,
+        "className": "node-item",
+        "isCopyBtn": false
+      },
+      "activeAfterSettlement": {
+        "tag": "g",
+        "id": null,
+        "className": "node-item",
+        "isCopyBtn": false
+      },
+      "theftDetected": false,
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "controlled-pending-search-focus-settlement-no-theft",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "activeElement": "dag-search-input",
+      "theftDetected": false,
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "controlled-pending-search-focus-refresh-stale-completion",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "refreshTheftDetected": false,
+      "staleMutationDetected": false,
+      "activeElement": "dag-search-input",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "controlled-pending-search-focus-dispose-stale-completion",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "disposedButtonDisabled": true,
+      "disposedStatusNeutral": true,
+      "staleMutationDetected": false,
+      "activeElement": "dag-search-input",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "refresh-focus-restoration-differential",
+      "category": "lifecycle_focus",
+      "controlledPromise": false,
+      "focusedWhenOwned": true,
+      "unfocusedWhenNotOwned": true,
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "reduced-motion-autocenter-decision",
+      "category": "motion",
+      "controlledPromise": false,
+      "reduceBehavior": "auto",
+      "noPreferenceBehavior": "smooth",
+      "searchReduceBehavior": "auto",
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "repeated-same-route-success-dom-ax",
+      "category": "native_api",
+      "controlledPromise": false,
+      "activations": 2,
+      "route": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true,
+        "disabled": false
+      },
+      "focusPreserved": true,
+      "atSpeechClaim": false,
+      "note": "Repeated same-route DOM and AX status updates verified; not screen-reader speech output",
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "repeated-same-route-denial-dom-ax",
+      "category": "native_api",
+      "controlledPromise": false,
+      "activations": 2,
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true,
+        "disabled": false
+      },
+      "clipboardRetained": true,
+      "focusPreserved": true,
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "native-permission-recovery-search-regression",
+      "category": "native_api",
+      "controlledPromise": false,
+      "completed": true,
+      "searchEscapePreserved": true,
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "controlled-pending-tab-focus-settlement-no-theft",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "activeWhilePending": {
+        "tag": "g",
+        "id": null,
+        "className": "node-item",
+        "isCopyBtn": false
+      },
+      "activeAfterSettlement": {
+        "tag": "g",
+        "id": null,
+        "className": "node-item",
+        "isCopyBtn": false
+      },
+      "theftDetected": false,
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "controlled-pending-search-focus-settlement-no-theft",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "activeElement": "dag-search-input",
+      "theftDetected": false,
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "controlled-pending-search-focus-refresh-stale-completion",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "refreshTheftDetected": false,
+      "staleMutationDetected": false,
+      "activeElement": "dag-search-input",
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "controlled-pending-search-focus-dispose-stale-completion",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "disposedButtonDisabled": true,
+      "disposedStatusNeutral": true,
+      "staleMutationDetected": false,
+      "activeElement": "dag-search-input",
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "refresh-focus-restoration-differential",
+      "category": "lifecycle_focus",
+      "controlledPromise": false,
+      "focusedWhenOwned": true,
+      "unfocusedWhenNotOwned": true,
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "reduced-motion-autocenter-decision",
+      "category": "motion",
+      "controlledPromise": false,
+      "reduceBehavior": "auto",
+      "noPreferenceBehavior": "smooth",
+      "searchReduceBehavior": "auto",
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "repeated-same-route-success-dom-ax",
+      "category": "native_api",
+      "controlledPromise": false,
+      "activations": 2,
+      "route": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true,
+        "disabled": false
+      },
+      "focusPreserved": true,
+      "atSpeechClaim": false,
+      "note": "Repeated same-route DOM and AX status updates verified; not screen-reader speech output",
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "repeated-same-route-denial-dom-ax",
+      "category": "native_api",
+      "controlledPromise": false,
+      "activations": 2,
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true,
+        "disabled": false
+      },
+      "clipboardRetained": true,
+      "focusPreserved": true,
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "native-permission-recovery-search-regression",
+      "category": "native_api",
+      "controlledPromise": false,
+      "completed": true,
+      "searchEscapePreserved": true,
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "controlled-pending-tab-focus-settlement-no-theft",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "activeWhilePending": {
+        "tag": "g",
+        "id": null,
+        "className": "node-item",
+        "isCopyBtn": false
+      },
+      "activeAfterSettlement": {
+        "tag": "g",
+        "id": null,
+        "className": "node-item",
+        "isCopyBtn": false
+      },
+      "theftDetected": false,
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "controlled-pending-search-focus-settlement-no-theft",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "activeElement": "dag-search-input",
+      "theftDetected": false,
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "controlled-pending-search-focus-refresh-stale-completion",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "refreshTheftDetected": false,
+      "staleMutationDetected": false,
+      "activeElement": "dag-search-input",
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "controlled-pending-search-focus-dispose-stale-completion",
+      "category": "controlled_promise",
+      "controlledPromise": true,
+      "disposedButtonDisabled": true,
+      "disposedStatusNeutral": true,
+      "staleMutationDetected": false,
+      "activeElement": "dag-search-input",
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "refresh-focus-restoration-differential",
+      "category": "lifecycle_focus",
+      "controlledPromise": false,
+      "focusedWhenOwned": true,
+      "unfocusedWhenNotOwned": true,
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "reduced-motion-autocenter-decision",
+      "category": "motion",
+      "controlledPromise": false,
+      "reduceBehavior": "auto",
+      "noPreferenceBehavior": "smooth",
+      "searchReduceBehavior": "auto",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "origin": "http://127.0.0.1:35941",
+  "browser": "156.0.8078.4",
+  "pass": true
+}

@@ -14,6 +14,13 @@ def fixture():
         'html': render(history),
         'initial': {'id': 'anak-雪', 'text': 'root > alpha > anak-雪'},
         'recovery': {'id': 'beta & <baru>', 'text': 'root > beta & <baru>'},
+        'keyboard': {
+            'activation_keys': ['Enter', 'Space'],
+            'copy_button_selector': '.dag-breadcrumb-copy-btn',
+            'status_selector': '#status',
+            'expected_status_success': 'Silsilah rute berhasil disalin ke clipboard',
+            'expected_status_failure': 'Gagal menyalin silsilah rute ke clipboard',
+        },
     }
 
 

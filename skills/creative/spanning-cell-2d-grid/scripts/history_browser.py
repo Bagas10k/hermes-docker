@@ -57,9 +57,12 @@ main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;
 :focus-visible{outline:3px solid #1669e8;outline-offset:3px}pre{white-space:pre-wrap;overflow-wrap:anywhere}
 .dag-container{position:relative;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:0;margin:16px 0;overflow-x:auto;scroll-behavior:auto}
 .dag-breadcrumbs-bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:8px 12px;margin:12px 0;font-family:ui-monospace,monospace;font-size:12px;color:#334155}
-.dag-breadcrumb-copy-btn{display:inline-flex;align-items:center;background:#e2e8f0;border:1px solid #94a3b8;border-radius:4px;padding:3px 7px;cursor:pointer;color:#334155;font-size:10px;font-family:inherit;font-weight:600;margin-left:auto;transition:all 0.15s ease;line-height:1}
+.dag-breadcrumb-copy-btn{display:inline-flex;align-items:center;background:#e2e8f0;border:1px solid #94a3b8;border-radius:4px;padding:3px 7px;cursor:pointer;color:#334155;font-size:10px;font-family:inherit;font-weight:600;margin-left:auto;transition:outline-offset 0.15s ease;line-height:1}
 .dag-breadcrumb-copy-btn:hover{background:#cbd5e1;color:#0f172a}
-.dag-breadcrumb-copy-btn.copied{background:#10b981;color:#fff;border-color:#059669}
+.dag-breadcrumb-copy-btn.copied{background:#065f46;color:#fff;border-color:#047857}
+.dag-breadcrumb-copy-btn.copied:hover{background:#047857;color:#fff}
+.dag-breadcrumb-copy-btn:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+@media (forced-colors:active){.dag-breadcrumb-copy-btn{forced-color-adjust:auto}.dag-breadcrumb-copy-btn:focus-visible{outline:2px solid Highlight;outline-offset:2px}}
 .dag-breadcrumb-item{display:inline-flex;align-items:center;background:#fff;border:1px solid #94a3b8;border-radius:4px;padding:3px 8px;cursor:pointer;color:#0f172a;transition:all 0.15s ease;gap:5px}
 .dag-breadcrumb-item:hover{background:#e2e8f0;border-color:#64748b}
 .dag-breadcrumb-item.active{background:#1669e8;color:#fff;border-color:#0f172a;font-weight:600}
@@ -95,6 +98,7 @@ main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;
 .node-item.search-dim{opacity:0.25;transition:opacity 0.2s ease}
 .minimap-node.search-match{stroke:#f59e0b!important;stroke-width:2px!important;r:3.5px!important}
 .minimap-node.search-dim{opacity:0.25!important}
+@media (prefers-reduced-motion:reduce){*,::before,::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}}
 </style><main><h1>Riwayat cabang</h1><p>Pratinjau lokal. Dokumen bersama tidak diubah.</p>
 <button id="outside">Kontrol di luar riwayat</button>
 <section aria-label="Navigasi riwayat"><button id="undo">Kembali ke induk</button>

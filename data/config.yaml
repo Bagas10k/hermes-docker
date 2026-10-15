@@ -1,21 +1,13 @@
 model:
-  api_mode: chat_completions
   base_url: http://localhost:20128/v1
-  default: hight
-  provider: custom:lk
+  default: oc/deepseek-v4.1-flash-free
+  provider: custom
+  api_key: ${HERMES_CUSTOM_LOCALHOST_20128_API_KEY}
 fallback_providers:
-  - base_url: http://localhost:20128/v1
-    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
-    model: ag/gemini-3.8-flash-low
-    provider: custom
-  - base_url: http://localhost:20128/v1
-    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
-    model: ag/gemini-3.7-flash-medium
-    provider: custom
-  - base_url: http://localhost:20128/v1
-    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
-    model: cx/gpt-5.5
-    provider: custom
+- base_url: http://localhost:20128/v1
+  provider: custom
+  key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+  model: oc/muse-spark-1.3-contributor-free
 database:
   journal_mode: wal
 runtime:
@@ -26,7 +18,7 @@ agent:
   fast_auto_seconds: 60
   verify_on_stop: true
   personalities: {}
-  reasoning_effort: medium
+  reasoning_effort: xhigh
   verbose: false
 terminal:
   backend: local
@@ -98,9 +90,9 @@ display:
   runtime_footer:
     enabled: true
     fields:
-      - model
-      - context_pct
-      - latency
+    - model
+    - context_pct
+    - latency
   busy_ack_detail: true
   cleanup_progress: true
   long_running_notifications: true
@@ -133,9 +125,13 @@ memory:
   user_char_limit: 1375
   nudge_interval: 10
 delegation:
+  model: ag/gemini-3.8-flash-high
+  provider: custom
   max_iterations: 250
+  max_concurrent_children: 25
   independent_completions: true
   subagent_auto_approve: true
+  worktree_isolation: true
 skills:
   creation_nudge_interval: 15
 timezone: Asia/Jakarta
@@ -145,10 +141,10 @@ approvals:
 plugins:
   disabled: []
   enabled:
-    - flash-review
-    - ponytail
-    - rtk-rewrite
-    - skill-retriever
+  - flash-review
+  - ponytail
+  - rtk-rewrite
+  - skill-retriever
   entries:
     rtk-rewrite:
       allow_tool_override: false
@@ -158,16 +154,16 @@ plugins:
       allow_tool_override: false
 hooks:
   outbound:
-    - events:
-        - pre_tool_call
-        - post_tool_call
-        - pre_llm_call
-        - on_session_start
-        - on_session_finalize
-        - post_llm_call
-      name: aoms_native_stream
-      timeout: 3
-      url: http://127.0.0.1:3090/api/aoms/native-event
+  - events:
+    - pre_tool_call
+    - post_tool_call
+    - pre_llm_call
+    - on_session_start
+    - on_session_finalize
+    - post_llm_call
+    name: aoms_native_stream
+    timeout: 3
+    url: http://127.0.0.1:3090/api/aoms/native-event
 kanban:
   review_dispatch: true
 code_execution:
@@ -220,89 +216,209 @@ updates:
   non_interactive_local_changes: stash
 _config_version: 44
 custom_providers:
-  - base_url: http://localhost:20128/v1
-    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
-    models:
-      hight: {}
-      medium: {}
-      ag/gemini-3.8-flash-high: {}
-      ag/gemini-3.8-flash-medium: {}
-      ag/gemini-3.8-flash-low: {}
-      ag/gemini-3.8-flash: {}
-      ag/gemini-3.7-flash-high: {}
-      ag/gemini-3.7-flash-medium: {}
-      ag/gemini-3.7-flash-low: {}
-      ag/gemini-3.6-flash-high: {}
-      ag/gemini-3.6-flash-medium: {}
-      ag/gemini-3.6-flash-low: {}
-      ag/gemini-3.5-flash-high: {}
-      ag/gemini-3-flash-agent: {}
-      ag/gemini-3.5-flash-low: {}
-      ag/gemini-3.5-flash-extra-low: {}
-      ag/gemini-pro-agent: {}
-      ag/gemini-3.1-pro-low: {}
-      ag/claude-sonnet-4-6: {}
-      ag/claude-opus-4-6-thinking: {}
-      ag/gpt-oss-120b-medium: {}
-      ag/gemini-3-flash: {}
-      cx/gpt-6.1-sol: {}
-      cx/gpt-6-astra: {}
-      cx/gpt-6-astra[1m]: {}
-      cx/gpt-6-sol: {}
-      cx/gpt-6-sol[1m]: {}
-      cx/gpt-6-luna: {}
-      cx/gpt-6-luna[1m]: {}
-      cx/gpt-5.6-sol: {}
-      cx/gpt-5.6-sol[1m]: {}
-      cx/gpt-5.6-sol-review: {}
-      cx/gpt-5.6-terra: {}
-      cx/gpt-5.6-terra[1m]: {}
-      cx/gpt-5.6-terra-review: {}
-      cx/gpt-5.6-luna: {}
-      cx/gpt-5.6-luna[1m]: {}
-      cx/gpt-5.6-luna-review: {}
-      cx/gpt-5.5: {}
-      cx/gpt-5.5-review: {}
-      cx/gpt-daybreak-blue-latest: {}
-      cx/gpt-reserve: {}
-      cx/codex-auto-review: {}
-    models_discovered: true
-    name: lk
+- base_url: http://localhost:20128/v1
+  key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+  models:
+    hight: {}
+    medium: {}
+    ag/gemini-3.8-flash-high: {}
+    ag/gemini-3.8-flash-medium: {}
+    ag/gemini-3.8-flash-low: {}
+    ag/gemini-3.8-flash: {}
+    ag/gemini-3.7-flash-high: {}
+    ag/gemini-3.7-flash-medium: {}
+    ag/gemini-3.7-flash-low: {}
+    ag/gemini-3.6-flash-high: {}
+    ag/gemini-3.6-flash-medium: {}
+    ag/gemini-3.6-flash-low: {}
+    ag/gemini-3.1-pro-high: {}
+    ag/gemini-pro-agent: {}
+    ag/gemini-3.1-pro-low: {}
+    ag/claude-sonnet-5-5-high: {}
+    ag/claude-sonnet-5-5-medium: {}
+    ag/claude-sonnet-5-5-low: {}
+    ag/claude-sonnet-5-5: {}
+    ag/claude-opus-5-5-high: {}
+    ag/claude-opus-5-5-medium: {}
+    ag/claude-opus-5-5-low: {}
+    ag/claude-opus-5-5: {}
+    ag/claude-sonnet-4-6: {}
+    ag/claude-opus-4-6-thinking: {}
+    ag/gpt-oss-120b-medium: {}
+    cx/gpt-6.1-sol: {}
+    cx/gpt-6-astra: {}
+    cx/gpt-6-astra[1m]: {}
+    cx/gpt-6-sol: {}
+    cx/gpt-6-sol[1m]: {}
+    cx/gpt-6-luna: {}
+    cx/gpt-6-luna[1m]: {}
+    cx/gpt-5.6-sol: {}
+    cx/gpt-5.6-sol[1m]: {}
+    cx/gpt-5.6-sol-review: {}
+    cx/gpt-5.6-terra: {}
+    cx/gpt-5.6-terra[1m]: {}
+    cx/gpt-5.6-terra-review: {}
+    cx/gpt-5.6-luna: {}
+    cx/gpt-5.6-luna[1m]: {}
+    cx/gpt-5.6-luna-review: {}
+    cx/gpt-5.5: {}
+    cx/gpt-5.5-review: {}
+    cx/gpt-daybreak-blue-latest: {}
+    cx/gpt-reserve: {}
+    cx/codex-auto-review: {}
+    gemini/gemini-3.8-flash: {}
+    gemini/gemini-3.7-flash: {}
+    gemini/gemini-3.6-flash: {}
+    gemini/gemini-3.5-flash-lite: {}
+    gemini/gemini-3.1-pro-preview: {}
+    gemini/gemini-3.1-flash-lite-preview: {}
+    gemini/gemini-3-flash-preview: {}
+    gemini/gemma-4-31b-it: {}
+  models_discovered: true
+  name: lk
+- name: kagiro
+  base_url: https://api.kagiro.net/v1
+  key_env: HERMES_CUSTOM_API_KAGIRO_NET_API_KEY
+  model: glm5-3
+  models:
+    claude-opus-4.7: {}
+    claude-opus-5: {}
+    claude-opus-5-5: {}
+    claude-sonnet-5: {}
+    deepseek-4-1-flash: {}
+    deepseek-v4-flash: {}
+    deepseek-v4-flash-0731: {}
+    deepseek-v4-pro: {}
+    deepseek-v4-pro-0813: {}
+    deepseek-v4.1-flash-expires-on-0910: {}
+    gemini-3-8-flash: {}
+    gemini-3.6-flash: {}
+    gemini-3.7-flash: {}
+    glm-5-1: {}
+    glm-5-3-flash: {}
+    glm-5.3-flash-bugil: {}
+    glm5-2: {}
+    glm5-3: {}
+    gpt-5-5: {}
+    gpt-5-6-luna: {}
+    gpt-5-6-sol: {}
+    gpt-5-6-terra: {}
+    gpt-6-astra: {}
+    gpt-6-luna: {}
+    gpt-6-sol: {}
+    grok-4-6: {}
+    grok-4.5: {}
+    grok-4.7: {}
+    hy3: {}
+    kimi-k2-7-code: {}
+    kimi-k2.6: {}
+    kimi-k3: {}
+    minimax-m2.7: {}
+    qwen3-8-flash: {}
+    qwen3.8-plus: {}
+    qwen3.8max: {}
+  models_discovered: true
+- name: nbgate
+  base_url: https://api.nbgate.com/v1
+  key_env: HERMES_CUSTOM_API_NBGATE_COM_API_KEY
+  model: nbgate
+  models:
+    Greg/glm-5.3-flashx-mod: {}
+    Greg/deepseek-v4-flash-0731: {}
+    Greg/glm-5.3: {}
+    gregv4/glm-5.3-nb: {}
+    Gregv2/deepseek-v4.1-flash-fr: {}
+    Greg/glm-5.3-flash: {}
+    Greg/hy4: {}
+    Gregv2/deepseek-v4.1-flash: {}
+    Greg/glm-5.3-mod: {}
+    Greg/deepseek-v4-pro: {}
+    Gregv2/hy3: {}
+    Greg/glm-5.3-flashx: {}
+    Greg/deepseek-v4-pro-0813: {}
+    Greg/kimi-k2.7-code-highspeed: {}
+    Greg/deepseek-v4.1-flash: {}
+    Gregv2/step-5-preview: {}
+    Greg/glm-5.2-mod: {}
+    Greg/deepseek-v4-mod: {}
+    gregv4/gpt-6.1-sol: {}
+    Greg/glm-5.2: {}
+    Greg/deepseek-v4-flash: {}
+    gregv4/gpt-6-astra: {}
+    Greg/mimo-v2.5-pro: {}
+    Greg/kimi-k2.7-code: {}
+    Greg/gpt-5.6-luna: {}
+    Greg/deepseek-v4-flash-vision-exp: {}
+    gregv4/gpt-6-sol-B: {}
+    Greg/deepseek-v4.1-mod: {}
+    Greg/hy3: {}
+    Greg/gpt-5.6: {}
+    Greg/kimi-k3: {}
+    Greg/mimo-v2.6-pro: {}
+    Greg/kimi-k3-mod: {}
+    Greg/mimo-v2.6-flash: {}
+    gregv4/gpt-6-luna-A: {}
+    Greg/glm-5.3-flash-mod: {}
+  models_discovered: true
+- name: Tokenharbor.ai
+  base_url: https://tokenharbor.ai/v1
+  key_env: HERMES_CUSTOM_TOKENHARBOR_AI_API_KEY
+- name: cutad
+  base_url: https://ai.cutad.web.id/v1
+  key_env: HERMES_CUSTOM_AI_CUTAD_WEB_ID_API_KEY
+  model: glm-5.3-flash
+  models:
+    big-pickle: {}
+    deepseek-v4.1-flash: {}
+    poolside/laguna-s-2.1: {}
+    longcat-2.5-preview: {}
+    dots-studio/dots-3-note-preview: {}
+    meta/muse-spark-1.2-contributor: {}
+    z-ai/glm-5.2: {}
+    CutadAgent-Pro: {}
+    glm-5.3-flash: {}
+    meta/muse-spark-1.3-contributor: {}
+    cbcn/deepseek-v4.1-flash: {}
+    space-bunny: {}
+    cbcn/glm-5.3-flash: {}
+    deepseek-v4-pro: {}
+    tencent/hy3: {}
+  models_discovered: true
 group_sessions_per_user: true
 known_builtin_toolsets:
   cli:
-    - browser
-    - clarify
-    - code_execution
-    - computer_use
-    - connections
-    - context_engine
-    - cronjob
-    - delegation
-    - discord
-    - discord_admin
-    - file
-    - homeassistant
-    - image_gen
-    - kanban
-    - memory
-    - session_search
-    - skills
-    - spotify
-    - stt
-    - terminal
-    - todo
-    - tts
-    - video
-    - video_gen
-    - vision
-    - web
-    - x_search
-    - yuanbao
+  - browser
+  - clarify
+  - code_execution
+  - computer_use
+  - connections
+  - context_engine
+  - cronjob
+  - delegation
+  - discord
+  - discord_admin
+  - file
+  - homeassistant
+  - image_gen
+  - kanban
+  - memory
+  - session_search
+  - skills
+  - spotify
+  - stt
+  - terminal
+  - todo
+  - tts
+  - video
+  - video_gen
+  - vision
+  - web
+  - x_search
+  - yuanbao
 known_plugin_toolsets:
   cli:
-    - a2a
-    - spotify
+  - a2a
+  - spotify
 mcp_servers:
   context7:
     enabled: true
@@ -312,215 +428,177 @@ mcp_servers:
     url: https://huggingface.co/mcp
   rust-docs:
     args:
-      - serve
+    - serve
     command: /home/ubuntu/.cargo/bin/rust-docs-mcp
     enabled: true
   ui-layouts:
     args:
-      - -y
-      - '@ui-layouts/mcp'
+    - -y
+    - '@ui-layouts/mcp'
     command: npx
     enabled: true
   uiux-reference:
     args:
-      - /home/ubuntu/mcp-uiux-reference/server.py
+    - /home/ubuntu/mcp-uiux-reference/server.py
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
     enabled: true
   sqlite:
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
     args:
-      - /home/ubuntu/mcp-sqlite/server.py
+    - /home/ubuntu/mcp-sqlite/server.py
     enabled: true
   lottiefiles-creator:
     command: /home/ubuntu/.local/bin/node
     args:
-      - /home/ubuntu/.local/share/lottie-creator-mcp/node_modules/@lottiefiles/creator-mcp/dist/index.mjs
+    - /home/ubuntu/.local/share/lottie-creator-mcp/node_modules/@lottiefiles/creator-mcp/dist/index.mjs
     connect_timeout: 15.0
     tools:
       include:
-        - read_scene
-        - apply_keyframes
-        - apply_motion_preset
-        - apply_motion_path
-        - set_anchor_point
-        - create_shape
-        - bend_shape
-        - create_text
-        - create_text_group
-        - create_button
-        - create_reference_board
-        - set_text
-        - set_text_style
-        - measure_text_units
-        - split_text
-        - stagger_layers
-        - animate_entrance
-        - list_fonts
-        - center_layer
-        - set_fill
-        - set_stroke
-        - animate_paint
-        - animate_property
-        - set_blend_mode
-        - add_drop_shadow
-        - add_blur
-        - add_color_overlay
-        - add_tint
-        - add_tritone
-        - list_layer_effects
-        - remove_layer_effect
-        - update_layer_effect
-        - list_themes
-        - list_slots
-        - list_motion_system_items
-        - link_slot_to_layer
-        - create_slot
-        - create_slot_from_value
-        - update_slot_value
-        - unlink_slot
-        - add_theme
-        - select_theme
-        - remove_theme
-        - list_segments
-        - add_segment
-        - rename_segment
-        - remove_segment
-        - select_segment
-        - list_state_machines
-        - add_state_machine
-        - set_active_state_machine
-        - remove_state_machine
-        - list_states
-        - add_state
-        - add_global_state
-        - remove_state
-        - update_state
-        - set_state_actions
-        - set_initial_state
-        - add_transition
-        - remove_transition
-        - list_interactions
-        - add_pointer_interaction
-        - add_state_interaction
-        - remove_interaction
-        - list_inputs
-        - add_input
-        - update_input
-        - remove_input
-        - import_asset
-        - vectorize_image
-        - remove_keyframes
-        - duplicate_layer
-        - tile_layer
-        - reorder_layer
-        - group_layers
-        - create_shape_group
-        - add_shape_to_layer
-        - set_group_transform
-        - reorder_shape
-        - set_layer_time
-        - retime_keyframes
-        - delete_layer
-        - create_mask
-        - update_mask
-        - remove_mask
-        - set_matte
-        - remove_matte
-        - rename_node
-        - set_layer_visibility
-        - set_layer_lock
-        - flip_layer
-        - align_layer
-        - align_layers
-        - layout
-        - read_keyframes
-        - copy_animation
-        - list_scenes
-        - create_scene
-        - switch_scene
-        - set_current_frame
-        - set_scene_background
-        - set_scene_settings
-        - create_scene_layer
-        - break_scene_layer
-        - apply_bounce
-        - apply_squash
-        - apply_coupled_shadow
+      - read_scene
+      - apply_keyframes
+      - apply_motion_preset
+      - apply_motion_path
+      - set_anchor_point
+      - create_shape
+      - bend_shape
+      - create_text
+      - create_text_group
+      - create_button
+      - create_reference_board
+      - set_text
+      - set_text_style
+      - measure_text_units
+      - split_text
+      - stagger_layers
+      - animate_entrance
+      - list_fonts
+      - center_layer
+      - set_fill
+      - set_stroke
+      - animate_paint
+      - animate_property
+      - set_blend_mode
+      - add_drop_shadow
+      - add_blur
+      - add_color_overlay
+      - add_tint
+      - add_tritone
+      - list_layer_effects
+      - remove_layer_effect
+      - update_layer_effect
+      - list_themes
+      - list_slots
+      - list_motion_system_items
+      - link_slot_to_layer
+      - create_slot
+      - create_slot_from_value
+      - update_slot_value
+      - unlink_slot
+      - add_theme
+      - select_theme
+      - remove_theme
+      - list_segments
+      - add_segment
+      - rename_segment
+      - remove_segment
+      - select_segment
+      - list_state_machines
+      - add_state_machine
+      - set_active_state_machine
+      - remove_state_machine
+      - list_states
+      - add_state
+      - add_global_state
+      - remove_state
+      - update_state
+      - set_state_actions
+      - set_initial_state
+      - add_transition
+      - remove_transition
+      - list_interactions
+      - add_pointer_interaction
+      - add_state_interaction
+      - remove_interaction
+      - list_inputs
+      - add_input
+      - update_input
+      - remove_input
+      - import_asset
+      - vectorize_image
+      - remove_keyframes
+      - duplicate_layer
+      - tile_layer
+      - reorder_layer
+      - group_layers
+      - create_shape_group
+      - add_shape_to_layer
+      - set_group_transform
+      - reorder_shape
+      - set_layer_time
+      - retime_keyframes
+      - delete_layer
+      - create_mask
+      - update_mask
+      - remove_mask
+      - set_matte
+      - remove_matte
+      - rename_node
+      - set_layer_visibility
+      - set_layer_lock
+      - flip_layer
+      - align_layer
+      - align_layers
+      - layout
+      - read_keyframes
+      - copy_animation
+      - list_scenes
+      - create_scene
+      - switch_scene
+      - set_current_frame
+      - set_scene_background
+      - set_scene_settings
+      - create_scene_layer
+      - break_scene_layer
+      - apply_bounce
+      - apply_squash
+      - apply_coupled_shadow
     enabled: true
 platform_toolsets:
   cli:
-    - browser
-    - clarify
-    - code_execution
-    - computer_use
-    - connections
-    - cronjob
-    - delegation
-    - file
-    - image_gen
-    - memory
-    - session_search
-    - skills
-    - terminal
-    - todo
-    - tts
-    - vision
-    - web
+  - browser
+  - clarify
+  - code_execution
+  - computer_use
+  - connections
+  - cronjob
+  - delegation
+  - file
+  - image_gen
+  - memory
+  - session_search
+  - skills
+  - terminal
+  - todo
+  - tts
+  - vision
+  - web
   discord:
-    - hermes-discord
+  - hermes-discord
   google_chat:
-    - hermes-google_chat
+  - hermes-google_chat
   homeassistant:
-    - hermes-homeassistant
+  - hermes-homeassistant
   qqbot:
-    - hermes-qqbot
+  - hermes-qqbot
   signal:
-    - hermes-signal
+  - hermes-signal
   slack:
-    - hermes-slack
+  - hermes-slack
   teams:
-    - hermes-teams
+  - hermes-teams
   telegram:
-    - hermes-telegram
+  - hermes-telegram
   whatsapp:
-    - hermes-whatsapp
+  - hermes-whatsapp
   yuanbao:
-    - hermes-yuanbao
-
-# ── Security ──────────────────────────────────────────────────────────
-# Secret redaction is ON by default — strings that look like API keys,
-# tokens, and passwords are masked in tool output, logs, and chat
-# responses before the model or user ever sees them. Set redact_secrets
-# to false to disable (e.g. when developing the redactor itself).
-# tirith pre-exec scanning is enabled by default when the tirith binary
-# is available. Configure via security.tirith_* keys or env vars
-# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
-#
-# security:
-#   redact_secrets: true
-#   tirith_enabled: true
-#   tirith_path: "tirith"
-#   tirith_timeout: 5
-#   tirith_fail_open: true
-
-# ── Fallback Model ────────────────────────────────────────────────────
-# Automatic provider failover when primary is unavailable.
-# Uncomment and configure to enable. Triggers on rate limits (429),
-# overload (529), service errors (503), or connection failures.
-#
-# Supported providers:
-#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
-#   openai-codex (OAuth — hermes auth) — OpenAI Codex
-#   nous         (OAuth — hermes auth) — Nous Portal
-#   zai          (ZAI_API_KEY)         — Z.AI / GLM
-#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
-#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
-#   minimax      (MINIMAX_API_KEY)     — MiniMax
-#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
-#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
-#
-# For custom OpenAI-compatible endpoints, add base_url and key_env.
-#
-# fallback_model:
-#   provider: openrouter
-#   model: anthropic/claude-sonnet-4
+  - hermes-yuanbao

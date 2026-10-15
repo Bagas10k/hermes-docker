@@ -37,6 +37,9 @@ function createFakeDOM(initialData, svgContent = '', initialStorage = new Map())
       listeners: {},
       setAttribute(k, v) { this.attributes[k] = String(v); this[k] = String(v); },
       getAttribute(k) { return this.attributes[k] !== undefined ? this.attributes[k] : (this[k] !== undefined ? String(this[k]) : null); },
+      removeAttribute(k) { delete this.attributes[k]; delete this[k]; },
+      hasAttribute(k) { return this.attributes[k] !== undefined; },
+      focus() { if (this.ownerDocument) this.ownerDocument.activeElement = this; },
       addEventListener(type, fn) {
         if (!this.listeners[type]) this.listeners[type] = [];
         this.listeners[type].push(fn);
@@ -70,6 +73,9 @@ function createFakeDOM(initialData, svgContent = '', initialStorage = new Map())
       },
       keydown(key) {
         this.dispatchEvent('keydown', { key });
+      },
+      keyup(key) {
+        this.dispatchEvent('keyup', { key });
       },
       replaceChildren(...nodes) {
         this.children = nodes;

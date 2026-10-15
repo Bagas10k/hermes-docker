@@ -1,0 +1,542 @@
+{
+  "kind": "native headless Chromium clipboard keyboard activation; loopback secure context; CDP permission intervention",
+  "limitations": [
+    "Not physical system clipboard or cross-application paste integration",
+    "No native OS permission prompt UI, other browser engine, or screen-reader speech output claim",
+    "CDP AX tree verification represents computed accessibility nodes, not end-user screen-reader audio experience"
+  ],
+  "records": [
+    {
+      "width": 390,
+      "nativeActivationChecked": true,
+      "pendingFocusChecked": true,
+      "sameButtonChecked": true,
+      "case": "enter-granted-exact-route",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "native": {
+        "secure": true,
+        "focused": true,
+        "write": "function writeText() { [native code] }",
+        "read": "function readText() { [native code] }",
+        "own": false
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "keyboard-tab-shift-tab-continuation",
+      "prevElement": {
+        "tag": "button",
+        "node": "anak-雪",
+        "isActive": true
+      },
+      "nextElement": {
+        "tag": "g",
+        "className": "node-item"
+      },
+      "focusPreserved": true,
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "space-granted-no-scroll",
+      "key": "Space",
+      "scrollBefore": 0,
+      "scrollAfter": 0,
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "enter-denied-retains-clipboard",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "rejection": {
+        "name": "NotAllowedError",
+        "message": "Failed to execute 'writeText' on 'Clipboard': Write permission denied."
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "space-denied-retains-clipboard",
+      "key": "Space",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "enter-permission-recovery-new-route",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > beta & <baru>",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "space-permission-recovery-new-route",
+      "key": "Space",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > beta & <baru>",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 390,
+      "case": "native-feedback-reset-focus",
+      "pass": true
+    },
+    {
+      "width": 768,
+      "nativeActivationChecked": true,
+      "pendingFocusChecked": true,
+      "sameButtonChecked": true,
+      "case": "enter-granted-exact-route",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "native": {
+        "secure": true,
+        "focused": true,
+        "write": "function writeText() { [native code] }",
+        "read": "function readText() { [native code] }",
+        "own": false
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "keyboard-tab-shift-tab-continuation",
+      "prevElement": {
+        "tag": "button",
+        "node": "anak-雪",
+        "isActive": true
+      },
+      "nextElement": {
+        "tag": "g",
+        "className": "node-item"
+      },
+      "focusPreserved": true,
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "space-granted-no-scroll",
+      "key": "Space",
+      "scrollBefore": 0,
+      "scrollAfter": 0,
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "enter-denied-retains-clipboard",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "rejection": {
+        "name": "NotAllowedError",
+        "message": "Failed to execute 'writeText' on 'Clipboard': Write permission denied."
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "space-denied-retains-clipboard",
+      "key": "Space",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "enter-permission-recovery-new-route",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > beta & <baru>",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "space-permission-recovery-new-route",
+      "key": "Space",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > beta & <baru>",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 768,
+      "case": "native-feedback-reset-focus",
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "nativeActivationChecked": true,
+      "pendingFocusChecked": true,
+      "sameButtonChecked": true,
+      "case": "enter-granted-exact-route",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "native": {
+        "secure": true,
+        "focused": true,
+        "write": "function writeText() { [native code] }",
+        "read": "function readText() { [native code] }",
+        "own": false
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "keyboard-tab-shift-tab-continuation",
+      "prevElement": {
+        "tag": "button",
+        "node": "anak-雪",
+        "isActive": true
+      },
+      "nextElement": {
+        "tag": "g",
+        "className": "node-item"
+      },
+      "focusPreserved": true,
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "space-granted-no-scroll",
+      "key": "Space",
+      "scrollBefore": 0,
+      "scrollAfter": 0,
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "enter-denied-retains-clipboard",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "rejection": {
+        "name": "NotAllowedError",
+        "message": "Failed to execute 'writeText' on 'Clipboard': Write permission denied."
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "space-denied-retains-clipboard",
+      "key": "Space",
+      "states": {
+        "read": "granted",
+        "write": "denied"
+      },
+      "ui": {
+        "text": "Gagal menyalin",
+        "ariaLabel": "Gagal menyalin silsilah rute ke clipboard",
+        "copied": false,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > alpha > anak-雪",
+      "domStatus": "Gagal menyalin silsilah rute ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Gagal menyalin silsilah rute ke clipboard",
+        "buttonName": "Gagal menyalin silsilah rute ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "enter-permission-recovery-new-route",
+      "key": "Enter",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > beta & <baru>",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "space-permission-recovery-new-route",
+      "key": "Space",
+      "states": {
+        "read": "granted",
+        "write": "granted"
+      },
+      "ui": {
+        "text": "Tersalin!",
+        "ariaLabel": "Silsilah rute berhasil disalin ke clipboard",
+        "copied": true,
+        "focused": true,
+        "connected": true
+      },
+      "text": "root > beta & <baru>",
+      "domStatus": "Silsilah rute berhasil disalin ke clipboard",
+      "ax": {
+        "statusRole": "status",
+        "statusText": "Silsilah rute berhasil disalin ke clipboard",
+        "buttonName": "Silsilah rute berhasil disalin ke clipboard"
+      },
+      "pass": true
+    },
+    {
+      "width": 1280,
+      "case": "native-feedback-reset-focus",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "origin": "http://127.0.0.1:36437",
+  "browser": "156.0.8078.4",
+  "pass": true
+}

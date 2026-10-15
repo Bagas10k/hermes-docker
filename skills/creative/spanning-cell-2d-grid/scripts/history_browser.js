@@ -141,10 +141,15 @@
     if (clipboardDisposed) return false;
     clipboardDisposed = true;
     invalidateClipboard();
+    if (status && history && history.nodes && history.nodes[cursor]) {
+      const node = history.nodes[cursor];
+      status.textContent = `Versi ${cursor}. ${node.children ? node.children.length : 0} cabang lanjutan.`;
+    }
     if (clipboardButton) {
       clipboardButton.removeEventListener('click', clipboardClick);
       clipboardButton.disabled = true;
       clipboardButton.textContent = 'Salin Rute';
+      clipboardButton.setAttribute('aria-label', 'Salin seluruh jejak silsilah rute ke clipboard');
       clipboardButton.classList.remove('copied');
     }
     return true;
@@ -158,9 +163,14 @@
     const button = clipboardButton;
     const owns = () => !clipboardDisposed && clipboardRequest === request &&
       clipboardButton === button && button && breadcrumbsBar.contains(button);
+    const setStatus = (msg) => {
+      if (status) status.textContent = msg;
+    };
     if (owns()) {
       button.textContent = 'Menyalin…';
+      button.setAttribute('aria-label', 'Menyalin silsilah rute ke clipboard');
       button.classList.remove('copied');
+      setStatus('Menyalin silsilah rute ke clipboard…');
     }
     let success = false;
     try {
@@ -185,13 +195,20 @@
     } catch (_) { success = false; }
     if (owns()) {
       button.textContent = success ? 'Tersalin!' : 'Gagal menyalin';
+      button.setAttribute('aria-label', success ? 'Silsilah rute berhasil disalin ke clipboard' : 'Gagal menyalin silsilah rute ke clipboard');
       if (success) button.classList.add('copied');
+      setStatus(success ? 'Silsilah rute berhasil disalin ke clipboard' : 'Gagal menyalin silsilah rute ke clipboard');
       clipboardTimer = setTimeout(() => {
         if (!owns()) return;
         clipboardTimer = null;
         clipboardRequest = null;
         button.textContent = 'Salin Rute';
+        button.setAttribute('aria-label', 'Salin seluruh jejak silsilah rute ke clipboard');
         button.classList.remove('copied');
+        if (status && history && history.nodes && history.nodes[cursor]) {
+          const node = history.nodes[cursor];
+          setStatus(`Versi ${cursor}. ${node.children ? node.children.length : 0} cabang lanjutan.`);
+        }
       }, 1500);
     }
     return {text: formatted, success};
@@ -365,6 +382,7 @@
 
   function renderBreadcrumbs(activeId) {
     invalidateClipboard();
+    const hadFocus = Boolean(clipboardButton && typeof document !== 'undefined' && document.activeElement === clipboardButton);
     if (clipboardButton) clipboardButton.removeEventListener('click', clipboardClick);
     clipboardButton = null;
     if (!breadcrumbsBar) return;
@@ -417,7 +435,7 @@
     copyBtn.type = 'button';
     copyBtn.className = 'dag-breadcrumb-copy-btn';
     copyBtn.textContent = 'Salin Rute';
-    copyBtn.title = 'Salin jejak silsilah rute ke clipboard';
+    copyBtn.title = 'Salin jejak silsilah rute ke clipboard (klik, atau Enter/Spasi)';
     copyBtn.setAttribute('aria-label', 'Salin seluruh jejak silsilah rute ke clipboard');
     copyBtn.disabled = clipboardDisposed;
     clipboardButton = copyBtn;
@@ -425,10 +443,15 @@
       if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
       copyLineageToClipboard();
     };
-    if (!clipboardDisposed) copyBtn.addEventListener('click', clipboardClick);
+    if (!clipboardDisposed) {
+      copyBtn.addEventListener('click', clipboardClick);
+    }
     items.push(copyBtn);
 
     breadcrumbsBar.replaceChildren(...items);
+    if (hadFocus && copyBtn.isConnected && typeof copyBtn.focus === 'function') {
+      copyBtn.focus({preventScroll: true});
+    }
   }
 
   function autoCenterViewport(activeId) {
@@ -441,8 +464,13 @@
     const containerWidth = dagView.clientWidth || 600;
     const targetScrollLeft = Math.max(0, cx - containerWidth / 2);
 
+    const prefersReduced = typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      Boolean(window.matchMedia('(prefers-reduced-motion: reduce)')?.matches);
+    const behavior = prefersReduced ? 'auto' : 'smooth';
+
     if (typeof dagView.scrollTo === 'function') {
-      dagView.scrollTo({ left: targetScrollLeft, behavior: 'smooth' });
+      dagView.scrollTo({ left: targetScrollLeft, behavior });
     } else {
       dagView.scrollLeft = targetScrollLeft;
     }
@@ -910,6 +938,9 @@
     setMinimapScale: (multiplier) => setMinimapScale(multiplier),
     disposeClipboard,
     copyLineage: () => copyLineageToClipboard(),
+    prefersReducedMotion: () => typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      Boolean(window.matchMedia('(prefers-reduced-motion: reduce)')?.matches),
     search: (query) => searchNodes(query),
     searchQuery: () => activeSearchQuery,
     state: () => ({cursor, cells: {...history.nodes[cursor].cells}})

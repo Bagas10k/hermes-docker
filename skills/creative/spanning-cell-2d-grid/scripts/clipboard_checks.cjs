@@ -6,6 +6,7 @@ module.exports = async function clipboardChecks(timerDisposal = false) {
   const record = name => records.push({name, pass:true});
   const button = () => document.getElementById('dag-breadcrumbs').querySelector('.dag-breadcrumb-copy-btn');
   const label = text => check(button().textContent === text, 'expected ' + text + ', got ' + button().textContent);
+  const status = text => check(document.getElementById('status').textContent === text, 'status: expected '+text+', got '+document.getElementById('status').textContent);
   const nativeSet = globalThis.setTimeout, nativeClear = globalThis.clearTimeout;
   let next = 0;
   globalThis.setTimeout = (cb, ms) => { check(ms === 1500, 'feedback duration'); timers.set(++next, cb); return next; };
@@ -24,12 +25,12 @@ module.exports = async function clipboardChecks(timerDisposal = false) {
       check(button().textContent===before, 'saved timer inert');
       record('dispose-active-feedback-timer'); return records;
     }
-    let d=pending(); label('Menyalin…'); check(!button().classList.contains('copied') && timers.size===0, 'pending not success');
+    let d=pending(); label('Menyalin…'); status('Menyalin silsilah rute ke clipboard…'); check(!button().classList.contains('copied') && timers.size===0, 'pending not success');
     d.resolve(); const result=await d.result;
-    check(result.success && result.text===api.lineage().join(' > '), 'fulfilled result'); label('Tersalin!');
+    check(result.success && result.text===api.lineage().join(' > '), 'fulfilled result'); label('Tersalin!'); status('Silsilah rute berhasil disalin ke clipboard');
     check(timers.size===1, 'one reset timer'); const reset=timers.values().next().value; timers.clear(); reset(); label('Salin Rute'); record('pending-fulfillment-reset');
 
-    d=pending(); d.reject(Error('denied')); check(!(await d.result).success, 'rejected result'); label('Gagal menyalin'); check(!button().classList.contains('copied'), 'failure class'); record('rejection');
+    d=pending(); d.reject(Error('denied')); check(!(await d.result).success, 'rejected result'); label('Gagal menyalin'); status('Gagal menyalin silsilah rute ke clipboard'); check(!button().classList.contains('copied'), 'failure class'); record('rejection');
     clipboard(() => {throw Error('sync');}); check(!(await api.copyLineage()).success, 'sync failure'); label('Gagal menyalin'); record('synchronous-write-throw');
 
     clipboard(null);
@@ -49,7 +50,7 @@ module.exports = async function clipboardChecks(timerDisposal = false) {
     const old=pending(); check(timers.size===0,'replace timer');
     const newer=pending(); newer.resolve(); await newer.result; label('Tersalin!');
     const currentTimer=timers.values().next().value;
-    old.reject(Error('late')); await old.result; oldTimer(); label('Tersalin!');
+    old.reject(Error('late')); await old.result; oldTimer(); label('Tersalin!'); status('Silsilah rute berhasil disalin ke clipboard');
     check(timers.size===1 && timers.values().next().value===currentTimer,'old work preserves new timer'); record('overlap-and-old-timer');
 
     api.refresh(); check(timers.size===0, 'rerender clears active timer');
@@ -62,7 +63,9 @@ module.exports = async function clipboardChecks(timerDisposal = false) {
     // Disposal with both a saved timer and an outstanding write.
     clipboard(() => Promise.resolve()); await api.copyLineage(); const saved=timers.values().next().value;
     d=pending(); check(api.disposeClipboard() && !api.disposeClipboard(),'idempotent dispose');
-    const text=button().textContent; saved(); d.resolve(); await d.result;
+    check(!document.getElementById('status').textContent.startsWith('Menyalin'), 'disposal clears pending live status');
+    const disposedStatus=document.getElementById('status').textContent;
+    const text=button().textContent; saved(); d.resolve(); await d.result; status(disposedStatus);
     check(button().disabled && button().textContent===text && timers.size===0,'disposed callbacks inert');
     let writes=0; clipboard(() => { writes++; return Promise.resolve(); });
     check(!(await api.copyLineage()).success && writes===0,'disposed API inert');

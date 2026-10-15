@@ -1,0 +1,66 @@
+{
+  "verified_at": "2026-10-15T19:51:17.910908+00:00",
+  "parent_rerun": true,
+  "pass": true,
+  "counts": {
+    "python_tests": 338,
+    "node_clock": 39,
+    "node_clipboard_controlled": 11,
+    "native_keyboard": 24,
+    "native_mouse": 9
+  },
+  "browser": "156.0.8078.4",
+  "runs": [
+    {
+      "command": "python3 -B -m unittest discover -s scripts -q",
+      "output": "----------------------------------------------------------------------\nRan 338 tests in 1.701s\n\nOK",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "command": "node scripts/test_browser_clock.cjs",
+      "output": "PASS first frame zero; stationary endpoint follows camera; zoom exactly once\nPASS long dt capped and resume timestamp reset\nPASS pointerup cancels\nPASS pointercancel cancels\nPASS lostpointercapture cancels\nPASS hidden cancels\nPASS blur cancels\nPASS dispose cancels\nPASS unrelated pointer ignored and duplicate down owns one frame\nPASS invalid camera releases capture without scheduling\nPASS dynamic zoom preserves world anchor\nPASS native adapter regression\nPASS camera boundary uses actual clipped offset\nPASS detached frame stops without camera or selection writes\nPASS repeated mount and unmount zeros listeners and cleans pending frames\nPASS reentrant disposal from pointerdown selection callback cleanly stops without scheduling rAF\nPASS reentrant disposal from frame tick selection callback stops loop and clears listeners\nPASS focal cursor recovery retains cell when inside visible camera bounds\nPASS focal cursor recovers to leading boundary during active edge autoscroll translation\nPASS roving tab index assignment preserves single 0 tab stop and sets others to -1\nPASS shift arrow expansion expands selection bounding box while preserving anchor\nPASS ctrl arrow boundary jump skips contiguous populated cells into boundary\nPASS active edge autoscroll stretches lead selection boundary while anchor remains anchored\nPASS ctrl click adds disjoint non-contiguous bounding boxes into range list\nPASS range deduplication eliminates fully subsumed boxes under spatial bounds\nPASS virtual camera spatial intersection filters only in-frustum selection boxes\nPASS clipboard tsv parsing handles crlf and ragged matrix normalization\nPASS single anchor clipboard paste expands rectangular boundaries\nPASS asymmetric multi-range selection tiles clipboard data via modulo indexing\nPASS relative formula translation shifts coordinates preserving absolutes\nPASS merged cell partial overwrite veto rejects non-top-left paste\nPASS merged cell auto unmerge clears conflicting boundaries\nPASS transaction journal single cell mutation undo and redo invertible replay\nPASS transaction journal compound paste and topology unmerge atomic rollback\nPASS transaction journal bounded capacity evicts oldest record\nPASS transaction journal selective range rollback isolates targeted bounding box\nPASS transaction journal local delta persistence roundtrip with zlib compression simulation\nPASS multi-client vector clock causality and concurrent collision resolution\nPASS multi-client topology merge conflict arbitration with automatic overlap purge\n{\"passed\":39,\"failed\":0,\"environment\":\"Node vm fake DOM and deterministic rAF; not browser rendering\"}",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "command": "node scripts/test_history_browser.cjs",
+      "output": "OK: all Node DOM browser history unit checks passed (including hover diff inspector, spatial arrow navigation, breadcrumbs, auto-centering, minimap radar, collapsible quick-jump navigation, visual shortcut badges, localStorage persistence, scale presets, clipboard export, search omnibar & minimap search/clustering indicators)\nOK: 11 deterministic clipboard scenarios",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "command": "NODE_PATH=/home/ubuntu/website-security-auditor/node_modules node scripts/test_native_clipboard_chromium.cjs",
+      "output": "{\"pass\":true,\"records\":9,\"browser\":\"156.0.8078.4\"}",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "command": "NODE_PATH=/home/ubuntu/website-security-auditor/node_modules node scripts/test_native_clipboard_keyboard.cjs",
+      "output": "{\"pass\":true,\"records\":24,\"browser\":\"156.0.8078.4\"}",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "command": "NODE_PATH=/home/ubuntu/website-security-auditor/node_modules node scripts/test_minimap_chromium.cjs",
+      "output": "{\"pass\":true,\"records\":9,\"lifecycleRecords\":3,\"clipboardRecords\":3,\"clipboardChecks\":33,\"browser\":\"156.0.8078.4\"}",
+      "exit_code": 0,
+      "error": null
+    }
+  ],
+  "red_regression": {
+    "output": "OK: all Node DOM browser history unit checks passed (including hover diff inspector, spatial arrow navigation, breadcrumbs, auto-centering, minimap radar, collapsible quick-jump navigation, visual shortcut badges, localStorage persistence, scale presets, clipboard export, search omnibar & minimap search/clustering indicators)\nError: disposal clears pending live status\n    at check (evalmachine.<anonymous>:3:51)\n    at clipboardChecks (evalmachine.<anonymous>:64:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+    "exit_code": 1,
+    "error": null
+  },
+  "scope": "Isolated local fixture; native keyboard and clipboard in headless Chromium. CDP permission control; no screen-reader speech, cross-application OS clipboard or production deployment.",
+  "sha256": {
+    "scripts/history_browser.js": "fdd7769d3e27aab35f7458f664cdd883fab80a8c73d4d0aaa06743477fd3b04b",
+    "scripts/history_browser.py": "9ba2c9d0bc34e73dbbc5af12ac9438a5088f30c60e51c4d5a476f72f67dd561d",
+    "scripts/native_clipboard_fixture.py": "6fd0748a5797cc2157cae934f1720fe450f7d0e365aaa5882fe7df67b6bad779",
+    "scripts/test_native_clipboard_fixture.py": "eb90b309a444ec0ed3b77c5390c3d18d795ccf5b8163f3dc13e1c52747326c08",
+    "scripts/clipboard_checks.cjs": "1497e9cfd0d4094f5e39b7682331d2202b499f31a82ec2e227748c74a248e06b",
+    "scripts/test_native_clipboard_keyboard.cjs": "05d4bc861712ed899847c30955ac8f0fc451e04607500ff3acf178c344467ec2",
+    "scripts/test_history_browser.cjs": "8b9bbdca1cbdb3583f161bb029aafb9c48e2131e10ea1602ce06b5b0904f622f"
+  }
+}
