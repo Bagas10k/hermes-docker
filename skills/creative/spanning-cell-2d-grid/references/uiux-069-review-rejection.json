@@ -1,0 +1,24 @@
+{
+  "worker_evidence_accepted": false,
+  "probe": {
+    "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"<string>\", line 1, in <listcomp>\nKeyError: 'id'\nnonfinite_geometry_passed= True",
+    "exit_code": 1,
+    "error": null
+  },
+  "defects": [
+    "Browser states painted directly into DOM; no clipboard promise invoked despite claim",
+    "Font scaling reads inherited values after parent mutation: main becomes 4x not 2x",
+    "Negative controls use separate predicates, not shared audit pipeline",
+    "Only bar bounds checked; clipping ancestors missing",
+    "Opaque overlap checked against button only, not focus outline",
+    "ReducedMotionSupported Boolean(MediaQueryList) is always true",
+    "Geometry NaN accepted; fields default to passing values"
+  ],
+  "predictions": [
+    "Strict numeric gate will reject NaN and incomplete evidence",
+    "Snapshot all computed font sizes before mutation will produce exactly 2x samples",
+    "Drive native Enter into controlled clipboard promise; verify application status changes without text mutation",
+    "Same extractor and Python gate must reject full negative records; pointer-events:none hit test can remain true",
+    "Preserve source renderer unless real browser audit proves layout failure"
+  ]
+}

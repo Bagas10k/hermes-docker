@@ -1,0 +1,14 @@
+[
+  {
+    "command": "python3 -B -m unittest discover -s scripts -q",
+    "output": "----------------------------------------------------------------------\nRan 364 tests in 1.593s\n\nOK",
+    "exit_code": 0,
+    "error": null
+  },
+  {
+    "command": "NODE_PATH=/home/ubuntu/website-security-auditor/node_modules node scripts/test_focus_reflow_chromium.cjs",
+    "output": "{\"browser\":\"156.0.8078.4\",\"records\":48,\"negativeControls\":6,\"gateExit\":0,\"gate\":\"{\\n  \\\"passed\\\": true,\\n  \\\"matrix_records\\\": 48,\\n  \\\"failed_records\\\": [],\\n  \\\"negative_controls\\\": {\\n    \\\"clipping\\\": true,\\n    \\\"occlusionStandard\\\": true,\\n    \\\"occlusionPointerEventsNone\\\": true,\\n    \\\"outlineOnly\\\": true,\\n    \\\"unfocused\\\": true,\\n    \\\"textOverflow\\\": true\\n  }\\n}\\n\",\"errors\":[],\"stderr\":\"\"}",
+    "exit_code": 0,
+    "error": null
+  }
+]

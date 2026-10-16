@@ -143,7 +143,10 @@
     invalidateClipboard();
     if (status && history && history.nodes && history.nodes[cursor]) {
       const node = history.nodes[cursor];
-      status.textContent = `Versi ${cursor}. ${node.children ? node.children.length : 0} cabang lanjutan.`;
+      const resetMsg = `Versi ${cursor}. ${node.children ? node.children.length : 0} cabang lanjutan.`;
+      status.textContent = resetMsg;
+      const r = document.getElementById('dag-status-reserve-idle') || document.getElementById('dag-status-reserve-reset');
+      if (r) r.textContent = resetMsg;
     }
     if (clipboardButton) {
       clipboardButton.removeEventListener('click', clipboardClick);
@@ -207,7 +210,10 @@
         button.classList.remove('copied');
         if (status && history && history.nodes && history.nodes[cursor]) {
           const node = history.nodes[cursor];
-          setStatus(`Versi ${cursor}. ${node.children ? node.children.length : 0} cabang lanjutan.`);
+          const resetMsg = `Versi ${cursor}. ${node.children ? node.children.length : 0} cabang lanjutan.`;
+          setStatus(resetMsg);
+          const r = document.getElementById('dag-status-reserve-idle') || document.getElementById('dag-status-reserve-reset');
+          if (r) r.textContent = resetMsg;
         }
       }, 1500);
     }
@@ -380,7 +386,7 @@
     return path;
   }
 
-  function renderBreadcrumbs(activeId) {
+  function renderBreadcrumbs(activeId, restoreFocus = true) {
     invalidateClipboard();
     const hadFocus = Boolean(clipboardButton && typeof document !== 'undefined' && document.activeElement === clipboardButton);
     if (clipboardButton) clipboardButton.removeEventListener('click', clipboardClick);
@@ -405,6 +411,7 @@
       btn.className = 'dag-breadcrumb-item' + (nodeId === activeId ? ' active' : '');
       btn.dataset.breadcrumbNode = nodeId;
       btn.dataset.breadcrumbIndex = idx;
+      btn.addEventListener('focus', () => btn.scrollIntoView({block:'nearest', inline:'nearest', behavior:'instant'}));
 
       // Add numeric shortcut badge [N] for first 9 ancestors (Alt+1..Alt+9)
       if (idx < 9) {
@@ -449,7 +456,7 @@
     items.push(copyBtn);
 
     breadcrumbsBar.replaceChildren(...items);
-    if (hadFocus && copyBtn.isConnected && typeof copyBtn.focus === 'function') {
+    if (restoreFocus && hadFocus && copyBtn.isConnected && typeof copyBtn.focus === 'function') {
       copyBtn.focus({preventScroll: true});
     }
   }
@@ -597,7 +604,9 @@
     // Position popover relative to dagView container
     const cx = parseFloat(item.dataset.cx) || 0;
     const cy = parseFloat(item.dataset.cy) || 0;
-    popover.style.left = `${cx + 25}px`;
+    // Keep the popover beyond the whole focus outline, including SVG labels.
+    const bounds = item.getBoundingClientRect(), view = dagView.getBoundingClientRect();
+    popover.style.left = `${bounds.right - view.left + dagView.scrollLeft + 8}px`;
     popover.style.top = `${Math.max(10, cy - 25)}px`;
   }
 
@@ -676,6 +685,7 @@
 
       // Focus / blur diff popover for keyboard accessibility
       item.addEventListener('focus', () => {
+        item.scrollIntoView({block:'nearest', inline:'nearest', behavior:'instant'});
         showDiffPopover(item);
       });
       item.addEventListener('blur', () => {
@@ -704,10 +714,13 @@
   function draw(focus = false, preferred = null) {
     const node = history.nodes[cursor];
     undo.disabled = node.parent === null;
-    status.textContent = `Versi ${cursor}. ${node.children.length} cabang lanjutan.`;
+    const resetMsg = `Versi ${cursor}. ${node.children ? node.children.length : 0} cabang lanjutan.`;
+    status.textContent = resetMsg;
+    const r = document.getElementById('dag-status-reserve-idle') || document.getElementById('dag-status-reserve-reset');
+    if (r) r.textContent = resetMsg;
     preview.textContent = JSON.stringify(node.cells, null, 2);
     updateDagSelection(cursor);
-    renderBreadcrumbs(cursor);
+    renderBreadcrumbs(cursor, !focus);
     autoCenterViewport(cursor);
     syncMinimapViewport();
     const buttons = node.children.map(id => {

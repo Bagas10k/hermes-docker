@@ -76,6 +76,7 @@ Ketika autopilot aktif:
 ## Finalisasi Siklus Terjadwal yang Dapat Diverifikasi
 - Eksekusi satu target pending per pemanggilan cron; antrekan Gap List berikutnya tanpa membuat/mengubah scheduler atau memperluas pekerjaan tanpa batas dalam satu run.
 - Baca ulang target berdasarkan ID sebelum finalisasi. Jika penulis lain sudah menyelesaikan ID yang sama, rekonsiliasi bukti secara idempoten; jangan menambah cycle_count atau completed_researches kedua kali dan jangan menimpa state dari snapshot lama.
+- Gunakan transaksi read-modify-write terkunci yang sudah tersedia (`atomic_update_json`), bukan load lalu save snapshot terpisah. Ledger lama dapat berisi string dan roadmap dapat memuat objek tanpa id: saring `isinstance(entry, dict)` dan gunakan `.get('id')`, pertahankan entri lama. Uji finalizer dua kali pada salinan; bila readback gagal setelah commit, baca state terbaru sebelum retry agar siklus tidak terhitung ganda.
 - Verifikasi ulang artefak pekerja dengan runner nyata. Pisahkan jumlah unit test, skenario terkontrol, browser native, dan pemeriksaan AX; DOM/AX tidak membuktikan pengumuman screen-reader. Simpan perintah, exit code, batas klaim, serta hash sumber yang diuji.
 - Perluas skill yang sudah menaungi target; jangan membuat skill duplikat demi menambah hitungan. Simpan prosedur ringkas di SKILL.md dan rincian eksperimen di references.
 

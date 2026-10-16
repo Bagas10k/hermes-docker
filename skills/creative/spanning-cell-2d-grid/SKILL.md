@@ -1,7 +1,7 @@
 ---
 name: spanning-cell-2d-grid
 description: Use when indexing merged cells in virtual grids.
-version: 0.56.0
+version: 0.61.0
 author: Bagas Cihuy, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -254,6 +254,46 @@ Do not transition text/background colors across opposite polarity: readable endp
 
 Run via `terminal`: `python3 -B -m unittest discover -s scripts -q`, `NODE_PATH=<installed Playwright node_modules> node scripts/test_feedback_contrast_chromium.cjs`, then `python3 -B scripts/feedback_contrast.py references/uiux-068-browser.json`. The Python gate requires exactly the full matrix and recomputes ratios before rounding. Verification: 355 Python methods (eight new), 72 Chromium state records; minimum text 5.4839:1 and adjacent focus 4.7179:1. Forced-colors system outlines have alpha 0.8; composited contrast is 11.2993:1 light and 8.7281:1 dark. Focus/motion/native clipboard regressions pass separately. Details, sources, commands and hashes: [references/uiux-068-contrast.md](references/uiux-068-contrast.md) and `references/uiux-068-parent-verification.json`. Computed styles do not prove clipping/occlusion, screen-reader speech, physical OS palettes or full WCAG conformance.
 
+## Clipboard focus geometry and enlarged-text reflow (UIUX-069)
+Snapshot all computed font sizes before enlarging any ancestor; sequential read/write compounds inherited scaling. Verify actual after/before ratios. Drive native Tab/Enter and resolve/reject controlled clipboard promises through the application; never paint expected labels directly into DOM and call that a state test. Preserve reduced-motion and contrast checks separately.
+
+Use `scripts/clipboard_focus_reflow.py` with `scripts/test_focus_reflow_chromium.cjs`. Audit expanded outline bounds against viewport and each clipping ancestor, button text fit on both axes, breadcrumb clearance and document width. Feed negative records through the same extractor and gate, including a pointer-events:none overlay and an outline-only overlay. Reject missing/nonfinite geometry and incomplete matrices. Hit-testing alone misses pointer-transparent paint; the known-foreground rectangle model is intentionally not an arbitrary stacking-context/pixel-coverage solver.
+
+A narrow enlarged search input can overflow the document and native Tab scrolling can push the later copy button offscreen. Keep `min-width:0` on the flex search input; fix the overflow source rather than resetting focus scroll or hiding page overflow. Parent observed six failing geometry records before this single CSS change, then 48 passing records with six detected negative controls. Verification: 364 Python methods (nine new), existing contrast/motion/native clipboard regressions, exact commands and source hashes in `references/uiux-069-parent-verification.json`. Run via `terminal`: `python3 -B -m unittest discover -s scripts -q`, `NODE_PATH=<installed Playwright node_modules> node scripts/test_focus_reflow_chromium.cjs`, then `python3 -B scripts/clipboard_focus_reflow.py references/uiux-069-browser.json`. Details: [references/uiux-069-focus-reflow.md](references/uiux-069-focus-reflow.md).
+
+This is explicit computed-font scaling, not native browser zoom; rounded-outline AABB containment is conservative, not painted-area proof. No screen-reader speech, physical high-contrast, arbitrary overlays, whole-page WCAG, performance or production claim. Nested scrolling and container resize are covered below within a bounded fixture.
+
+## Event-level focus, anchoring and feedback reset (UIUX-071/072)
+- Bind contiguous focus/key/scroll event IDs to phase end counters, observation clocks and scroll counts; reject truncated traces. Correlate departure with native Tab/Shift+Tab, not isTrusted alone: programmatic focus also produces trusted events. Reject steal-and-return during settlement/reset. Permit keyboard departure scroll before establishing the comparison baseline.
+- Reserve known status strings in one CSS Grid cell using invisible, aria-hidden siblings with matching font/line-height. Keep the live status node. Default overflow-anchor:auto then needs no compensation for those strings; none only disables compensation, not layout movement. Include the exact current idle/reset text as a dynamic sibling; feedback templates alone cannot bound long revision IDs. See the dynamic-status contract below.
+- Audit the newly focused neighbor, not just the old copy button: exact identity, connectedness, focus-visible outline bounds, all clipping ancestors, known opaque foregrounds and painted-target hit test. Pointer-events:none does not imply visual transparency; SVG group AABB centers may be unpainted. Use scroll-margin plus nearest/instant scroll on deliberate focus to reveal its outline; keep the tooltip beyond the full target bounds.
+- Observe native 1500ms timer registration/firing and original callback without accelerating or invoking it manually. Verify reset text, native deadline, stable neighbor position, no scroll/focus events, and unchanged status-track height. Keep controlled clipboard promises separate from native clipboard regressions.
+- Run via `terminal` from the skill directory: `python3 -B -m unittest discover -s scripts -q`; `NODE_PATH=<installed Playwright node_modules> node scripts/test_scroll_anchor_chromium.cjs`; `python3 -B scripts/clipboard_scroll_anchor.py references/uiux-072-browser.json`. Retain prior focus/nested/contrast/motion/native clipboard runners.
+- Parent verification: 418 Python methods, 36 Chromium sequences/288 phases, nine rejected negative controls and one opt-out comparison; 16 commands exit 0. Reserved-auto had zero settlement/reset drift; unreserved-auto moved scroll 43px, unreserved-none moved target 43.1875px. These are fixture results, not CLS/performance, arbitrary-paint, native-zoom or screen-reader proof. Commands/hashes: `references/uiux-072-parent-verification.json`; details: [references/uiux-072-scroll-anchoring.md](references/uiux-072-scroll-anchoring.md). Historical event-only baseline: [references/uiux-071-focus-events.md](references/uiux-071-focus-events.md).
+
+## Dynamic status and unbroken revision IDs
+- Mirror escaped idle/reset text in one aria-hidden reservation sibling before clipboard activation; synchronize on cursor changes. Use `min-width:0; overflow-wrap:anywhere` to wrap tokens without expanding the grid. Never clip status or breadcrumb text to pass geometry gates.
+- Use normal inline text flow for long breadcrumb labels; an inline-flex badge can consume the label width under explicit font scaling. Verify text Range bounds and focused-neighbor outlines, not only scroll offsets. Reserving height costs space and does not make arbitrary text fit a viewport.
+- Reject missing/zero dimensions, mismatched phase/measurement text, stale reservation and wrong breadcrumb identity. Short-ID evidence cannot satisfy a long-ID gate.
+- Via `terminal`, run `python3 -B -m unittest discover -s scripts -q`, `NODE_PATH=<installed Playwright node_modules> node scripts/test_dynamic_status_chromium.cjs`, and `python3 -B scripts/clipboard_dynamic_status.py references/uiux-073-browser.json`. Retain event/neighbor, native clipboard and accessibility regressions.
+- Evidence: 432 Python methods, 36 bounded Chromium sequences/288 phases, ten negative controls, one opt-out comparison; 18 parent commands exit 0 with unchanged source hashes. One long active payload is covered, not all localizations or pending cursor races. Details: [references/dynamic-status-reservation.md](references/dynamic-status-reservation.md).
+
+## Clipboard ownership across checkout and disposal
+- Invalidate the request token and cancel its feedback timer before replacing the copy node. An old OS write cannot be cancelled; its result must not mutate the current revision's status, reservation or button.
+- Give one layer responsibility for focus: `draw(true)` selects the destination, so call `renderBreadcrumbs(cursor, !focus)` to suppress intermediate copy-button focus. Final snapshots alone miss a focus detour.
+- Observe real timer registration, cancellation and deadlines. A cancelled flag before the deadline is insufficient. Inject negative faults into behavior, not reported timestamps; track node identity separately from DOM attributes.
+- Keep font magnification on replacement nodes. Reject absent traces, missing suffix counters, nonfinite clocks, stale idle text, enabled disposed controls and late geometry changes. Compare heights within a revision, not across different revision text.
+- Run via `terminal`: `python3 -B -m unittest discover -s scripts -q`; `NODE_PATH=<installed Playwright node_modules> node scripts/test_status_ownership_chromium.cjs`; `python3 -B scripts/clipboard_status_ownership.py references/uiux-074-browser.json`. Retain dynamic-text, event/neighbor and native clipboard regression runners.
+- Scope and evidence: [references/status-ownership-races.md](references/status-ownership-races.md). API-triggered checkout is not proof of keyboard checkout, nested-scroll race geometry, arbitrary strings or screen-reader speech.
+
+## Pending clipboard under nested scroll and resize (UIUX-070)
+- Reuse the shared geometry extractor and `audit_record`; bind each measurement to its sequence viewport, font scale, phase state, window dimensions and activation counters. A valid success snapshot is invalid during the pending resize phase. Reject incomplete/duplicate matrices and nonfinite or negative extents.
+- Capture the original copy node before native Tab/Enter. Change both nested scroll offsets, shrink/regrow only the container, and sample identity, focus, outline and text fit at every phase. Do not recenter or refocus after layout intervention. Preserve perturbed offsets through resize; measure rather than assume fixed window size. Tab must reach the exact expected next control (this fixture: SVG `data-node=alpha`, role button), then Shift+Tab returns to the same copy node.
+- Prove sticky behavior, not only `position:sticky`: record an actual scroll delta, a crossed normal-flow threshold and a stationary rectangle at the inset boundary. Use opaque auto/none pointer controls through the same geometry gate; require occlusion failure without unrelated clipping failures.
+- Run via `terminal`: `python3 -B -m unittest discover -s scripts -q`, `NODE_PATH=<installed Playwright node_modules> node scripts/test_nested_reflow_chromium.cjs`, then `python3 -B scripts/clipboard_nested_reflow.py references/uiux-070-browser.json`. Keep contrast/motion/native clipboard regressions separate and serialize native clipboard runs.
+- Parent verified 380 Python methods (16 new), 12 Chromium sequences / 84 phase measurements and six negative controls; 15 final commands exited zero. No application-source change was needed. Details: [references/uiux-070-nested-reflow.md](references/uiux-070-nested-reflow.md); exact commands and hashes: `references/uiux-070-parent-verification.json`.
+- Bounds: outer vertical + inner horizontal scrolling, fixed-width breadcrumb stress fixture, bounded shrink/regrow, controlled write promises and explicit font scaling. Phase samples do not rule out transient blur/refocus between samples. Native zoom, arbitrary paint, cross-engine/physical OS behavior and screen-reader speech remain unproven. Next check: event-level focus continuity and user focus departure while a write remains pending.
+
 ## Bounds and Trade-offs
 SQLite R-tree prunes spatial searches without expanding each covered cell. Storage is O(M) for M merges, independent of span area. Pathological queries can visit O(M); sorting K hits adds O(K log K). No unconditional logarithmic bound or FPS guarantee is claimed. The connection is in-memory, single-thread-owned, and nonpersistent.
 
@@ -463,78 +503,9 @@ Verification v0.42.0 (UIUX-054): 305 Python unittest methods pass in 1.732s (cov
 
 Verification v0.43.0 (UIUX-055): 307 Python unittest methods pass in 1.955s (covering ancestor lineage computation, root boundary paths, manifest export integration, and breadcrumbs HTML container rendering). Node VM browser unit checks pass 100% (covering breadcrumb pill rendering, breadcrumb click-to-checkout, ancestor trail synchronization, and auto-centering scrollLeft calculation). Exit code 0.
 
-## Interactive SVG Mini-Map Radar & Drag Viewport Pan (v0.44.0 / UIUX-056)
-`render_dag_minimap_svg`, corner `#dag-minimap-wrap`, draggable `#minimap-viewport-frame`, and bi-directional viewport pan synchronization (scripts/branch_dag_topology.py, scripts/history_browser.js, scripts/history_browser.py):
-- Proportional Miniature SVG Radar Minimap (`render_dag_minimap_svg`):
-  * Generates a lightweight proportional miniature SVG canvas ($180 \times 90\text{px}$) docked at the bottom-right of the DAG container (`#dag-minimap-wrap`).
-  * Emits scaled branch edges (`.minimap-edge`), node dots (`.minimap-node` with active cursor highlighted in cyan `#38BDF8`), and background radar plate (`.minimap-bg`).
-  * Encodes world topology bounds (`data-world-width`, `data-world-height`) and scaling factors (`data-scale-x`, `data-scale-y`) directly into SVG XML attributes.
-- Interactive Draggable Viewport Bounding Frame (`#minimap-viewport-frame`):
-  * SVG rectangle with semi-transparent cyan fill (`rgba(56, 189, 248, 0.15)`) and grab/grabbing cursor states.
-  * Dynamically matches visible viewport proportion: $\text{width} = \min(W_{\text{map}}, W_{\text{container}} \times \text{scale}_X)$ and $\text{x} = \text{scrollLeft} \times \text{scale}_X$.
-  * Direct mouse drag on the minimap radar updates container `scrollLeft` instantaneously and auto-clamps within bounds.
-  * Scrolling `#dag-view` automatically updates the minimap frame position via event listener.
-- Dynamic Zoom & Viewport Percentage Indicator (`#dag-minimap-status`):
-  * Header label computes visible coverage ratio $\min(100, \text{round}(W_{\text{container}} / W_{\text{world}} \times 100\%))$.
-  * Client API exposes: `window.historyPreview.minimapFrameBounds()` and `window.historyPreview.minimapPan(scrollLeft)`.
-
-Verification v0.44.0 (UIUX-056): 309 Python unittest methods pass in 1.751s (covering minimap SVG generation, proportional scale attributes, viewport frame rect structure, active node dot styling, and manifest export integration). Node VM browser unit checks pass 100% (covering initial minimap frame bounds, drag pan synchronization, scrollLeft tracking, and viewport coverage percentage). Exit code 0.
-
-## Minimap Collapsible Toggle & Keyboard Quick-Jump Navigation (v0.45.0 / UIUX-057)
-`#dag-minimap-toggle`, collapsible `.dag-minimap-container.collapsed`, Alt+Number numeric keyboard shortcuts, and `breadcrumbJump` (scripts/history_browser.js, scripts/history_browser.py):
-- Minimap Collapsible Toggle (`#dag-minimap-toggle`):
-  * Header button toggle allowing users to minimize/expand the radar canvas on small viewports without losing spatial position.
-  * Toggles `.collapsed` class on `#dag-minimap-wrap`, hiding the SVG radar canvas (`display:none`) while preserving the header status bar and toggle trigger.
-  * Updates accessible attributes: `aria-expanded="false"` / `"true"` and text label ("Buka" / "Tutup").
-  * Exposes programmatic APIs: `window.historyPreview.toggleMinimap(force)` and `window.historyPreview.isMinimapCollapsed()`.
-- Keyboard Quick-Jump Ancestor Shortcuts (`Alt + Digit1..Digit9`):
-  * Global keydown event listener binds `Alt + Digit1` through `Alt + Digit9` to directly checkout the $N$-th ancestor in the current lineage path.
-  * `Alt+1` jumps instantly to `root` (index 0), `Alt+2` to the first child along the current branch lineage, and so forth.
-  * Exposes programmatic API `window.historyPreview.breadcrumbJump(indexOrDigit)`.
-  * Safe validation prevents out-of-bounds jumps, preserving current focus without error.
-
-Verification v0.45.0 (UIUX-057): 310 Python unittest methods pass in 1.846s (covering minimap toggle button presence, collapsed class styles, aria-expanded attributes, and template rendering). Node VM browser unit checks pass 100% (covering toggle button click, programmatic collapse/expand, aria state sync, breadcrumb jump to ancestors, out-of-bounds guard, and Alt+Digit keyboard shortcuts). Exit code 0.
-
-## Breadcrumb Visual Shortcut Badges & Minimap LocalStorage Persistence (v0.46.0 / UIUX-058)
-`dag-breadcrumb-badge`, `localStorage` key `'dag_minimap_collapsed'`, and instant pre-load state hydration (scripts/history_browser.js, scripts/history_browser.py):
-- Visual Numeric Shortcut Badges (`.dag-breadcrumb-badge`):
-  * Injects compact monospace badges (`[1]`, `[2]`, ..., `[9]`) into ancestor breadcrumb buttons for the first 9 lineage nodes.
-  * Provides immediate discoverability for `Alt+1` .. `Alt+9` quick-jump keyboard shortcuts without requiring hidden menu discovery.
-  * Badges dynamically adapt styling on active nodes (`.dag-breadcrumb-item.active .dag-breadcrumb-badge`), maintaining WCAG contrast and unified visual hierarchy.
-  * Public API exposes: `window.historyPreview.breadcrumbBadges()` for automated testing and status auditing.
-- Minimap LocalStorage Persistence:
-  * Automatically writes collapsed/expanded boolean state to browser `localStorage` under key `'dag_minimap_collapsed'` on user toggle.
-  * Hydrates saved state upon initial page load (`setupMinimapToggle()`), restoring collapsed styling and ARIA attributes seamlessly prior to initial user interaction.
-  * Resilient fallback gracefully degrades when `window.localStorage` is unavailable or restricted.
-
-Verification v0.46.0 (UIUX-058): 311 Python unittest methods pass in 1.814s (covering breadcrumb badge CSS rules, minimap toggle markup, and manifest rendering). Node VM browser unit checks pass 100% (covering visual shortcut badge rendering `['[1]', '[2]', '[3]']`, breadcrumb items structure, localStorage sync on toggle, and pre-load storage hydration). Exit code 0.
-
-## Minimap Scale Preset Multipliers & Breadcrumb Lineage Clipboard Export (v0.47.0 / UIUX-059)
-`#dag-minimap-scale-controls`, `dag-breadcrumb-copy-btn`, multiplier presets (1x, 1.5x, 2x), and clipboard lineage serialization (scripts/history_browser.js, scripts/history_browser.py):
-- Minimap Zoom Ratio Scale Presets (`#dag-minimap-scale-controls`):
-  * Segmented button group (`1x`, `1.5x`, `2x`) allowing users to scale the minimap canvas ($180 \times 90\text{px}$, $270 \times 135\text{px}$, $360 \times 180\text{px}$) for high-density, sprawling DAG topologies with hundreds of nodes.
-  * Dynamically resizes the miniature SVG canvas while maintaining exact world coordinate proportions, boundary clamping, and drag-pan synchronization.
-  * Persists selected multiplier in `localStorage` under key `'dag_minimap_scale'` with seamless rehydration across page reloads.
-  * Programmatic APIs: `window.historyPreview.minimapScale()` and `window.historyPreview.setMinimapScale(multiplier)`.
-- One-Click Breadcrumb Lineage Clipboard Export (`.dag-breadcrumb-copy-btn`):
-  * Dedicated "Salin Rute" button embedded in the breadcrumbs bar (`#dag-breadcrumbs`) that formats the active branch ancestry path into human-readable lineage syntax (e.g., `root > alpha > alpha_child`).
-  * Interacts with `navigator.clipboard.writeText` with fallback to `document.execCommand('copy')`.
-  * Provides transient tactile visual feedback (`Tersalin!` green badge) with automated reset after 1.5s.
-  * Programmatic API: `window.historyPreview.copyLineage()`.
-
-Verification v0.47.0 (UIUX-059): 312 Python unittest methods pass in 1.685s (covering minimap scale controls markup, copy button presence, CSS rules, and manifest rendering). Node VM browser unit checks pass 100% (covering lineage clipboard export formatting, visual feedback, 1x/1.5x/2x scale multiplier switching, SVG dimensions recalculation, drag pan tracking, and localStorage scale persistence). Exit code 0.
-
-## Interactive Node Search & Filter Omnibar on Visual DAG Viewer (v0.48.0 / UIUX-060)
-`#dag-search-bar`, `#dag-search-input`, `.node-item.search-match`, `.node-item.search-dim`, match counter, and camera auto-focus (scripts/history_browser.js, scripts/history_browser.py):
-- Interactive Search & Filter Omnibar (`#dag-search-bar`):
-  * Dedicated search input bar mounted directly above the SVG DAG container with live match badge (`#dag-search-count`) and clear button (`#dag-search-clear`).
-  * Instant sub-millisecond filtering across node IDs and granular diff JSON metadata (`diff.summary`, `diff.added`, `diff.modified`, `diff.deleted`).
-  * Dynamic visual state discrimination: matches receive prominent amber glow halos (`.search-match` with stroke `#f59e0b` and drop-shadow) while non-matching nodes are dimmed smoothly (`.search-dim` with opacity `0.25`).
-  * Camera auto-centering smoothly pans the SVG viewport to the first matched node upon query change.
-  * Keyboard accessibility: pressing `Escape` clears active search and restores full graph visibility immediately.
-  * Public APIs: `window.historyPreview.search(query)` and `window.historyPreview.searchQuery()`.
-
-Verification v0.48.0 (UIUX-060): 313 Python unittest methods pass in 1.424s (covering search omnibar controls markup, input presence, count badge, clear button, CSS highlight/dim rules, and manifest rendering). Node VM browser unit checks pass 100% (covering search query initialization, ID filtering, diff metadata mutation matching, DOM class list updates, clear trigger, Escape key dismissal, and public API search state). Exit code 0.
+## Minimap, breadcrumb shortcuts and search
+Use `minimapFrameBounds`/`minimapPan` for SVG/world-coordinate synchronization; keep client pixels separate from world units. `toggleMinimap` and `setMinimapScale` expose collapse and scale state with localStorage persistence; tolerate unavailable storage. `breadcrumbJump` supports Alt+1..9 with bounds checks. `search(query)` filters node IDs/diffs; Escape restores visibility. Await `copyLineage()` before reporting clipboard success (see lifecycle contract below).
+Historical feature details and milestone evidence: [references/legacy-minimap-breadcrumb-milestones.md](references/legacy-minimap-breadcrumb-milestones.md). Historical timings are not current performance guarantees.
 
 ## Resize and clipboard lifecycle (v0.52.0 / UIUX-062–064)
 - Observe the DAG container with `ResizeObserver`, not only window resize. Recompute minimap frame after container-only size changes; keep SVG world units separate from CSS zoom presets. `disposeMinimap()` must be idempotent, disconnect its observer, remove owned listeners, and reject callbacks delivered after disposal. This is scoped cleanup, not proof of heap reclamation.

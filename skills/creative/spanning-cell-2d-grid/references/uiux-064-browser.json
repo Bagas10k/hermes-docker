@@ -7,19 +7,19 @@
       "geometry": {
         "world": 1676,
         "client": 348,
-        "scroll": 288,
+        "scroll": 274,
         "map": {
           "x": 27,
-          "y": 1009.6875,
+          "y": 1010.28125,
           "width": 180,
           "height": 90
         },
         "frame": {
-          "x": 30.900001525878906,
+          "x": 29.400001525878906,
           "width": 37.400001525878906
         },
         "units": {
-          "x": 30.9,
+          "x": 29.4,
           "width": 37.4
         },
         "scrollWidth": 1676
@@ -43,19 +43,19 @@
       "geometry": {
         "world": 1676,
         "client": 348,
-        "scroll": 250,
+        "scroll": 252,
         "map": {
           "x": 27,
-          "y": 964.6875,
+          "y": 965.28125,
           "width": 270,
           "height": 135
         },
         "frame": {
-          "x": 40.19999694824219,
+          "x": 40.650001525878906,
           "width": 56.099998474121094
         },
         "units": {
-          "x": 26.8,
+          "x": 27.1,
           "width": 37.4
         },
         "scrollWidth": 1676
@@ -82,7 +82,7 @@
         "scroll": 252,
         "map": {
           "x": 27,
-          "y": 931.6875,
+          "y": 932.28125,
           "width": 336,
           "height": 168
         },
@@ -118,7 +118,7 @@
         "scroll": 266,
         "map": {
           "x": 27,
-          "y": 900.6875,
+          "y": 905.28125,
           "width": 180,
           "height": 90
         },
@@ -151,19 +151,19 @@
       "geometry": {
         "world": 1676,
         "client": 726,
-        "scroll": 252,
+        "scroll": 250,
         "map": {
           "x": 27,
-          "y": 900.6875,
+          "y": 905.28125,
           "width": 270,
           "height": 135
         },
         "frame": {
-          "x": 40.650001525878906,
-          "width": 116.99999237060547
+          "x": 40.19999694824219,
+          "width": 117.00001525878906
         },
         "units": {
-          "x": 27.1,
+          "x": 26.8,
           "width": 78
         },
         "scrollWidth": 1676
@@ -187,19 +187,19 @@
       "geometry": {
         "world": 1676,
         "client": 726,
-        "scroll": 250,
+        "scroll": 252,
         "map": {
           "x": 27,
-          "y": 900.6875,
+          "y": 905.28125,
           "width": 360,
           "height": 180
         },
         "frame": {
-          "x": 53.599998474121094,
+          "x": 54.19999694824219,
           "width": 156
         },
         "units": {
-          "x": 26.8,
+          "x": 27.1,
           "width": 78
         },
         "scrollWidth": 1676
@@ -223,19 +223,19 @@
       "geometry": {
         "world": 1676,
         "client": 818,
-        "scroll": 267,
+        "scroll": 258,
         "map": {
           "x": 27,
-          "y": 900.6875,
+          "y": 904.28125,
           "width": 180,
           "height": 90
         },
         "frame": {
-          "x": 28.700000762939453,
+          "x": 27.700000762939453,
           "width": 87.90000915527344
         },
         "units": {
-          "x": 28.7,
+          "x": 27.7,
           "width": 87.9
         },
         "scrollWidth": 1676
@@ -262,7 +262,7 @@
         "scroll": 250,
         "map": {
           "x": 27,
-          "y": 900.6875,
+          "y": 904.28125,
           "width": 270,
           "height": 135
         },
@@ -298,7 +298,7 @@
         "scroll": 252,
         "map": {
           "x": 27,
-          "y": 900.6875,
+          "y": 904.28125,
           "width": 360,
           "height": 180
         },
@@ -347,7 +347,7 @@
             "mapWidth": 180,
             "screenX": 2.6000003814697266,
             "resize": 0,
-            "scrollEvents": 3,
+            "scrollEvents": 4,
             "deliveries": 2
           },
           {
@@ -362,7 +362,7 @@
             "mapWidth": 180,
             "screenX": 2.6000003814697266,
             "resize": 0,
-            "scrollEvents": 3,
+            "scrollEvents": 4,
             "deliveries": 3
           }
         ],
@@ -455,7 +455,7 @@
             "mapWidth": 180,
             "screenX": 1.7000007629394531,
             "resize": 0,
-            "scrollEvents": 2,
+            "scrollEvents": 3,
             "deliveries": 2
           },
           {
@@ -470,7 +470,7 @@
             "mapWidth": 180,
             "screenX": 1.7000007629394531,
             "resize": 0,
-            "scrollEvents": 2,
+            "scrollEvents": 3,
             "deliveries": 3
           }
         ],
@@ -563,7 +563,7 @@
             "mapWidth": 180,
             "screenX": 1.7999992370605469,
             "resize": 0,
-            "scrollEvents": 3,
+            "scrollEvents": 2,
             "deliveries": 2
           },
           {
@@ -578,7 +578,7 @@
             "mapWidth": 180,
             "screenX": 1.7999992370605469,
             "resize": 0,
-            "scrollEvents": 3,
+            "scrollEvents": 2,
             "deliveries": 3
           }
         ],

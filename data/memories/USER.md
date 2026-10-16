@@ -8,8 +8,8 @@ Milik Bagas @sputarai (auto-post, 100% indo alami). Carousel wajib tepat 4 slide
 §
 Kurasi ide dan catatan dibukukan oleh Bot 2 (@Bekbekk_bot / Bekagent) ke Obsidian BUKU_CATATAN & web /buku. Vault steril murni milik Bagas.
 §
-Hemat RAM. Migrasi otomatis; berkas Telegram pecah bila >15MB. Gunakan sub-agent paralel agar eksekusi cepat.
+Hemat RAM. Migrasi otomatis; berkas Telegram pecah >15MB. Delegasi sub-agent: potongan kecil (3 berkas), isi ulang slot begitu ada yang selesai - bukan batch besar. Pekerjaan yang sudah didelegasikan tidak diambil alih.
 §
-Visual/motion: tinjau referensi lama; animatic pendek ditinjau sebelum video penuh; tes teknis bukan bukti kualitas. Saat menyerahkan web, sertakan link dan batas verifikasi. Jika chat terkait /memory pending, ingatkan singkat ID relevan + intinya; jangan kirim daftar panjang atau approve otomatis. Tanpa pengingat harian.
+Visual/motion: tinjau referensi lama; animatic pendek sebelum video penuh; tes teknis bukan bukti kualitas. Serahkan web dengan link + batas verifikasi. /memory pending: sebut ID relevan saja, jangan approve otomatis. Tanpa pengingat harian.
 §
 Ponytail: akar, minimal teruji. Keputusan berbukti, trade-off singkat. Aman, jujur, info berbobot. Simpan baru; konflik tanya langsung, jangan pendam.

@@ -10,6 +10,8 @@ version: 1.0.0
 
 Skill ini menyediakan arsitektur standar industri untuk menangani webhook bisnis dari berbagai pihak ketiga (WhatsApp Cloud API / Baileys, Stripe, Midtrans, Shopify, GitHub, Google Forms, Typeform) tanpa risiko kehilangan data (*zero-drop guarantee*) dan tanpa eksekusi ganda (*idempotency protection*).
 
+**Konteks pembayaran/ERP:** bila webhook ini membawa peristiwa keuangan (pembayaran gateway, mutasi bank, konfirmasi ekspedisi), pola idempotensi di sini harus dipadukan dengan penegakan di sisi domain — penanda dan efek dalam SATU transaksi, plus kanonikalisasi payload sebelum hashing. Muat `erp-engineering-doctrine` untuk daftar invarian lengkap dan uji invariannya; hub ini menangani penerimaan, doktrin itu menangani konsekuensi pembukuannya.
+
 ---
 
 ## 1. Masalah Nyata di Lingkungan Klien Perusahaan

@@ -1,6 +1,6 @@
 model:
   base_url: http://localhost:20128/v1
-  default: oc/deepseek-v4.1-flash-free
+  default: ag/gemini-3.8-flash-high
   provider: custom
   api_key: ${HERMES_CUSTOM_LOCALHOST_20128_API_KEY}
 fallback_providers:
@@ -132,6 +132,8 @@ delegation:
   independent_completions: true
   subagent_auto_approve: true
   worktree_isolation: true
+  max_spawn_depth: 3
+  orchestrator_enabled: true
 skills:
   creation_nudge_interval: 15
 timezone: Asia/Jakarta
@@ -221,6 +223,7 @@ custom_providers:
   models:
     hight: {}
     medium: {}
+    ag/gemini-4-argon-high: {}
     ag/gemini-3.8-flash-high: {}
     ag/gemini-3.8-flash-medium: {}
     ag/gemini-3.8-flash-low: {}
@@ -261,11 +264,10 @@ custom_providers:
     cx/gpt-5.6-luna: {}
     cx/gpt-5.6-luna[1m]: {}
     cx/gpt-5.6-luna-review: {}
-    cx/gpt-5.5: {}
-    cx/gpt-5.5-review: {}
     cx/gpt-daybreak-blue-latest: {}
     cx/gpt-reserve: {}
     cx/codex-auto-review: {}
+    gemini/gemini-4-argon: {}
     gemini/gemini-3.8-flash: {}
     gemini/gemini-3.7-flash: {}
     gemini/gemini-3.6-flash: {}
@@ -274,6 +276,11 @@ custom_providers:
     gemini/gemini-3.1-flash-lite-preview: {}
     gemini/gemini-3-flash-preview: {}
     gemini/gemma-4-31b-it: {}
+    mmf/mimo-auto: {}
+    oc/muse-spark-1.2-contributor-free: {}
+    oc/muse-spark-1.3-contributor-free: {}
+    oc/union-alpha: {}
+    oc/jev-1.13-free: {}
   models_discovered: true
   name: lk
 - name: kagiro
@@ -323,42 +330,41 @@ custom_providers:
   key_env: HERMES_CUSTOM_API_NBGATE_COM_API_KEY
   model: nbgate
   models:
-    Greg/glm-5.3-flashx-mod: {}
-    Greg/deepseek-v4-flash-0731: {}
-    Greg/glm-5.3: {}
-    gregv4/glm-5.3-nb: {}
-    Gregv2/deepseek-v4.1-flash-fr: {}
-    Greg/glm-5.3-flash: {}
-    Greg/hy4: {}
     Gregv2/deepseek-v4.1-flash: {}
-    Greg/glm-5.3-mod: {}
-    Greg/deepseek-v4-pro: {}
-    Gregv2/hy3: {}
-    Greg/glm-5.3-flashx: {}
-    Greg/deepseek-v4-pro-0813: {}
-    Greg/kimi-k2.7-code-highspeed: {}
-    Greg/deepseek-v4.1-flash: {}
-    Gregv2/step-5-preview: {}
-    Greg/glm-5.2-mod: {}
-    Greg/deepseek-v4-mod: {}
-    gregv4/gpt-6.1-sol: {}
-    Greg/glm-5.2: {}
-    Greg/deepseek-v4-flash: {}
-    gregv4/gpt-6-astra: {}
-    Greg/mimo-v2.5-pro: {}
-    Greg/kimi-k2.7-code: {}
-    Greg/gpt-5.6-luna: {}
-    Greg/deepseek-v4-flash-vision-exp: {}
     gregv4/gpt-6-sol-B: {}
+    Greg/deepseek-v4-flash: {}
     Greg/deepseek-v4.1-mod: {}
-    Greg/hy3: {}
-    Greg/gpt-5.6: {}
-    Greg/kimi-k3: {}
-    Greg/mimo-v2.6-pro: {}
-    Greg/kimi-k3-mod: {}
-    Greg/mimo-v2.6-flash: {}
+    Greg/glm-5.2-mod: {}
+    Greg/kimi-k2.7-code: {}
+    Greg/deepseek-v4-flash-0731: {}
+    Greg/hy4: {}
     gregv4/gpt-6-luna-A: {}
+    Greg/glm-5.3-flashx-mod: {}
+    Greg/hy3: {}
+    Greg/kimi-k3-mod: {}
+    Greg/deepseek-v4-flash-vision-exp: {}
+    Greg/mimo-v2.6-pro: {}
+    gregv4/gpt-6.1-sol: {}
+    Greg/deepseek-v4.1-flash: {}
+    Greg/gpt-5.6-luna: {}
+    Gregv2/step-5-preview: {}
+    Greg/deepseek-v4-mod: {}
+    Greg/glm-5.3-flashx: {}
+    Greg/kimi-k3: {}
+    Greg/gpt-5.6: {}
+    gregv4/gpt-6-astra: {}
+    Greg/glm-5.3-flash: {}
+    Greg/deepseek-v4-pro-0813: {}
+    Greg/glm-5.3: {}
+    Greg/kimi-k2.7-code-highspeed: {}
+    Gregv2/deepseek-v4.1-flash-fr: {}
     Greg/glm-5.3-flash-mod: {}
+    Greg/deepseek-v4-pro: {}
+    Greg/mimo-v2.5-pro: {}
+    Greg/glm-5.3-mod: {}
+    Greg/glm-5.2: {}
+    Greg/mimo-v2.6-flash: {}
+    gregv4/glm-5.3-nb: {}
   models_discovered: true
 - name: Tokenharbor.ai
   base_url: https://tokenharbor.ai/v1
@@ -383,6 +389,173 @@ custom_providers:
     cbcn/glm-5.3-flash: {}
     deepseek-v4-pro: {}
     tencent/hy3: {}
+    gpt-5.6-luna: {}
+    deepseek-v4.1-flash-ultrafast: {}
+    muse-wonder-1.0: {}
+    workbuddy/deepseek-v4.1-flash: {}
+    atria/Atria-Dawn-Preview: {}
+    step-5-preview: {}
+  models_discovered: true
+- name: atmo
+  base_url: https://atmorouter.dev/v1
+  key_env: HERMES_CUSTOM_ATMOROUTER_DEV_API_KEY
+  model: ag/gemini-4-argon
+  models:
+    ag/claude-opus-4-6-thinking: {}
+    ag/claude-opus-5-5: {}
+    ag/claude-sonnet-4-6: {}
+    ag/claude-sonnet-5-5: {}
+    ag/gemini-3.8-flash-high: {}
+    ag/gemini-4-argon: {}
+    ali/deepseek-v4-flash-0731: {}
+    ali/deepseek-v4-pro-0813: {}
+    ali/deepseek-v4.1-flash: {}
+    ali/glm-5.2: {}
+    ali/glm-5.3: {}
+    ali/kimi-k2.7-code: {}
+    ali/kimi-k3: {}
+    ali/qwen3.8-2.4t-a95b: {}
+    ali/qwen3.8-27b: {}
+    ali/qwen3.8-flash: {}
+    ali/qwen3.8-max: {}
+    ali/qwen3.8-max-0902: {}
+    ali/qwen3.8-omni-flash: {}
+    alicn/deepseek-v4-flash-0731: {}
+    alicn/deepseek-v4-pro-0813: {}
+    alicn/deepseek-v4.1-flash: {}
+    alicn/glm-5.2: {}
+    alicn/glm-5.3: {}
+    alicn/kimi-k2.6: {}
+    alicn/kimi-k2.7-code: {}
+    alicn/kimi-k3: {}
+    alicn/qwen3.8-flash: {}
+    alicn/qwen3.8-max: {}
+    alicn/qwen3.8-max-0902: {}
+    alicn/qwen3.8-omni-flash: {}
+    atmo/deepseek-v4.1-flash: {}
+    cb/claude-opus-4.6: {}
+    cb/claude-opus-4.7-1m: {}
+    cb/deepseek-v4.1-flash: {}
+    cb/gemini-2.5-flash-image: {}
+    cb/gemini-3.0-pro-image: {}
+    cb/gemini-3.1-flash-image: {}
+    cb/gemini-3.1-pro: {}
+    cb/glm-5.2: {}
+    cb/glm-5.3: {}
+    cb/glm-5.3-flash: {}
+    cb/gpt-5.3-codex: {}
+    cb/gpt-5.4: {}
+    cb/gpt-5.5: {}
+    cb/gpt-5.6-luna: {}
+    cb/gpt-5.6-terra: {}
+    cb/gpt-6-luna: {}
+    cb/gpt-6-sol: {}
+    cb/gpt-image-2: {}
+    cb/grok-4.6: {}
+    cb/grok-4.7: {}
+    cb/hy3: {}
+    cb/hy4-preview: {}
+    cb/kimi-k2.5: {}
+    cb/kimi-k2.6: {}
+    cb/kimi-k2.7: {}
+    cb/kimi-k2.8-preview: {}
+    cb/kimi-k3: {}
+    cb/minimax-m3: {}
+    cbcn/deepseek-v4-flash: {}
+    cbcn/deepseek-v4-pro: {}
+    cbcn/deepseek-v4.1-flash: {}
+    cbcn/glm-5.1: {}
+    cbcn/glm-5.2: {}
+    cbcn/glm-5.3: {}
+    cbcn/glm-5.3-flash: {}
+    cbcn/hy3: {}
+    cbcn/hy4-preview: {}
+    cbcn/kimi-k2.5: {}
+    cbcn/kimi-k2.6: {}
+    cbcn/kimi-k2.7: {}
+    cbcn/kimi-k2.8-preview: {}
+    cbcn/kimi-k3: {}
+    cbcn/minimax-m2.7: {}
+    cbcn/minimax-m3: {}
+    cc/claude-fable-5: {}
+    cc/claude-fable-5-1: {}
+    cc/claude-haiku-4-5: {}
+    cc/claude-haiku-5-5: {}
+    cc/claude-opus-4-5: {}
+    cc/claude-opus-4-6: {}
+    cc/claude-opus-4-7: {}
+    cc/claude-opus-4-8: {}
+    cc/claude-opus-5: {}
+    cc/claude-opus-5-5: {}
+    cc/claude-sonnet-4-6: {}
+    cc/claude-sonnet-5: {}
+    cc/claude-sonnet-5-5: {}
+    cp/cline-pass/deepseek-v4-pro: {}
+    cp/cline-pass/deepseek-v4.1-flash: {}
+    cp/cline-pass/glm-5.3: {}
+    cp/cline-pass/mimo-v2.6-flash: {}
+    cp/cline-pass/mimo-v2.6-pro: {}
+    cp/cline-pass/minimax-m3: {}
+    cp/xai/grok-4.5: {}
+    cp/xai/grok-4.7: {}
+    cx/gpt-5.6-luna: {}
+    cx/gpt-5.6-sol: {}
+    cx/gpt-5.6-terra: {}
+    cx/gpt-6-astra: {}
+    cx/gpt-6-luna: {}
+    cx/gpt-6-sol: {}
+    cx/gpt-6.1-sol: {}
+    grok/grok-4.5: {}
+    grok/grok-4.6: {}
+    grok/grok-4.7: {}
+    grok/grok-4.7-build-fast: {}
+    kc/k3: {}
+    kc/k3-256k: {}
+    kc/kimi-for-coding: {}
+    kc/kimi-for-coding-highspeed: {}
+    kcai/k3: {}
+    kcai/k3-256k: {}
+    kcai/kimi-for-coding: {}
+    kcai/kimi-for-coding-highspeed: {}
+    kiro/claude-haiku-4.5: {}
+    kiro/claude-opus-4.5: {}
+    kiro/claude-opus-4.6: {}
+    kiro/claude-opus-4.7: {}
+    kiro/claude-opus-4.8: {}
+    kiro/claude-opus-5: {}
+    kiro/claude-opus-5.5: {}
+    kiro/claude-sonnet-4.6: {}
+    kiro/claude-sonnet-5: {}
+    kiro/claude-sonnet-5.5: {}
+    kiro/deepseek-3.2: {}
+    kiro/glm-5: {}
+    kiro/gpt-5.6-luna: {}
+    kiro/gpt-5.6-sol: {}
+    kiro/gpt-5.6-terra: {}
+    kiro/minimax-m2.1: {}
+    kiro/minimax-m2.5: {}
+    kiro/qwen3-coder-next: {}
+    mm/MiniMax-M2: {}
+    mm/MiniMax-M2.1: {}
+    mm/MiniMax-M2.1-highspeed: {}
+    mm/MiniMax-M2.5: {}
+    mm/MiniMax-M2.5-highspeed: {}
+    mm/MiniMax-M2.7: {}
+    mm/MiniMax-M2.7-highspeed: {}
+    mm/MiniMax-M3: {}
+    mm/MiniMax-M3.1-Flash-Preview: {}
+    mmcn/MiniMax-M2: {}
+    mmcn/MiniMax-M2.1: {}
+    mmcn/MiniMax-M2.1-highspeed: {}
+    mmcn/MiniMax-M2.5: {}
+    mmcn/MiniMax-M2.5-highspeed: {}
+    mmcn/MiniMax-M2.7: {}
+    mmcn/MiniMax-M2.7-highspeed: {}
+    mmcn/MiniMax-M3: {}
+    mmcn/MiniMax-M3.1-Flash-Preview: {}
+    zai/glm-4.6v: {}
+    zai/glm-5.3: {}
+    zai/glm-5.3-flash: {}
   models_discovered: true
 group_sessions_per_user: true
 known_builtin_toolsets:

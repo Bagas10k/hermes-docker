@@ -619,7 +619,8 @@ def render_dag_svg(
         .node-label { font-family: ui-monospace, monospace; font-size: 11px; fill: #0F172A; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
         .node-label.active { fill: #FFFFFF; font-weight: bold; }
         .node-item { cursor: pointer; }
-        .node-item:focus { outline: none; }
+        .node-item:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+        .node-item:focus:not(:focus-visible) { outline: none; }
         .node-item:focus .node-circle { stroke: #F59E0B; stroke-width: 3.5px; }
         .diff-badge-rect { fill: #0F172A; rx: 4px; ry: 4px; opacity: 0.85; }
         .diff-badge-text { font-family: ui-monospace, monospace; font-size: 9px; fill: #F8FAFC; text-anchor: middle; dominant-baseline: central; font-weight: 600; }

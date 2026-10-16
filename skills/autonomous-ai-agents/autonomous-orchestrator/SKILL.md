@@ -71,6 +71,65 @@ Manifest teknis tersimpan di `~/.hermes/subagents_manifest.json` dan dokumentasi
 ## 5. Panduan Menggunakan `delegate_task`
 Gunakan tool `delegate_task` untuk mengirim tugas. Berikan `context` sejelas mungkin karena sub-agent tidak memiliki riwayat chat ini.
 
+### 5.1 Batas Arsitektur: Sub-Agent Tidak Dapat Saling Bicara
+
+Sub-agent berjalan di **konteks terisolasi**. Mereka tidak melihat riwayat chat ini, tidak melihat transkrip sub-agent lain, dan tidak punya kanal ke sesama pekerja. Tool yang tersedia bagi mereka juga tidak memuat `delegate_task`, `clarify`, maupun `cronjob`.
+
+**Konsekuensi mutlak:** "sub-agent A yang sudah selesai membantu sub-agent B yang belum" **tidak dapat terjadi langsung**. Satu-satunya kanal kontrol adalah Mandor (agen induk): `steer` dan `stop` hanya bekerja pada anak yang **masih berjalan**; anak yang sudah selesai sudah hilang dan tidak bisa diperintah lagi.
+
+### 5.2 Anti-Pola: Pekerja Cepat Mengambil Alih Tugas Pekerja Lambat
+
+Ini terlihat seperti efisiensi, padahal kerugian bersih:
+
+- Dua agen menulis berkas yang sama → tulisan saling menimpa, atau konten tergandakan.
+- Pekerja lambat tetap menyelesaikan bagiannya → kerja ganda yang dibuang.
+- Tidak ada yang tahu siapa penulis terakhir → verifikasi menjadi mustahil.
+
+**Aturan:** pekerjaan yang sudah didelegasikan tidak pernah diambil alih oleh pekerja lain. Bila satu anak macet, **hentikan** lalu **delegasikan ulang sisanya sebagai tugas baru** — jangan serahkan ke anak lain yang masih hidup.
+
+### 5.3 Tiga Pola yang Benar-Benar Menghemat Waktu
+
+**Pola A — Potong kecil, gelombang berikutnya saat satu selesai.**
+Jangan membagi N berkas menjadi 3 batch besar (6/7/6). Ketimpangan sekecil satu berkas pun membuat satu pekerja menganggur di akhir. Lebih baik: bagi menjadi potongan kecil (mis. 3 berkas per tugas), kirim sampai batas konkurensi, lalu begitu satu selesai **langsung kirim potongan berikutnya**. Tidak ada pekerja yang menganggur menunggu gelombang selesai.
+
+**Pola B — Mandor tidak pernah menganggur.**
+Selagi anak-anak bekerja, Mandor mengerjakan yang tidak bergantung pada mereka: menulis indeks, menyiapkan skrip verifikasi, memeriksa hasil yang sudah masuk, memperbarui daftar isi. Waktu tunggu adalah waktu kerja, bukan waktu diam.
+
+**Pola C — Macet berarti dihentikan, bukan ditunggu.**
+Anak yang transkripnya tidak bergerak sementara yang lain maju → `stop`, ambil hasil parsialnya, delegasikan ulang sisanya. Menunggu anak macet adalah bentuk pemborosan yang paling mahal karena tidak menghasilkan apa pun.
+
+### 5.4 Yang Benar-Benar Dihemat oleh Mandor
+
+Peran Mandor yang menyerupai "bantuan" sebenarnya adalah **verifikasi dan agregasi**:
+
+1. Baca hasil anak yang sudah selesai, bandingkan dengan kondisi nyata di disk (bukan sekadar percaya laporan diri).
+2. Jalankan verifier otomatis (skrip pemeriksa) atas gabungan seluruh hasil.
+3. Perbaiki cacat yang muncul di persimpangan antar-bagian — hal yang tidak terlihat oleh anak mana pun karena mereka buta terhadap pekerjaan tetangganya.
+4. Bila ada bagian yang hilang, tulis sendiri atau delegasikan ulang dengan konteks yang sudah diperkaya temuan verifikasi.
+
+Laporan diri sub-agent **bukan bukti**. Klaim "selesai" atau "berhasil" wajib dicek ke artefak nyata (berkas, exit code, status HTTP) sebelum dilaporkan ke pengguna.
+
+### 5.5 Kedalaman Tanpa Plafon & Rembukan Antar-Agen
+
+**Kedalaman.** `delegation.max_spawn_depth` bawaan 1 (datar). Nilai 2 = anak boleh punya anak, 3 = tiga tingkat. Tidak ada plafon atas. Peran anak ditentukan **kedalaman**, bukan permintaan: anak yang kedalamannya masih di bawah batas mendapat peran `orchestrator` (boleh mendelegasikan lagi), sisanya `leaf`.
+
+Anak `leaf` tidak boleh memanggil `delegate_task`, `clarify`, `memory`, `send_message`, `cronjob`. Anak `orchestrator` mempertahankan `delegate_task` tetapi tetap dilarang yang lain. Keduanya tetap punya `execute_code` — pakai itu untuk kerja mekanis berulang agar tidak membakar iterasi penalaran.
+
+**Konsekuensi yang wajib disadari:**
+1. Anak tidak bisa bertanya ke pengguna. Semua pertanyaan naik lewat induk.
+2. Biaya berlipat tiap tingkat kedalaman. Tanpa plafon, satu-satunya pengendali adalah **anggaran**: `child_timeout_seconds`, plafon konkurensi, kedalaman maksimum yang masuk akal, dan aturan berhenti setelah 2 kegagalan pada cabang yang sama.
+3. Kegagalan pada cabang terdalam lebih sulit terlihat oleh induk. Ringkasan anak harus diperiksa terhadap artefak nyata, bukan dipercaya.
+
+**Rembukan.** Jangan "dikit-dikit tanya Mas Bagas". Aturan pembagiannya:
+
+| Yang kurang | Ke mana |
+|---|---|
+| Pengetahuan teknis, referensi, cara pakai pustaka, pilihan alat | Cari sendiri: internet, dokumentasi resmi, basis kode |
+| Kesepakatan antar-bagian pekerjaan | Rembuk antar-agen lewat artefak tertulis |
+| Kebutuhan bisnis, kondisi lapangan, preferensi, keputusan berdampak besar | Baru tanya Mas Bagas |
+
+Karena sub-agent tidak punya kanal langsung ke sesama, rembukan diwujudkan sebagai **artefak tertulis di ruang kerja bersama** yang dibaca anak berikutnya — bukan obrolan. Bentuk konkret dan protokol gerbangnya ada di `fleet-branch-merge-protocol`.
+
 ## 6. Aturan Keselamatan & Kontrol Mutu (Production Safety & QC)
 1. Selalu berikan **batas yang jelas** (context) ke sub-agent (contoh: "jangan sentuh database, jangan upload ke production").
 2. Sub-agent **tidak bisa** membaca chat history. Semua info krusial (jalur file absolut, nama fungsi, rule desain) HARUS disematkan ke dalam `context`.

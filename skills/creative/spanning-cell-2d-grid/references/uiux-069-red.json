@@ -1,0 +1,14 @@
+{
+  "target": "UIUX-069 test-first initial RED (unittest and browser baseline)",
+  "timestamp": "2026-10-16T00:00:00+00:00",
+  "exit_code": 1,
+  "unit_test_error": "ModuleNotFoundError: No module named 'clipboard_focus_reflow'",
+  "predictions": {
+    "outline_expansion": "Button focus outline expands 4px in all directions (2px width + 2px offset).",
+    "viewport_clipping": "Outline must not cross viewport bounds [0, 0, width, height] when scrolled into view by native Tab.",
+    "ancestor_clipping": "Container with overflow: hidden or constrained width must not clip outline expansion.",
+    "occlusion_model": "Sampled hit-test is insufficient alone: pointer-events: none opaque overlay passes elementFromPoint but visually occludes target.",
+    "text_reflow": "2x enlarged font sizes must fit without horizontal scrollWidth > clientWidth clipping."
+  },
+  "raw_output": "ERROR: test_clipboard_focus_reflow (unittest.loader._FailedTest.test_clipboard_focus_reflow)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_clipboard_focus_reflow\nModuleNotFoundError: No module named 'clipboard_focus_reflow'\nFAILED (errors=1)"
+}

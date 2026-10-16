@@ -48,6 +48,8 @@ function createFakeDOM(initialData, svgContent = '', initialStorage = new Map())
         this.listeners[type] = (this.listeners[type] || []).filter(cb => cb !== fn);
       },
       isConnected: true,
+      scrollIntoView() {},
+      getBoundingClientRect() { return {left:0,top:0,right:(Number(this.dataset.cx)||0)+18,bottom:40,width:36,height:40}; },
       select() { doc.activeElement = this; },
       remove() { if (this.parentElement) this.parentElement.children = this.parentElement.children.filter(c => c !== this); },
       dispatchEvent(type, eventObj = {}) {

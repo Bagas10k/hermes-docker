@@ -29,9 +29,13 @@ Protokol resmi orkestrasi sub-agent otonom untuk tugas tingkat menengah dan komp
 
 ---
 
-## 2. Formasi Alokasi Sub-Agent (2 s.d. 5 Pekerja)
+## 2. Formasi Sub-Agent (2 s.d. 5 Pekerja per Gelombang)
 
-Seluruh pemanggilan sub-agent (`delegate_task`) wajib berada dalam rentang minimal 2 dan maksimal 5:
+Rentang 2-5 berlaku sebagai **formasi per gelombang**, bukan plafon total. Jumlah pekerja yang boleh lahir sepanjang satu tugas **tidak dibatasi** selama ada anggaran; yang dibatasi adalah berapa yang berjalan bersamaan per gelombang.
+
+Batas kerasnya bukan angka, melainkan **anggaran**: kedalaman (`delegation.max_spawn_depth`, bawaan 1 = datar; 2 = anak boleh punya anak; tanpa plafon atas), plafon konkurensi (`delegation.max_concurrent_children`), batas waktu anak (`child_timeout_seconds`), dan aturan berhenti setelah 2 kegagalan berturut pada cabang yang sama.
+
+Konsekuensi bila plafon dilepas tanpa anggaran: biaya berlipat tiap tingkat kedalaman, dan kegagalan senyap pada cabang terdalam tidak lagi terlihat oleh induk. Untuk protokol lengkap cabang, gerbang gabung, dan rembukan antar-agen, muat `fleet-branch-merge-protocol`.
 
 1. **Formasi 2 Sub-Agent:**
    - Worker 1: Si Eksekutor (Pembuat kode, konfigurasi, atau perumus solusi teknis).
@@ -57,8 +61,12 @@ Khusus untuk proyek yang membutuhkan ketelitian tinggi, arsitektur baru, atau pe
 2. **Aturan Selesai Cepat (Early Exit):**
    - Jika pada putaran 1 atau 2 rancangan sudah terbukti kokoh dan disepakati kedua pihak, debat langsung disudahi. Jangan memaksakan hingga 3 putaran.
 3. **Pagar Pengaman & Eskalasi (Circuit Breaker):**
-   - Jika setelah putaran ke-3 belum tercapai kesepakatan, ATAU jika ditemukan ambiguitas spesifikasi/kebutuhan bisnis:
-   - **WAJIB STOP EKSEKUSI** dan langsung tanyakan ke Mas Bagas (1 pertanyaan bertahap, format pilihan ganda terstruktur dengan rekomendasi di awal).
+   - Jika setelah putaran ke-3 belum tercapai kesepakatan, ATAU jika ditemukan ambiguitas **kebutuhan bisnis**:
+   - **WAJIB STOP EKSEKUSI** dan tanyakan ke Mas Bagas (1 pertanyaan bertahap, format pilihan ganda terstruktur dengan rekomendasi di awal).
+
+   **Pembatasan penting — jangan salah tanya:** yang dinaikkan ke Mas Bagas hanya **kebutuhan, kondisi lapangan, preferensi, dan keputusan berdampak besar**. Kekurangan **pengetahuan teknis, referensi, cara pakai pustaka, atau pilihan alat** TIDAK ditanyakan ke pengguna — dicari sendiri ke internet, dokumentasi resmi, atau basis kode. Tanya ke pengguna untuk hal teknis membuang waktu pengguna dan menghasilkan jawaban yang lebih lemah daripada sumber primer.
+   - Kekurangan **kesepakatan antar-bagian pekerjaan** diselesaikan lewat rembukan antar-agen berbasis artefak tertulis (lihat `fleet-branch-merge-protocol`), bukan dengan menaikkannya ke pengguna.
+   - Sub-agent tidak punya kanal `clarify`; pertanyaan yang benar-benar harus naik dilewatkan induk, bukan ditanyakan langsung oleh anak.
 
 ---
 

@@ -1,0 +1,14 @@
+{
+  "probe": "audit_focus_record with eventTrace sliced to first setup event",
+  "accepted_invalid_trace": {
+    "key": [
+      320,
+      1,
+      "success",
+      "stay"
+    ],
+    "passed": true,
+    "failures": []
+  },
+  "hypothesis": "Checkpoints bound to contiguous trace + actual setup focusin and keyboard input reject truncation; default anchoring may yield real settlement scroll whereas opt-out does not. Validate both, do not claim no-scroll by hiding native anchoring."
+}

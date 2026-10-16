@@ -47,6 +47,7 @@ def render(history):
         '<li data-branch-root="' + escape(root, quote=True) + '">Branch root: ' +
         escape(root) + ' — Nodes: ' + escape(', '.join(sorted(members[root]))) + '</li>'
         for root in sorted(members)) + '</ul>'
+    initial_status = 'Versi ' + escape(history.cursor) + '. ' + str(len(list(history.children(history.cursor)))) + ' cabang lanjutan.'
     data = json.dumps(manifest, ensure_ascii=True).replace('<', '\\u003c')
     script = Path(__file__).with_name('history_browser.js').read_text()
     return '''<!doctype html><html lang="id"><meta charset="utf-8">
@@ -56,14 +57,16 @@ def render(history):
 main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;overflow-wrap:anywhere}
 :focus-visible{outline:3px solid #1669e8;outline-offset:3px}pre{white-space:pre-wrap;overflow-wrap:anywhere}
 .dag-container{position:relative;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:0;margin:16px 0;overflow-x:auto;scroll-behavior:auto}
-.dag-breadcrumbs-bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:8px 12px;margin:12px 0;font-family:ui-monospace,monospace;font-size:12px;color:#334155}
-.dag-breadcrumb-copy-btn{display:inline-flex;align-items:center;background:#e2e8f0;border:1px solid #94a3b8;border-radius:4px;padding:3px 7px;cursor:pointer;color:#334155;font-size:10px;font-family:inherit;font-weight:600;margin-left:auto;transition:outline-offset 0.15s ease;line-height:1}
+.dag-breadcrumbs-bar{display:flex;align-items:flex-end;flex-wrap:wrap;gap:6px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:8px 12px;margin:12px 0;font-family:ui-monospace,monospace;font-size:12px;color:#334155}
+.dag-breadcrumb-copy-btn{display:inline-flex;align-items:center;background:#e2e8f0;border:1px solid #94a3b8;border-radius:4px;padding:3px 7px;cursor:pointer;color:#334155;font-size:10px;font-family:inherit;font-weight:600;margin-left:auto;transition:outline-offset 0.15s ease;line-height:1;white-space:nowrap;flex-shrink:0}
 .dag-breadcrumb-copy-btn:hover{background:#cbd5e1;color:#0f172a}
 .dag-breadcrumb-copy-btn.copied{background:#065f46;color:#fff;border-color:#047857}
 .dag-breadcrumb-copy-btn.copied:hover{background:#047857;color:#fff}
 .dag-breadcrumb-copy-btn:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
 @media (forced-colors:active){.dag-breadcrumb-copy-btn{forced-color-adjust:auto}.dag-breadcrumb-copy-btn:focus-visible{outline:2px solid Highlight;outline-offset:2px}}
-.dag-breadcrumb-item{display:inline-flex;align-items:center;background:#fff;border:1px solid #94a3b8;border-radius:4px;padding:3px 8px;cursor:pointer;color:#0f172a;transition:all 0.15s ease;gap:5px}
+.dag-breadcrumb-item{scroll-margin:8px;display:inline-block;background:#fff;border:1px solid #94a3b8;border-radius:4px;padding:3px 8px;cursor:pointer;color:#0f172a;transition:all 0.15s ease;gap:5px;max-width:min(20rem,calc(100vw - 100px));min-width:0;white-space:normal;flex-shrink:0}
+.dag-breadcrumb-label{min-width:0;overflow-wrap:anywhere}
+.dag-breadcrumb-badge{flex-shrink:0}
 .dag-breadcrumb-item:hover{background:#e2e8f0;border-color:#64748b}
 .dag-breadcrumb-item.active{background:#1669e8;color:#fff;border-color:#0f172a;font-weight:600}
 .dag-breadcrumb-badge{display:inline-block;font-size:9px;font-family:ui-monospace,monospace;font-weight:700;line-height:1;padding:1px 4px;border-radius:3px;background:#e2e8f0;color:#475569;border:1px solid #cbd5e1}
@@ -89,7 +92,7 @@ main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;
 .dag-minimap-toggle-btn:hover{background:#334155;color:#f8fafc}
 #branch-root-labels{overflow-wrap:anywhere}.dag-minimap-header{flex-wrap:wrap}.dag-minimap-svg{display:block;max-width:100%}.dag-minimap-radar{display:block;cursor:crosshair;overflow:hidden;border-radius:4px}
 .dag-search-omnibar{display:flex;align-items:center;gap:8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;padding:6px 10px;margin:8px 0;font-family:ui-monospace,monospace;font-size:12px}
-.dag-search-input{flex:1;background:#fff;border:1px solid #94a3b8;border-radius:4px;padding:4px 8px;font-family:inherit;font-size:12px;color:#0f172a;outline:none;transition:border-color 0.15s ease}
+.dag-search-input{flex:1;min-width:0;background:#fff;border:1px solid #94a3b8;border-radius:4px;padding:4px 8px;font-family:inherit;font-size:12px;color:#0f172a;outline:none;transition:border-color 0.15s ease}
 .dag-search-input:focus{border-color:#1669e8;box-shadow:0 0 0 2px rgba(22,105,232,0.2)}
 .dag-search-count{font-size:11px;color:#64748b;font-weight:600;min-width:60px;text-align:right}
 .dag-search-clear-btn{background:#e2e8f0;border:1px solid #94a3b8;border-radius:4px;padding:2px 6px;cursor:pointer;color:#475569;font-size:10px;font-family:inherit;line-height:1}
@@ -98,11 +101,16 @@ main{max-width:820px}button{font:inherit;margin:4px;padding:12px;max-width:100%;
 .node-item.search-dim{opacity:0.25;transition:opacity 0.2s ease}
 .minimap-node.search-match{stroke:#f59e0b!important;stroke-width:2px!important;r:3.5px!important}
 .minimap-node.search-dim{opacity:0.25!important}
+.dag-status-region{display:grid;grid-template-areas:"status";margin:1em 0;min-width:0;overflow-wrap:anywhere}
+.dag-status-reserve{grid-area:status;visibility:hidden;pointer-events:none;line-height:1.35;margin:0;min-width:0;overflow-wrap:anywhere}
+#status{grid-area:status;margin:0;line-height:1.35;min-width:0;overflow-wrap:anywhere}
+.node-item{scroll-margin:8px}.node-item:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+@media (forced-colors:active){.node-item:focus-visible{outline:2px solid Highlight;outline-offset:2px}}
 @media (prefers-reduced-motion:reduce){*,::before,::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}}
 </style><main><h1>Riwayat cabang</h1><p>Pratinjau lokal. Dokumen bersama tidak diubah.</p>
 <button id="outside">Kontrol di luar riwayat</button>
 <section aria-label="Navigasi riwayat"><button id="undo">Kembali ke induk</button>
-<p id="status" role="status" aria-live="polite" aria-atomic="true"></p>
+<div class="dag-status-region" aria-hidden="false"><span class="dag-status-reserve" aria-hidden="true">Silsilah rute berhasil disalin ke clipboard</span><span class="dag-status-reserve" aria-hidden="true">Gagal menyalin silsilah rute ke clipboard</span><span class="dag-status-reserve" aria-hidden="true">Menyalin silsilah rute ke clipboard…</span><span class="dag-status-reserve" id="dag-status-reserve-idle" aria-hidden="true">''' + initial_status + '''</span><p id="status" role="status" aria-live="polite" aria-atomic="true">''' + initial_status + '''</p></div>
 <h2>Topologi Cabang (Visual DAG)</h2>
 <div id="dag-search-bar" class="dag-search-omnibar" role="search" aria-label="Pencarian Simpul DAG"><input type="search" id="dag-search-input" class="dag-search-input" placeholder="Cari simpul (ID atau diff)..." aria-label="Cari simpul"><span id="dag-search-count" class="dag-search-count" aria-live="polite"></span><button type="button" id="dag-search-clear" class="dag-search-clear-btn" aria-label="Hapus pencarian">Batal</button></div>
 <nav id="dag-breadcrumbs" class="dag-breadcrumbs-bar" aria-label="Jejak silsilah cabang"></nav>
