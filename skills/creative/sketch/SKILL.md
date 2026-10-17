@@ -60,6 +60,10 @@ Each variant should take a **different design stance**, not different pixel valu
 
 Pick one axis and pull apart from it. Two variants that differ only in accent color are wasted effort — the user can't distinguish them.
 
+**Aturan 1-Sumbu (Hard Invariant):** Dari 4 pilar utama (Layout, Tipografi, Palet Warna, dan Densitas), dua varian mana pun maksimal hanya boleh berbagi 1 pilar yang sama. Jika layout mirip, maka tipografi dan densitas wajib kontras tajam.
+
+**Verifikasi Dual-Viewport:** Setiap varian wajib dimuat dan diverifikasi tangkapan layarnya pada desktop (1280px) dan mobile (390px) via browser vision sebelum diajukan.
+
 **Variant naming:** describe the stance, not the number.
 
 ```

@@ -1,6 +1,6 @@
 ---
 name: autonomous-orchestrator
-description: Spawn sub-agents for complex or noisy technical tasks.
+description: "Use when orchestrating tasks. Analyze decomposition & spawn sub-agents."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -14,6 +14,35 @@ metadata:
 
 Skill ini digunakan untuk mengatur hierarki komando dan delegasi pekerjaan multi-agent dalam ekosistem otonom Bagas Cihuy.
 
+## 0. Gerbang Wajib Analisis Pra-Tugas (Pre-Task Orchestration Gate)
+
+SETIAP KALI menerima tugas dari pengguna (sebelum menyentuh kode, berkas, atau mengeksekusi alat secara sepihak/monolitik), Agen Utama (Mandor) WAJIB menganalisis dan memutuskan dekomposisi tugas:
+
+### 1. Pertanyaan Kunci Evaluasi
+> *"Apakah tugas ini bisa dan layak dipecah menjadi pembagian tugas sub-agent (anak / cucu)?"*
+
+### 2. Matriks Keputusan Dekomposisi
+
+| Karakteristik Tugas | Keputusan | Tindakan Wajib |
+|---|---|---|
+| Memiliki komponen yang bisa dipisah (misal: UI, Backend, DB, Riset, Verifikasi) | **YA (Wajib Pecah)** | Rumuskan pembagian tugas, kirim `tasks=[...]` via `delegate_task`. |
+| Membutuhkan pengujian independen / rilis fitur produksi | **YA (Wajib Pecah)** | Formasi minimal: **1 Pelaksana + 1 Pengawas (QC)** independen. |
+| Pekerjaan berpotensi bising (log panjang, build masif, scanning ratusan baris) | **YA (Wajib Pecah)** | Isolasi ke subagent agar konteks percakapan utama tidak tercemar. |
+| Riset perbandingan multi-dokumen atau multi-sumber | **YA (Wajib Pecah)** | Pecah per sumber ke subagent paralel. |
+| Tugas mikro sepele (cek status, baca 1 baris, kueri tunggal) | **TIDAK (Eksekusi Langsung)** | Tulis alasan teknis 1 baris, eksekusi langsung di agen utama. |
+| Pekerjaan mekanis murni tanpa penalaran | **TIDAK (Gunakan `execute_code`)** | Gunakan `execute_code` untuk efisiensi token. |
+| Membutuhkan klarifikasi bolak-balik dengan Mas Bagas di tengah jalan | **TIDAK (Eksekusi Langsung)** | Subagent tidak punya tool `clarify`, tangani langsung. |
+
+### 3. Protokol Pembagian Tugas (Jika YA)
+Jika hasil evaluasi menyatakan **YA**, rumuskan pembagian tugas secara eksplisit sebelum memanggil `delegate_task`:
+1. **Analisis Dekomposisi:** Tuliskan ringkasan mengapa tugas ini dibagi.
+2. **Formulasi Pembagian Tugas:**
+   - **Subagent 1 (Pelaksana A):** Sasaran tugas (`goal`), latar belakang & batasan (`context`), artefak yang wajib dihasilkan.
+   - **Subagent 2 (Pelaksana B / Spesialis):** Sasaran tugas (`goal`), latar belakang & batasan (`context`), artefak yang wajib dihasilkan.
+   - **Subagent N (Pengawas / QC Independen):** Kriteria penerimaan, bukti empiris yang harus diuji (curl, status HTTP, visual browser), dan hak veto.
+3. **Dispatch Sub-Agents:** Panggil `delegate_task(tasks=[...])` dengan model paten terkonfigurasi.
+4. **Verifikasi Mandor:** Mandor memverifikasi bukti artefak fisik di disk (exit code, file, HTTP) sebelum melapor ke Mas Bagas. Dilarang percaya laporan diri tanpa bukti empiris.
+
 ## 1. Peta Hierarki Komando (Executive Chain of Command)
 Untuk mencegah eksekusi buta (*blind execution*), penurunan mutu, dan pemborosan token, alur kerja diorganisasikan dalam hierarki 4 tingkat:
 
@@ -21,21 +50,20 @@ Untuk mencegah eksekusi buta (*blind execution*), penurunan mutu, dan pemborosan
 [Level 0: Supreme Commander]
        Mas Bagas (Bagas Cihuy) ── Otoritas Mutlak & Visi Strategis
                  │
-[Level 1: Direksi & Administrasi]
+[Level 1: Induk / Direksi]
        General Manager (Hermes Utama) ── Bikagent (@Bekbekk_bot)
-       (Orkestrator & Resource Manager)   (Asisten Manager, Notulen Vault /buku)
+       (Mandor Utama & Orchestrator)      (Asisten Manager, Notulen Vault /buku)
                  │
                  ├─────────────────────────┬─────────────────────────┐
                  │                         │                         │
-[Level 2: Kabinet Tiga Serangkai]
+[Level 2: Agent Anak (Kabinet Tiga Serangkai - Role: Orchestrator)]
             Si Pintar                 Si Eksekutor               Si Pengawas
-      (Riset, Arsitek, Solver)   (Komandan Lapangan/Kode)    (QC, Security, Veto Gate)
+      (Arsitek & Solver Riset)   (Komandan Lapangan/Kode)    (QC, Security, Veto Gate)
                  │                         │                         │
-[Level 3: Sub-Agents Lapangan]
-   - ML Scorer AI (:3055)     - Realtime Image Hunter     - PNG IHDR Byte Inspector
-   - ML Scorer Bola (:3086)   - Sports & AI Writer        - Watermark Stock Filter
-   - Research Harvester       - Puppeteer 1080x1350 px    - Token Bloat & Leak Hunter
-                              - Meta Graph Dispatcher     - Rollback & Veto Gate
+[Level 3: Agent Cucu (Pekerja Lapangan Ephemeral / Kuli Spesialis - Role: Leaf)]
+   - subagent-frontend         - subagent-backend          - subagent-qc-inspector
+   - subagent-database         - subagent-radar            - Byte / IHDR Inspector
+   - Research Harvester        - Puppeteer Render Worker   - Rollback & Token Auditor
 ```
 
 ## 2. Karakter & Mindset Kabinet Tiga Serangkai
@@ -58,18 +86,27 @@ Untuk mencegah eksekusi buta (*blind execution*), penurunan mutu, dan pemborosan
   - **API Telemetri:** `GET /api/hierarchy` dan `GET /api/metrics/token-efficiency`.
   - **Pelaporan Agen:** Sub-agent dan kabinet wajib melaporkan status tugas ke `POST /api/agents/report`.
 
-## 4. Formasi 5 Subagent Spesialis (Kuli Lapangan)
-Sesuai arsitektur Mandor-Kuli Mas Bagas, subagent didelegasikan berdasarkan peran teknis:
+## 4. Formasi Agent Cucu Spesialis (Kuli Lapangan On-Demand)
+Sesuai arsitektur Mandor-Kuli Mas Bagas, Agent Anak (terutama Si Eksekutor dan Si Pengawas) melahirkan (*spawn*) **Agent Cucu** sementara (*ephemeral*) sesuai peran teknis yang dibutuhkan:
 1. **subagent-frontend**: UI/UX Architect (Warm Paper & Obsidian, CSS, render Puppeteer, NOL emoji di UI).
 2. **subagent-backend**: Backend & API (Express.js, reverse proxy subpath, auth middleware, absolute path).
 3. **subagent-database**: Database & State (better-sqlite3, ACID, pessimistic locking kuota, no reset db produksi).
 4. **subagent-radar**: Sensor & Crawler (CCTV internet 24/7, feeds, publikasi 4-slide @sputarai, dilarang kata 'RADAR').
 5. **subagent-obsidian**: Curator & Knowledge Engine (catatan steril BUKU_CATATAN, atribusi hak cipta Bagas Cihuy, sinkronisasi /buku/).
+6. **subagent-qc-inspector**: QA/QC Inspector (pengujian biner, verifikasi curl, visual render inspector, security gate).
 
-Manifest teknis tersimpan di `~/.hermes/subagents_manifest.json` dan dokumentasi di `~/otak-koding/01-Rekayasa-Sistem/FORMASI-5-SUBAGENT-MANDOR-KULI.md`.
+Setiap Agent Cucu bertindak sebagai unit kerja atomik: dieksekusi cepat, fokus pada artefak nyata, dan langsung dimusnahkan (*terminated*) setelah menyetorkan hasil ke Agent Anak.
 
 ## 5. Panduan Menggunakan `delegate_task`
 Gunakan tool `delegate_task` untuk mengirim tugas. Berikan `context` sejelas mungkin karena sub-agent tidak memiliki riwayat chat ini.
+
+### 5.0 Bawaan: Jalan Paralel
+
+Delegasikan lebih dulu; kerjakan sendiri hanya untuk tugas mikro, kerja mekanis murni (pakai `execute_code`), alur yang saling bergantung berantai, atau tugas yang butuh interaksi pengguna di tengah jalan.
+
+Komposisi ditentukan oleh **peran yang dibutuhkan**, bukan angka. Tiga peran tetap: **Perancang** (terbitkan kontrak bila ada lebih dari satu bagian yang harus saling cocok), **Pelaksana**, dan **Pengawas** (selalu ada). Pengawas adalah **pekerja** — ia memakai slot konkurensi dan membakar token, jadi 3 pelaksana + 1 pengawas = 4 slot terpakai. Pengawas wajib **berbeda orang** dari pelaksana yang diperiksa.
+
+Prosedur keputusan lengkap, pemisahan tugas four-eyes, dan hak veto ada di `tiga-serangkai-orchestration` bagian 1-2 dan 4.
 
 ### 5.1 Batas Arsitektur: Sub-Agent Tidak Dapat Saling Bicara
 
@@ -135,3 +172,30 @@ Karena sub-agent tidak punya kanal langsung ke sesama, rembukan diwujudkan sebag
 2. Sub-agent **tidak bisa** membaca chat history. Semua info krusial (jalur file absolut, nama fungsi, rule desain) HARUS disematkan ke dalam `context`.
 3. Setelah sub-agent selesai, **Mandor dan Si Pengawas wajib memverifikasi hasil kerjanya** (contoh: curl endpoint, validasi biner gambar, inspeksi log) sebelum dilaporkan ke pengguna. Dilarang merilis fitur tanpa uji verifikasi empiris.
 4. **Protokol Klarifikasi Bertahap:** Jika arahan ambigu, ajukan 1 pertanyaan bertahap per turn ('satu soal satu soal') dengan opsi pilihan ganda terstruktur (rekomendasi pertama), pantang memutuskan sepihak.
+
+## 7. Format Notifikasi & Pelaporan Telegram (Standar Bagas Cihuy)
+Untuk menjaga keterbacaan di Telegram HP (spasi lega, poin 1 baris, zero slop, tidak berantakan):
+
+1. **Notifikasi Real-time & Selesai Parsial (Interim):**
+   Saat sebagian sub-agent selesai dan masih menunggu yang lain, tampilkan status terstruktur:
+   ```text
+   [Status Armada Sub-Agent]
+   ┌ 🤖 Sub-Agent 1/2 ("Nama Tugas") ── ✅ Selesai (18.2s)
+   └ Ringkasan: Status kunci 1 baris
+   
+   ┌ 🤖 Sub-Agent 2/2 ("Nama Tugas") ── ⏳ Berjalan...
+   └ Status: Sedang verifikasi komponen
+   ```
+
+2. **Laporan Akhir (Final Completion):**
+   Saat seluruh sub-agent tuntas, rangkum dengan kartu kolom bertumpuk:
+   ```text
+   [Hasil Akhir Armada Sub-Agent]
+   ┌ 🤖 Sub-Agent 1/2 ("Nama Tugas A") ── ✅ Selesai (26.9s)
+   └ Temuan: Poin konkret hasil kerja & verifikasi empiris
+   
+   ┌ 🤖 Sub-Agent 2/2 ("Nama Tugas B") ── ✅ Selesai (18.2s)
+   └ Temuan: Poin konkret hasil kerja & verifikasi empiris
+   ```
+3. **Anti-Hapus & Anti-Spam:**
+   Pembaruan progres diedit langsung in-place pada pesan yang sama. Riwayat akhir tetap tersimpan di obrolan (`cleanup_progress = false`) sebagai jejak audit.

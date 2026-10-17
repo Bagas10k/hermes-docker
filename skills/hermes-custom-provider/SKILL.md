@@ -29,10 +29,11 @@ Point Hermes at any OpenAI-compatible endpoint. Order matters: verify the provid
 5. **Record notable model IDs** from step 1; later switching is one command: `hermes config set model.default <id>`.
 6. **Telegram runtime footer alignment**: When verifying output on Telegram messaging (`display.runtime_footer`), ensure `gateway/runtime_footer.py` preserves provider context for custom/proxy endpoints so the footer reflects the actual serving provider alongside the short model name.
 7. **Align or isolate fallback chains**: Hermes automatically walks `fallback_providers` on 429, 500, or capacity errors. If user requests a specific model/tier (e.g. free models or specific proxy), align `fallback_providers` to peer models on the same tier or disable with `hermes config set fallback_providers "[]"` so failures report directly instead of silently switching models.
-8. **Local router / 9Router model routing**:
+8. **Local router / 9Router model routing & combo troubleshooting**:
    - Model identifiers via proxies typically use slash prefixes (`oc/<model>`, `ag/<model>`), not colons (`opencode:<model>`).
    - For reasoning/thinking models (e.g. DeepSeek Flash, Muse Spark), provide sufficient `max_tokens` headroom; low limits (e.g. <30) are consumed entirely by reasoning tokens and return blank assistant content.
-   - When local routers fail with HTTP 500 on `/v1/models`, inspect combo definitions: object payloads in combo model lists (`{provider, model}`) crash un-normalized `.includes("/")` string operations.
+   - **Combo `a.includes is not a function` (HTTP 500)**: In 9Router (`~/.9router/db/data.sqlite`), `combos.models` must be stored as a JSON array of model ID strings (e.g. `["ag/claude-opus-4-6-thinking", "cx/gpt-5.5"]`), NOT an array of metadata objects (`[{"provider":"ag","model":...}]`). When objects are stored, 9Router's dispatcher passes the object directly to `handleSingleModel(body, modelId)` where `modelId.includes('/')` throws `TypeError: a.includes is not a function`. Fix in place by updating `combos.models` in `data.sqlite` to string arrays of `fullModel || routedModel || model`.
+   - **Headless browser path for auxiliary local bots**: On Linux environments with system Chromium at `/usr/local/bin/chromium`, companion apps (such as WhatsApp Web / Puppeteer) crash in continuous initialization loops if `puppeteer_executable_path` points to a non-existent cache directory (`~/.cache/puppeteer/...`). Set `puppeteer_executable_path: "/usr/local/bin/chromium"` and guard client options with fallback detection if the configured path is missing.
 
 ## Adding a named provider without touching the current default
 

@@ -66,6 +66,10 @@ python3 ~/.hermes/skills/software-development/e2e-browser-testing/scripts/cdp_ru
 
 ## Pitfalls
 
+- **Browser binary vs package cache**: Resolve an installed Chromium executable before launching Puppeteer. The package's default pinned Chrome may be absent while `/usr/local/bin/chromium` is usable; verify the binary and pass `executablePath` rather than installing another browser.
+- **Exact delivery surface**: Record the actual response status and final browser URL. A local HTTP 200 does not establish public availability; keep an outer login wall intact and disclose it. Never silently fall back from the requested URL to `file://` and report the URL as tested.
+- **Semantic task counts**: Empty-state list items are not records. Count rows containing the actual record marker/control, and verify the visible total against that count; do not weaken a failing assertion to accommodate genuine data errors.
+
 - **HTTP PUT pada `/json/new`**: Endpoint `/json/new` pada Chromium modern mewajibkan HTTP method `PUT`; pemanggilan dengan `GET` melempar HTTP 405 Method Not Allowed.
 - **WebSocket Frame Size**: Tangkapan layar base64 resolusi tinggi dapat melebihi batas default WebSocket frame (1 MB). Runner mengonfigurasi batas `max_size=25MB` untuk mencegah koneksi terputus tiba-tiba.
 - **Horizontal Overflow False Negatives**: Nilai `scrollWidth` elemen `document.documentElement` wajib dibandingkan terhadap `clientWidth`. Runner menyertakan toleransi 1px untuk mencegah subpixel anti-aliasing jitter.

@@ -1,8 +1,8 @@
 Obsidian vault berlokasi di /home/ubuntu/otak-koding. Rujukan utama: SYSTEM/KNOWLEDGE_ENGINE.md dan KNOWLEDGE/INDEX.md.
 §
-1. Verifikasi sukses via curl. 2. Proxy existing UIs daripada merakit ulang. 3. Haram localhost/127.0.0.1 di HTML publik. Gunakan Bot 2 untuk tugas bising.
+1. Verifikasi via curl. 2. Proxy existing UIs. 3. Haram localhost di HTML publik. Bot 2 tugas bising. Debugging: baca langsung log error sistem (~/.hermes/logs/errors.log, pm2 logs), jangan tebak acak.
 §
-Format Telegram: spasi lega, poin 1 baris. PANTANGAN: Dilarang emoji di UI/UX. Standar 98/100: 'Warm Paper & Obsidian'.
+Format Telegram: spasi lega, poin 1 baris. PANTANGAN: Dilarang emoji di UI/UX. Standar TUI: gaya Zen (⚡ Skill, # Command, → Read/Edit, diff side-by-side maks 20 baris, [✓]/[ ] checklist).
 §
 jajandigital (:3000), hermes-gateway (:8080), hermes-pekerja (@Bekbekk_bot), buku (/buku), system-telemetry (:8090), penelitian-ai (:3050), 9router (:20128).
 §
@@ -21,3 +21,5 @@ LangitDev adalah proyek web dev multi-klien ERP milik user. User memilih pemelih
 Vault Obsidian: ~/otak-koding/ (00-Peta-Pengetahuan ... 10-Rekayasa-ERP-dan-Akuntansi-Sistem). Standar catatan: YAML frontmatter (judul/kategori/tag/tanggal_dibuat/terakhir_diperbarui/tautan_terkait), kebab-case, wikilink [[...]], penutup '*Skipped:*'/'*Add when:*'. Folder 10 berisi 30 catatan doktrin ERP; verifikasi dengan `python3 ~/otak-koding/10-Rekayasa-ERP-dan-Akuntansi-Sistem/verifikasi_catatan_erp.py`. Skill terkait: erp-engineering-doctrine.
 §
 Skill `otak-koding`: SKILL.md sudah 101k char, di atas batas 100k — tambahan teks ke SKILL.md ditolak sistem; taruh materi baru di `references/` skill itu (tetap terdeteksi via linked_files).
+§
+Plugin autonomous-orchestrator aktif via pre_llm_call hook (hierarki 3 generasi). Tangga kebenaran: lokal/vault -> empiris mesin -> model -> pencarian semantik Exa. Telegram display: cleanup_progress: false, thinking_progress: true, tool_preview_length: 120, delegation fallback aktif.

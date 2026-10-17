@@ -82,6 +82,23 @@ Use this skill when building or extending internal dashboards, modular "command 
       }
     });
     ```
+- **CRITICAL PITFALL: The http-proxy-middleware 'ws: true' Global Upgrade Hijacking Trap**:
+  - **Rule**: In Express/Node reverse proxies hosting multiple services or multiplexed WebSocket upstreams, NEVER set `ws: true` inside `createProxyMiddleware({...})` options. Always set `ws: false` on middleware configurations and delegate upgrades explicitly via `proxyInstance.upgrade(req, socket, head)` inside your multiplexed `server.on('upgrade')` handler.
+  - **Mechanism**: When `ws: true` is configured in `createProxyMiddleware`, the first HTTP request that hits the middleware causes `http-proxy-middleware` to access `req.socket.server` and register its internal `this.handleUpgrade` listener globally on the `upgrade` event of the underlying `http.Server`. Because this internal listener executes without route prefix scoping, that single proxy hijacks EVERY incoming WebSocket upgrade across the entire application (e.g. a Socket.IO proxy rewriting `/hermes/api/pty` into `/socket.io/...` and routing to an Engine.IO port, returning `400 Transport unknown` or socket drops).
+  - **Action**: Set `ws: false` on all `createProxyMiddleware` instances and manually dispatch inside `server.on('upgrade')`:
+    ```javascript
+    const socketIoProxy = createProxyMiddleware({ target: '...', ws: false, ... });
+    server.on('upgrade', (req, socket, head) => {
+      if (req.url && req.url.startsWith('/socket.io')) {
+        return socketIoProxy.upgrade(req, socket, head);
+      }
+      // other explicit proxy handlers...
+    });
+    ```
+- **CRITICAL PITFALL: Auth-Boundary WebSocket Whitelisting & The 5-Second Terminal Murder Trap**:
+  - **Rule**: When wrapping a subpath-proxied SPA (such as Hermes Agent Dashboard under `/hermes`) behind an authentication boundary (`privacy-boundary.js`), whitelist the full spectrum of real-time WebSocket routes required by the client (`/api/pty` for xterm shells, `/api/ws` for client RPC, `/api/events` for telemetry, and single-use ticket parameters `?ticket=...`). Never attach background interval timers (`setInterval(..., 5000)`) calling `socket.destroy()` on upstream-authenticated terminal streams.
+  - **Mechanism**: Modern developer SPAs split real-time concerns across multiple WebSocket endpoints: interactive terminal sessions run on `/api/pty`, whereas background status streams run on `/api/events`. If the privacy boundary only exempts native desktop clients (e.g. checking only `/api/ws` with custom subprotocol headers), web browser connections to `/api/pty` get rejected with HTTP 403 Forbidden, trapping the web UI in an infinite "Chat connection interrupted. Reconnecting..." loop. Furthermore, polling auth cookies every 5 seconds on active sockets drops terminal connections mid-keystroke if cookies are stripped by proxy hops.
+  - **Action**: Recognize all app WebSocket routes under the mounted prefix (`prefix === '/hermes' && (p.startsWith('/hermes/api/') || ...)`), exempt them from aggressive portal cookie stripping, and let the upstream service's native ticket lifecycle manage socket authentication.
 - **CRITICAL PITFALL: The WebSocket `RSV1 must be clear` Reverse-Proxy Compression Trap**:
   - **Rule**: Explicitly pass `perMessageDeflate: false` when initializing WebSocket servers (`new WebSocketServer({ server, perMessageDeflate: false })`) behind Node reverse proxies (`http-proxy-middleware`), Cloudflare Tunnels, or Nginx.
   - **Mechanism**: The `ws` library enables `perMessageDeflate` compression by default. When WebSocket frames pass through intermediate proxy layers that forward raw TCP frames without negotiating compression extensions symmetrically, the client browser or proxy parser receives unhandled compressed frames and immediately terminates the connection with `Invalid WebSocket frame: RSV1 must be clear` or socket hang up. Disabling perMessageDeflate eliminates RSV1 errors and drops framing overhead for high-frequency JSON ticks.
@@ -381,6 +398,10 @@ When developing these systems, adhere to the "Bagus vs Jelek" integrity standard
   - Separate attachment controls into distinct Apple SF Symbol icons (e.g. Photo `#btn-attach-photo` with `accept="image/*"` and Document `#btn-attach-doc` with document/code extensions).
   - Never dump uploaded file names directly into the prompt textarea. Render tactile preview chips inside a dedicated attachment tray (`.dock-attachments-tray`) above the input with file type icons and individual removal buttons (`✕`).
   - Implement a `paste` event listener on the textarea to automatically intercept clipboard screenshots (`Ctrl+V`) and convert them into preview chips.
+- **CRITICAL PITFALL: Symmetrical 4-Tier Extension Whitelisting for Chat Attachments**:
+  - **Rule**: When adding support for new file formats (e.g. `.zip` archives or code bundles) into chat/terminal interfaces, update the extension whitelist symmetrically across all 4 tiers of the stack: (1) backend router validation sets (`_CHAT_DOCUMENT_EXTENSIONS`), (2) client validation helpers (`isChatDocument` / `DOCUMENT_EXTENSIONS`), (3) HTML file input `accept="..."` filters on all relevant composer views (terminal and mobile/canvas), and (4) unit/integration test suites (`pytest` and `vitest`).
+  - **Mechanism**: Updating only the frontend causes backend API rejection (`HTTP 400 Unsupported document type`); updating only the backend leaves the browser file dialog disabling selection via `accept` and client guards throwing `Unsupported file type`.
+  - **Action**: Always grep the repository for the document extension set, update all 4 tiers, rebuild the frontend bundle (`npm run build`), restart the supervised service, and verify with both unit tests and live multipart uploads.
 - **Google Sign-In & Zero-Friction Social Onboarding**:
   - Implement dual-mode Google Identity Services (GIS): verify incoming Google ID Tokens server-side via `https://oauth2.googleapis.com/tokeninfo?id_token=...` without external npm bloat.
   - Support instant demo fallback mode when Google Cloud Client ID is pending configuration, plus an in-UI Client ID persistence field (`google_auth.json`) that reloads dynamically without process restarts.
