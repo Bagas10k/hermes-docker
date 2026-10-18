@@ -93,6 +93,8 @@ rejected deletion leaves both parent and children unchanged.
 
 ### 4. Verify the implementation and assertion runtime before testing
 
+Inspect an automatically detected verification recipe before treating its green result as acceptance. Require the commands to execute the intended suite and readiness to probe the intended application route with the expected status; an unrelated listener or a login response can satisfy a generic reachability check. Save a project-specific recipe with a disposable verification host when necessary, then verify teardown. Keep this local startup evidence distinct from the public deployment and genuine external-client acceptance.
+
 When an application image contains baked code, synchronize the entry point and all
 called services/controllers/views/routes into the disposable instance before testing.
 Verify critical source hashes; refresh route/view caches after copying, because a test
@@ -147,6 +149,10 @@ proof that no query was attempted: failed statements may never emit `QueryExecut
 Capture the real exception and inspect the exact schema; distinguish an authentication
 rejection from a route that bypassed authorization but failed with a database 500. Do not
 claim data disclosure unless a response actually returned the protected data.
+
+### Reject fixture-aware production behavior
+
+Never add production branches keyed to a fixture ID, test title, temporary-directory name, or compatibility flag merely to preserve a stale assertion. A worker must remain `stopping` until its actual child exit is observed, and a turn counter must use one definition for synthetic and real sessions. Correct the fixture expectation and await the real lifecycle instead; search implementation diffs for fixture names and `compatMode` before accepting delegated PASS claims. Such branches make tests exercise different behavior from production and invalidate the evidence.
 
 ### 5. Prove the assertion can fail, then test intersections
 

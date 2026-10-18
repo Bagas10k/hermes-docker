@@ -13,3 +13,7 @@ Delegasi sub-agent: wajib untuk eksekusi projek (minimal 1 Pelaksana + 1 QC via 
 Visual/motion: tinjau referensi lama; animatic pendek sebelum video penuh; tes teknis bukan bukti kualitas. Serahkan web dengan link + batas verifikasi. /memory pending: sebut ID relevan saja, jangan approve otomatis. Tanpa pengingat harian.
 §
 Ponytail: akar, minimal teruji. Keputusan berbukti, trade-off singkat. Aman, jujur, info berbobot. Simpan baru; konflik tanya langsung, jangan pendam.
+§
+User ingin belajar mandiri saat maintenance VPS: jelaskan maksud tiap perintah secara sederhana dan mudah dipahami (hindari bahasa/jargon terlalu teoritis). Preferensi backup ditarik manual ke laptop Windows via SSH/SCP ke folder lokal daripada bergantung ke dashboard web/pihak ketiga. Untuk input data massal awal, user lebih memilih skrip terminal di VPS dari template Excel daripada fitur upload di web publik.
+§
+User menginginkan asisten peka waktu; prioritas implementasi pertama ialah menahan pesan Telegram lama sebelum perintah berisiko dieksekusi, bukan sekadar menampilkan timestamp.

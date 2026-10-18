@@ -38,6 +38,13 @@ Hidden buttons, client-side route guards, unpredictable IDs, and a working login
 
 For Telegram portal login, derive authorization from an explicit numeric owner/allowlist, never a home-channel ID or username. Read-only `getMe` can verify the bot identity without interfering with gateway updates/webhooks. Keep bot credentials server-side outside public roots. The legacy widget requires BotFather `/setdomain`; a real `Bot domain invalid` response must leave login fail-closed until the user links the domain. Its signature does not bind an application nonce: combine browser-bound single-use challenges, CSRF, freshness and global proof replay protection, and document that OIDC nonce/PKCE provides stronger binding. Strip portal session cookies before forwarding to native upstream apps, and recheck long-lived WebSocket sessions after revocation.
 
+## Telegram Mini App control surfaces
+
+- Exchange fresh signed `Telegram.WebApp.initData` for an owner-authorized session; reject duplicate fields, malformed form encoding, nonnumeric identity, stale/future timestamps, and replay. Decode `+` as space before HMAC canonicalization. Persist proof consumption and session creation atomically; corruption or persistence failure must fail closed, not silently reset the anti-replay store.
+- Keep all data, capabilities, unknown API paths, and SSE behind a central authentication boundary. Missing auth modules must abort startup, never install a permissive fallback. Apply private no-store policy to API responses as well as static/login responses.
+- Distinguish top-level mobile WebViews from Telegram Web desktop iframes. A secure cookie with Origin/CSRF checks can be the primary transport; if bearer fallback is needed, keep the opaque token in memory only and use streaming `fetch` headers for SSE, never query tokens. Test real Telegram separately from an injected fixture SDK.
+- A process-local Hermes registry cannot be controlled by launching another gateway and reusing session IDs. Scope controls to a transport-bound native process or to explicitly app-owned workers; do not advertise inferred reachability or mark a status label change as a completed action.
+
 ## Segregation of Duties (ERP / finance paths)
 
 Role checks are not internal control. When a system moves money, inventory, or approvals, enforce the separation of FOUR functions: otorisasi (approve), pencatatan (record), penyimpanan aset (hold the asset), rekonsiliasi (reconcile).

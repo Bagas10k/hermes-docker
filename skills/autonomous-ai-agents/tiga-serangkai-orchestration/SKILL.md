@@ -99,6 +99,14 @@ Konsekuensi praktis: satu pekerja tidak bisa menjadi pelaksana sekaligus pengawa
 5. **Saling bergantung berantai?** → 1 Pelaksana, urutkan langkahnya; menambah pekerja di alur berantai hanya menambah waktu tunggu.
 6. **Selalu akhiri dengan Pengawas** yang berbeda dari pelaksana yang diperiksa.
 
+### Artefak lebih dulu, laporan setelahnya
+
+- Pecah implementasi pada batas dependensi yang kecil, biasanya 1–3 berkas, dengan kepemilikan penulis tunggal. Jangan memberi satu pekerja satu paket besar hanya karena semua berkas termasuk kategori UI.
+- Sertakan ringkasan kontrak, cuplikan sumber relevan, versi beku dan kriteria uji; hindari meminta setiap anak mengulang audit historis dan pembacaan konteks besar yang sama. Pembacaan tetap wajib untuk kode yang benar-benar akan diubah.
+- Simpan perubahan yang koheren beserta pemeriksaan runnable sebelum memperluas laporan. Jika waktu tidak cukup, setorkan artefak parsial dan sebut dependensi yang belum lengkap; berkas host yang memanggil partial belum tersedia bukan unit selesai.
+- Perlakukan ringkasan QC sebagai klaim yang dapat salah: cocokkan hash, jalankan bukti, dan koreksi asumsi versi lingkungan serta klaim keamanan yang melampaui skenario uji. Kesepakatan antar-model tidak menggantikan bukti.
+- Ukur manfaat delegasi dari cacat yang ditemukan dan kriteria penerimaan yang ditutup; jangan mengklaim lebih cepat, lebih murah, atau persentase peningkatan tanpa baseline pembanding. Paralelisasi tidak menghapus tahap integrasi, pengujian bersama, dan publikasi yang tetap berurutan.
+
 ### Batas kerasnya adalah anggaran, bukan jumlah
 
 - Kedalaman: `delegation.max_spawn_depth` (bawaan 1 = datar; tanpa plafon atas).

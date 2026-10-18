@@ -23,3 +23,5 @@ Vault Obsidian: ~/otak-koding/ (00-Peta-Pengetahuan ... 10-Rekayasa-ERP-dan-Akun
 Skill `otak-koding`: SKILL.md sudah 101k char, di atas batas 100k — tambahan teks ke SKILL.md ditolak sistem; taruh materi baru di `references/` skill itu (tetap terdeteksi via linked_files).
 §
 Plugin autonomous-orchestrator aktif via pre_llm_call hook (hierarki 3 generasi). Tangga kebenaran: lokal/vault -> empiris mesin -> model -> pencarian semantik Exa. Telegram display: cleanup_progress: false, thinking_progress: true, tool_preview_length: 120, delegation fallback aktif.
+§
+VPS LangitDev: 187.77.120.168 (user langitdev), pbj.melodygroup.cloud di /srv/apps/website-pbj (Docker: pbj_app, pbj_worker, pbj_web, mysql_pusat, pbj_tunnel). Script cek kesehatan: ~/pbj-check.sh. Database db_pbj memakai skema sandbox (79 tabel, 9 akun login aktif).
