@@ -168,6 +168,7 @@ delegation:
 skills:
   auto_load:
     - autonomous-orchestrator
+    - advanced-gpu-aware-design-system
   creation_nudge_interval: 15
 timezone: Asia/Jakarta
 approvals:
@@ -326,23 +327,15 @@ custom_providers:
     model: glm5-3
     models:
       atria-dawn-preview: {}
-      claude-opus-5-5: {}
       deepseek-4-1-flash: {}
       deepseek-v4-flash: {}
-      deepseek-v4-flash-0731: {}
       deepseek-v4-pro: {}
-      deepseek-v4-pro-0813: {}
-      deepseek-v4.1-flash: {}
       deepseek-v4.1-flash-expires-on-0910: {}
-      deepseek-v4.1-flash-ultrafast: {}
-      dots-3-note-preview: {}
       gemini-3-8-flash: {}
       gemini-3.6-flash: {}
       gemini-3.7-flash: {}
       glm-5-1: {}
       glm-5-3-flash: {}
-      glm-5.2: {}
-      glm-5.3-flash: {}
       glm-5.3-flash-bugil: {}
       glm5-2: {}
       glm5-3: {}
@@ -365,7 +358,6 @@ custom_providers:
       qwen3-8-flash: {}
       qwen3.8-plus: {}
       qwen3.8max: {}
-      space-bunny: {}
     models_discovered: true
     name: kagiro
   - base_url: https://api.nbgate.com/v1
@@ -373,39 +365,39 @@ custom_providers:
     model: nbgate
     models:
       gregv4/gpt-6.1-sol: {}
-      gregv4/gpt-6-sol-B: {}
+      Greg/glm-5.2-mod: {}
+      Greg/gpt-5.6-luna: {}
+      Greg/deepseek-v4-flash: {}
+      Greg/gpt-5.6: {}
       Greg/deepseek-v4.1-flash: {}
-      Greg/hy3: {}
-      Greg/mimo-v2.5-pro: {}
-      Greg/glm-5.3: {}
-      Greg/kimi-k2.7-code-highspeed: {}
-      Greg/deepseek-v4-flash-vision-exp: {}
-      Greg/deepseek-v4-mod: {}
-      Greg/kimi-k3-mod: {}
+      Gregv2/deepseek-v4.1-flash-fr: {}
+      Greg/glm-5.2: {}
+      Greg/mimo-v2.6-pro: {}
+      Greg/glm-5.3-flashx: {}
       Greg/mimo-v2.6-flash: {}
+      Greg/deepseek-v4-flash-vision-exp: {}
+      Greg/glm-5.3-flash-mod: {}
+      gregv4/glm-5.3-nb: {}
+      Greg/deepseek-v4-pro-0813: {}
+      Greg/hy3: {}
+      Greg/glm-5.3: {}
+      gregv4/gpt-6-astra: {}
+      Greg/deepseek-v4-pro: {}
+      Greg/deepseek-v4-mod: {}
+      Greg/mimo-v2.5-pro: {}
+      gregv4/gpt-6-sol-B: {}
+      Gregv2/deepseek-v4.1-flash-1017: {}
+      Greg/kimi-k3-mod: {}
+      Greg/kimi-k3: {}
+      Greg/glm-5.3-mod: {}
       Greg/hy4: {}
       Gregv2/step-5-preview: {}
-      Greg/deepseek-v4-pro-0813: {}
-      Greg/kimi-k2.7-code: {}
-      Greg/glm-5.3-flashx: {}
-      Greg/glm-5.3-flashx-mod: {}
-      Greg/gpt-5.6: {}
-      Greg/deepseek-v4-flash-0731: {}
-      Greg/glm-5.2-mod: {}
-      Greg/kimi-k3: {}
       Greg/glm-5.3-flash: {}
-      Greg/glm-5.3-flash-mod: {}
-      Greg/deepseek-v4-pro: {}
-      Greg/glm-5.2: {}
+      Greg/kimi-k2.7-code-highspeed: {}
+      Greg/deepseek-v4-flash-0731: {}
       gregv4/gpt-6-luna-A: {}
-      Greg/mimo-v2.6-pro: {}
-      Greg/deepseek-v4-flash: {}
-      gregv4/glm-5.3-nb: {}
-      Greg/glm-5.3-mod: {}
-      Gregv2/deepseek-v4.1-flash: {}
-      Greg/gpt-5.6-luna: {}
-      gregv4/gpt-6-astra: {}
-      Gregv2/deepseek-v4.1-flash-fr: {}
+      Greg/glm-5.3-flashx-mod: {}
+      Greg/kimi-k2.7-code: {}
     models_discovered: true
     name: nbgate
   - base_url: https://tokenharbor.ai/v1
@@ -430,7 +422,6 @@ custom_providers:
       cbcn/glm-5.3-flash: {}
       deepseek-v4-pro: {}
       tencent/hy3: {}
-      gpt-5.6-luna: {}
       deepseek-v4.1-flash-ultrafast: {}
       muse-wonder-1.0: {}
       workbuddy/deepseek-v4.1-flash: {}
@@ -522,7 +513,6 @@ custom_providers:
       cc/claude-sonnet-5: {}
       cc/claude-sonnet-5-5: {}
       cp/xai/grok-4.5: {}
-      cp/xai/grok-4.7: {}
       cp/zai/glm-5.3-flash: {}
       cx/gpt-5.6-luna: {}
       cx/gpt-5.6-sol: {}
@@ -808,41 +798,3 @@ platform_toolsets:
     - hermes-whatsapp
   yuanbao:
     - hermes-yuanbao
-
-# ── Security ──────────────────────────────────────────────────────────
-# Secret redaction is ON by default — strings that look like API keys,
-# tokens, and passwords are masked in tool output, logs, and chat
-# responses before the model or user ever sees them. Set redact_secrets
-# to false to disable (e.g. when developing the redactor itself).
-# tirith pre-exec scanning is enabled by default when the tirith binary
-# is available. Configure via security.tirith_* keys or env vars
-# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
-#
-# security:
-#   redact_secrets: true
-#   tirith_enabled: true
-#   tirith_path: "tirith"
-#   tirith_timeout: 5
-#   tirith_fail_open: true
-
-# ── Fallback Model ────────────────────────────────────────────────────
-# Automatic provider failover when primary is unavailable.
-# Uncomment and configure to enable. Triggers on rate limits (429),
-# overload (529), service errors (503), or connection failures.
-#
-# Supported providers:
-#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
-#   openai-codex (OAuth — hermes auth) — OpenAI Codex
-#   nous         (OAuth — hermes auth) — Nous Portal
-#   zai          (ZAI_API_KEY)         — Z.AI / GLM
-#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
-#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
-#   minimax      (MINIMAX_API_KEY)     — MiniMax
-#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
-#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
-#
-# For custom OpenAI-compatible endpoints, add base_url and key_env.
-#
-# fallback_model:
-#   provider: openrouter
-#   model: anthropic/claude-sonnet-4

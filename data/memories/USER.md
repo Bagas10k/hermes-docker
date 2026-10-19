@@ -8,9 +8,9 @@ Milik Bagas @sputarai (auto-post, 100% indo alami). Carousel wajib tepat 4 slide
 §
 Kurasi ide dan catatan dibukukan oleh Bot 2 (@Bekbekk_bot / Bekagent) ke Obsidian BUKU_CATATAN & web /buku. Vault steril murni milik Bagas.
 §
-Delegasi sub-agent: wajib untuk eksekusi projek (minimal 1 Pelaksana + 1 QC via delegate_task); tanya-jawab biasa langsung. Potongan kecil (3 berkas), isi ulang slot instan. Tugas didelegasikan pantang diambil alih. Telegram >15MB pecah.
+Delegasi sub-agent: wajib untuk eksekusi projek (minimal 1 Pelaksana + 1 QC via delegate_task); tanya-jawab biasa langsung. Terapkan protokol gitai/Scion: sparse file allocation, kunci jalur file (anti-contention), landing compare-and-swap, dan verifikasi bisection pasca-landing. Potongan kecil (3 berkas).
 §
-Visual/motion: tinjau referensi lama; animatic pendek sebelum video penuh; tes teknis bukan bukti kualitas. Serahkan web dengan link + batas verifikasi. /memory pending: sebut ID relevan saja, jangan approve otomatis. Tanpa pengingat harian.
+Visual/motion: Selera UI/UX Linear/Revolut, palet kontras tinggi (WCAG AAA min 7:1), animasi WAJIB Morphing (perubahan bentuk fluida in-place 60 FPS, spring physics, shared element, anti-modal kaku). Tinjau referensi lama; animatic pendek sebelum video penuh. Serahkan web dengan link + batas verifikasi.
 §
 Ponytail: akar, minimal teruji. Keputusan berbukti, trade-off singkat. Aman, jujur, info berbobot. Simpan baru; konflik tanya langsung, jangan pendam.
 §

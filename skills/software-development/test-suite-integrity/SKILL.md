@@ -56,6 +56,8 @@ profile** turned every green run into a silent production reconfiguration. The a
 kept answering, but from a dead endpoint, and the failure surfaced later as "the AI
 stopped replying" rather than as a test bug.
 
+Pass disposable paths to every stateful constructor, including secondary asset/auth stores created by a router; overriding only the primary database leaves default storage writes outside the sandbox. Seed persisted authentication fixtures before constructing an in-memory auth provider, or use its supported store API: editing its file afterwards does not update the provider's already-loaded sessions.
+
 Check it: snapshot the live record before the run and diff it after. If it changed,
 the suite is destructive.
 
@@ -78,6 +80,19 @@ alone does not distinguish successful mutation from an error redirect.
 A test that duplicates a branch is a **vacuous test**. Delete it and write one that
 fails when the branch is removed.
 
+Construct control-character negatives with actual bytes, such as `String.fromCharCode(10)`, and assert their code points before invoking the real boundary; a string containing backslash-plus-n tests a different input. Compare fixtures with captured wire shapes before changing production: `text` versus `content`, top-level versus nested fields, and native identifier names are contract differences, not reasons to weaken assertions.
+
+Await the observable asynchronous effect before inspecting it. A queued/admitted response can precede the native call; use an event/promise or a bounded event-loop checkpoint in deterministic component tests, then assert the exact call count and parameters. Do not add fixture-specific synchronous behavior to production just to satisfy an immediate assertion.
+
+For browser interaction claims, observe the external effect rather than an event flag:
+assert prompt request counts and retained draft text for Enter/IME behavior, not only
+`defaultPrevented`. Change the relevant geometry before testing keyboard overlap;
+dispatching `resize` at an unchanged viewport height cannot prove keyboard handling.
+Label injected viewport measurements as simulation rather than physical-device evidence.
+Treat source-only accessibility findings as hypotheses until the browser reproduces them,
+because native controls may already provide the claimed missing behavior.
+For reconnect claims, force the real stream to disconnect/reopen or switch away and back, require a fresh stream request/snapshot plus at least one existing tool row, then verify row identity/count. Dispatching an unhandled custom browser event and observing unchanged rows proves no recovery behavior. Missing runtimes, hidden controls, or absent prompts must fail or remain untested, never pass privacy/approval assertions by default.
+
 ### 3. Test the domain's deletion policy, not a blanket cascade
 
 Determine whether deletion should remove owned children, be rejected, or preserve
@@ -93,7 +108,7 @@ rejected deletion leaves both parent and children unchanged.
 
 ### 4. Verify the implementation and assertion runtime before testing
 
-Inspect an automatically detected verification recipe before treating its green result as acceptance. Require the commands to execute the intended suite and readiness to probe the intended application route with the expected status; an unrelated listener or a login response can satisfy a generic reachability check. Save a project-specific recipe with a disposable verification host when necessary, then verify teardown. Keep this local startup evidence distinct from the public deployment and genuine external-client acceptance.
+Inspect an automatically detected verification recipe before treating its green result as acceptance. Require the commands to execute the intended suite and readiness to probe the intended application route with the expected status; an unrelated listener or a login response can satisfy a generic reachability check. Name the candidate suite separately when the recipe still covers an older surface; repeatedly rerunning the older recipe does not close the missing candidate or visual gate. Save an authorized project-specific recipe with a disposable verification host when necessary, then verify teardown. If a recipe write is refused or its approval expires, leave it unchanged and run the scoped checks separately instead of writing through another tool. Keep local startup evidence distinct from public deployment and genuine external-client acceptance.
 
 When an application image contains baked code, synchronize the entry point and all
 called services/controllers/views/routes into the disposable instance before testing.
@@ -121,12 +136,25 @@ misleading success.
 Inspect delegated probe source and raw execution artifacts before accepting its
 reported results. Preserve runner stdout/stderr and exit status as execution logs;
 keep handwritten summaries in reports, never as substitutes for captured logs.
+If a completion summary conflicts with recorded failures or a broken aggregation runner, inspect which commands actually executed, fix the runner, and rerun the complete named set against one frozen revision. Save each subprocess return code separately; a semicolon chain's final exit status cannot prove earlier commands passed. Record expected/executed/passed suite counts programmatically and hash transitive helpers as well as the entry module, because an unchanged service file can load a changed filter or catalog.
+Make candidate acceptance failure return nonzero even when the harness completed;
+a baseline reproduction mode may record expected defects, but must label them as
+reproduced failures rather than application PASS. Reject a PASS verdict that also
+lists an unresolved security or correctness blocker; inspect the finding and rerun
+the corrected revision instead of trusting the verdict word.
+Separate a characterization probe from an acceptance test: an assertion that a private path remains exposed or a string flag becomes true proves the observed defect, not its acceptability. Convert confirmed unsafe behavior into a desired-boundary failing assertion before repairing it; do not downgrade a violated requirement to INFO merely because the probe exits zero.
 Relabel expected HTTP codes or database changes as predictions when the worker only
 authored the script; a completion summary is not runtime proof. Bind each QC verdict
 to source and test hashes: a rejected earlier candidate is not a verdict on a later
 revision, and a later edit invalidates byte-identical PASS claims until rechecked.
 For a reproduction-only task, hash the application before and after, and report a
 confirmed anomaly separately from a fix, deployment, or historical-data correction.
+Archive baseline reports, raw logs, screenshots, and source hashes before a revised run
+can overwrite them; observed RED is evidence worth preserving, not a stale output to erase.
+Use a configurable candidate root and output directory to exercise the intended isolated
+revision; do not overwrite an earlier approved candidate merely to satisfy hardcoded test
+paths. Preserve assertions while adapting the harness, and compare enumerated check names
+and totals programmatically before accepting its summary.
 
 Enable the assertion runtime explicitly. For standalone PHP checks, use
 `php -d zend.assertions=1 -d assert.exception=1 scripts/<scenario>.php` or explicit
@@ -202,6 +230,7 @@ exit status and raw output for each gate.
 - **Cleanup mistaken for isolation.** Register cleanup close to setup and preserve
   the primary exception, but assume abrupt termination can bypass both `finally`
   and `atexit`; disposable storage, not teardown, is the protection boundary.
+- **A timeout race mistaken for cancellation.** `Promise.race` settles the caller but leaves its asynchronous work running. For disposable native probes, reject new operations after a deadline, close the owned client to reject pending RPC/start promises, await the main loop and timeout cleanup, then remove the temporary home. Test a forced short deadline and require nonzero probe status, a settled lifecycle, dead owned processes and removed state; a normal successful run does not exercise timeout safety.
 - **Cleanup that masks the real failure.** Wrap teardown in its own `try/except`
   and log to stderr; never let a cleanup error replace the assertion error. Record
   exact container/network/volume IDs owned by the run and read those targets back
@@ -211,8 +240,9 @@ exit status and raw output for each gate.
 - **Fixture names leaking into production config.** A test that writes
   `model: "inspect"`, `base_url: http://127.0.0.1:8099` and never restores leaves
   the live app pointing at fixtures. Isolate (step 1) instead of trusting restore.
+- **Scrubbed synthetic credentials becoming vacuous fixtures.** A tool/privacy hook can replace a secret-shaped literal with a redaction placeholder before the test reaches disk. Construct the recognized prefix and neutral synthetic value at runtime, assert the resulting input actually matches the intended credential shape, and pair absence checks with delivery of ordinary surrounding text. Inspect the saved fixture before accepting a redaction PASS; never disable production redaction or use real secrets for the test.
 - **Counting assertions as coverage.** More assertions over a copied implementation
-  is not more evidence. Check that at least one assertion drives the real path.
+  is not more evidence. Check that at least one test drives the real path.
 
 ## Verification
 

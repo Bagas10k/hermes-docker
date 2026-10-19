@@ -87,6 +87,8 @@ Docs: https://hermes-agent.nousresearch.com/docs/user-guide/messaging/
 hermes sessions list|browse|rename ID TITLE|delete ID|export OUT|prune|stats
 ```
 
+A history link returned by `session_search` is a reference, not a guarantee that gateway `/resume` will admit that session. Distinguish CLI-origin sessions from the current messaging chat before offering continuation. If the gateway reports a different-user/chat ownership block, preserve it: do not rewrite session owner/source metadata, try another identifier as an authorization workaround, or disable the guard. Explain the mismatch and correct any earlier promise of direct resume. Use the originating CLI for that session, or continue an authorized discussion in the current chat with relevant permitted context; the latter is not the same runtime session.
+
 ### Cron / Webhooks
 
 ```

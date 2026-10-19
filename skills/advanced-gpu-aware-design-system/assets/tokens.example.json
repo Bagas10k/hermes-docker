@@ -1,0 +1,5 @@
+{
+  "primitive": {"color": {"ink": "#15202b", "paper": "#ffffff", "accent": "#2157d5"}, "space": {"1": "4px", "2": "8px", "3": "12px", "4": "16px", "6": "24px", "8": "32px"}, "radius": {"sm": "6px", "md": "12px"}},
+  "semantic": {"light": {"background": "{primitive.color.paper}", "foreground": "{primitive.color.ink}", "primary": "{primitive.color.accent}"}, "dark": {"background": "#111827", "foreground": "#f9fafb", "primary": "#86aaff"}},
+  "motion": {"duration": {"fast": "150ms", "standard": "240ms"}, "easing": {"standard": "cubic-bezier(0.2, 0, 0, 1)"}}
+}

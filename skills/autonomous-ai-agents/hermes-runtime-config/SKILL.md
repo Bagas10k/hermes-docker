@@ -23,14 +23,15 @@ Cara aman mengubah `~/.hermes/config.yaml` dan membuktikan efeknya. Skill ini ti
 ## Aturan Keras
 
 1. **Jangan menulis `config.yaml` dengan `patch` atau `write_file`.** Tool menolak dengan *"Refusing to write to Hermes config file"*. Selalu `hermes config set <key> '<json>'` dan baca balik dengan `hermes config get <key>`.
-2. **Bedakan kapan key dibaca runtime.** Perubahan yang menyusun system prompt/toolset baru berlaku pada sesi berikutnya karena prompt di-cache; jangan menyuntik ulang di tengah percakapan. Pengaturan gateway yang di-resolve per turn dapat berlaku pada pesan berikutnya tanpa restart. Baca jalur pemakai key sebelum menjanjikan waktu aktivasi.
+2. **Bedakan konfigurasi tersimpan, resolver baru, dan agen yang sedang hidup.** Telusuri pembaca key sebelum menjanjikan waktu aktivasi. Untuk `skills.auto_load`, periksa `agent/system_prompt.py::_auto_load_parts`: hasil di-cache sekali per siklus hidup agen melalui `_auto_load_skills_resolved`; kompresi atau pergantian model tidak otomatis membaca ulang. Keberhasilan `build_auto_load_prompt()` pada proses baru bukan bukti percakapan aktif telah memuat ulang. Jangan mengubah prefix prompt atau me-restart gateway hanya untuk memaksa aktivasi. Pengaturan gateway yang di-resolve per turn dapat berlaku pada pesan berikutnya tanpa restart. Agen anak dengan `skip_context_files` melewati auto-load; teruskan kontrak skill yang relevan secara eksplisit dalam konteks delegasi.
 3. **Buktikan, jangan klaim.** Jalankan `scripts/verify_auto_load.py` (atau probe `resolve_*` yang setara) sebelum melapor. Nilai yang ada di file config bukan bukti bahwa nilainya terbaca runtime.
 4. **Sertakan harga.** Setiap skill yang di-auto-load dibayar di setiap request. Sebutkan angka karakter/token-nya, bukan hanya "sudah aktif".
+5. **Pisahkan default perilaku dari mekanisme pemuatan.** Bila pengguna menjadikan skill sebagai default untuk suatu kelas tugas, tulis batas kelas tugas di kontraknya; `auto_load` sendiri tetap menambahkan konten pada semua request. Untuk default penciptaan interface, pertahankan keahlian dan skill UI/UX yang sudah ada: arah visual baru melengkapi layout, tipografi, warna, aksesibilitas, dan QA, bukan menggantikannya. Jangan menonaktifkan skill lain sebagai efek samping aktivasi default.
 
 ## Prosedur: Mengaktifkan Skill Permanen (`skills.auto_load`)
 
 1. **Pastikan nama skill persis** — pakai `skills_list` dulu; nama salah ketik dilaporkan `missing` dan tidak menggagalkan start, jadi salah ketik mudah lolos tanpa terlihat.
-2. **Set:**
+2. **Baca, gabungkan, lalu set tanpa menghapus entri lama.** Jalankan `terminal(command="hermes config get skills.auto_load")`, tambahkan nama baru tepat sekali, dan pertahankan semua nama yang sudah aktif. Baca ulang tepat sebelum menulis bila ada penulis konfigurasi lain. Gunakan `hermes config set` dengan seluruh daftar hasil penggabungan, bukan daftar berisi skill baru saja. Contoh berikut hanya untuk profil yang sebelumnya kosong:
    ```bash
    hermes config set skills.auto_load '["nama-skill"]'
    ```

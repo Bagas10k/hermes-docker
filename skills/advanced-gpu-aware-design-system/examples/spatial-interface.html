@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pusat Operasi Spasial — Demonstrasi Data Sintetis</title>
+  <!--
+    RECIPE TOKENS & ARSITEKTUR:
+    - Primitive: Navy (#080F20), Surface (#101C34), Surface Raised (#182844), Border (#314565).
+    - Semantic: Cyan (#2DDAFF), Mint (#28D9AD), Amber (#FFB454), Blue (#397BFF).
+    - Compositor: Transform dan opacity bersifat compositor-friendly; alokasi layer GPU ditentukan heuristik browser dan diverifikasi melalui profil DevTools.
+    - Aksesibilitas: Keyboard navigable, ARIA toggle sync (aria-pressed), default 2D pada mobile, static scene pada reduced-motion, dan fallback no-JS statis lengkap.
+  -->
+  <style>
+    :root {
+      --bg-canvas: #080F20; --bg-surface: #101C34; --bg-surface-raised: #182844;
+      --border-subtle: #314565; --text-main: #F4F8FF; --text-muted: #B8C7DD;
+      --accent-cyan: #2DDAFF; --accent-mint: #28D9AD; --accent-amber: #FFB454;
+      --accent-blue: #397BFF; --focus-ring: #2DDAFF; --radius-sm: 6px; --radius-md: 10px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-canvas); color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; padding: 16px;
+    }
+    .app-shell { max-width: 1040px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    header {
+      background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+      padding: 14px 18px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .title-group h1 { font-size: 1.15rem; font-weight: 700; }
+    .demo-badge {
+      display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent-cyan); background: rgba(45, 218, 255, 0.1); border: 1px solid var(--border-subtle);
+      border-radius: 4px; padding: 2px 8px; margin-top: 4px;
+    }
+    .controls-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .no-js .controls-toolbar { display: none; }
+    .btn-toggle, .btn-action {
+      background: var(--bg-surface-raised); color: var(--text-main); border: 1px solid var(--border-subtle);
+      padding: 6px 14px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+    .btn-toggle[aria-pressed="true"] { background: var(--accent-blue); border-color: var(--accent-cyan); color: #FFF; }
+    .btn-toggle:focus-visible, .btn-action:focus-visible, .node-item-btn:focus-visible, .svg-node:focus-visible {
+      outline: 2px solid var(--focus-ring); outline-offset: 2px;
+    }
+    .main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start; }
+    .spatial-viewport {
+      background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+      padding: 16px; perspective: 900px; min-height: 280px; display: flex; justify-content: center; align-items: center;
+      overflow: hidden;
+    }
+    .scene-board { width: 100%; transition: transform 260ms cubic-bezier(0.2, 0, 0, 1); transform-origin: center center; }
+    .spatial-viewport[data-mode="3d"] .scene-board { transform: rotateX(24deg) rotateZ(-6deg) scale(0.96); }
+    .spatial-viewport[data-mode="2d"] .scene-board { transform: none; }
+    .svg-scene { width: 100%; height: auto; max-height: 270px; display: block; }
+    .svg-node { cursor: pointer; outline: none; }
+    .svg-node .node-base { fill: var(--bg-surface-raised); stroke: var(--border-subtle); stroke-width: 1.5; transition: stroke 160ms ease, fill 160ms ease; }
+    .svg-node .node-halo { fill: none; stroke: var(--accent-cyan); stroke-width: 2; opacity: 0; transition: opacity 160ms ease; }
+    .svg-node:hover .node-base, .svg-node:focus-visible .node-base { stroke: var(--accent-cyan); fill: #1E3458; }
+    .svg-node[aria-pressed="true"] .node-base { stroke: var(--accent-cyan); fill: #24416E; }
+    .svg-node[aria-pressed="true"] .node-halo { opacity: 1; }
+    .panel-stack { display: flex; flex-direction: column; gap: 16px; }
+    .card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; }
+    .card-heading {
+      font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);
+      margin-bottom: 12px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;
+    }
+    .node-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .node-item-btn {
+      width: 100%; text-align: left; background: var(--bg-surface-raised); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text-main); cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;
+      transition: border-color 160ms ease, background 160ms ease;
+    }
+    .node-item-btn[aria-pressed="true"] { border-color: var(--accent-cyan); background: #1B3254; }
+    .telemetry-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; word-break: break-word; }
+    .telemetry-table th, .telemetry-table td { padding: 6px 0; border-bottom: 1px solid rgba(49, 69, 101, 0.4); text-align: left; }
+    .telemetry-table th { color: var(--text-muted); font-weight: 500; width: 44%; }
+    .telemetry-table td { color: var(--text-main); font-weight: 600; }
+    .status-pill { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; }
+    .status-ok { background: rgba(40, 217, 173, 0.15); color: var(--accent-mint); }
+    .status-warn { background: rgba(255, 180, 84, 0.15); color: var(--accent-amber); }
+    .no-js .interactive-panel { display: none; }
+    .static-nodes-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 8px; word-break: break-word; }
+    .static-nodes-table th, .static-nodes-table td { padding: 6px 8px; border-bottom: 1px solid rgba(49, 69, 101, 0.4); text-align: left; }
+    .static-nodes-table th { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; }
+    .static-info-desc { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+    @media (max-width: 768px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .spatial-viewport { min-height: 230px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="title-group">
+        <h1>Pusat Operasi Spasial</h1>
+        <span class="demo-badge">DEMONSTRASI / DATA SINTETIS</span>
+      </div>
+      <div class="controls-toolbar" role="group" aria-label="Pengaturan Tampilan Mode">
+        <button id="btn-mode-2d" class="btn-toggle" aria-pressed="true" type="button">Mode 2D</button>
+        <button id="btn-mode-3d" class="btn-toggle" aria-pressed="false" type="button">Mode 3D</button>
+        <button id="btn-reset" class="btn-action" type="button">Reset Pilihan</button>
+      </div>
+    </header>
+
+    <main class="main-grid">
+      <section class="spatial-viewport" id="viewport-container" data-mode="2d" aria-label="Kanvas Topologi Spasial">
+        <div class="scene-board">
+          <svg class="svg-scene" viewBox="0 0 520 280" role="group" aria-label="Diagram Topologi Kluster Sintetis">
+            <defs>
+              <linearGradient id="link-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#397BFF" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#2DDAFF" stop-opacity="0.3"/>
+              </linearGradient>
+            </defs>
+            <path d="M 120 180 L 260 80 L 400 180 Z" fill="none" stroke="url(#link-grad)" stroke-width="2" stroke-dasharray="4 3" aria-hidden="true" />
+            <!-- Node Alpha -->
+            <g class="svg-node" id="svg-node-alpha" role="button" tabindex="0" aria-label="Pilih Node Alpha" aria-pressed="true" data-id="alpha" transform="translate(120, 180)">
+              <polygon class="node-base" points="0,-22 38,0 0,22 -38,0" /><polygon class="node-halo" points="0,-26 44,0 0,26 -44,0" /><circle cx="0" cy="0" r="5" fill="var(--accent-mint)" />
+              <text x="0" y="38" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="600">Node Alpha</text>
+            </g>
+            <!-- Node Beta -->
+            <g class="svg-node" id="svg-node-beta" role="button" tabindex="0" aria-label="Pilih Node Beta" aria-pressed="false" data-id="beta" transform="translate(260, 80)">
+              <polygon class="node-base" points="0,-22 38,0 0,22 -38,0" /><polygon class="node-halo" points="0,-26 44,0 0,26 -44,0" /><circle cx="0" cy="0" r="5" fill="var(--accent-amber)" />
+              <text x="0" y="38" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="600">Node Beta</text>
+            </g>
+            <!-- Node Gamma -->
+            <g class="svg-node" id="svg-node-gamma" role="button" tabindex="0" aria-label="Pilih Node Gamma" aria-pressed="false" data-id="gamma" transform="translate(400, 180)">
+              <polygon class="node-base" points="0,-22 38,0 0,22 -38,0" /><polygon class="node-halo" points="0,-26 44,0 0,26 -44,0" /><circle cx="0" cy="0" r="5" fill="var(--accent-cyan)" />
+              <text x="0" y="38" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="600">Node Gamma</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <aside class="panel-stack">
+        <noscript>
+          <div class="card" aria-label="Telemetri Lengkap Semua Node (Mode Statis)">
+            <h2 class="card-heading">Telemetri Semua Node (Mode Statis)</h2>
+            <p class="static-info-desc">JavaScript tidak aktif. Berikut ringkasan status dan telemetri seluruh node kluster tanpa seleksi dinamis:</p>
+            <div style="overflow-x: auto;">
+              <table class="static-nodes-table">
+                <thead>
+                  <tr><th>Node</th><th>Peran</th><th>Status</th><th>Beban</th><th>RTT</th><th>Zona</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>Alpha</strong></td><td>Gateway Ingress</td><td><span class="status-pill status-ok">Normal</span></td><td>42%</td><td>14 ms</td><td>Wilayah-1</td></tr>
+                  <tr><td><strong>Beta</strong></td><td>Komputasi Batch</td><td><span class="status-warn status-pill">Beban Tinggi</span></td><td>78%</td><td>62 ms</td><td>Wilayah-2</td></tr>
+                  <tr><td><strong>Gamma</strong></td><td>Replika Riwayat</td><td><span class="status-pill status-ok">Tersinkron</span></td><td>31%</td><td>8 ms</td><td>Wilayah-3</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </noscript>
+
+        <div class="card interactive-panel" aria-label="Daftar Node Sintetis">
+          <h2 class="card-heading">Daftar Node Terhubung</h2>
+          <ul class="node-list">
+            <li><button type="button" class="node-item-btn" id="list-node-alpha" data-id="alpha" aria-pressed="true"><span>Node Alpha</span><span class="status-pill status-ok">Normal</span></button></li>
+            <li><button type="button" class="node-item-btn" id="list-node-beta" data-id="beta" aria-pressed="false"><span>Node Beta</span><span class="status-pill status-warn">Beban Tinggi</span></button></li>
+            <li><button type="button" class="node-item-btn" id="list-node-gamma" data-id="gamma" aria-pressed="false"><span>Node Gamma</span><span class="status-pill status-ok">Tersinkron</span></button></li>
+          </ul>
+        </div>
+
+        <div class="card interactive-panel" id="detail-card" aria-live="polite" aria-label="Telemetri Detail Node">
+          <h2 class="card-heading">Detail Telemetri Node</h2>
+          <table class="telemetry-table">
+            <tbody>
+              <tr><th>Identitas</th><td id="dt-name">Node Alpha</td></tr>
+              <tr><th>Peran Sistem</th><td id="dt-role">Gateway Ingress Sintetis</td></tr>
+              <tr><th>Status</th><td id="dt-status"><span class="status-pill status-ok" id="dt-status-pill">Normal</span></td></tr>
+              <tr><th>Beban Operasional</th><td id="dt-load">42% (Normal)</td></tr>
+              <tr><th>Latensi RTT</th><td id="dt-latency">14 ms</td></tr>
+              <tr><th>Zona Kluster</th><td id="dt-zone">Wilayah-1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    (function() {
+      document.documentElement.classList.remove("no-js");
+      const NODES_DATA = {
+        alpha: { name: "Node Alpha", role: "Gateway Ingress Sintetis", statusText: "Normal", statusClass: "status-ok", load: "42% (Normal)", latency: "14 ms", zone: "Wilayah-1" },
+        beta: { name: "Node Beta", role: "Komputasi Batch Analitik", statusText: "Beban Tinggi", statusClass: "status-warn", load: "78% (Tinggi)", latency: "62 ms", zone: "Wilayah-2" },
+        gamma: { name: "Node Gamma", role: "Replika Basis Data Riwayat", statusText: "Tersinkron", statusClass: "status-ok", load: "31% (Rendah)", latency: "8 ms", zone: "Wilayah-3" }
+      };
+
+      const viewportContainer = document.getElementById("viewport-container");
+      const btnMode2d = document.getElementById("btn-mode-2d"), btnMode3d = document.getElementById("btn-mode-3d"), btnReset = document.getElementById("btn-reset");
+      const dtName = document.getElementById("dt-name"), dtRole = document.getElementById("dt-role"), dtStatusPill = document.getElementById("dt-status-pill");
+      const dtLoad = document.getElementById("dt-load"), dtLatency = document.getElementById("dt-latency"), dtZone = document.getElementById("dt-zone");
+
+      function updateSelection(nodeId) {
+        const data = NODES_DATA[nodeId];
+        if (!data) return;
+        document.querySelectorAll(".svg-node").forEach(function(el) { el.setAttribute("aria-pressed", el.dataset.id === nodeId ? "true" : "false"); });
+        document.querySelectorAll(".node-item-btn").forEach(function(el) { el.setAttribute("aria-pressed", el.dataset.id === nodeId ? "true" : "false"); });
+        dtName.textContent = data.name;
+        dtRole.textContent = data.role;
+        dtStatusPill.textContent = data.statusText;
+        dtStatusPill.className = "status-pill " + data.statusClass;
+        dtLoad.textContent = data.load;
+        dtLatency.textContent = data.latency;
+        dtZone.textContent = data.zone;
+      }
+
+      function setViewMode(mode) {
+        viewportContainer.setAttribute("data-mode", mode);
+        const is3d = (mode === "3d");
+        btnMode3d.setAttribute("aria-pressed", is3d ? "true" : "false");
+        btnMode2d.setAttribute("aria-pressed", is3d ? "false" : "true");
+      }
+
+      document.querySelectorAll(".svg-node").forEach(function(el) {
+        el.addEventListener("click", function() { updateSelection(el.dataset.id); });
+        el.addEventListener("keydown", function(e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            updateSelection(el.dataset.id);
+          }
+        });
+      });
+
+      document.querySelectorAll(".node-item-btn").forEach(function(btn) {
+        btn.addEventListener("click", function() { updateSelection(btn.dataset.id); });
+      });
+
+      btnMode2d.addEventListener("click", function() { setViewMode("2d"); });
+      btnMode3d.addEventListener("click", function() { setViewMode("3d"); });
+      btnReset.addEventListener("click", function() { updateSelection("alpha"); });
+
+      // Startup defaults: width <= 768 defaults to 2D, > 768 defaults to 3D
+      const startupMode = (window.innerWidth <= 768) ? "2d" : "3d";
+      setViewMode(startupMode);
+      updateSelection("alpha");
+    })();
+  </script>
+</body>
+</html>

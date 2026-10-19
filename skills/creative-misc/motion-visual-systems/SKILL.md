@@ -6,6 +6,9 @@ description: Use when designing motion for web interfaces or videos.
 
 Gunakan untuk animasi web, presentasi, dan video motion. Muat juga `creative/genjutsu/_jutsu/motion-principles` untuk aksesibilitas/performa web dan `audio-driven-motion-graphics` untuk produksi video. Motion bukan hiasan: objek, posisi, dan waktunya harus menjelaskan aksi.
 
+## Prioritas UI/UX & Motion
+UI, UX, dan motion adalah satu standar mutu utama bagi pengguna, bukan motion sebagai hiasan opsional yang dikerjakan kalau sempat. Untuk interface yang memerlukan gerak, rancang keyframe, kontinuitas objek, fokus perhatian, dan hubungan sebab–akibat sejak kontrak desain; jangan menganggap HTML/CSS yang rapi dan tes fungsi yang lulus sudah memenuhi kualitas pengalaman. Jika performa, perangkat, atau aksesibilitas membatasi gerak, adaptasikan teknik dan intensitas sambil mempertahankan makna serta kendali pengguna—jangan membuang motion secara sepihak atau memaksakan gerak nonesensial pada reduced motion. Nilai komposisi statis, transisi aktual, dan interaksi dengan bukti terpisah sebelum menyerahkan hasil.
+
 ## 1. Pilih visualisasi dulu
 1. Tuliskan **apa yang berubah** dan bukti visual sebelum memilih efek. `objek awal → tindakan → objek akhir` adalah kontrak per beat. Untuk konsep abstrak, tampilkan representasi yang jujur dan dikenali (berkas, tabel, terminal, laporan), bukan kartu generik sebagai bentuk fisik objek.
 2. Pertahankan satu objek utama melintasi beat ketika relasinya masih sama. Jangan ganti seluruh halaman hanya karena kalimat narator berganti. Tempatkan objek yang sama pada posisi berdekatan agar mata bisa mengikutinya.

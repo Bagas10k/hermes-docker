@@ -35,6 +35,8 @@ Audit UI work before delivery so unfinished visuals, fake affordances, cramped s
 6. Verify catalog/live deployment when applicable. Completion: public route returns HTTP success and screenshot matches the new build.
 
 ## Hard Blockers
+- Fallback view (2D/no-GPU/no-JS) looking like an unfinished wireframe while primary view is styled. Fallback must be visually intentional from pass 1.
+- Public static deploy lacking cache-busting version strings on CSS/JS when verifying changes on mobile.
 - Unicode emoji or Extended Pictographic symbols in UI code.
 - Phone/device/mockup framing when the user asked for direct web/app UI.
 - Generic template imagery where authentic references/photos are required.

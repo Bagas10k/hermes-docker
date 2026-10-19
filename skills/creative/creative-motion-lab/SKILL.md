@@ -13,14 +13,14 @@ metadata:
 
 # Creative Motion Lab & Interactive Canvas Suite
 
-Modul terpadu untuk merancang animasi antarmuka 60 FPS, efek shader WebGL, simulasi partikel, fisika pegas (spring physics), dan kanvas interaktif. Seluruh kapabilitas terintegrasi secara modular melalui referensi di `references/`.
+Modul terpadu untuk merancang animasi antarmuka terkalibrasi (memerlukan profiling), efek shader WebGL, simulasi partikel, fisika pegas (spring physics), dan kanvas interaktif. Seluruh kapabilitas terintegrasi secara modular melalui referensi di `references/`.
 
 ## Panduan Sub-Modul Terintegrasi
 1. **WebGL GLSL Shaders & Backdrops**:
    - `references/shader-canvas-flow.md`: Render interaktif shader fragment WebGL untuk ambient backdrop.
    - `references/dynamic-canvas-backdrop.md`: Reactive WebGL ambient background dengan transisi halus.
 2. **Fluid Mechanics & Particle Systems**:
-   - `references/fluid-interactive-surface.md`: Real-time fluid dynamic surface 60 FPS.
+   - `references/fluid-interactive-surface.md`: Real-time fluid dynamic surface terprofil (bounded buffers).
    - `references/vector-field-particle-flow.md`: Aliran partikel reaktif berbasis vektor medan.
 3. **UI Physics & Kinematics**:
    - `references/spring-physics-motion-lab.md`: Desain kurva gerak fisika pegas interaktif (damping, stiffness, mass).
@@ -28,10 +28,10 @@ Modul terpadu untuk merancang animasi antarmuka 60 FPS, efek shader WebGL, simul
    - `references/surface-curvature-and-kinematics.md`: Smoothing kelengkungan G2/squircle dan pergerakan halus.
 4. **Kinetic Typography & Audio-Reactive Visuals**:
    - `references/kinetic-typography-glitch.md`: Efek kinetik status teks dan tipografi responsif.
-   - `references/audio-reactive-visual-flow.md`: Visualisasi audio reaktif 60 FPS.
+   - `references/audio-reactive-visual-flow.md`: Visualisasi audio reaktif terprofil (bounded buffers).
    - `references/interactive-canvas-sketchbook.md`: Kanvas eksperimen 2D/WebGL untuk visual prototipe cepat.
 
 ## Standar Performa & Disiplin Koding
-- **60 FPS & Zero-Jank**: Gunakan `requestAnimationFrame` dengan delta timing (`dt`), hindari alokasi memori berulang di dalam render loop (Zero GC).
+- **Performance Targets & Profiling Required**: Gunakan `requestAnimationFrame` dengan delta timing (`dt`); target frame rate memerlukan profiling pada perangkat target (jangan jamin 60 FPS atau bebas jank universal). Batasi alokasi berulang di render loop dengan buffer bertipe berbatas (bounded work, tidak ada klaim zero-allocation / zero-GC).
 - **Graceful Fallback**: Selalu sediakan fallback CSS statis atau canvas 2D jika konteks WebGL tidak tersedia.
 - **Respect User Preferences**: Patuhi `@media (prefers-reduced-motion: reduce)` untuk aksesibilitas pengguna.
