@@ -35,6 +35,10 @@ Name a handoff automatic only if code implements it. Otherwise label it an opera
 4. Separate inactive/candidate features from current procedures. A static review PASS on a partial does not make the companion controller/script workflow available.
 5. Use a warm paper background, dark ink, PBJ blue actions, restrained semantic warnings and no emoji. Label external actors and pending features with text and line style as well as color. Keep arrows behind boxes, with legible arrowheads and gaps.
 6. Preserve enough technical references for auditability in a small source line or appendix; keep full hashes and long paths out of diagram nodes.
+7. For financial architecture and COA integration guides:
+   - Categorize accounts based strictly on verified code usage (`$hubunganFitur` and `MesinJurnalOtomatis`), distinguishing automated posting accounts (e.g. Kas/Bank, Piutang Semen/Material, Persediaan, Hutang SIG/Kuari, Penjualan, HPP, Ritase, Gaji, Sparepart, Aset/Penyusutan) from adjusting/manual/reserve accounts (general overhead, loans, equity, unmapped expenses).
+   - Document the end-to-end accounting lifecycle: Source Operational Transactions → Automated Double-Entry Journal → General Ledger / Trial Balance (with H-1 cutoff carry-forward) → Financial Statements (P&L, Balance Sheet, Cash Flow) → Executive Reconciliation → Period Closing (`periode_akuntansi` lock).
+   - Detail the period closing & roll-forward mechanism: explain how `pastikanPeriodeTerbuka` rejects backdated entries and reversals on closed periods, how real accounts roll forward into opening balances, and how nominal accounts close to equity without arbitrary plug entries.
 
 ## 4. Prepare screenshots without leaking static data
 

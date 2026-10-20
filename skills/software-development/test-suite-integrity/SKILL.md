@@ -73,9 +73,11 @@ Label the boundary exercised: a direct controller call proves controller behavio
 not route authorization; an in-process HTTP kernel request exercises middleware but
 is not a network or browser test. For role probes, provision real synthetic accounts
 in the disposable database, retain authentication/session/CSRF middleware, and compare
-HTTP response plus persisted before/after state. Pair an unauthorized role with an
-authorized-role control and a missing-CSRF control; a 419 measures CSRF, and a 302
-alone does not distinguish successful mutation from an error redirect.
+HTTP response plus persisted before/after state. Resolve every probe URL from the actual
+named route before testing: a 404 on an invented write URL does not measure the role guard.
+Pair an unauthorized role with an authorized-role control and a missing-CSRF control;
+a 419 measures CSRF, and a 302 alone does not distinguish successful mutation from an
+error redirect. For redirected reads, assert both status and the intended destination.
 
 A test that duplicates a branch is a **vacuous test**. Delete it and write one that
 fails when the branch is removed.
@@ -134,8 +136,13 @@ expansion of `$file` can leave `php -l` checking empty standard input and return
 misleading success.
 
 Inspect delegated probe source and raw execution artifacts before accepting its
-reported results. Preserve runner stdout/stderr and exit status as execution logs;
-keep handwritten summaries in reports, never as substitutes for captured logs.
+reported results. If a reviewer times out after writing a partial runner, inspect its
+source and artifact once, correct only verified harness defects, then rerun the full
+named suite yourself; a timeout or saved partial PASS is not a QC verdict. Preserve
+runner stdout/stderr and exit status as execution logs; keep handwritten summaries
+in reports, never as substitutes for captured logs. Keep raw HTTP probe output and
+session cookies private; persist/share only aggregate results, failure names, and
+source hashes, because diagnostic response objects can contain live session IDs.
 If a completion summary conflicts with recorded failures or a broken aggregation runner, inspect which commands actually executed, fix the runner, and rerun the complete named set against one frozen revision. Save each subprocess return code separately; a semicolon chain's final exit status cannot prove earlier commands passed. Record expected/executed/passed suite counts programmatically and hash transitive helpers as well as the entry module, because an unchanged service file can load a changed filter or catalog.
 Make candidate acceptance failure return nonzero even when the harness completed;
 a baseline reproduction mode may record expected defects, but must label them as

@@ -248,14 +248,15 @@ onboarding:
     tool_progress_prompt: true
 telemetry:
   shared_metrics:
-    enabled: false
-    send: false
+    enabled: true
+    send: true
+    offer_version: 2
 updates:
   check: true
   pre_update_backup: false
   backup_keep: 5
   non_interactive_local_changes: stash
-_config_version: 45
+_config_version: 51
 custom_providers:
   - base_url: http://localhost:20128/v1
     key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
@@ -364,39 +365,41 @@ custom_providers:
     key_env: HERMES_CUSTOM_API_NBGATE_COM_API_KEY
     model: nbgate
     models:
-      gregv4/gpt-6.1-sol: {}
+      Greg/kimi-k3: {}
       Greg/glm-5.2-mod: {}
+      Greg/deepseek-v4-pro: {}
+      Greg/mimo-v2.6-pro: {}
+      gregv4/gpt-6-sol-B: {}
+      Greg/deepseek-v4-pro-0813: {}
+      Gregv2/deepseek-v4.1-flash-fr: {}
+      Greg/glm-5.3: {}
+      Greg/hy4: {}
+      Greg/glm-5.3-mod: {}
+      Greg/glm-5.3-flashx: {}
       Greg/gpt-5.6-luna: {}
+      Greg/hy3: {}
+      Greg/kimi-k2.7-code-highspeed: {}
+      Gregv2/deepseek-v4.1-flash: {}
+      gregv4/glm-5.3-nb: {}
+      gregv4/gpt-6-luna-A: {}
+      Greg/glm-5.3-flash-mod: {}
+      Greg/glm-5.3-flash: {}
+      Greg/mimo-v2.5-pro: {}
+      Greg/deepseek-v4-flash-vision-exp: {}
+      Greg/kimi-k3-mod: {}
+      gregv4/gpt-6.1-sol: {}
+      gregv4/gpt-6-astra: {}
+      Gregv2/step-5-preview: {}
+      Greg/glm-5.3-flashx-mod: {}
+      Greg/deepseek-v4-mod: {}
+      gregv4/deepseek-v4.1-flash-1017: {}
       Greg/deepseek-v4-flash: {}
+      Greg/mimo-v2.6-flash: {}
+      Gregv2/deepseek-v4.1-flash-1017: {}
+      Greg/deepseek-v4-flash-0731: {}
       Greg/gpt-5.6: {}
       Greg/deepseek-v4.1-flash: {}
-      Gregv2/deepseek-v4.1-flash-fr: {}
       Greg/glm-5.2: {}
-      Greg/mimo-v2.6-pro: {}
-      Greg/glm-5.3-flashx: {}
-      Greg/mimo-v2.6-flash: {}
-      Greg/deepseek-v4-flash-vision-exp: {}
-      Greg/glm-5.3-flash-mod: {}
-      gregv4/glm-5.3-nb: {}
-      Greg/deepseek-v4-pro-0813: {}
-      Greg/hy3: {}
-      Greg/glm-5.3: {}
-      gregv4/gpt-6-astra: {}
-      Greg/deepseek-v4-pro: {}
-      Greg/deepseek-v4-mod: {}
-      Greg/mimo-v2.5-pro: {}
-      gregv4/gpt-6-sol-B: {}
-      Gregv2/deepseek-v4.1-flash-1017: {}
-      Greg/kimi-k3-mod: {}
-      Greg/kimi-k3: {}
-      Greg/glm-5.3-mod: {}
-      Greg/hy4: {}
-      Gregv2/step-5-preview: {}
-      Greg/glm-5.3-flash: {}
-      Greg/kimi-k2.7-code-highspeed: {}
-      Greg/deepseek-v4-flash-0731: {}
-      gregv4/gpt-6-luna-A: {}
-      Greg/glm-5.3-flashx-mod: {}
       Greg/kimi-k2.7-code: {}
     models_discovered: true
     name: nbgate
@@ -425,9 +428,9 @@ custom_providers:
       deepseek-v4.1-flash-ultrafast: {}
       muse-wonder-1.0: {}
       workbuddy/deepseek-v4.1-flash: {}
-      Beam-1.0-501B-A23B: {}
       atria/Atria-Dawn-Preview: {}
       step-5-preview: {}
+      mimo-v2.6-flash: {}
     models_discovered: true
     name: cutad
   - base_url: https://atmorouter.dev/v1
@@ -513,6 +516,8 @@ custom_providers:
       cc/claude-sonnet-5: {}
       cc/claude-sonnet-5-5: {}
       cp/xai/grok-4.5: {}
+      cp/xai/grok-4.6: {}
+      cp/xai/grok-4.7: {}
       cp/zai/glm-5.3-flash: {}
       cx/gpt-5.6-luna: {}
       cx/gpt-5.6-sol: {}
@@ -798,3 +803,41 @@ platform_toolsets:
     - hermes-whatsapp
   yuanbao:
     - hermes-yuanbao
+
+# ── Security ──────────────────────────────────────────────────────────
+# Secret redaction is ON by default — strings that look like API keys,
+# tokens, and passwords are masked in tool output, logs, and chat
+# responses before the model or user ever sees them. Set redact_secrets
+# to false to disable (e.g. when developing the redactor itself).
+# tirith pre-exec scanning is enabled by default when the tirith binary
+# is available. Configure via security.tirith_* keys or env vars
+# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
+#
+# security:
+#   redact_secrets: true
+#   tirith_enabled: true
+#   tirith_path: "tirith"
+#   tirith_timeout: 5
+#   tirith_fail_open: true
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4
