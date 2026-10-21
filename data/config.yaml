@@ -327,11 +327,14 @@ custom_providers:
     key_env: HERMES_CUSTOM_API_KAGIRO_NET_API_KEY
     model: glm5-3
     models:
+      5.3ftest: {}
       atria-dawn-preview: {}
       deepseek-4-1-flash: {}
       deepseek-v4-flash: {}
       deepseek-v4-pro: {}
+      deepseek-v4.1-flash-1017: {}
       deepseek-v4.1-flash-expires-on-0910: {}
+      dp4.1ftest: {}
       gemini-3-8-flash: {}
       gemini-3.6-flash: {}
       gemini-3.7-flash: {}
@@ -341,17 +344,15 @@ custom_providers:
       glm5-2: {}
       glm5-3: {}
       gpt-5-5: {}
-      gpt-5-6-luna: {}
-      gpt-5-6-sol: {}
-      gpt-5-6-terra: {}
-      gpt-6-astra: {}
-      gpt-6-luna: {}
-      gpt-6-sol: {}
+      hy3: {}
+      hy4-preview: {}
       kimi-k2-7-code: {}
       kimi-k2.6: {}
-      kimi-k3: {}
       laguna-s-2.1: {}
       longcat-2.5-preview: {}
+      m3test: {}
+      mimo-v2.6-flash: {}
+      mimo2.6test: {}
       minimax-m2.7: {}
       muse-spark-1.2-contributor: {}
       muse-spark-1.3-contributor: {}
@@ -392,7 +393,6 @@ custom_providers:
       Gregv2/step-5-preview: {}
       Greg/glm-5.3-flashx-mod: {}
       Greg/deepseek-v4-mod: {}
-      gregv4/deepseek-v4.1-flash-1017: {}
       Greg/deepseek-v4-flash: {}
       Greg/mimo-v2.6-flash: {}
       Gregv2/deepseek-v4.1-flash-1017: {}
@@ -410,7 +410,6 @@ custom_providers:
     key_env: HERMES_CUSTOM_AI_CUTAD_WEB_ID_API_KEY
     model: glm-5.3-flash
     models:
-      big-pickle: {}
       deepseek-v4.1-flash: {}
       poolside/laguna-s-2.1: {}
       longcat-2.5-preview: {}
@@ -421,15 +420,15 @@ custom_providers:
       glm-5.3-flash: {}
       meta/muse-spark-1.3-contributor: {}
       cbcn/deepseek-v4.1-flash: {}
-      space-bunny: {}
       cbcn/glm-5.3-flash: {}
       deepseek-v4-pro: {}
       tencent/hy3: {}
       deepseek-v4.1-flash-ultrafast: {}
       muse-wonder-1.0: {}
       workbuddy/deepseek-v4.1-flash: {}
+      hy4-preview: {}
+      NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4: {}
       atria/Atria-Dawn-Preview: {}
-      step-5-preview: {}
       mimo-v2.6-flash: {}
     models_discovered: true
     name: cutad
@@ -442,7 +441,6 @@ custom_providers:
       ag/claude-sonnet-4-6: {}
       ag/claude-sonnet-5-5: {}
       ag/gemini-3.8-flash-high: {}
-      ag/gemini-4-argon: {}
       ali/deepseek-v4-flash-0731: {}
       ali/deepseek-v4-pro-0813: {}
       ali/deepseek-v4.1-flash: {}

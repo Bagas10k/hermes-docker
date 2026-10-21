@@ -34,7 +34,11 @@ uncertain paths only in a disposable instance and compare schema AND source rows
 and after, because unchanged ledger counts do not exclude destructive master-data writes.
 Run financial, ledger, migration, destructive, and cross-module write tests in a disposable
 database or instance of the target engine/version, never in a live application with a
-promise to restore it afterwards. For an explicitly authorized, non-financial live test, use a
+promise to restore it afterwards. Before using Laravel `RefreshDatabase` against an
+external MySQL/MariaDB connection, put a fail-closed guard in `beforeRefreshingDatabase()`:
+it runs before the trait's `migrate:fresh`, unlike a test method or ordinary `setUp()`
+after refresh. Require both an application-specific disposable database name and an
+explicit opt-in; check the effective connection, not merely a test configuration file. For an explicitly authorized, non-financial live test, use a
 **throwaway record** and snapshot any live configuration before changing it. Register
 cleanup immediately after setup; `atexit` handles normal interpreter shutdown and many
 handled failures, not SIGKILL, power loss, or every crash. Isolation must remain safe
@@ -88,7 +92,7 @@ Await the observable asynchronous effect before inspecting it. A queued/admitted
 
 For browser interaction claims, observe the external effect rather than an event flag:
 assert prompt request counts and retained draft text for Enter/IME behavior, not only
-`defaultPrevented`. Change the relevant geometry before testing keyboard overlap;
+`defaultPrevented`. For decimal input/display changes, assert both the accepted input step and the exact rendered value from a nonzero fractional fixture; a step-only test can pass while display formatting silently discards fractional digits. Never print a full rendered authenticated response during diagnosis: it can include CSRF tokens and session-bearing content; inspect a scoped, redacted value or assert the target cell instead. Change the relevant geometry before testing keyboard overlap;
 dispatching `resize` at an unchanged viewport height cannot prove keyboard handling.
 Label injected viewport measurements as simulation rather than physical-device evidence.
 Treat source-only accessibility findings as hypotheses until the browser reproduces them,
@@ -202,6 +206,11 @@ prefix can erase an earlier scenario's evidence even in a disposable database.
 
 For rejection tests, isolate competing guards: a negative-nominal case that reuses a
 busy driver can pass because availability rejected it before nominal validation.
+In SQL constraint probes, fill every other required column and assert the exact
+constraint name or SQLSTATE/error code, not merely nonzero exit: a missing timestamp,
+foreign key, or syntax error otherwise looks like a successful CHECK test. Assert
+historical row values and counts before/after migration rather than printing them;
+check both numeric precision and scale, not scale alone.
 Use unique fixture identities or retire only scenario-owned active assignments.
 Clear old flash errors before each request, then require the expected HTTP status,
 the specific rejection reason, and unchanged source/stock/bank/ledger snapshots.
