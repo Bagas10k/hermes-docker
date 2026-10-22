@@ -109,12 +109,21 @@ Profiles use `~/.hermes/profiles/<name>/` with the same layout. When a profile i
 | delegate_task "capped at N" reports | `references/delegate-task-concurrency-diagnosis.md` |
 | "Can app X use my Nous Portal subscription/OAuth?" | `references/portal-auth-for-third-party-apps.md` |
 | Connecting a messaging platform (Telegram, Discord, Slack, WhatsApp, …) | docs: `/user-guide/messaging` |
+| Same-host profiles, gateway multiplexing, or Bot-to-Bot collaboration | `references/multi-profile-gateways-bot-mode.md` + docs: `/user-guide/bot-mode` |
 
 The reference list above is not the feature list — it is the set of topics that
 need more than their docs page. For everything else Hermes ships, fetch
 `llms.txt` and it maps the question to the page that answers it.
 
 Two theming rules that hold even without loading the reference: **you apply skins yourself** (`hermes config set display.skin <name>` — every surface repaints live within ~a second; don't tell the user to run `/skin`), and **to tweak one color, edit the ACTIVE skin** (`hermes skin set <key> <hex>`) — never fork `default`, which drops the palette and resets the background.
+
+## Profile Orchestration Invariants
+
+Before changing a multi-profile setup, separate four layers: **profile** (persistent isolated home), **gateway multiplexing** (one transport/router process serving profiles), **Bot Mode `message_agent`** (durable profile-to-profile handoff through canonical Bot Chats), and **`delegate_task`** (ephemeral child work inside the active profile). Never claim that multiplexing alone creates cognitive collaboration.
+
+For profiles on one host, prefer Hermes's supported **one-gateway-per-host multiplex** topology. Run `hermes gateway migrate --multiplex --dry-run` first; do not keep secondary standalone gateways alive with `--force` as a permanent architecture. Execute a migration/restart from a shell or transient supervisor outside the running gateway, because an in-gateway command cannot safely replace its own process.
+
+Keep gateway repair scoped to the failing layer. Inspect config, ownership, process state, profile state, logs, credentials, and platform API health before changing network egress. Do not introduce SSH, VPN, Tor, WARP, DNS, or host routing merely because a messaging gateway is unhealthy; require causal evidence that the direct network path is the blocker and explicit user approval before expanding into infrastructure.
 
 ## Spawning Additional Hermes Instances
 

@@ -32,6 +32,8 @@ Discover actual package scripts, lockfiles, CI provider, runtime versions, infra
 - Mocks are suitable at controlled external boundaries, not proof that the real integration works.
 - Never modify the running Hermes installation's dependencies as part of an application's setup.
 - Package managers, DB runtimes, and MCP connectors should be installed for a concrete project need, not to inflate the skill catalog.
+- Laravel feature suites with a `:memory:`-only guard (RefreshDatabase that throws on anything but `:memory:`) fail against a file SQLite. Run them with `DB_CONNECTION=sqlite DB_DATABASE=:memory:` env overrides — via `docker exec -e` when the suite lives in a container — not against the app's configured DB, and do not weaken the guard.
+- Before declaring a change "live" or "not deployed", verify how the running container obtains its code: `docker inspect --format '{{range .Mounts}}{{.Source}}=>{{.Destination}} {{end}}' <container>`, then grep the expected change inside the container. A bind mount serves edits immediately; a baked image does not.
 
 ## Private knowledge-ingestion verification
 - Exercise uploads through an isolated app using the real signed challenge/verify flow with a temporary issuer and database; never insert production sessions for tests.

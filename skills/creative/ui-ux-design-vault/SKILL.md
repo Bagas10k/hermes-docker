@@ -44,7 +44,11 @@ Aturan pencegahan mutlak:
    - Sistem formal/institusi/sekolah membutuhkan otoritas: palet formal navy/slate, tabel ledger rapat, font humanist tajam, zero fluff marketing.
    - Produk consumer/kriya membutuhkan kehangatan bahan: warna perkamen, tipografi serif italic humanist, foto asli.
    - Produk digital/modern: palet akromatik dengan aksen tunggal disiplin (gaya Linear/Mercury/Revolut).
-6. **Arsitektur Multi-Page (MPA) untuk Publikasi Referensi**: Proyek referensi komponen kelas publikasi wajib dipisah ke halaman mandiri per kategori menggunakan bundler modern (Vite) dengan Home Bento Hub interaktif.
+8. **Anti-Slop Sidebar & Navigasi Aktif (Quiet Editorial Standard)**:
+   - Dilarang keras menggunakan aksen samping melengkung (*bent inset line*) atau `box-shadow: inset ...` pada kontainer navigasi bersudut bulat (`border-radius: 8px-12px`). Pada sudut membulat, garis tegak akan melengkung canggung menjadi bentuk sabit/tanda kurung kurawal yang merupakan penanda khas kebiasaan AI-slop.
+   - Hindari outline kaku atau kotak mengambang tebal di menu aktif.
+   - Standar kanonikal editorial ala Linear/Fulcrum: Sapuan latar sangat tipis dan transparan (~6-8% organic wash, misal `rgba(45, 106, 79, 0.08)`), teks berwarna pekat (spruce/charcoal) dengan ketebalan semibold, ikon outline sewarna, dan tanpa border/garis tepi sama sekali.
+9. **Arsitektur Multi-Page (MPA) untuk Publikasi Referensi**: Proyek referensi komponen kelas publikasi wajib dipisah ke halaman mandiri per kategori menggunakan bundler modern (Vite) dengan Home Bento Hub interaktif.
 7. **Standar Antarmuka Cerah & Kaya Warna (Warm Paper & Obsidian 98/100)**:
    - Terapkan antarmuka cerah, hidup, dan kaya warna yang terkalibrasi dan harmonis, dengan **mutlak 0% emoji** (wajib menggunakan SVG Lucide monokrom/aksen).
    - **Kanvas Luar / Visualisasi 3D**: Gunakan warna porselen bersih (`#f8fafc`).
@@ -197,3 +201,19 @@ Ketika mengadaptasi software desktop multi-kolom yang kompleks (studio catatan, 
 - `btn-success-check`: Hijau zamrud (`#059669`) dengan ikon centang terintegrasi.
 - `btn-danger-solid`: Merah rubi (`#dc2626`) dengan glow hover untuk aksi destruktif.
 - `btn-glass`: `backdrop-filter: blur(16px)`, border putih 0.25, inner-glow inset 0 1px 1px.
+
+---
+
+## 8. Arsitektur Modal Dialog Terpusat & Anti-Containing Block Trap (Fixed Viewport Teleport)
+- **Pitfall CSS Containing Block (Transformasi Menjebak `position: fixed`)**:
+  - Menurut spesifikasi CSS, jika elemen induk atau leluhur memiliki `transform`, `filter`, `perspective`, atau animasi transisi yang memanipulasi koordinat (seperti `transform: translateY(...)` atau `pageMorphIn`), kontainer tersebut otomatis membentuk *containing block* baru bagi semua elemen keturunannya yang berproperti `position: fixed`.
+  - Akibatnya: modal tidak berada di tengah viewport melainkan terjepit di dalam batas kontainer konten, efek *backdrop blur* gagal menutupi area di luar kontainer (sidebar dan header tetap terbuka/jelas), dan perhitungan pemusatan vertikal mengacu pada tinggi elemen konten yang panjang, sehingga kotak modal terdorong jatuh ke bawah dan tombol-tombol aksi formulir terpotong di luar batas layar.
+- **Pola Penanganan Baku (Modal Teleport & Viewport Clamping)**:
+  1. *Body Teleport Portal*: Letakkan elemen modal langsung di bawah root `<body>` (misal via template `@yield('modals')` terpisah dari `@yield('content')`, atau script otomatis pemindah DOM `document.body.appendChild(modal)` saat dokumen dimuat dan sebelum modal dibuka). Jangan pernah membiarkan modal bersarang di dalam kontainer beranimasi `transform`.
+  2. *Overlay Spesifikasi Penuh*: Terapkan overlay penuh `position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;`.
+  3. *Struktur 3-Zona Anti-Terpotong (Dialog Clamping)*:
+     - `.modal-dialog`: `max-height: min(88vh, 620px); display: flex; flex-direction: column; overflow: hidden; margin: auto; border-radius: var(--radius-modal);`.
+     - `.modal-header`: `flex-shrink: 0; padding: 18px 24px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;`.
+     - `.modal-body`: `flex: 1; overflow-y: auto; padding: 20px 24px;` (seluruh form input dapat digulir bebas secara mulus jika tinggi layar terbatas).
+     - `.modal-footer`: `flex-shrink: 0; padding: 16px 24px; border-top: 1px solid var(--border-subtle); background: var(--surface); display: flex; justify-content: flex-end; gap: 10px;` (tombol Simpan dan Batal terkunci permanen di bawah, 100% terjamin selalu terlihat di segala resolusi layar tanpa risiko terpotong).
+

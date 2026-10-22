@@ -63,6 +63,12 @@ Sebelum menulis kode visual, sintesiskan 5 pilar desain berikut:
    - Tentukan apakah antarmuka bertipe *Console/Operate*, *Catalog/Explore*, *Monitor/Dashboard*, atau *Editorial/Learn*.
 3. **Struktur Bersih**: Tulis markup semantik dengan aksesibilitas bawaan (ARIA, semantic tags).
 4. **Styling Modular**: Gunakan variabel CSS terstruktur atau utility class Tailwind yang konsisten dengan token desain.
+   - Pada permukaan operasional (kasir, inventori, tabel), letakkan pencarian/aksi utama di viewport pertama; buang hero dekoratif, badge status semu, dan kotak pencarian ganda yang mendorong pekerjaan inti ke bawah.
+   - Untuk dropdown bertema, biarkan `<select>` asli memegang `name`, nilai, validasi, dan pengiriman form. Pemicu visual harus punya fokus keyboard, ArrowUp/Down, Enter, Escape, serta fallback tanpa JS; sinkronkan event `change` ke listener yang sudah ada.
+   - Saat menyusun hasil pencarian atau baris keranjang lewat `innerHTML`, escape seluruh teks katalog (nama, SKU, satuan); jangan samakan escaping Blade di tabel statis dengan keamanan interpolasi JavaScript.
+   - Pada CSS grid responsif, beri `min-width: 0` pada anak grid dan bungkus hanya tabel yang lebar dengan `overflow-x: auto`. Ukur lebar halaman dan keterbacaan angka pada layar kecil **serta** desktop; `scrollWidth` halaman yang benar tidak membuktikan subtotal di dalam tabel terlihat, dan kolom angka harus utuh di desktop tanpa digeser.
+   - Saat memakai `@view-transition { navigation: auto }` untuk transisi halaman, JANGAN memberi `animation:` masuk pada kontainer konten sekaligus — morph ganda terasa patah. Kecualikan chrome tetap (sidebar/topbar) lewat `view-transition-name: none`, beri `view-transition-name` hanya pada area konten, lalu pertahankan fallback `@supports not (view-transition-name: ...)` dan guard `prefers-reduced-motion`.
+   - Tabel data yang dipaginasi: tampilkan `firstItem()–lastItem() dari total()` + kontrol halaman lewat satu partial bersama; total uang yang difilter (satu halaman) wajib dilabeli "Total nilai halaman ini", jangan mengklaim agregat global.
 5. **Verifikasi Browser Nyata**:
    - Jalankan pemeriksaan curl HTTP 200.
    - Periksa responsivitas viewport mobile & desktop via `browser_exec`.
