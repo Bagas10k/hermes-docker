@@ -119,6 +119,7 @@ display:
     tools: collapsed
   tool_progress: all
   tui_compact: true
+  interface: cli
 dashboard:
   theme: midnight
   basic_auth:
@@ -330,7 +331,6 @@ custom_providers:
     models:
       5.3ftest: {}
       atria-dawn-preview: {}
-      claude-opus-5.5: {}
       deepseek-4-1-flash: {}
       deepseek-v4-flash: {}
       deepseek-v4-pro: {}
@@ -342,7 +342,6 @@ custom_providers:
       gemini-3.7-flash: {}
       glm-5-1: {}
       glm-5-3-flash: {}
-      glm-5.3-flash-bugil: {}
       glm5-2: {}
       glm5-3: {}
       gpt-5-5: {}
@@ -362,6 +361,12 @@ custom_providers:
       qwen3-8-flash: {}
       qwen3.8-plus: {}
       qwen3.8max: {}
+      gpt-5-6-luna: {}
+      gpt-5-6-sol: {}
+      gpt-6-astra: {}
+      gpt-6-luna: {}
+      gpt-6-sol: {}
+      kimi-k3: {}
     models_discovered: true
     name: kagiro
   - base_url: https://api.nbgate.com/v1
@@ -379,7 +384,6 @@ custom_providers:
       Greg/mimo-v2.5-pro: {}
       Greg/claude-sonnet-5: {}
       Greg/gpt-5.6-luna: {}
-      Gregv2/step-5-preview: {}
       Greg/gemini-4-argon: {}
       Greg/hy3: {}
       Greg/kimi-k2.5: {}
@@ -389,7 +393,6 @@ custom_providers:
       Greg/claude-opus-5: {}
       Greg/deepseek-v4-flash: {}
       Greg/gpt-6-sol: {}
-      gregv4/gpt-6-luna-A: {}
       Greg/glm-5.2: {}
       Greg/kimi-k2.6: {}
       Greg/deepseek-v4-flash-vision-exp: {}
@@ -398,7 +401,6 @@ custom_providers:
       Greg/gpt-6-luna: {}
       Greg/deepseek-v4.1-flash-mod: {}
       Greg/kimi-k2.7-code: {}
-      gregv4/gpt-6.1-sol: {}
       Greg/glm-5.3-flashx-mod: {}
       Greg/gpt-5.6-sol: {}
       Greg/deepseek-v4-pro-0813: {}
@@ -411,7 +413,10 @@ custom_providers:
       Greg/glm-5.2-mod: {}
       Greg/deepseek-v4-pro: {}
       Greg/glm-5.3-flash-mod: {}
-      Gregv2/deepseek-v4.1-flash: {}
+      Gregv5/muse-wonder-1.0: {}
+      Gregv5/muse-spark-1.3: {}
+      Gregv5/step-5-preview: {}
+      Gregv5/deepseek-v4.1-flash-1017: {}
     models_discovered: true
     name: nbgate
   - base_url: https://tokenharbor.ai/v1
@@ -509,7 +514,6 @@ custom_providers:
       cc/claude-sonnet-4-6: {}
       cc/claude-sonnet-5: {}
       cc/claude-sonnet-5-5: {}
-      cp/zai/glm-5.3-flash: {}
       cx/gpt-5.6-luna: {}
       cx/gpt-5.6-sol: {}
       cx/gpt-5.6-terra: {}
@@ -580,7 +584,6 @@ custom_providers:
       zai/glm-5.3-flash: {}
       ag/claude-opus-5-5: {}
       ag/claude-sonnet-5-5: {}
-      ag/gemini-4-argon: {}
       ali/deepseek-v4.1-flash: {}
       ali/deepseek-v4.1-flash-1017: {}
       ali/qwen3.8-2.4t-a95b: {}
@@ -596,6 +599,8 @@ custom_providers:
       cp/xai/grok-4.7: {}
       mimotp/mimo-v2.6-flash: {}
       mimotp/mimo-v2.6-pro: {}
+      mm/MiniMax-M3.1-Flash: {}
+      mmcn/MiniMax-M3.1-Flash: {}
     models_discovered: true
     name: atmo
 group_sessions_per_user: true

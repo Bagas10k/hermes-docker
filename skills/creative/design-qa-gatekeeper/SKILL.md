@@ -59,6 +59,7 @@ Static checks are not enough. A clean static scan does not replace Playwright, A
 - Do not claim deployed success from a build alone; verify the public route or copied static directory.
 - Do not average responsive quality; the smallest viewport is a hard constraint.
 - Do not patch cosmetics after a score below 5; use a total reference-driven rebuild.
+- When `vision_analyze` fails (non-vision model returns unsupported_modality), do not skip visual inspection — delegate it to a vision-capable leaf subagent via `delegate_task` with the screenshot paths in the `images` field, require a GO/NO-GO with file:line evidence, and re-verify DOM/bounds yourself; a self-report is not proof.
 
 ## Verification
 - Static scan completed.

@@ -68,3 +68,19 @@ Ketika mendelegasikan beberapa sub-agent bekerja bersamaan pada satu proyek:
    - Pengujian visual wajib dilakukan secara fisik di peramban riil, bukan sekadar tes biner teks.
 3. Sub-agent **tidak bisa** membaca chat history. Semua info krusial (jalur file absolut, nama fungsi, rule desain) HARUS disematkan ke dalam `context`.
 4. Setelah sub-agent selesai, **Mandor wajib memverifikasi hasil kerjanya** (contoh: curl endpoint, baca head file) sebelum dilaporkan ke pengguna. Jangan sekadar menjadi "kurir" tanpa paham apa yang diperbaiki sub-agent.
+5. **Pitfall hang leaf:** Sub-agent ber-model `ag/gemini-*` (role leaf) sering hang tanpa progres — nol tool call setelah baris `start`, lalu berakhir `interrupted: retrying API call after error` setelah puluhan menit. Untuk tugas implementasi bounded (beberapa berkas, TDD), kerjakan langsung di Mandor; pakai `delegate_task` hanya untuk pekerjaan reasoning-heavy yang benar-benar butuh isolasi konteks. Cek transcript 2–3 menit setelah dispatch — kalau masih diam di `start`, stop dan ambil alih.
+
+## Kontrak Laporan Progres Konkret
+
+Untuk setiap tugas multi-langkah, setiap pulse kepada Mas Bagas wajib memakai bahasa awam dan memuat:
+
+1. `STATUS: SEDANG BEKERJA | SELESAI | TERBLOKIR`.
+2. `Sedang dikerjakan:` tindakan konkret dan targetnya; contoh: “membaca konfigurasi Telegram untuk mencari pengaturan status”, bukan “audit berjalan”.
+3. `Sudah selesai:` hasil nyata yang telah diperoleh, bukan nama fase.
+4. `File yang diubah:` path berkas; tulis `belum ada` jika belum menyentuh kode.
+5. `Hasil tes:` perintah/bukti nyata; tulis `belum dijalankan` bila memang belum.
+6. `Sisa pekerjaan:` langkah konkret yang belum selesai.
+
+Dilarang mengirim progress bar atau persentase tanpa daftar pekerjaan yang dapat dipahami. Identitas/peran agen bukan penjelasan pekerjaan. Jika agen macet, laporkan `TERBLOKIR`, sebut durasinya, hentikan atau ambil alih. Untuk tugas panjang, buat dan perbarui `build_tracker.json` di workspace tugas sebelum perubahan kode pertama.
+
+Kontrak teks ini adalah fallback komunikasi, bukan pengganti observabilitas live. Jika Mas Bagas meminta melihat apa yang sedang dikerjakan atau kode apa yang berubah, tampilkan artefak eksekusi pada permukaan yang mendukungnya: alat aktif, target file/perintah, diff, hasil/exit status, dan lifecycle sub-agent. Jangan menyatakan masalah visibilitas selesai hanya karena format laporan sudah lebih rapi; uji permukaan live dengan satu pekerjaan sintetis aman dan bukti render aktual.

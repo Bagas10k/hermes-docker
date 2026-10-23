@@ -176,6 +176,21 @@ A skill exists to make the agent's process more predictable — the agent reliab
 6. **Git add + commit** on the active branch; open a PR.
 7. **Note:** the CURRENT session's skill loader is cached — `skill_view` / `skills_list` will not see the new skill until a new session. This is expected, not a bug.
 
+## Importing a Contributed Skill Bundle
+
+When a user supplies an archive or folder as a proposed skill, integrate it as source input rather than installing it wholesale:
+
+1. **Quarantine first.** Record the archive hash and inspect member names, uncompressed size, path traversal, symlinks, and executable bits before extraction. Extract only into a scratch directory; completion means no entry can escape that directory.
+2. **Static audit before execution.** Inspect scripts for subprocesses, network calls, dynamic imports, unsafe deserialization, secret access, and filesystem writes. Classify intentional output writes separately from hidden side effects.
+3. **Compare by task class.** Load the closest existing class-level skill and compare procedures, references, scripts, and tests. Extend it when the proposed bundle overlaps; a new sibling is justified only when its trigger and workflow are materially distinct.
+4. **Run the bundle in quarantine.** Compile scripts, run their own tests with a bounded timeout, and execute one representative command. A timeout or partial test run blocks integration until the hot path is profiled and fixed.
+5. **Integrate the minimum.** Copy only unique reusable rules, topical references, deterministic scripts, and regression tests. Do not copy generated examples, duplicate engines, session artifacts, or marketing prose.
+6. **Harden both entry paths.** Validate resource bounds, invalid types, malformed identifiers, and non-finite values in the callable API as well as the CLI; CLI-only validation leaves imported helpers unsafe for future reuse.
+7. **Prove transformations.** For optimizations, compare against the pre-change baseline and an independent exhaustive oracle where feasible. Add persistent tests for the mechanism being optimized, not only happy-path output.
+8. **Verify the installed target.** Run tests and a real output probe from the destination skill directory, then obtain independent QC on the installed files. Hashes and tests from quarantine do not prove the installed artifact.
+
+Completion means the existing class-level skill contains the unique value, all target-side gates pass, and the archive itself was never treated as trusted executable input.
+
 ## Editing Existing In-Repo Skills
 
 - **Small fix:** `skill_manage(action='patch', ...)` works on in-repo skills, as does `patch`.
@@ -191,10 +206,11 @@ A skill exists to make the agent's process more predictable — the agent reliab
 4. **Leading whitespace before `---`.** Validation fails on any leading blank line or BOM.
 5. **Description too generic or trigger buried past char 57.**
 6. **`related_skills` pointing at skills that don't exist in-repo** (user-local, planned, or in a sibling PR).
-7. **Duplicating a peer.** Survey the category first; extend rather than sibling.
-8. **Skipping the docs generator or pushing its unrelated drift.** Both directions are wrong: no regen = orphan skill with no docs page; blind regen = a ballooned diff full of other skills' drift.
-9. **Expecting the current session to see the new skill.** The loader is initialized at session start.
-10. **Letting skills accumulate sediment.** When adding a rule, remove the old wording it replaces.
+7. **Duplicating a peer.** Survey the category first; extend rather than sibling. Treat externally supplied bundles as proposals: cherry-pick their unique procedure and verified helpers into the existing class-level skill instead of copying the folder wholesale.
+8. **Trusting archive tests as integration proof.** Re-run tests and probes from the installed target, because quarantine success does not verify destination paths, merged instructions, or copied files.
+9. **Skipping the docs generator or pushing its unrelated drift.** Both directions are wrong: no regen = orphan skill with no docs page; blind regen = a ballooned diff full of other skills' drift.
+10. **Expecting the current session to see the new skill.** The loader is initialized at session start.
+11. **Letting skills accumulate sediment.** When adding a rule, remove the old wording it replaces.
 
 ## Verification Checklist
 

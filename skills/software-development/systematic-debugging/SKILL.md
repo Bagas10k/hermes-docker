@@ -139,9 +139,13 @@ git log -p --follow src/problematic_file.py | head -100
 
 ### 4. Gather Evidence in Multi-Component Systems
 
-**WHEN system has multiple components (API → service → database, CI → build → deploy):**
+**WHEN system has multiple components (browser → public reverse proxy → app → session/database, CI → build → deploy):**
+
+Trace the exact external URL and response chain before editing an internal redirect. A green app test or asset build cannot prove that a prefixed public URL survives proxy rewrites and cookie handling; assert the final public destination separately. For login flows, use a disposable account/session fixture or an authorized browser vault session; never put plaintext credentials in commands, logs, or reports.
 
 **BEFORE proposing fixes, add diagnostic instrumentation:**
+
+When a user reports no visible progress, make one bounded probe immediately and report its actual observation plus the next unresolved gate. Do not replace the requested behavioral check with a generic build result or repeatedly announce a plan; distinguish source edited, local behavior verified, public behavior verified, and still blocked.
 
 For EACH component boundary:
 - Log what data enters the component

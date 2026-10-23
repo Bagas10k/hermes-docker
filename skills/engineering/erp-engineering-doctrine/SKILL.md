@@ -1,6 +1,13 @@
 ---
 name: erp-engineering-doctrine
 description: "Use when building or auditing ERP/accounting systems."
+version: 1.1.0
+author: Bagas Cihuy & Hermes Agent
+license: MIT
+metadata:
+  hermes:
+    tags: [erp, accounting, journals, balances, cash-controls]
+    related_skills: [database-design-migrations, application-auth-security]
 ---
 
 # Doktrin Rekayasa ERP & Akuntansi Sistem
@@ -31,18 +38,34 @@ Ketika ada konflik antar aturan, urutan otoritasnya:
 - **I-2:** Simpan `debit` dan `kredit` sebagai dua kolom terpisah dengan `CHECK (debit >= 0 AND kredit >= 0)` dan `CHECK ((debit > 0 AND kredit = 0) OR (kredit > 0 AND debit = 0))`. Jangan pernah menyimpan "nominal bertanda".
 - **I-3:** Pembulatan pajak/potongan ditetapkan **satu kali di satu tempat** dan dicatat sebagai baris jurnal eksplisit. Selisih pembulatan bukan noise — ia akun tersendiri.
 
+**Implementasi aritmetika uang di kode (PHP/Laravel):**
+- Seluruh operasi uang pakai `Brick\Math\BigDecimal` dengan input **string**, lalu `.toScale(n, RoundingMode::HalfUp)` eksplisit. Larangan `FLOAT` di skema tak berarti apa-apa jika kode tetap `(float)`.
+- Nominal mengalir antar lapisan (controller → service → basis data) sebagai **string desimal**, bukan cast float. Satu cast `(float)` pada angka 4-desimal (mis. `1234.5678`) cukup untuk menyuntikkan drift biner ke nilai yang akan diaudit.
+- Skala ditetapkan per jenis: mata uang 2 desimal, kuantitas & HPP 4 desimal. Konversi skala (termasuk moving-average `totalValuation / totalQty`) memakai `RoundingMode::HalfUp`, bukan mode pembulatan bawaan.
+
 ### 2.2 Jurnal & Saldo
 - **I-4:** Jurnal yang sudah diposting bersifat **imutabel**. Koreksi = jurnal pembalik (`jenis='pembalik'`, `id_jurnal_asal` merujuk jurnal asal, debit dan kredit ditukar), bukan `UPDATE`/`DELETE`.
 - **I-5:** Jurnal pembalik tidak dapat dibalik kembali. Cegah dengan `UNIQUE` pada `id_jurnal_asal`.
 - **I-6:** Saldo akun adalah **turunan** (`SUM(debit) - SUM(kredit)`), bukan nilai tersimpan yang diperbarui terpisah. Dua sumber kebenaran pasti akan berbeda.
-- **I-7:** Keseimbangan ditegakkan dengan `CONSTRAINT TRIGGER ... DEFERRABLE INITIALLY DEFERRED` (diperiksa saat commit), bukan `CHECK` per baris.
-- **I-8:** Akun kepala (`adalah_posting = FALSE`) tidak dapat menerima baris jurnal. Ditegakkan lewat trigger, bukan validasi form.
+- **I-7:** Tegakkan keseimbangan **per jurnal saat commit** dengan mekanisme yang benar-benar didukung DBMS target (misalnya deferred constraint trigger di PostgreSQL; untuk MySQL/MariaDB rancang jalur posting atomik dan gate validasi yang tidak dapat dilewati, lalu uji langsung). `CHECK` per baris hanya mengamankan kaki debit/kredit, bukan jumlah satu jurnal. Saat membaca neraca, periksa pula tiap jurnal yang masuk rentang tanggal: dua jurnal pincang dapat saling menutup sehingga aset=pasiva tampak seimbang. Indikator `is_balanced` tidak boleh bersandar pada kesamaan agregat saja.
+- **I-8:** Akun kepala (`adalah_posting = FALSE`) tidak dapat menerima baris jurnal. Ditegakkan lewat trigger, bukan validasi form. Bekukan kode, jenis, dan saldo normal akun yang telah digunakan: perubahan COA tidak boleh mengubah atau mengklasifikasi ulang jurnal historis. Saat aplikasi menggolongkan laporan menurut awalan kode (aset `1`, kewajiban `2`, ekuitas `3`, pendapatan `4/7`, beban `5/6/8`), validasi jenis akun terhadap awalan saat membuat dan memperbarui COA; awalan/jenis yang bertentangan dapat membuat neraca palsu meskipun jurnal seimbang.
+
+#### Bootstrap saldo awal dan kontrol Kas/Bank
+1. Pisahkan **COA** dari **Jurnal Umum**: COA hanya master akun dan saldo turunannya; seluruh aktivitas debit–kredit tampil di jurnal kronologis tersendiri. Jangan menaruh singkatan aktivitas seperti `N jrn` sebagai pengganti halaman jurnal yang dapat diaudit.
+2. Untuk onboarding pertama, simpan Kas/Bank sebagai **draf yang belum memengaruhi laporan**. Saat pengguna memilih *Mulai Pembukuan*, buat satu jurnal atomic: debit Kas/Bank, kredit Ekuitas Saldo Awal sebesar total yang sama; baru kemudian tandai `posted`.
+3. Tegakkan status `draft|posted`, singleton bootstrap, dan imutabilitas `posted` di basis data. Koreksi setelah posting wajib jurnal penyesuaian/pembalik, bukan edit atau hapus sumber lama.
+4. Temukan semua jalur uang keluar dari **baris jurnal yang mengkredit akun Kas/Bank**, bukan dari nama layar. Terapkan satu guard saldo bersama pada pengeluaran, ritase, pembelian tunai/bank, refund, dan jalur lain yang ditemukan.
+5. Jalankan pemeriksaan saldo dan penulisan dokumen+jurnal dalam transaksi yang sama, dengan kunci serialisasi per akun (atau kunci global yang sengaja dibatasi dan didokumentasikan). Pola `SUM saldo → insert jurnal` tanpa lock dapat lolos dua kali saat request konkuren.
+6. Hitung saldo dan total jurnal dengan `BigDecimal` dari string sampai selesai. `Collection::sum()`, `(float)`, dan `number_format()` hanya boleh dipakai pada lapisan presentasi, bukan untuk memutuskan cukup/tidak atau seimbang/tidak.
+7. Saat guard baru membuat tes lama gagal, cari semua pemanggil service langsung dan fixture transaksi keluar; tambahkan pembukaan eksplisit hanya pada tes yang memang membutuhkan dana. Jangan melemahkan fail-closed atau menanam saldo tersembunyi secara global demi membuat suite hijau.
+
+Resep Laravel, matriks jalur keluar, dan tes minimum tersedia di `references/opening-balances-and-cash-guards.md`.
 
 ### 2.3 Periode & Waktu
 - **I-9:** Posting diperiksa terhadap **tanggal jurnal**, bukan tanggal hari ini. Pengguna dapat memasukkan tanggal mundur.
 - **I-10:** Periode `keras_tutup` menolak seluruh posting. Koreksi jatuh di periode berjalan.
 - **I-11:** Hanya satu periode `terbuka` per tenant — tegakkan dengan `CREATE UNIQUE INDEX ... WHERE status = 'terbuka'`.
-- **I-12:** Saldo awal periode **tidak pernah** diinput manual. Ia turunan dari jurnal periode sebelumnya.
+- **I-12:** Saldo awal periode berjalan **tidak pernah** diinput manual; ia turunan dari jurnal periode sebelumnya. Pengecualian hanya untuk **bootstrap pertama saat onboarding**: nilai boleh disusun dalam tabel draf, tetapi menjadi saldo akuntansi hanya setelah diposting sebagai satu jurnal pembukaan seimbang dan kemudian dikunci permanen.
 
 ### 2.4 Persediaan & HPP
 - **I-13:** Metode valuasi (FIFO / Moving Average) dikunci saat transaksi terjadi. HPP tercatat pada detik mutasi keluar, bukan dihitung ulang saat laporan.
@@ -77,6 +100,11 @@ Ketika ada konflik antar aturan, urutan otoritasnya:
 | F-8 | `SERIALIZABLE` tanpa retry `40001` | Tim menurunkan isolasi kembali | Retry terbatas dengan backoff |
 | F-9 | Outbox menumpuk tanpa alarm | Kehilangan data perlahan | Peringatan pada `percobaan > N` |
 | F-10 | Saldo disimpan terpisah dari jurnal | Laporan tidak rekonsiliasi | Jadikan saldo turunan murni |
+| F-11 | Service melempar galat bisnis tanpa ditangkap controller | HTTP 500 saat overjual/stok kurang; data aman karena `DB::transaction` rollback, tapi UX kasar | Controller tangkap `InvalidArgumentException`/`RuntimeException` → respons JSON 422 atau `redirect()->back()->withInput()->withErrors()`; catch ini soal UX, bukan integritas |
+| F-12 | Asersi string desimal di SQLite `:memory:` | `assertSame('5.0000', …)` gagal: SQLite menyimpan DECIMAL lewat NUMERIC affinity dan membuang nol belakang, balik `'5'` | Asersi string persis hanya untuk nilai berdesimal non-nol; nilai bulat pakai `assertEquals(5.0, (float)$v)` |
+| F-13 | Guard saldo hanya dipasang di form pengeluaran | Pembelian tunai atau biaya operasional lain tetap dapat membuat Kas/Bank negatif | Cari seluruh penulisan jurnal yang mengkredit Kas/Bank dan arahkan ke satu guard domain bersama |
+| F-14 | Fixture lama langsung mengeluarkan uang | Suite gagal setelah guard fail-closed diterapkan | Siapkan saldo pembukaan secara eksplisit pada tiap skenario yang membutuhkan dana; jangan menghapus guard untuk mempertahankan asumsi fixture lama |
+| F-15 | Feed jurnal mencampur urutan initial dan incremental | Tampilan awal menunjukkan catatan lama atau polling menyisipkan urutan terbalik | Muat awal `id DESC`; ambil `after_id` secara `ASC`, lalu prepend batch sehingga entri terbaru tetap paling atas |
 
 ---
 

@@ -29,6 +29,7 @@ Discover actual package scripts, lockfiles, CI provider, runtime versions, infra
 
 ## Pitfalls
 - Built, unit-tested, browser-tested, deployed, and production-ready are different claims.
+- Read the detected recipe and every readiness status before summarizing an umbrella verifier. A successful Vite build or dev-server readiness at an HTTP 404 proves only that asset tooling started; run the framework/domain suite and an application route/browser smoke test separately, and report each evidence boundary explicitly.
 - Mocks are suitable at controlled external boundaries, not proof that the real integration works.
 - Never modify the running Hermes installation's dependencies as part of an application's setup.
 - Package managers, DB runtimes, and MCP connectors should be installed for a concrete project need, not to inflate the skill catalog.

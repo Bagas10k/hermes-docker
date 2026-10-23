@@ -32,6 +32,8 @@ What makes Hermes different:
 
 ## Scope & Verification
 
+Resolve a skill name before calling `skill_view`: when uncertain, call `skills_list` for its category and copy the exact `name` value as the **entire** argument. For this user's project, the canonical name is `kasir-bangunan-app-workflow`. Never concatenate a comment, diagnostic suffix (`; invalid?`, `?`, `.hmm?`), or `[SKILL_PRUNED]` marker. On the first `not found`, compare the actual sent argument character-for-character with the listed name; make **one corrected call only**, then resume the user's concrete task. A repeated-call warning is an immediate circuit breaker: stop that signature, do not spend another call on it. Do not promise to use the correct name and then send the suffixed name; check the call payload before dispatch. Never ask the user to send `continue` to recover from your own lookup typo or relay a canned retry message. When asked why lookup failed, state the malformed argument plainly and proceed with the corrected call or available work.
+
 This skill is a concise operating guide, not the complete source of truth for every Hermes feature. If a Hermes feature, command, or setting is not mentioned here or in a reference, do not treat that absence as evidence that it does not exist. Check the live repository and official docs before giving a negative answer.
 
 Good verification targets, cheapest first:

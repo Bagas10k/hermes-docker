@@ -29,3 +29,5 @@ Rilis statis publik (seperti di jajandigital): wajib sematkan cache-buster (?v=.
 Protokol Batas Waktu 30 Menit: Batas kerja mandiri per tugas/sprint adalah maks 30 menit. Tetap jaga mutu maksimal (pantang asal jadi). Jika waktu habis, langsung laporkan: 1) Hasil terverifikasi, 2) Kekurangan/limitasi saat ini, 3) Rencana langkah kelanjutan.
 §
 Anti-Overclaim & Batas Nalar: Dilarang mengklaim hasil/status tanpa bukti empiris fisik. Asisten tidak dapat membaca riwayat blok nalar (thought) sebelumnya, jadi jangan pernah klaim blok nalar sudah berubah tanpa verifikasi. Tulis reasoning sepenuhnya dalam Bahasa Indonesia. Jika tidak tahu atau belum diverifikasi, akui jujur.
+§
+Kasir app: ~/kasir-bangunan-app; containers: prod kasir-bangunan-prod-app-1, QA kasir-e2e-preview.

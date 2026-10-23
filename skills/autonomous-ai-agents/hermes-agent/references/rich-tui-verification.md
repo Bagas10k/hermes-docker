@@ -1,5 +1,16 @@
 # Rich TUI integration and verification
 
+## Operator-visible coding mode
+
+When a user asks to watch coding work “like OpenCode”, prefer Hermes's native tool-lifecycle surface before building another dashboard or installing another coding agent:
+
+1. Inspect the current non-secret display values with `hermes config get <key>` and confirm the runtime/source supports each enum.
+2. Persist an OpenCode-style local profile with `hermes config set`: `display.interface=tui`, `display.details_mode=expanded`, `display.sections.activity=expanded`, `display.sections.tools=expanded`, `display.sections.subagents=expanded`, `display.sections.thinking=collapsed`, `display.tool_progress=verbose`, `display.inline_diffs=true`, and `display.tui_compact=false`. For Telegram visibility, use `display.platforms.telegram.tool_progress=all`, `tool_progress_grouping=separate`, a bounded `tool_preview_length`, and `cleanup_progress=false`; Telegram remains a message stream, not an expandable TUI.
+3. Treat config-schema warnings as inconclusive, not as success or failure. A runtime key may be newer than the validator; require all three witnesses before keeping it: a valid enum in source/tests, resolved readback, and a real TUI session showing the behavior. Roll back a key that lacks those witnesses.
+4. Launch a fresh real PTY with `hermes` (not finite `-z`, which suppresses tool previews), submit a harmless scratch task that writes one line, patches it, and verifies it, then capture the rendered terminal. Acceptance requires the tool name, exact path/command, inline unified diff, duration, and result/exit evidence in execution order. Clean the scratch fixture afterwards. An already-open classic CLI or messaging conversation cannot morph into the TUI mid-turn; the new surface applies on a fresh launch.
+5. Run the focused backend tests for verbose payload redaction/capping and per-section details, plus the frontend inline-diff ordering test. Search the test tree for current test symbols before constructing node IDs; a wrong selector that runs zero tests is a failed invocation, not product evidence. Build Ink from `ui-tui/` with `npm run build:ink`, then run Vitest from that same directory because the script is workspace-local.
+6. Report corrected chronology honestly: an earlier bad test selector remains a failed attempt, while a later exact rerun with exit code 0 can satisfy the final gate. If an evidence hook appends a stale warning based on the earlier attempt, cite the accepted rerun rather than hiding either event.
+
 - Extend `ui-tui/` Ink components and `tui_gateway/` contracts rather than replacing dashboard chat with a second renderer. Read the area's AGENTS.md first; preserve pre-existing dirty work.
 - Build `ui-tui/packages/hermes-ink` with `npm run build:ink` before Vitest imports `@hermes/ink`; a missing dist/entry-exports.js is a build prerequisite, not a renderer bug.
 - Derive tool outcome from structured `tool.complete.result`, never prose or the existence of a completion event. Carry safe outcome fields through session history projection too; raw error/output may contain credentials.

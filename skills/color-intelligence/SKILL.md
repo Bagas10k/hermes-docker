@@ -37,6 +37,8 @@ For every color task, reason in this order:
 - In industrial/HMI contexts, prioritize normal-state calmness and reserve strong color for abnormal/attention states.
 - In data visualization, prioritize distinguishability and ordered meaning over decorative harmony.
 - In dark mode, redesign surfaces and luminance relationships; do not merely invert the light theme.
+- Treat computational output as candidate generation, not authority. Recompute every required contrast ratio from the final quantized HEX roles; generated metadata can be stale or wrong.
+- Keep hard constraints at public API boundaries, not only in the CLI. Reject malformed HEX, non-finite numeric values, invalid types, and unbounded search sizes before entering color math or candidate loops.
 - If the user gives only adjectives such as “premium”, “soft”, “futuristic”, or “cute”, translate them into measurable color behavior using `references/mood-brand-context.md`.
 
 ## Workflow by task
@@ -101,6 +103,18 @@ Example:
 python scripts/color_tools.py contrast '#111827' '#ffffff'
 ```
 
+### F. Compute a role-based system from a seed
+Read `references/computational-color-reasoning.md`, then run `scripts/color_reasoning_engine.py` when the task needs multiple accessible, gamut-mapped candidates rather than a fixed harmony template.
+
+Generate at least two parameter variants, treat accessibility as a hard gate, and treat the engine score only as a heuristic. Neutral seeds require an explicit hue choice or a clearly disclosed inferred hue. Recompute role-pair contrast from the emitted HEX values instead of trusting the result metadata. A generated palette is not final until it is applied to real components and inspected at mobile/desktop sizes with interaction states.
+
+When modifying the engine, follow the maintenance gate in `references/computational-color-reasoning.md`: lock direct-API bounds, compare optimized searches against an exhaustive oracle, prove repeated work is computed once, verify normalized bounded caches, fuzz valid inputs, and obtain independent QC before release.
+
+Example:
+```bash
+python scripts/color_reasoning_engine.py --seed '#6B4FFF' --mode dark --expression .93 --tension .84 --variants 3
+```
+
 ## Output contract
 
 Adapt detail to the request. For a full color-design answer, default to:
@@ -126,6 +140,7 @@ Load only what the current task needs:
 - `references/accessibility-quality.md` — WCAG contrast, use-of-color rules, color-vision concerns, and quality audit checklist.
 - `references/implementation.md` — HEX/RGB/HSL/OKLCH, CSS variables, Tailwind, JSON tokens, naming, and handoff patterns.
 - `references/sources.md` — authoritative W3C/MDN references for standards or compatibility checks.
+- `references/computational-color-reasoning.md` — OKLCH search, gamut mapping, hard/soft objectives, experiment protocol, and engine limits.
 
 ## Anti-patterns
 
@@ -155,13 +170,10 @@ Before finishing, ask internally:
 
 ---
 
-## Harmonic Palette Calibration & Script Helper
+## Deterministic helpers
 
-Untuk menghasilkan palet triadik atau komplementer yang terkalibrasi secara matematis dengan WCAG AA/AAA:
-```bash
-python3 ~/.hermes/skills/color-intelligence/scripts/palette_calibrator.py "#F59E0B" triadic light
-```
+- `scripts/color_tools.py` checks a known foreground/background pair.
+- `scripts/color_reasoning_engine.py` searches role-based systems from any valid HEX seed using OKLab/OKLCH, sRGB gamut reduction, final-HEX WCAG checks, and candidate deduplication.
+- `scripts/test_color_reasoning_engine.py` is the runnable regression gate.
 
-### Fondasi Teruji Light Mode vs Dark Mode:
-- **Light Mode (Warm Paper):** Canvas `#EFECE6` atau `#FAF8F5`, Card `#FFFFFF` (1px `#E2E8F0` border), Heading Text `#0F172A` (WCAG AAA 17.8:1), Body Text `#334155`.
-- **Dark Mode (Obsidian Noir):** Canvas `#0B0A10` atau `#0F172A`, Card `#15131D`, Aksen Tajam: Crimson `#EF4444`, Amber `#F59E0B`, Safety Orange `#FF5C00`.
+Prefer the computational engine over fixed triadic/complementary presets when context, accessibility, and candidate diversity matter. Its creative ranking is explicitly heuristic; visual inspection and user judgment remain required.
