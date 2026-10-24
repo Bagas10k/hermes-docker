@@ -1,7 +1,7 @@
 ---
 name: autonomous-orchestrator
 description: Spawn sub-agents for complex or noisy technical tasks.
-version: 1.0.0
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -14,11 +14,32 @@ metadata:
 
 Skill ini digunakan untuk mengatur delegasi pekerjaan ke sub-agent menggunakan alat `delegate_task`. Gunakan saat menghadapi tugas panjang, debugging ruwet, penulisan skrip masif, atau tugas berulang yang akan mengotori riwayat chat utama jika dikerjakan sendiri oleh agen utama (Mandor).
 
+## 🚨 Gate Kecepatan Eksekusi (Wajib Sebelum Delegasi)
+
+Jalankan gate ini **sebelum** memanggil `delegate_task`:
+
+1. **Cek lokal dulu (≤10 detik).** Jalankan `terminal` / `search_files` / `read_file` sendiri. Kalau 1–2 tool call sudah menjawab pertanyaan → STOP, jangan delegasikan.
+2. **≤5 tool call total?** Kerjakan langsung di Mandor. Sub-agent untuk tugas sepele = overhead menit tanpa nilai tambah.
+3. **Batch agresif.** Semua operasi independen (rename + tulis .env + verify) dalam satu blok, bukan giliran terpisah.
+4. **Delegasi HANYA untuk:** QC independen · pekerjaan paralel beda jalur nyata · reasoning-heavy butuh isolasi konteks.
+5. **Dilarang audit pre-task via sub-agent** kalau satu `terminal` call menjawab hal yang sama.
+
+**Anti-pola (menghasilkan kecepatan rendah):**
+> delegasi audit → tunggu 4 menit → baca hasil → baru eksekusi 1 terminal call
+
+**Pola benar:**
+> terminal (cek + eksekusi + verify dalam satu blok) → sub-agent hanya untuk QC independen
+
 ## Kapan Menggunakan Sub-Agent?
 1. **Refactoring / Coding Skala Besar:** Memperbaiki sistem, menulis API baru, merombak CSS.
 2. **System Debugging:** Menelusuri log error, memeriksa dependensi, dan menambal bug.
 3. **Data Processing:** Membaca ribuan baris log, mengonversi format data, menerjemahkan dokumen berukuran besar.
 4. **Research:** Mencari dokumentasi API, membaca forum, atau menggali referensi.
+
+**TIDAK cocok untuk sub-agent:**
+- Cek profil list, status gateway, atau pembacaan file tunggal
+- Langkah yang output-nya langsung dibutuhkan sebelum lanjut
+- Tugas yang bisa selesai dalam ≤3 tool call
 
 ## Peran Arsitektur (Hierarki 3 Generasi: Mandor, Anak, Cucu)
 
@@ -44,6 +65,13 @@ Skill ini digunakan untuk mengatur delegasi pekerjaan ke sub-agent menggunakan a
      - `🛡️ QC Cucu`: Memeriksa byte gambar, mengecek status HTTP, inspeksi artifact disk.
    - **Sifat:** Lahir saat task dipanggil (`delegate_task`), selesai menyetor bukti, langsung dimusnahkan agar hemat RAM.
 
+## Model Sub-Agent: Resolusi & Verifikasi
+
+- Anak `delegate_task` **tidak mewarisi model percakapan induk** bila `delegation.model` + `delegation.provider` dipin di `config.yaml`; rantai cadangannya `delegation.fallback_providers`. Tanpa pin, anak mengikuti model induk.
+- **Profil bukan sub-agent.** `~/.hermes/profiles/<nama>/` adalah proses Hermes terpisah (punya `model.default` sendiri) dan tidak pernah dipakai `delegate_task`. Jangan menjawab "sub-agent pakai model X" dari daftar profil.
+- **Buktikan nama model dengan satu `curl` nyata** ke endpoint provider sebelum menyebutkannya ke Mas Bagas — entri di config bukan bukti endpoint melayaninya.
+- QC independen sebaiknya memakai model **beda keluarga** dari pelaksana; QC se-keluarga mewarisi blind spot yang sama. Ganti model QC hanya setelah model pengganti diuji nyata.
+
 ## Panduan Menggunakan `delegate_task`
 Gunakan tool `delegate_task` untuk mengirim tugas. Berikan `context` sejelas mungkin karena sub-agent tidak memiliki riwayat chat ini.
 
@@ -68,7 +96,7 @@ Ketika mendelegasikan beberapa sub-agent bekerja bersamaan pada satu proyek:
    - Pengujian visual wajib dilakukan secara fisik di peramban riil, bukan sekadar tes biner teks.
 3. Sub-agent **tidak bisa** membaca chat history. Semua info krusial (jalur file absolut, nama fungsi, rule desain) HARUS disematkan ke dalam `context`.
 4. Setelah sub-agent selesai, **Mandor wajib memverifikasi hasil kerjanya** (contoh: curl endpoint, baca head file) sebelum dilaporkan ke pengguna. Jangan sekadar menjadi "kurir" tanpa paham apa yang diperbaiki sub-agent.
-5. **Pitfall hang leaf:** Sub-agent ber-model `ag/gemini-*` (role leaf) sering hang tanpa progres — nol tool call setelah baris `start`, lalu berakhir `interrupted: retrying API call after error` setelah puluhan menit. Untuk tugas implementasi bounded (beberapa berkas, TDD), kerjakan langsung di Mandor; pakai `delegate_task` hanya untuk pekerjaan reasoning-heavy yang benar-benar butuh isolasi konteks. Cek transcript 2–3 menit setelah dispatch — kalau masih diam di `start`, stop dan ambil alih.
+5. **Pitfall drift/hang leaf:** Aktivitas tool bukan otomatis progres. Untuk QC/riset bounded, berikan artefak final, hash, kriteria biner, larangan menjelajah workspace, serta batas 4–6 tool call. Cek transcript setelah 2–3 menit; hentikan dan ambil alih bila worker masih diam **atau** melebar ke git/history/file di luar scope, membaca ulang bukti yang sama, atau melewati budget. Jangan delegasikan diagnosis awal bila Mandor dapat menentukannya dalam ≤5 tool call; eksekusi langsung lalu gunakan satu worker hanya sebagai QC final. Verdict `GO` dari worker berstatus `interrupted` adalah bukti pendukung, bukan gate lulus—dispatch pengganti yang bounded dan terima hanya hasil `completed` yang terikat ke hash final.
 
 ## Kontrak Laporan Progres Konkret
 

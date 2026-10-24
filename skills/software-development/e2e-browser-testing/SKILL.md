@@ -49,8 +49,9 @@ python3 ~/.hermes/skills/software-development/e2e-browser-testing/scripts/cdp_ru
 ## Procedure
 
 1. **Siapkan Target Pengujian**:
-   - Pastikan server web target aktif melayani HTTP 200 di port lokal atau URL publik.
-   - Kriteria selesai: Target merespons permintaan HTTP dengan status kode 200 OK.
+   - Pastikan URL halaman yang tepat—bukan sekadar port/listener—melayani HTTP 200 sebelum setiap batch DOM/screenshot. Ulangi probe setelah proses capture panjang; socket `LISTEN` masih dapat memberi empty reply ketika server preview macet.
+   - Jika preview disposable macet, hentikan hanya proses preview, jalankan ulang server pada direktori artefak yang sama, lalu buktikan setiap URL target kembali HTTP 200 sebelum melanjutkan.
+   - Kriteria selesai: setiap target yang akan diuji merespons HTTP 200 OK.
 
 2. **Eksekusi Pengujian CDP Viewport**:
    - Jalankan `cdp_runner.py` dengan parameter viewport (`mobile` atau `desktop`).
@@ -61,8 +62,11 @@ python3 ~/.hermes/skills/software-development/e2e-browser-testing/scripts/cdp_ru
    - Kriteria selesai: `zero_emoji.passed` bernilai `true` (`emoji_count: 0`) dan elemen tombol/link terdeteksi pada AXTree.
 
 4. **Simpan Bukti Tangkapan Layar**:
-   - Simpan berkas PNG tangkapan layar ke direktori sementara atau direktori aset pengujian.
-   - Kriteria selesai: Ukuran berkas screenshot $>0$ bytes dan framebuffer tersimpan di disk.
+   - Simpan setiap viewport/page ke path unik dan eksplisit; jangan mengandalkan path temporer default karena sesi paralel dapat melaporkan nama yang sama.
+   - Setelah batch, hitung artefak secara programatik, cocokkan dengan jumlah yang diminta, pastikan setiap PNG berukuran >0 byte, lalu simpan checksum bila verdict harus terikat ke versi tertentu.
+   - Jika CDP screenshot timeout tetapi DOM probe lulus, gunakan Chromium headless per URL/viewport sebagai fallback terisolasi; jangan mengubah hasil kosong menjadi klaim screenshot berhasil.
+   - Untuk halaman panjang ketika capture viewport setelah scroll tetap tidak andal, buat artefak HTML **focus-record** dari fixture yang sudah dirender: sembunyikan hanya header/ringkasan/filter pendahulu pada salinan disposable, jangan ubah markup record atau shared CSS, lalu sajikan lewat HTTP lokal dan capture viewport. Sebelum memakai bukti ini, ukur pada halaman asli bahwa record dapat dijangkau, tidak overflow, dan target aksi memenuhi dimensi; labeli gambarnya sebagai focus-record fixture, bukan komposisi top-of-page asli.
+   - Kriteria selesai: jumlah, nama, ukuran, dan—bila diperlukan—checksum artefak cocok dengan matriks pengujian.
 
 ## Pitfalls
 
@@ -84,7 +88,8 @@ python3 ~/.hermes/skills/software-development/e2e-browser-testing/scripts/cdp_ru
 - **HTTP PUT pada `/json/new`**: Endpoint `/json/new` pada Chromium modern mewajibkan HTTP method `PUT`; pemanggilan dengan `GET` melempar HTTP 405 Method Not Allowed.
 - **WebSocket Frame Size**: Tangkapan layar base64 resolusi tinggi dapat melebihi batas default WebSocket frame (1 MB). Runner mengonfigurasi batas `max_size=25MB` untuk mencegah koneksi terputus tiba-tiba.
 - **Horizontal Overflow False Negatives**: Nilai `scrollWidth` elemen `document.documentElement` wajib dibandingkan terhadap `clientWidth`. Runner menyertakan toleransi 1px untuk mencegah subpixel anti-aliasing jitter. Jangan berhenti pada cek halaman: untuk kartu dengan `overflow: hidden`, ukur setiap kontrol penting memakai `getBoundingClientRect()` dan pastikan batas kiri/kanannya berada di dalam content box kartu; anak dapat terpotong tanpa memperbesar `documentElement.scrollWidth`.
-- **Viewport-task reachability**: Untuk antarmuka kerja padat, ukur posisi kontrol wajib terhadap `innerHeight` pada viewport target, lalu inspeksi framebuffer. Contoh kontrak POS desktop: pencarian, input transaksi, total, dan CTA final semuanya memiliki `bottom <= innerHeight`; daftar sekunder boleh memakai scroll internal. Ulangi setelah patch CSS terakhir karena screenshot atau verdict sebelum edit tidak membuktikan kandidat terbaru.
+- **Viewport-task reachability**: Untuk antarmuka kerja padat, ukur posisi kontrol wajib terhadap `innerHeight` pada viewport target, lalu inspeksi framebuffer. Contoh kontrak POS desktop: pencarian, input transaksi, total, dan CTA final semuanya memiliki `bottom <= innerHeight`; daftar sekunder boleh memakai scroll internal. Untuk tabel tablet yang sengaja lebih lebar, set `scrollLeft` ke maksimum dan buktikan kolom aksi masuk utuh ke content box wrapper. Untuk bukti record mobile yang di-scroll, kompensasikan topbar tetap dengan `scroll-margin-top` atau offset eksplisit dan pastikan identitas, batas kartu, status, serta semua aksi terlihat. Ulangi setelah patch CSS terakhir karena screenshot atau verdict sebelum edit tidak membuktikan kandidat terbaru.
+- **Off-canvas focus trap**: `scrollWidth <= clientWidth` tidak membuktikan drawer tertutup aman. Kirim Tab native dan pastikan fokus pertama berada pada kontrol yang terlihat; drawer off-canvas harus `inert` atau setara (`visibility:hidden`/`pointer-events:none` plus pemulihan saat dibuka) agar kontrol pada koordinat negatif tidak menerima fokus.
 - **DOM order across breakpoints**: Audit urutan visual dan DOM pada desktop serta mobile. Reordering dengan flex/grid `order` hilang ketika breakpoint mengubah parent menjadi `display: block`, sehingga konten ringkasan yang lebih dulu di DOM dapat kembali mendahului tugas utama di mobile. Gunakan DOM order sesuai prioritas utama dan batasi reordering hanya sebagai enhancement desktop.
 
 ## Verification

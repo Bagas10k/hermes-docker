@@ -44,7 +44,8 @@ Klasifikasikan setiap temuan:
 
 - Draf dapat direvisi tanpa menciptakan jurnal.
 - Posting Kas 10 juta + Bank 5 juta menghasilkan debit 15 juta dan kredit 15 juta.
-- Posting kedua, update, dan delete setelah posted ditolak.
+- Posting kedua, update, dan delete setelah posted ditolak. Jalankan migrasi pada instance disposable dari **engine produksi yang sebenarnya**, lalu coba `UPDATE` satu baris jurnal dan `DELETE` header secara langsung; status migrasi atau tes service saja tidak membuktikan trigger DB bekerja.
+- Saat dokumen sudah tertaut ke jurnal posted, service update/delete harus gagal sebelum memasuki cabang sinkronisasi mutabel; hapus kode pembaruan jurnal yang menjadi tidak mungkin dicapai agar tidak hidup kembali lewat refactor.
 - Tanpa saldo pembukaan, semua jalur keluar gagal tertutup tanpa baris parsial.
 - Nominal tepat sama dengan saldo boleh; lebih satu sen harus ditolak.
 - Pengeluaran, ritase, dan pembelian tunai/bank rollback lengkap saat saldo kurang.

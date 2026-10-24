@@ -182,6 +182,10 @@ For Tailwind, map the design's spacing tokens deliberately instead of sprinkling
 
 See `references/implementation.md`.
 
+### 10. Iterate from measured feedback
+
+When a user says a layout still looks unchanged or untidy, inspect the latest rendered screenshot and the current DOM geometry before making another cosmetic adjustment. Identify the specific imbalance (such as an orphaned grid cell, unequal row pattern, misaligned control group, or weak hierarchy), then change the layout structure that causes it. Re-render from the exact current source and verify the requested mobile and desktop widths; stale preview markup is not evidence of the current design. Apply the revision to the target runtime only after this check, then verify the deployed file/version and report any authentication boundary that prevents viewing the protected page.
+
 ## Spacing decision rules
 
 Use these rules before inventing a number:
@@ -194,6 +198,7 @@ Use these rules before inventing a number:
 6. Prefer consistent repeated relationships over perfect local symmetry.
 7. Use optical correction only after structural spacing is correct.
 8. Document exceptions instead of silently creating magic numbers.
+9. Budget viewport vertical space: top summary/KPI cards above primary data tables must stay within ≤ 20–25% of viewport height (target ≤ 180px on desktop) using a horizontal split architecture (key metrics on left, compact micro-sparkline on right) so the table and filters below remain immediately visible above the fold.
 
 ## Optical spacing
 
@@ -225,7 +230,9 @@ Avoid:
 - shrinking hit targets because the icon looks small;
 - copying screenshot coordinates without reconstructing the underlying system;
 - using excessive cards/borders because spacing hierarchy is weak;
-- fixed widths that break localization or responsive reflow.
+- fixed widths that break localization or responsive reflow;
+- building tall summary blocks with full-height charts (>150px) above data tables that consume >30% of viewport height and drown out primary records below the fold;
+- forcing multi-digit currency metrics into narrow horizontal multi-column grids on mobile, causing critical financial figures to truncate with ellipsis.
 
 ## Reference reconstruction principle
 

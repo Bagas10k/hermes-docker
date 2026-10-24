@@ -38,6 +38,31 @@ For each profile, verify the token exists and compare a short SHA-256 fingerprin
 
 List every profile that has a messaging credential before migration. A multiplexer rescans profile homes and may activate a dormant bot whose token is still present, so obtain the user's decision about that expanded roster first.
 
+## 2A. Rename a live profile and attach a Telegram bot
+
+Use this path when the user wants an existing specialist profile to keep its model, SOUL, skills, memory, and sessions under a shorter public identity.
+
+1. Identify the source profile from its live `SOUL.md`/`profile.yaml`; do not create a blank replacement when the requested expertise already exists.
+2. Export a rollback archive to a mode-`0700` local directory and treat the archive as secret-bearing because it may include `.env`:
+   ```bash
+   hermes profile export <old> -o <protected-dir>/<old>-before-rename.tar.gz
+   ```
+3. Rename only through the supported command:
+   ```bash
+   hermes profile rename <old> <new>
+   ```
+   Never `mv` a live profile directory: the CLI first unserves the old adapter, migrates routing identity and aliases, records `previous_names`, then asks the multiplexer to reconcile. A filesystem-only move can resurrect a ghost profile or strand persisted routing.
+4. Search live, nonhistorical files across all profiles for the old slug and absolute path. Update `SOUL.md`, `profile.yaml` descriptions, collaborator routing instructions, topical references, and pending durable-memory payloads. Do **not** rewrite session dumps, caches, backups, or `previous_names`; those are historical provenance, not active routing.
+5. Validate the Telegram credential with `getMe` before binding it and require the returned username to equal the intended bot username. Keep the token out of command arguments and printed URLs; report only HTTP status, `ok`, `is_bot`, display name, and username.
+6. Configure the renamed profile through its scoped setup (`hermes -p <new> gateway setup`) or an equivalent secret-aware writer to `<profile-home>/.env`. Require mode `0600`. Use numeric Telegram IDs for `TELEGRAM_ALLOWED_USERS`; when setup originates from an authenticated Telegram turn, `HERMES_SESSION_USER_ID` is the correct default for that user, never their `@username`.
+7. Let the live multiplexer hot-rescan the profile signature before restarting anything. Wait one bounded rescan interval, then require `gateway_state.json` to contain `<new>:telegram` as `connected`, with no error and the current gateway writer PID; require `<old>:telegram` to be absent. Restart only if the bounded rescan fails and logs identify a startup-only setting or stuck adapter.
+8. Test the scoped transport:
+   ```bash
+   hermes -p <new> send --to telegram:<numeric-chat-id> --json '<synthetic probe>'
+   ```
+   Require `success: true` and a real `message_id`. Then require the user to send a fresh message to the new bot and verify that the inbound turn/session is owned by `<new>`; outbound delivery is not evidence of inbound routing or agent response.
+9. Run a fixed post-cutover soak. Judge errors after the adapter's connected timestamp; a one-off handoff warning is not a veto unless it recurs after reconciliation.
+
 ## 3. Preflight and migrate through the official path
 
 ```bash
@@ -77,7 +102,7 @@ journalctl --user -u hermes-gateway.service --since '<start time>' --no-pager
 
 Match Telegram conflicts precisely (`409`, `terminated by other getUpdates`, or the platform's conflict class). A generic word such as `conflict` may match unrelated session-route diagnostics and produce a false veto.
 
-For each bot, verify platform authentication and a real send/receive. A successful `hermes send --to telegram ... --json` must include `success: true` and a real `message_id`; process-active or adapter-connected alone is insufficient. Use synthetic messages, never personal/business data.
+For each bot, verify platform authentication and a real send/receive. Scope secondary-profile delivery explicitly with `hermes -p <profile> send --to telegram:<numeric-chat-id> --json ...`; otherwise the default profile's credential can produce a false-positive transport test. Require `success: true` and a real `message_id`, then verify a fresh inbound message creates or resumes a session under that same profile. Process-active, adapter-connected, `getMe`, and outbound delivery are four separate gates; none alone proves end-to-end conversation. Use synthetic messages, never personal/business data.
 
 ## 5. Enable durable Bot Mode collaboration on a headless host
 
@@ -132,4 +157,4 @@ Run one minimal `delegate_task` child that returns an exact sentinel. This prove
 
 ## 8. Report and release
 
-Report each gate as PASS/PARTIAL/FAIL with evidence. A valid partial release may have one-gateway transport and Bot-to-Bot handoff working while one optional bot has an invalid credential; do not call the whole roster healthy until that credential and its inbound/outbound paths pass. Preserve a physical tracker for long work and include remaining user-supplied prerequisites explicitly.
+Report each gate as PASS/PARTIAL/FAIL with evidence. For a renamed messaging profile, include: old slug absent from the active roster, new slug/model/SOUL/skills preserved, old live cross-profile references removed, credential identity matched, exact adapter key connected, scoped outbound `message_id`, fresh inbound ownership, and a clean bounded soak. A valid partial release may have one-gateway transport and outbound delivery working while inbound remains untested, or one optional bot has an invalid credential; do not call the whole roster healthy until every required inbound/outbound path passes. Preserve a physical tracker for long work and include remaining user-supplied prerequisites explicitly.

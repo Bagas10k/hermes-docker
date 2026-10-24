@@ -95,6 +95,18 @@ Progres yang berantakan (belasan bubble per turn) hampir selalu soal tiga knob, 
 4. Jelaskan cakupan dengan tepat: timestamp pesan masuk dirender ke konteks model pada turn gateway berikutnya; konten tersimpan tetap bersih. Ini membantu membandingkan waktu kirim antar-pesan, tetapi **bukan guardrail keamanan**. Untuk pengaman anti-stale, pasang pemeriksaan di ingress adapter sebelum penanganan sesi aktif: `/approve`, `/stop`, jawaban klarifikasi, dan antrian pesan dapat diproses tanpa melewati handler pesan biasa. Periksa setiap potongan teks sebelum penggabungan batch: potongan lama yang bergabung dengan event segar dapat mewarisi timestamp segar. Bedakan waktu klik tombol dari waktu kirim prompt bot; timestamp prompt bukan bukti usia klik. Jalankan tes merah untuk pesan lama, tes hijau untuk pesan baru/internal/metadata hilang, lalu tes integrasi melalui jalur pesan aktif. Fitur timestamp **tidak otomatis mengukur latensi balasan ujung-ke-ujung** tanpa waktu pesan balasan terkirim/diterima; profil Hermes lain tetap terisolasi.
 5. **Sebelum restart gateway untuk perubahan kode**, inventarisasi `git status --porcelain=v1 -uall` dan `git diff --check`, cadangkan berkas kotor tanpa menghapusnya, lalu audit semua perubahan yang akan ikut dimuat—terutama adapter dan handler gateway. Tes pada worktree terpisah membuktikan patch saja, bukan keseluruhan checkout produksi. Verifikasi ulang bahwa berkas tes/patch masih ada dan jalankan tes di checkout yang akan dijalankan, karena artefak sementara bisa hilang di antara QC dan promosi. Jika ada perubahan lain yang belum diaudit, tahan restart dan laporkan kode di disk terpisah dari kode yang sedang berjalan; jangan klaim fitur sudah aktif dari tes atau salinan berkas saja.
 
+## Prosedur: Mengukur Beban Prompt Nyata (Audit Stack)
+
+Keluhan "prompt banyak yang stack" dijawab dengan angka dari berkas nyata, bukan perkiraan.
+
+1. **Hitung biaya `skills.auto_load` dari sumbernya:** `wc -c` setiap `SKILL.md` yang ada di daftar. Angka itu dibayar di setiap request.
+2. **Hitung injeksi plugin `pre_llm_call`:** teksnya string literal di `~/.hermes/plugins/<nama>/__init__.py`; cari literal panjang di file itu. Injeksi digabung ke `api_content` sebuah pesan user, jadi di UI ia tampak "menempel" di pesan Mas Bagas.
+3. **Ukur payload sebenarnya** dari `~/.hermes/sessions/request_dump_*.json` (dump ditulis saat request gagal, tapi isinya payload request nyata): bentuk Responses → `request.body.instructions` + `request.body.input`; bentuk chat → `request.body.messages`. **Tangani kedua bentuk** — hanya menangani satu menghasilkan "0 pesan" dan diagnosis palsu.
+4. **Hitung okurensi marker, jangan asumsikan pertumbuhan per turn.** Plugin melewati injeksi ulang bila marker-nya sudah ada di `api_content` riwayat (mis. `PONYTAIL MODE ACTIVE — level: `, `CONTRACT LAPORAN PROGRES KONKRET — V2`). Di sesi 770 pesan, blok ponytail muncul di **1** pesan ⇒ sekali per sesi, prefix stabil. Sebut sebagai beban tetap, bukan "menumpuk".
+5. **Audit duplikasi sebelum menyentuh teks prompt.** Doktrin yang sama sering hidup di tiga tempat sekaligus: prompt dasar + plugin + skill `auto_load`. Perbaikan termurah = **hapus satu sumber** (cabut entri `skills.auto_load` atau nonaktifkan plugin), bukan menulis ulang kalimatnya.
+
+Probe siap pakai: `python3 scripts/measure_prompt_stack.py [nama-profil]`.
+
 ## Pitfalls
 
 - **`delegation.orchestrator_enabled` bukan aktivasi skill.** Key itu hanya mengizinkan anak punya anak (`max_spawn_depth`). Memuat skill orkestrator di setiap turn adalah urusan `skills.auto_load`. Dua hal berbeda; menyamakan keduanya membuat laporan "sudah aktif" yang salah.
@@ -104,7 +116,11 @@ Progres yang berantakan (belasan bubble per turn) hampir selalu soal tiga knob, 
 - **Plugin `skill-retriever` ≠ auto_load.** Retriever menyuntik saat relevan (bisa terlewat); auto_load menyuntik selalu (deterministik, tapi dibayar). Pilih sesuai kebutuhan, jangan campur klaimnya.
 - **Backup dulu sebelum menyentuh config:** `cp ~/.hermes/config.yaml ~/.hermes/config.yaml.bak-$(date +%s)`.
 - **Entri `platform_toolsets` untuk platform yang tidak ada membanjiri `errors.log`.** Nilai seperti `hermes-google_chat` / `hermes-teams` tidak terdaftar di `toolsets.py`, jadi setiap sesi menulis WARNING "platform has no valid toolsets configured". Validasi nama sebelum set: `venv/bin/python -c "import sys;sys.path.insert(0,'.');from toolsets import validate_toolset;print(validate_toolset('hermes-telegram'))"`, lalu `hermes config unset platform_toolsets.<platform>` untuk yang `False`.
+- **Plugin yang aktif di `plugins.enabled` tanpa direktori di `~/.hermes/plugins/` adalah plugin bawaan.** Tidak ada kode lokal untuk dibaca; jangan mengklaim perilakunya (mis. "retriever menutup celah auto_load") sebelum ada bukti. Nyatakan sebagai UNCERTAIN bila hanya config yang terlihat.
+- **Beban doktrin yang sama di dua tempat bukan pengaman, tapi ongkos.** Sebelum menambah aturan ke skill yang `auto_load`, cek apakah plugin `pre_llm_call` atau prompt dasar sudah memuatnya; kalau sudah, perbaiki di satu tempat saja.
 
 ## Verification
 
 `python3 scripts/verify_auto_load.py` → `OK`, `missing` kosong, dan angka token tercetak. Tanpa itu, perubahan belum boleh dilaporkan berhasil.
+
+Untuk audit ongkos konteks: `python3 scripts/measure_prompt_stack.py [nama-profil]` → char per skill `auto_load`, literal injeksi tiap plugin, ukuran payload terbaru, dan jumlah pesan yang membawa marker injeksi.

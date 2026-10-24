@@ -16,6 +16,47 @@
 3. Check `.env` has the right API key
 4. **Copilot 403**: `gh auth login` tokens do NOT work for Copilot API. You must use the Copilot-specific OAuth device code flow via `hermes model` → GitHub Copilot.
 
+### "Hermes feels slow" — verify the model route before blaming the host
+Perceived lag is usually a dead model ID in the chain, not the machine. The
+session keeps answering because Hermes walks the fallback chain on every
+turn — so the symptom is latency, not an error.
+
+1. Rule out the host in one call — `uptime; free -m; vmstat 1 3`. Rising
+   swap with `si`/`so` near 0 is idle swap, not thrashing; only sustained
+   `si`/`so` means memory pressure is the cause.
+2. Probe each candidate model directly and read the BODY, not just the time:
+```bash
+curl -s --max-time 25 -o /tmp/r.json -w '%{time_total}s\n' \
+  -X POST "$BASE_URL/chat/completions" \
+  -H "Authorization: Bearer $KEY" -H 'Content-Type: application/json' \
+  -d '{"model":"<id>","messages":[{"role":"user","content":"ok"}],"max_tokens":5}'
+head -c 200 /tmp/r.json
+```
+   Always set `--max-time` per request: one hanging upstream otherwise
+   stalls the whole batch and pushes the loop into the background.
+3. Classify by body, because the failure modes look identical in latency:
+   - `0.01–0.03s` + `"No active credentials for provider: X"` → the router
+     lists the model but has no credential upstream.
+   - `1–5s` + upstream `400/404` text → the model ID exists but the account
+     behind it cannot serve that name; re-read the nested provider message.
+   - `>20s` with no body → upstream hang; treat as down.
+   - Real answer with `"content"` in `choices[0].message` → this ID is the
+     one to pin. A fast `time_total` alone proves nothing.
+4. List what the router advertises (`GET /v1/models`) but pin only IDs you
+   actually got an answer from. Advertised ≠ credentialed.
+5. Set it with the CLI setter, then re-run the same probe:
+```bash
+hermes config set model.default <verified-id>
+```
+   File-editing tools refuse `~/.hermes/config.yaml` by design — `hermes
+   config set` is the sanctioned path, not a workaround.
+6. The running session keeps its old model. `/model <id>` or a new session
+   is required before the change is felt — say so instead of reporting the
+   fix as already live.
+7. Profiles pin their own `model.default`. `hermes profile list` prints each
+   profile's model; if the dead family is pinned per-profile, switching
+   profile brings the lag straight back.
+
 ### Changes not taking effect
 - **Tools/skills:** `/reset` starts a new session with updated toolset
 - **Config changes:** In gateway: `/restart`. In CLI: exit and relaunch.

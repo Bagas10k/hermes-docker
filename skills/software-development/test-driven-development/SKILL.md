@@ -350,7 +350,7 @@ Never fix bugs without a test.
 - **Testing mock behavior instead of real behavior** — mocks should verify interactions, not replace the system under test
 - **Testing implementation details** — test behavior/results, not internal method calls
 - **Happy path only** — always test edge cases, errors, and boundaries
-- **Brittle tests** — tests should verify behavior, not structure; refactoring shouldn't break them
+- **Brittle tests** — tests should verify behavior, not structure; for rendered HTML assert semantic text, stable attributes, roles, or named controls instead of regexes that depend on tag attribute order or an exact inline-style fragment, because responsive markup changes can preserve behavior while invalidating serialization details
 
 ## Final Rule
 

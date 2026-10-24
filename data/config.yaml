@@ -1,25 +1,26 @@
 model:
   api_mode: chat_completions
   base_url: http://localhost:20128/v1
-  default: cx/gpt-5.6-sol
+  default: cx/gpt-6-luna
   provider: custom:lk
 fallback_providers:
   - base_url: http://localhost:20128/v1
     key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
-    model: cx/gpt-5.6-sol
-    provider: custom
+    model: ag/gemini-3.8-flash-low
+    provider: custom:lk
 database:
   journal_mode: wal
 runtime:
   nofile_soft_limit: 4096
 agent:
-  max_turns: 150
+  max_turns: 25
   service_tier: ''
   fast_auto_seconds: 60
   verify_on_stop: true
   personalities: {}
   reasoning_effort: xhigh
   verbose: false
+  gateway_notify_interval: 60
 terminal:
   backend: local
   cwd: .
@@ -40,16 +41,16 @@ browser:
     enabled: false
 tool_loop_guardrails:
   warnings_enabled: true
-  hard_stop_enabled: false
+  hard_stop_enabled: true
   non_interactive_hard_stop_enabled: true
   warn_after:
     exact_failure: 2
     same_tool_failure: 3
     idempotent_no_progress: 2
   hard_stop_after:
-    exact_failure: 5
-    same_tool_failure: 8
-    idempotent_no_progress: 5
+    exact_failure: 3
+    same_tool_failure: 4
+    idempotent_no_progress: 3
 compression:
   enabled: true
   checkpoint_required: false
@@ -83,13 +84,13 @@ display:
   interim_assistant_messages: false
   platforms:
     telegram:
-      streaming: false
+      streaming: true
       busy_ack_detail: true
-      cleanup_progress: true
+      cleanup_progress: false
       interim_assistant_messages: true
       long_running_notifications: true
-      tool_preview_length: 80
-      tool_progress: new
+      tool_preview_length: 160
+      tool_progress: verbose
       tool_progress_grouping: accumulate
       thinking_progress: true
   runtime_footer:
@@ -152,16 +153,13 @@ delegation:
   provider: custom:lk
   fallback_providers:
     - base_url: http://localhost:20128/v1
-      model: ag/gemini-3.7-flash-medium
+      model: ag/gemini-3.8-flash-low
       provider: custom:lk
-    - base_url: http://localhost:20128/v1
-      model: cx/gpt-5.6-sol
-      provider: custom:lk
-  max_iterations: 250
-  child_timeout_seconds: 600
-  max_concurrent_children: 10
+  max_iterations: 60
+  child_timeout_seconds: 180
+  max_concurrent_children: 3
   independent_completions: true
-  max_spawn_depth: 3
+  max_spawn_depth: 2
   orchestrator_enabled: true
   subagent_auto_approve: true
   surface_child_process_notifications: true
@@ -329,44 +327,32 @@ custom_providers:
     key_env: HERMES_CUSTOM_API_KAGIRO_NET_API_KEY
     model: glm5-3
     models:
-      5.3ftest: {}
-      atria-dawn-preview: {}
       deepseek-4-1-flash: {}
       deepseek-v4-flash: {}
       deepseek-v4-pro: {}
       deepseek-v4.1-flash-1017: {}
       deepseek-v4.1-flash-expires-on-0910: {}
-      dp4.1ftest: {}
       gemini-3-8-flash: {}
-      gemini-3.6-flash: {}
-      gemini-3.7-flash: {}
-      glm-5-1: {}
       glm-5-3-flash: {}
       glm5-2: {}
       glm5-3: {}
-      gpt-5-5: {}
-      hy3: {}
-      hy4-preview: {}
-      kimi-k2-7-code: {}
-      kimi-k2.6: {}
       laguna-s-2.1: {}
       longcat-2.5-preview: {}
-      m3test: {}
       mimo-v2.6-flash: {}
-      mimo2.6test: {}
       minimax-m2.7: {}
       muse-spark-1.2-contributor: {}
       muse-spark-1.3-contributor: {}
       muse-wonder-1.0: {}
-      qwen3-8-flash: {}
       qwen3.8-plus: {}
-      qwen3.8max: {}
       gpt-5-6-luna: {}
       gpt-5-6-sol: {}
       gpt-6-astra: {}
       gpt-6-luna: {}
       gpt-6-sol: {}
       kimi-k3: {}
+      kimi-k3.1-pro: {}
+      qwen3.8-abliterated-cyber: {}
+      qwen3.8-uncensored: {}
     models_discovered: true
     name: kagiro
   - base_url: https://api.nbgate.com/v1
@@ -575,15 +561,9 @@ custom_providers:
       mmcn/MiniMax-M2.7-highspeed: {}
       mmcn/MiniMax-M3: {}
       mmcn/MiniMax-M3.1-Flash-Preview: {}
-      moon/kimi-k2.6: {}
-      moon/kimi-k2.7-code: {}
-      moon/kimi-k2.7-code-highspeed: {}
-      moon/kimi-k3: {}
       zai/glm-4.6v: {}
       zai/glm-5.3: {}
       zai/glm-5.3-flash: {}
-      ag/claude-opus-5-5: {}
-      ag/claude-sonnet-5-5: {}
       ali/deepseek-v4.1-flash: {}
       ali/deepseek-v4.1-flash-1017: {}
       ali/qwen3.8-2.4t-a95b: {}
@@ -594,13 +574,42 @@ custom_providers:
       cb/deepseek-v4.1-flash: {}
       cb/minimax-m3.1-flash: {}
       cbcn/minimax-m3.1-flash: {}
-      cp/xai/grok-4.5: {}
-      cp/xai/grok-4.6: {}
-      cp/xai/grok-4.7: {}
       mimotp/mimo-v2.6-flash: {}
       mimotp/mimo-v2.6-pro: {}
       mm/MiniMax-M3.1-Flash: {}
       mmcn/MiniMax-M3.1-Flash: {}
+      ag/gemini-4-argon: {}
+      cb/kimi-k3.1-pro: {}
+      cbcn/kimi-k3.1-pro: {}
+      cp/anthropic/claude-fable-5: {}
+      cp/anthropic/claude-fable-5.1: {}
+      cp/anthropic/claude-haiku-4.5: {}
+      cp/anthropic/claude-haiku-5.5: {}
+      cp/anthropic/claude-opus-4.6: {}
+      cp/anthropic/claude-opus-4.7: {}
+      cp/anthropic/claude-opus-4.8: {}
+      cp/anthropic/claude-sonnet-4.6: {}
+      cp/zai/glm-5.3-flash: {}
+      kc/k3.1-pro: {}
+      kc/k3.1-pro-highspeed: {}
+      kcai/k3.1-pro: {}
+      kcai/k3.1-pro-highspeed: {}
+      cp/openai/gpt-6.1-sol: {}
+      cp/xai/grok-4.7: {}
+      ag/claude-opus-5-5: {}
+      ag/claude-sonnet-5-5: {}
+      cp/anthropic/claude-opus-4.1: {}
+      cp/anthropic/claude-opus-4.5: {}
+      cp/openai/gpt-6-astra-pro: {}
+      cp/xai/grok-4.5: {}
+      cp/anthropic/claude-opus-5: {}
+      cp/anthropic/claude-opus-5.5: {}
+      cp/anthropic/claude-sonnet-5: {}
+      cp/anthropic/claude-sonnet-5.5: {}
+      cp/openai/gpt-6-astra: {}
+      cp/openai/gpt-6-luna: {}
+      cp/openai/gpt-6-sol: {}
+      cp/openai/gpt-6.1-sol-pro: {}
     models_discovered: true
     name: atmo
 group_sessions_per_user: true

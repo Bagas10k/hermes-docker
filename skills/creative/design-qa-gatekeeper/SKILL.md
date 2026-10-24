@@ -29,8 +29,8 @@ Audit UI work before delivery so unfinished visuals, fake affordances, cramped s
 ## Procedure
 1. Run static design checks. Completion: `scripts/design_qa_scan.py PROJECT_DIR --json` exits successfully and findings are triaged.
 2. Run build and automated tests. Completion: the real command output exits 0, or blockers are reported plainly.
-3. Capture responsive screenshots. Completion: mobile, tablet, and desktop artifacts exist.
-4. Check overflow and accessibility. Completion: mobile `scrollWidth <= clientWidth`, keyboard/focus behavior works for modals/drawers, and Axe has no violations unless explicitly waived.
+3. Capture responsive screenshots. Completion: mobile, tablet, and desktop artifacts exist, with expected count and nonzero byte sizes verified programmatically. On long operational pages, capture both the top-level hierarchy and a second viewport scrolled to the primary data object; compensate fixed headers so one complete row/card shows its identity, outer border, every label/value/status, and every action.
+4. Check overflow and accessibility. Completion: mobile `scrollWidth <= clientWidth`, keyboard/focus behavior works for modals/drawers, and Axe has no violations unless explicitly waived. For dense reports, also measure every touch target at ≥44px, keep wide-table overflow inside its ledger container, prove the far-right action column is reachable at maximum `scrollLeft`, label breadcrumb/table regions, set header `scope`, and emulate print to confirm controls disappear, `thead` repeats, and rows/cards use `break-inside: avoid`. For mobile record cards, action groups must also look actionable: keep sibling actions on a stable grid, equalize heights, prevent label wrapping, and distinguish informational/locked controls from destructive or primary actions without relying on color alone.
 5. Inspect final visual output. Completion: `vision_analyze` confirms the screen matches the user's latest instruction, not stale assumptions.
 6. Verify catalog/live deployment when applicable. Completion: public route returns HTTP success and screenshot matches the new build.
 
@@ -46,7 +46,7 @@ Audit UI work before delivery so unfinished visuals, fake affordances, cramped s
 - Missing focus states or inaccessible interactive elements.
 
 ## Static Scan Coverage
-The helper script checks common blockers:
+The helper script checks source files, including Laravel `*.blade.php`, while skipping dependencies, archived backups, and generated storage so findings stay actionable:
 - Emoji / Extended Pictographic leakage.
 - Device simulator terms like `phone mockup`, `bezel`, `dynamic island`, or `viewport switcher`.
 - Generic AI-slop labels such as `premium`, `modern`, or `beautiful` overused in code comments/copy.
@@ -59,6 +59,8 @@ Static checks are not enough. A clean static scan does not replace Playwright, A
 - Do not claim deployed success from a build alone; verify the public route or copied static directory.
 - Do not average responsive quality; the smallest viewport is a hard constraint.
 - Do not patch cosmetics after a score below 5; use a total reference-driven rebuild.
+- Treat delegated QC as a versioned snapshot, not a timeless verdict: bind it to the final source hash and exact post-remediation artifact paths. Every CSS/markup edit invalidates prior screenshots and verdicts, even when tests still pass; stop in-flight reviewers of stale artifacts, regenerate the full evidence matrix, then request one final read-only verdict. Reject recommendations for work already visible in the supplied hash.
+- Do not call ordinary document continuation “clipping” because the screenshot ends mid-row. Distinguish viewport fold from layout failure with DOM bounds, document scroll reachability, wrapper scroll reachability, and a second screenshot of a complete record; only hidden/unreachable content is a blocker.
 - When `vision_analyze` fails (non-vision model returns unsupported_modality), do not skip visual inspection — delegate it to a vision-capable leaf subagent via `delegate_task` with the screenshot paths in the `images` field, require a GO/NO-GO with file:line evidence, and re-verify DOM/bounds yourself; a self-report is not proof.
 
 ## Verification

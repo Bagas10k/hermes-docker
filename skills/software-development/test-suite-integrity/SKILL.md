@@ -197,12 +197,21 @@ Never add production branches keyed to a fixture ID, test title, temporary-direc
 
 For a non-trivial new guard, disable it only in the disposable copy and confirm the
 specific expected invariant turns red; distinguish that failure from fixture, syntax,
-or dependency errors. Then restore and rerun. Run related scenarios separately and
-together on the same current implementation. Scope counts to the records/references
-owned by each scenario rather than assuming a globally empty table; otherwise an
-earlier scenario's valid rows can look like duplicate posting. Keep fixture cleanup
-scoped to those same identities; deleting every row with a shared production-style
-prefix can erase an earlier scenario's evidence even in a disposable database.
+or dependency errors. Then restore and rerun. For an exclusive-resource claim (driver,
+vehicle, slot, account period), test both creation and reassignment/edit: run a sequential
+conflict first, then two independent database connections released by one barrier. Require
+exactly one winner, one expected business rejection, one persisted binding and cleanup `0`;
+do not count an application exception, missing payload field or unrelated validation
+failure as the losing business request. Keep lock acquisition order identical across
+create and edit. Mutate only the disposable candidate by removing every lock that protects
+the decision window and widening that window; the same runner must then allow two winners
+or otherwise fail its invariant. Restore and hash-check the original source in a `finally`
+path before accepting either result. Run related scenarios separately and together on the
+same current implementation. Scope counts to the records/references owned by each scenario
+rather than assuming a globally empty table; otherwise an earlier scenario's valid rows
+can look like duplicate posting. Keep fixture cleanup scoped to those same identities;
+deleting every row with a shared production-style prefix can erase an earlier scenario's
+evidence even in a disposable database.
 
 For rejection tests, isolate competing guards: a negative-nominal case that reuses a
 busy driver can pass because availability rejected it before nominal validation.

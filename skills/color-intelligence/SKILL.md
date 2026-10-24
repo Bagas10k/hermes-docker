@@ -37,7 +37,8 @@ For every color task, reason in this order:
 - In industrial/HMI contexts, prioritize normal-state calmness and reserve strong color for abnormal/attention states.
 - In data visualization, prioritize distinguishability and ordered meaning over decorative harmony.
 - In dark mode, redesign surfaces and luminance relationships; do not merely invert the light theme.
-- Treat computational output as candidate generation, not authority. Recompute every required contrast ratio from the final quantized HEX roles; generated metadata can be stale or wrong.
+- Treat computational output as candidate generation, not authority. Recompute every required contrast ratio from the final quantized HEX pair actually used by each selector; semantic names such as `primary`, `muted`, or `caption` do not prove AA/AAA, and generated metadata can be stale or wrong.
+- When AAA is a hard requirement, test small button text and micro-labels at their real font size/weight. A brand primary that passes AA for white text may still fail AAA; prefer a darker existing token in the scoped component before changing the global palette. Replace low-contrast muted text locally when the redesign scope is narrow, so unrelated screens do not drift.
 - Keep hard constraints at public API boundaries, not only in the CLI. Reject malformed HEX, non-finite numeric values, invalid types, and unbounded search sizes before entering color math or candidate loops.
 - If the user gives only adjectives such as “premium”, “soft”, “futuristic”, or “cute”, translate them into measurable color behavior using `references/mood-brand-context.md`.
 

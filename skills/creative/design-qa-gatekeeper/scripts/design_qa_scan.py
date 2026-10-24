@@ -3,7 +3,7 @@ import argparse, json, os, re, sys
 from pathlib import Path
 
 TEXT_EXTS = {'.js','.jsx','.ts','.tsx','.css','.scss','.html','.md','.json','.vue','.svelte','.astro'}
-SKIP_DIRS = {'node_modules','dist','dist-public','build','.git','.next','coverage','artifacts'}
+SKIP_DIRS = {'node_modules','vendor','backups','storage','dist','dist-public','build','.git','.next','coverage','artifacts'}
 
 PATTERNS = [
     ('emoji_or_extended_pictographic', re.compile(r'[\U0001F000-\U0001FAFF\u2600-\u27BF]')),
@@ -19,7 +19,7 @@ def iter_files(root: Path):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
         for f in files:
             p = Path(base) / f
-            if p.suffix.lower() in TEXT_EXTS:
+            if p.suffix.lower() in TEXT_EXTS or p.name.endswith('.blade.php'):
                 yield p
 
 def scan(root: Path):

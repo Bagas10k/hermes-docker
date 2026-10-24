@@ -240,6 +240,12 @@ git add -A && git commit -m "[verified] <description>"
 
 The `[verified]` prefix indicates an independent reviewer approved this change.
 
+### 🚨 Pre-Commit Hook Binary Path Hygiene
+Repos with git hooks (e.g., Lefthook, Husky) that run linters (`ruff`, `eslint`) will fail with exit 127 if linters live in isolated project virtual environments instead of global PATH.
+- Verify binary presence before commit. If missing from PATH, prepend the project environment's bin:
+  `PATH="$PROJECT_VENV_BIN:$PATH" git commit -m "..."`
+- Never bypass hooks using `--no-verify`.
+
 ## Reference: Common Patterns to Flag
 
 ### Python
