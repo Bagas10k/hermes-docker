@@ -45,15 +45,19 @@ Use this path when the user wants an existing specialist profile to keep its mod
 1. Identify the source profile from its live `SOUL.md`/`profile.yaml`; do not create a blank replacement when the requested expertise already exists.
 2. Export a rollback archive to a mode-`0700` local directory and treat the archive as secret-bearing because it may include `.env`:
    ```bash
+   install -d -m 700 <protected-dir>
    hermes profile export <old> -o <protected-dir>/<old>-before-rename.tar.gz
+   chmod 600 <protected-dir>/<old>-before-rename.tar.gz
+   tar -tzf <protected-dir>/<old>-before-rename.tar.gz >/dev/null
    ```
+   Confirm the export process exits and the archive is non-empty and readable before renaming; do not run duplicate long exports concurrently or rename without a verified rollback copy. If export is large or stalls, diagnose archive size/slow directories and use a bounded secret-preserving archive only after excluding nothing needed for recovery; cancel the stuck export before retrying.
 3. Rename only through the supported command:
    ```bash
    hermes profile rename <old> <new>
    ```
    Never `mv` a live profile directory: the CLI first unserves the old adapter, migrates routing identity and aliases, records `previous_names`, then asks the multiplexer to reconcile. A filesystem-only move can resurrect a ghost profile or strand persisted routing.
 4. Search live, nonhistorical files across all profiles for the old slug and absolute path. Update `SOUL.md`, `profile.yaml` descriptions, collaborator routing instructions, topical references, and pending durable-memory payloads. Do **not** rewrite session dumps, caches, backups, or `previous_names`; those are historical provenance, not active routing.
-5. Validate the Telegram credential with `getMe` before binding it and require the returned username to equal the intended bot username. Keep the token out of command arguments and printed URLs; report only HTTP status, `ok`, `is_bot`, display name, and username.
+5. Treat any bot token pasted into chat, logs, shell history, or a command argument as compromised: do not validate, install, or reuse it; have the owner revoke it in BotFather and generate a replacement. Validate only the replacement with `getMe` through a secret-aware request path and require the returned username to equal the intended bot username. Keep tokens out of command arguments, URLs, progress labels, and output; report only HTTP status, `ok`, `is_bot`, display name, and username.
 6. Configure the renamed profile through its scoped setup (`hermes -p <new> gateway setup`) or an equivalent secret-aware writer to `<profile-home>/.env`. Require mode `0600`. Use numeric Telegram IDs for `TELEGRAM_ALLOWED_USERS`; when setup originates from an authenticated Telegram turn, `HERMES_SESSION_USER_ID` is the correct default for that user, never their `@username`.
 7. Let the live multiplexer hot-rescan the profile signature before restarting anything. Wait one bounded rescan interval, then require `gateway_state.json` to contain `<new>:telegram` as `connected`, with no error and the current gateway writer PID; require `<old>:telegram` to be absent. Restart only if the bounded rescan fails and logs identify a startup-only setting or stuck adapter.
 8. Test the scoped transport:

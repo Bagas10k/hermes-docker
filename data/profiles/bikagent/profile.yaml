@@ -1,0 +1,5 @@
+description: 'Asisten Manager: menerima setoran tim, mengompilasi laporan, menjaga
+  backlog, dan membukukan pelajaran untuk General Manager.'
+description_auto: false
+ui_meta:
+  hermes-bots: {}

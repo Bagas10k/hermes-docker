@@ -37,17 +37,85 @@ case "$1" in
     docker compose logs -f
     ;;
   pack-state)
-    echo "Mengompresi memori dan state lokal ke hermes-state.tar.gz..."
-    mkdir -p data/memories
-    cp -r ~/.hermes/memories/* data/memories/ 2>/dev/null || true
-    cp ~/.hermes/config.yaml data/config.yaml 2>/dev/null || true
-    echo "Memori dan konfigurasi berhasil disalin ke ./data/."
-    echo "Untuk memindahkan ke server lain, berkas di ./data siap diangkut!"
+    echo "Mencadangkan memori, konfigurasi, dan profil kabinet Hermes..."
+    mkdir -p data/memories data/profiles
+
+    # 1. Salin memori root & konfigurasi utama
+    if [ -d "$HOME/.hermes/memories" ]; then
+      cp -r "$HOME/.hermes/memories"/* data/memories/ 2>/dev/null || true
+      rm -f data/memories/*.lock 2>/dev/null || true
+    fi
+    if [ -f "$HOME/.hermes/config.yaml" ]; then
+      cp "$HOME/.hermes/config.yaml" data/config.yaml
+    fi
+
+    # 2. Salin profil kabinet (kecuali koagent, ksatest, dan profil tersembunyi)
+    EXCLUDED_PROFILES="koagent ksatest .deleted"
+    if [ -d "$HOME/.hermes/profiles" ]; then
+      for prof_dir in "$HOME/.hermes/profiles"/*; do
+        if [ -d "$prof_dir" ]; then
+          prof_name="$(basename "$prof_dir")"
+          case " $EXCLUDED_PROFILES " in
+            *" $prof_name "*|*".*"*)
+              echo "  [SKIP] Melewati profil terisolasi/khusus: $prof_name"
+              ;;
+            *)
+              target_dir="data/profiles/$prof_name"
+              mkdir -p "$target_dir"
+              for item in SOUL.md profile.yaml config.yaml; do
+                if [ -f "$prof_dir/$item" ]; then
+                  cp "$prof_dir/$item" "$target_dir/$item"
+                fi
+              done
+              if [ -d "$prof_dir/memories" ]; then
+                mkdir -p "$target_dir/memories"
+                cp -r "$prof_dir/memories"/* "$target_dir/memories/" 2>/dev/null || true
+                rm -f "$target_dir/memories/"*.lock 2>/dev/null || true
+              fi
+              echo "  [OK] Berhasil mencadangkan profil kabinet: $prof_name"
+              ;;
+          esac
+        fi
+      done
+    fi
+
+    echo "Pencadangan state lokal dan profil kabinet ke ./data/ selesai!"
     ;;
   unpack-state)
-    echo "Memulihkan memori dan konfigurasi ke dalam Docker data..."
-    mkdir -p data/memories
-    echo "Selesai! Saat Docker berjalan, memori langsung terbaca identik."
+    echo "Memulihkan memori, konfigurasi, dan profil kabinet ke sistem lokal (~/.hermes/)..."
+    mkdir -p "$HOME/.hermes/memories" "$HOME/.hermes/profiles"
+
+    # 1. Pulihkan memori root & config
+    if [ -d data/memories ]; then
+      cp -r data/memories/* "$HOME/.hermes/memories/" 2>/dev/null || true
+    fi
+    if [ -f data/config.yaml ] && [ ! -f "$HOME/.hermes/config.yaml" ]; then
+      cp data/config.yaml "$HOME/.hermes/config.yaml"
+      echo "  [OK] Konfigurasi utama dipulihkan ke ~/.hermes/config.yaml"
+    fi
+
+    # 2. Pulihkan profil kabinet
+    if [ -d data/profiles ]; then
+      for prof_dir in data/profiles/*; do
+        if [ -d "$prof_dir" ]; then
+          prof_name="$(basename "$prof_dir")"
+          target_dir="$HOME/.hermes/profiles/$prof_name"
+          mkdir -p "$target_dir"
+          for item in SOUL.md profile.yaml config.yaml; do
+            if [ -f "$prof_dir/$item" ]; then
+              cp "$prof_dir/$item" "$target_dir/$item"
+            fi
+          done
+          if [ -d "$prof_dir/memories" ]; then
+            mkdir -p "$target_dir/memories"
+            cp -r "$prof_dir/memories"/* "$target_dir/memories/" 2>/dev/null || true
+          fi
+          echo "  [OK] Profil $prof_name berhasil dipulihkan ke ~/.hermes/profiles/$prof_name"
+        fi
+      done
+    fi
+
+    echo "Selesai! Seluruh profil dan memori telah terpasang di ~/.hermes/."
     ;;
   cli)
     docker compose exec -it hermes hermes

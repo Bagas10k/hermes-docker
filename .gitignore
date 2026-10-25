@@ -16,3 +16,12 @@ skills/.usage.json*
 skills/.bundled_manifest
 skills/.hub/
 data/memories/*.lock
+data/profiles/**/.env
+data/profiles/**/state.db*
+data/profiles/**/sessions/
+data/profiles/**/logs/
+data/profiles/**/cache/
+data/profiles/**/runtime/
+data/profiles/**/workspace/
+data/profiles/**/koagent/
+data/profiles/**/koagent

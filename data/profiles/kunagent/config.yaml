@@ -1,0 +1,13 @@
+model:
+  base_url: http://localhost:20128/v1
+  default: ag/gemini-3.8-flash-medium
+  provider: custom
+  api_key: ${HERMES_CUSTOM_LOCALHOST_20128_API_KEY}
+plugins:
+  enabled: []
+_config_version: 51
+agent: {}
+approvals:
+  mode: manual
+terminal:
+  cwd: /home/ubuntu/otak-koding

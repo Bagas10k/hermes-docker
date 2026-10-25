@@ -1,0 +1,54 @@
+model:
+  default: ag/gemini-3.8-flash-medium
+  provider: custom
+  base_url: http://localhost:20128/v1
+  api_key: ${HERMES_CUSTOM_LOCALHOST_20128_API_KEY}
+fallback_providers:
+  - provider: custom
+    model: ag/gemini-3.8-flash-low
+    base_url: http://localhost:20128/v1
+    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+workspace:
+  dir: C:\Users\Administrator\Desktop\latihan ai\workspace-bukagent
+terminal:
+  backend: local
+  cwd: .
+  timeout: 180
+display:
+  compact: false
+  platforms:
+    telegram:
+      tool_progress: all
+      tool_progress_grouping: accumulate
+      tool_preview_length: 50
+      long_running_notifications: true
+      interim_assistant_messages: true
+      busy_ack_detail: true
+      cleanup_progress: false
+      group_policy: open
+      allowed_chats:
+        - '-5050099384'
+        - '6276190957'
+stt:
+  language: id
+  local:
+    language: id
+plugins:
+  enabled: []
+_config_version: 51
+agent: {}
+onboarding:
+  seen:
+    profile_build_offered: true
+    busy_input_prompt: true
+    tool_progress_prompt: true
+streaming:
+  enabled: true
+gateway:
+  message_timestamps:
+    enabled: true
+telemetry:
+  shared_metrics:
+    enabled: false
+    send: false
+    offer_version: 2
