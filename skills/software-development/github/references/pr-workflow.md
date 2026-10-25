@@ -46,6 +46,24 @@ echo "Owner: $OWNER, Repo: $REPO"
 
 This part is pure `git` — identical either way:
 
+### Explicit full replacement of a remote branch
+
+Only use this path when the user clearly says the remote branch should be replaced wholesale (for example, treat its old contents as absent). A normal request to push/merge does not imply permission to rewrite branch history.
+
+1. `git fetch origin <target> <source>` and record the exact old remote target SHA and chosen source commit SHA.
+2. Create a local backup ref for the old target, e.g. `git branch backup/<target>-before-replacement-<label> <old-sha>`; do not rewrite the dirty working branch to prepare the push.
+3. Inspect repository workflows/hooks for a push-triggered deployment. A Git ref update is not itself authorization to deploy, restart services, or migrate a database.
+4. Preview and publish the exact source ref with a lease bound to the old SHA:
+
+```bash
+git push --dry-run --force-with-lease=refs/heads/main:<old-sha> origin <source-ref>:refs/heads/main
+git push --force-with-lease=refs/heads/main:<old-sha> origin <source-ref>:refs/heads/main
+git ls-remote origin refs/heads/main
+```
+
+5. Verify the `ls-remote` SHA equals the chosen source commit. If the lease rejects the push, fetch and review the newly changed remote tip; never retry with unconditional `--force`.
+6. Report the replaced branch, new SHA, local backup SHA, whether CI ran, and that runtime deployment was or was not performed. Keep remote branch replacement distinct from application deployment.
+
 ```bash
 # Make sure you're up to date
 git fetch origin
