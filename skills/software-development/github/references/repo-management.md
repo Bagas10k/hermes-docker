@@ -71,6 +71,8 @@ gh repo clone owner/repo-name -- --depth 1
 
 ## 2. Creating Repositories
 
+When the requested deliverable is a published repo, preflight the exact repository name and existing contents, make the local implementation runnable first, then create/push with an explicit visibility choice and read back `nameWithOwner,isPrivate,url`. Verify the remote contains the expected files and commit before reporting its link. If the repo includes third-party or user-supplied template material with unresolved rights, preserve the license status honestly; public visibility does not grant reuse rights. Keep that caveat short and continue only within the publication authorization the user actually gave.
+
 **With gh:**
 
 ```bash

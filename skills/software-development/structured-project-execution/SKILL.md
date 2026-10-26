@@ -60,7 +60,13 @@ python3 scripts/flight_plan_tracker.py --status
   - Stage 1: Discovery & System Audit (Port & DB inspection).
   - Stage 2: Public Task DAG Checklist (Numbered roadmap in opening turn).
   - Stage 3: Contract Lockdown (Deterministic finish line: exit code 0 / HTTP 200).
-  - Stage 4: Bounded Sprint & Micro-Milestone Pulse (30-minute job ceiling, at most 3 attempts per same error, max 60-second silence). When a limit is reached, stop the loop and explain results, evidence, unresolved work and risks. End incomplete work with explicit **Continue** (remaining tasks, added estimate, risks, next verification) versus **Pause/Stop** (safe state), recommend one, and wait for user approval before a new contract.
+  - Stage 4: Bounded Sprint & Micro-Milestone Pulse (30-minute job ceiling, at most 3 attempts per same error, max 60-second silence). For CLI/tool repositories, build and exercise the smallest useful executable slice early; tell the user plainly what program is being built and show the first concrete proof before expanding scope. Keep progress updates brief and artifact-centered, not phase-centered. When a limit is reached, stop the loop and explain results, evidence, unresolved work and risks. End incomplete work with explicit **Continue** (remaining tasks, added estimate, risks, next verification) versus **Pause/Stop** (safe state), recommend one, and wait for user approval before a new contract.
+
+- **Delivery target lock:** If the user names a public repository URL as the deliverable, treat repository creation, push, and remote read-back as acceptance criteria—not optional polish after local coding. Keep publication prerequisites proportionate: confirm rights/license for included material, but do not let speculative release ceremony displace the requested working artifact. State an actual blocker promptly and distinguish local implementation from published status.
+
+- **MVP over coordination overhead:** Delegate only bounded independent implementation or QC; do not let multi-agent ceremony, repeated audits, or a growing test suite delay the first runnable tool. Run one focused test pass after the coherent fixes, then report real failures plainly instead of silently extending the loop.
+
+- **User status question:** If the user asks whether you are actually building a program or why it is taking time, answer directly with the artifact type, what currently runs, the latest observed test result, and whether a repository link exists yet. Avoid another plan or process recap.
   - Stage 5: Fixed Evaluation Gate & Atomic Promotion (Independent QC audit).
 - **Anti-ABS Rule:** Never claim completion without direct runtime evidence (`KNOWN`, `LIKELY`, `UNCERTAIN`, `UNKNOWN`).
 
