@@ -48,25 +48,17 @@ If the user mentions a URL in connection with any visual/design topic, lean towa
 
 Do NOT activate for: "extract data from a website" (use a scraping skill), "summarize the content of <url>" (use WebFetch), "deploy this site" (unrelated).
 
-## Prerequisites
+## Prerequisites & Execution Engines
 
-This skill requires the **Playwright MCP server** (https://playwright.dev/docs/getting-started-mcp) to be installed and connected. Verify with:
+This skill supports two execution environments:
+1. **Hermes Native Engine (Preferred in Hermes Agent):**
+   - Uses built-in `browser_exec` (headless Chromium over CDP) without extra MCP setup.
+   - Evaluates `references/extract.js` directly via `js(...)` and captures screenshots natively via `capture_screenshot()`.
+   - Results can be saved automatically to `/home/ubuntu/otak-koding/KNOWLEDGE/DESIGN_TRENDS/{domain}.md`.
+2. **Playwright MCP Server (External Claude Code / Cursor / Windsurf):**
+   - Requires Playwright MCP (`npx -y @playwright/mcp@latest --isolated`).
 
-```bash
-claude mcp list | grep playwright
-```
-
-If you see `playwright: ... - ✓ Connected`, you're good. If not, install it:
-
-```bash
-claude mcp add playwright -s user -- npx -y @playwright/mcp@latest --isolated
-```
-
-Why `--isolated`: every `/taste` run starts with a fresh browser state, so cookies, login sessions, and prior cache do not leak into the analyzed page. Without it, running `/taste https://linear.app` while you happen to be signed into Linear would analyze the app dashboard instead of the public marketing page — wrong surface, wrong taste.
-
-Why `npx @playwright/mcp@latest` (with no `--browser` flag): Playwright will download and use its own bundled Chromium (~100MB, one-time). This is more portable than relying on the user's system Chrome — it works on machines without Chrome installed, gives consistent rendering across users, and never opens a window in the user's real browser profile.
-
-After installing, the user must restart Claude Code for the MCP tools (`mcp__playwright__browser_*`) to appear in this session. If Playwright is unavailable when this skill runs, stop and tell the user clearly: "I need Playwright MCP to scrape the page. Run `claude mcp add playwright -s user -- npx -y @playwright/mcp@latest --isolated` and restart Claude Code, then try again."
+When running in Hermes Agent, execute Phase 1 directly via `browser_exec` without prompting to install external MCP servers.
 
 On first run, Playwright may take ~30-60 seconds before its first `browser_navigate` returns — that is the one-time Chromium download. Subsequent runs start in seconds. If the user wants to pre-download to avoid the wait, they can run `npx playwright install chromium` once before invoking this skill.
 

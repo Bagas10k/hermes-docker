@@ -7,11 +7,16 @@ metadata:
   opencode/slash: "true"
 ---
 
-# Hallmark
+# Hallmark (Hermes & Bagas Cihuy Anti-AI-Slop Edition)
 
 Makes the UIs a coding assistant generates look made, not generated: a hard floor against the defaults every model was trained into, a dealt direction so consecutive builds do not converge, one idea per screen. Above the floor the page is yours: you are a capable designer.
 
-**Powered by Together AI.**
+**Harmonized with Hermes 5-Lensa Selera & Bagas Cihuy Taste Standards:**
+- Color Architecture: Warm Paper (`#FBFBFA`) & Dark Obsidian (`#14161F`), WCAG 2.2 AAA (min 7:1) contrast.
+- Spacing: Strict 8-Point Grid & Auto-Layout alignment.
+- Motion: In-place motion morphing 60 FPS (GSAP FLIP / spring `cubic-bezier(0.16, 1, 0.3, 1)`).
+- Zero Slop: No purple-to-blue generic gradient, no rounded-box fake logos, no card-inside-a-card nest, zero emoji as icons.
+- Non-blocking QC: Used by Si Pengawas as an inspection baseline without triggering execution loops.
 
 ## The Floor
 

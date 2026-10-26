@@ -5,7 +5,11 @@ metadata:
   version: "49"
 ---
 
-# REA
+# REA (Reverse Engineer Anything)
+
+> **BATASAN PRIVASI & KESELAMATAN SAKRAL (MANDAT MAS BAGAS):**
+> DILARANG KERAS menggunakan REA untuk membongkar, mengekstrak, atau merekonstruksi data riil perusahaan internal (PT PBJ, logistik semen SIG, data klien/toko) atau kredensial privat.
+> Setiap artefak rekonstruksi atau AgentEnv bundle yang dibangun WAJIB 100% menggunakan entitas sintetis netral (misal: Acme Corp, Synthetic Cluster Node). REA difokuskan murni untuk analisis arsitektur aplikasi pihak ketiga, kompetitor, atau audit biner publik.
 
 Use REA when a claim depends on a shipped binary or package, decompilation,
 requested runtime evidence, or comparison with

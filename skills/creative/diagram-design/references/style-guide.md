@@ -1,10 +1,10 @@
-# Style Guide
+# Style Guide (Profile: Bagas Cihuy & Hermes System)
 
-**The single source of truth for colors, typography, and tokens.** Every diagram draws from this — not from hex values inlined in other reference files. If you want to change the visual skin of Diagram Design, change this file.
+**The single source of truth for colors, typography, and tokens.** Custom-tuned for Bagas Cihuy & Hermes Agent ecosystem (Warm Paper, Dark Obsidian, Hermes Blue Accent, 4px grid, anti-slop).
 
-Default skin is a cool editorial palette — white-smoke paper, jet-black ink, burnt-tangerine accent, blue-slate muted. It's designed to look good out of the box; swap these values (or run [`onboarding.md`](onboarding.md)) and every new diagram inherits the new skin without touching any type-specific logic.
-
-To generate your own from a website URL, see [`onboarding.md`](onboarding.md).
+Default skin is the official Hermes Warm Paper & Obsidian palette:
+- Light: Warm Paper `#FBFBFA`, Titanium ink `#0F172A`, Hermes Blue `#2563EB`, Slate muted `#475569`.
+- Dark: Dark Obsidian `#14161F`, Pearl ink `#F8FAFC`, Electric Blue `#3B82F6`, Slate soft `#94A3B8`.
 
 ---
 
@@ -12,21 +12,21 @@ To generate your own from a website URL, see [`onboarding.md`](onboarding.md).
 
 ### Semantic roles
 
-Every token is referred to by **semantic role**, not by its hex value. Type references (`type-*.md`) and SKILL.md say `accent`, not `#bf4520`.
+Every token is referred to by **semantic role**, not by its hex value. Type references (`type-*.md`) and SKILL.md say `accent`, not `#2563EB`.
 
 | Role | Purpose | Default (light) | Default (dark) |
 |---|---|---|---|
-| `paper` | Page background, default node fill | `#f5f5f5` (white-smoke) | `#2d3142` (jet-black) |
-| `paper-2` | Diagram container bg, secondary fill | `#ececec` | `#393e53` |
-| `ink` | Primary text, primary stroke | `#2d3142` (jet-black) | `#f5f5f5` (white-smoke) |
-| `ink-strong` | High-contrast text on warm accent fills | `#111111` | `#111111` |
-| `muted` | Secondary text, default arrow stroke | `#4f5d75` (blue-slate) | `#bfc0c0` (silver) |
-| `soft` | Sublabels, boundary labels | `#5a6580` | `#949eb2` |
-| `rule` | Hairline borders | `rgba(45,49,66,0.12)` | `rgba(245,245,245,0.12)` |
-| `rule-solid` | Stronger borders, baselines | `#bfc0c0` (silver) | `rgba(191,192,192,0.25)` |
-| `accent` | Focal / 1–2 max per diagram | `#bf4520` (burnt-tangerine) | `#f08a59` |
-| `accent-tint` | Fill for accent-bordered boxes | `rgba(191,69,32,0.08)` | `rgba(240,138,89,0.10)` |
-| `link` | HTTP/API calls, external arrows | `#2e5aa8` | `#739fdf` |
+| `paper` | Page background, default node fill | `#FBFBFA` (warm-paper) | `#14161F` (dark-obsidian) |
+| `paper-2` | Diagram container bg, secondary fill | `#F1F3F5` | `#1C1E2A` |
+| `ink` | Primary text, primary stroke | `#0F172A` (titanium-ink) | `#F8FAFC` (pearl-white) |
+| `ink-strong` | High-contrast text on warm accent fills | `#0F172A` | `#FFFFFF` |
+| `muted` | Secondary text, default arrow stroke | `#475569` (slate) | `#94A3B8` (silver-slate) |
+| `soft` | Sublabels, boundary labels | `#64748B` | `#94A3B8` |
+| `rule` | Hairline borders | `rgba(15,23,42,0.12)` | `rgba(248,250,252,0.12)` |
+| `rule-solid` | Stronger borders, baselines | `#CBD5E1` | `rgba(148,163,184,0.25)` |
+| `accent` | Focal / 1–2 max per diagram | `#2563EB` (hermes-blue) | `#3B82F6` |
+| `accent-tint` | Fill for accent-bordered boxes | `rgba(37,99,235,0.08)` | `rgba(59,130,246,0.12)` |
+| `link` | HTTP/API calls, external arrows | `#0284C7` (sky) | `#38BDF8` |
 
 > **Brand palette source:** this skin maps to a five-color brand palette: `jet-black #2d3142`, `silver #bfc0c0`, `white-smoke #f5f5f5`, `atomic-tangerine`, `blue-slate #4f5d75`. The light `accent` is not the raw brand tangerine. Raw atomic-tangerine reads 2.86:1 on `paper`, too faint for an arrow or a label, so the skin uses `#bf4520`, the same hue darkened until it clears 4.5:1 as text. The `soft`, `rule`, and `link` tokens are derived (a darker slate, ink at opacity, and a saturated variant in the blue-slate hue family) to cover roles the brand palette doesn't name directly. Every derived value is held to the contrast contract below.
 
