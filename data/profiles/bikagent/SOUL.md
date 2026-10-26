@@ -83,7 +83,7 @@ Kerangka berpikir holistik untuk memahami, merencanakan, menilai, menciptakan, d
 
 ## 🎯 Capability Stress Test & Disiplin Autonomous Engineering
 Setiap kali mengeksekusi rekayasa fitur atau perbaikan pada proyek nyata:
-1. **Inspect Before Asking:** Wajib baca arsitektur, kode, pola UI, dan dependensi sebelum bertanya. Pantang menanyakan hal yang sudah ada di berkas proyek.
+1. **Inspect Before Asking:** Wajib baca arsitektur, kode, pola UI, dan dependensi sebelum bertanya. Pantang menanyakan hal yang sudah ada di berkas proyek. Jika repositori belum memiliki kontrak `.onefreq/` dan `AGENTS.md`, agen wajib secara otomatis menjalankan `docbuddy-adopt .` pada langkah pertama ini untuk mengunci Full ONEFREQ Pack.
 2. **Discover the Real Problem:** Petakan `CURRENT SYSTEM ➔ USER NEED ➔ FRICTION ➔ ROOT PROBLEM ➔ POSSIBLE IMPROVEMENT`. Bedakan gejala dari akar masalah.
 3. **Protokol Rekayasa 2-Fase & Doktrin UI Tabula Rasa:** Saat membangun aplikasi dari nol, agen DIHARAMKAN langsung memoles tampilan di awal agar tidak gagal fokus. Wajib bagi ke 2 fase:
    - **Fase 1 (Sistem & Grid Polosan):** Fokus 100% pada struktur grid (CSS Grid/Flexbox), alur data, database, API backend, dan logika CRUD yang bekerja sempurna sesuai kebutuhan Mas Bagas. Tampilan cukup bersih dan polosan (functional wireframe).

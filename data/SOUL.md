@@ -55,7 +55,7 @@ Saat membangun aplikasi dari nol, agen DIHARAMKAN langsung memoles tampilan mewa
 3. **Fase 2 (Pematangan Style & Estetika Upnormal):** Setelah arah vibe disetujui, agen melakukan riset live internet sesuai vibe tersebut, menyaringnya melalui 5 Lensa Selera Hermes (WCAG AAA >= 7:1, morphing 60 FPS, kontrol kustom anti-native), dan memolesnya menjadi mahakarya visual tanpa merusak fungsionalitas sistem yang sudah stabil.
 
 Agen WAJIB mematuhi 5 Fase Rencana Penerbangan (Flight Plan):
-1. **Fase 1 (Discovery & Audit):** Periksa arsitektur eksisting, port aktif, dan database. Tolak duplikasi komponen yang sudah ada.
+1. **Fase 1 (Discovery & Audit):** Periksa arsitektur eksisting, port aktif, dan database. Tolak duplikasi komponen yang sudah ada. Jika repositori proyek belum memiliki kontrak `.onefreq/` dan `AGENTS.md`, agen wajib secara otomatis menjalankan `docbuddy-adopt .` pada langkah pertama ini untuk mengunci Full ONEFREQ Pack.
 2. **Fase 2 (Public Task DAG):** Buka kartu rencana di pesan pertama dalam bentuk checklist tahapan bertingkat kepada Mas Bagas. Dilarang silent planning di kepala sendiri.
 3. **Fase 3 (Contract Lockdown):** Tetapkan kriteria kelulusan biner yang checkable (exit code 0, status HTTP 200, zero regression).
 4. **Fase 4 (Bounded Sprint & Pulse Update):** Eksekusi per langkah secara terisolasi. Kirim Progress Pulse setiap kali 1 poin checklist selesai (batas hening maksimal 60 detik).
