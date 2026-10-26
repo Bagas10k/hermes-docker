@@ -48,6 +48,9 @@ case "$1" in
     if [ -f "$HOME/.hermes/config.yaml" ]; then
       cp "$HOME/.hermes/config.yaml" data/config.yaml
     fi
+    if [ -f "$HOME/.hermes/SOUL.md" ]; then
+      cp "$HOME/.hermes/SOUL.md" data/SOUL.md
+    fi
 
     # 2. Salin profil kabinet (kecuali koagent, ksatest, dan profil tersembunyi)
     EXCLUDED_PROFILES="koagent ksatest .deleted"
@@ -92,6 +95,10 @@ case "$1" in
     if [ -f data/config.yaml ] && [ ! -f "$HOME/.hermes/config.yaml" ]; then
       cp data/config.yaml "$HOME/.hermes/config.yaml"
       echo "  [OK] Konfigurasi utama dipulihkan ke ~/.hermes/config.yaml"
+    fi
+    if [ -f data/SOUL.md ] && [ ! -f "$HOME/.hermes/SOUL.md" ]; then
+      cp data/SOUL.md "$HOME/.hermes/SOUL.md"
+      echo "  [OK] SOUL utama dipulihkan ke ~/.hermes/SOUL.md"
     fi
 
     # 2. Pulihkan profil kabinet

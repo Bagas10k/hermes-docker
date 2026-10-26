@@ -67,6 +67,8 @@ Extract:
 
 Then reconstruct a coherent spacing system. See `references/reference-analysis.md`.
 
+When the complaint points at adjacent identifiers and labels, diagnose **spacing** separately from **clickability**: inspect the exact rendered pair, its HTML boundary, and computed `display`/`gap` before touching link behavior. A screenshot showing code and name together does not authorize a wider clickable area; preserve existing route parameters and financial values when the request is only visual.
+
 ### 3. Choose a spacing scale
 
 Use a small token system instead of arbitrary values.
