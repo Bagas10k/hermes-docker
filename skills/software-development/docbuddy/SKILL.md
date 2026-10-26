@@ -20,31 +20,31 @@ Kakas baris perintah deterministik berbasis bukti untuk menghasilkan dan memperb
 - Menyediakan kontrak kanonik `AGENTS.md` agar seluruh agen (Hermes, Claude Code, Cursor, Codex) memahami batasan dan arsitektur repositori.
 - Memperbarui snapshot arsitektur dan kontrak uji setelah penambahan dependensi/framework baru.
 
+## Doktrin Standarisasi: Wajib Full ONEFREQ Pack (Mandat Mas Bagas)
+Sesuai ketetapan Mas Bagas, **setiap proyek (baru maupun yang sedang berjalan) wajib mengadopsi Full ONEFREQ Pack secara seragam**. Tidak ada pemotongan tier; seluruh 15 dokumen standar kontrak, arsitektur, verifikasi, batasan keselamatan, dan catatan keputusan wajib hadir di repositori proyek.
+
 ## CLI Commands (Tersedia Global)
 ```bash
-# 1. Ajukan usulan pembaruan berdasarkan manifes aktual (package.json, pyproject.toml, Cargo.toml, go.mod)
-docbuddy propose . --proposal /tmp/proposal.json
+# Adopsi Instan Satu Langkah (Menyalin AGENTS.md, CLAUDE.md, .onefreq/ & memindai manifes otomatis)
+docbuddy-adopt <path_proyek>
 
-# 2. Tinjau diff yang dihasilkan di terminal. Jika disetujui, terapkan:
-docbuddy apply . --proposal /tmp/proposal.json
+# Pemindaian Manual & Pengajuan Usulan Berbasis Bukti
+docbuddy propose <path_proyek> --proposal /tmp/proposal.json
+
+# Penerapan Usulan Setelah Ditinjau
+docbuddy apply <path_proyek> --proposal /tmp/proposal.json
 ```
 
-## Prosedur Penerapan pada Repositori Baru
-1. Salin template dasar dari `/home/ubuntu/docbuddy/`:
+## Prosedur Penerapan pada Repositori
+1. Jalankan adopsi otomatis satu baris:
    ```bash
-   cp /home/ubuntu/docbuddy/AGENTS.md .
-   cp /home/ubuntu/docbuddy/CLAUDE.md .
-   cp -r /home/ubuntu/docbuddy/.onefreq .
+   docbuddy-adopt /path/ke/proyek
    ```
-2. Jalankan pemindaian manifes:
-   ```bash
-   docbuddy propose . --proposal /tmp/onefreq-proposal.json
-   ```
-3. Periksa diff, lalu terapkan perubahan:
-   ```bash
-   docbuddy apply . --proposal /tmp/onefreq-proposal.json
-   ```
-4. Lengkapi tujuan bisnis di `.onefreq/PROJECT_BRIEF.md` dan batasan risiko di `.onefreq/SAFETY_BOUNDARIES.md`.
+2. Skrip otomatis akan:
+   - Memasang `AGENTS.md` & `CLAUDE.md` sebagai gerbang kontrak lintas-agen.
+   - Memasang direktori lengkap `.onefreq/` (15 berkas template standar).
+   - Memindai manifes (`package.json`, `pyproject.toml`, dll.) dan memperbarui `.onefreq/ARCHITECTURE.md` serta `.onefreq/VERIFICATION.md` secara deterministik.
+3. Lengkapi konteks bisnis di `.onefreq/PROJECT_BRIEF.md` dan batasan risiko di `.onefreq/SAFETY_BOUNDARIES.md`.
 
 ## Batasan & Prinsip
 - `propose` tidak pernah memodifikasi file target secara sepihak.
