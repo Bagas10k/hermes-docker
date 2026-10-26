@@ -34,6 +34,7 @@ Orchestrate complex software and system development through structured Directed 
 - Target runtime environment (Node.js, Python, PHP, or Go) accessible via `terminal`.
 - Execution state tracking file at `build_tracker.json` in the current working directory.
 - Standard Python 3 runtime for the tracker script (`scripts/flight_plan_tracker.py`).
+- Follow `project-build-documentation`: inspect existing build docs first and update the canonical README/architecture/runbook when this work changes how contributors build, test, or operate the project.
 
 ## How to Run
 Initialize and track the project flight plan using the `terminal` tool:

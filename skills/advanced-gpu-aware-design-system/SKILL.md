@@ -6,7 +6,7 @@ description: "Use when creating interfaces. GPU-aware design system & UI."
 # Hermes Advanced GPU-Aware Design System Engineer
 
 ## Precedence & UI/UX Foundation
-- **Default interface workflow:** Hermes's default art direction and GPU-aware workflow when creating interfaces.
+- **Default interface workflow:** Hermes's default art direction and GPU-aware workflow when creating interfaces. Follow `ui-ux-execution-standard` for scope, behavior preservation, accessibility, and runtime verification; it does not override the brief or impose a universal palette.
 - **Explicitly apply existing UI/UX skills:** Applies existing skills by name: `ui-layout-intelligence`, `typography-ux-copy`, `color-intelligence`, `ui-ux-design-vault`, and `design-qa-gatekeeper`. Apply spacing, typography scales, semantic tokens, accessibility, and design QA before adding spatial/GPU effects.
 - **UI/UX motion as integrated core quality:** Motion is a primary UX dimension, not an afterthought. Design keyframes at start; test static composition, actual motion, and interaction separately; don't cut motion for convenience or pass bare functional tests as experience quality. Adapt technique and intensity for reduced motion and performance constraints while preserving user agency; avoid gratuitous particles or perpetual forced motion. Load existing motion skills on-demand when relevant:
   - `motion-principles`: Timing, easing, enter/exit, and reduced motion. Qualifies 'transform/opacity only' compositing vs GPU canvas pipelines managing coordinate buffers internally.

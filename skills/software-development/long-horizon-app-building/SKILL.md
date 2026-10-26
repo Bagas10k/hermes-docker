@@ -61,8 +61,8 @@ Orchestrate long-horizon milestones through Hermes tools:
    - Probe upstream data/API rights, terms, uptime, browser support, and media playback early. If the defining journey cannot be implemented responsibly, explain the blocker and ask permission for a changed scope before building a materially different product. A local-file player is not a substitute for an online-streaming player.
    - If the user has named a visual vibe, carry it through the functional phase; do not ask for it again.
 
-2. **Establish Persistent Build Tracker:**
-   Never rely solely on volatile conversational context. Write a persistent plan:
+2. **Establish Build Documentation and Persistent Tracker:**
+   Follow `project-build-documentation`: read existing docs first, reuse their canonical entry points, and keep setup/build/test/architecture notes accurate as the implementation changes. Do not create duplicate or ceremonial docs. Never rely solely on volatile conversational context. Write a persistent plan:
    ```json
    {
      "project_name": "app-name",

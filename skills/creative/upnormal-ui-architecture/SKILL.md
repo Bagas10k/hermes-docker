@@ -27,8 +27,10 @@ Architect and implement artistic, unconventional, high-contrast "upnormal" web i
 
 ## When to Use
 - User asks for "desain upnormal", "tampilan artistik", "anti-mainstream UI", or "Awwwards / Godly level web".
-- Building web interfaces where no specific template is mandated and the default must be breathtaking.
+- When no specific template is mandated and the default must be breathtaking.
 - Designing landing pages, portfolios, or luxury dashboards requiring memorable creative identity.
+
+For implementation sequence, preservation of existing behavior, and real-browser verification, also follow `ui-ux-execution-standard`. Upnormal art direction remains project-specific; do not copy the Kasir Bangunan green calendar palette into unrelated products.
 
 ## Prerequisites
 - Standard web environment: HTML5, CSS3 (Modern Grid, Flexbox, CSS Variables, SVG filters).

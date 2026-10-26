@@ -13,7 +13,7 @@ metadata:
 
 # UI/UX Design System & Master Component Vault (APEX Design System)
 
-Gunakan skill ini sebagai repositori standar kanonikal saat merancang antarmuka web, tombol, kartu, input, tata letak, dan sistem desain agar berkarakter kuat, presisi, dan bebas dari kebiasaan template AI generik (anti-slop). Skill ini menggabungkan seluruh bank komponen teruji dari `design-vault` dan `ui-ux-design-vault`.
+Gunakan skill ini sebagai repositori standar kanonikal saat merancang antarmuka web, tombol, kartu, input, tata letak, dan sistem desain agar berkarakter kuat, presisi, dan bebas dari kebiasaan template AI generik (anti-slop). Untuk urutan pengerjaan dan gerbang pembuktian UI/UX, ikuti juga skill `ui-ux-execution-standard`; skill ini mengatur eksekusi tanpa memaksakan satu palet universal. Skill ini menggabungkan seluruh bank komponen teruji dari `design-vault` dan `ui-ux-design-vault`.
 
 # Design Vault: Sistem Bank Komponen & Anti-Template UI/UX
 
