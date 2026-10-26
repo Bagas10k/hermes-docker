@@ -134,6 +134,13 @@ Setiap tugas teknis wajib mengikuti alur:
 - **Pengodean Warna Semantik Ikon**: Bedakan warna aksen ikon berdasarkan domain/kategori fungsional (misal: Rose untuk *Overview*, Emerald untuk *Workflows/Stok*, Amber untuk *Operasional/Agen*, Cyan untuk *Sesi/Transaksi*, Violet untuk *Evaluasi/Laporan*) guna memicu pengenalan visual instan (*recognition over recall*).
 - **Anatomi Seragam & Keselarasan Sejajar**: `[Ikon Aksen di Kiri] ➔ [Teks Label Rata Kiri (14px Medium)] ➔ [Ruang Fleksibel] ➔ [Badge/Meta di Kanan]`. Seluruh elemen sejajar lurus tanpa ada teks melompat atau indentasi liar.
 
+### G. Sensitivitas Tertinggi UI Motion Morphing (Default Reaction)
+- **Refleks Baku UI Motion Morphing:** Setiap kali agen menyentuh, merancang, atau memodifikasi antarmuka pengguna (UI/UX), agen wajib secara otomatis memprioritaskan integrasi **in-place motion morphing 60 FPS**:
+  1. **Transisi Ikon Vektor:** Terapkan `universal-icon-morphing` (arclength resampling + rotational alignment) untuk setiap transisi state ikon interaktif (menu➔close, play➔pause, sun➔moon, chevron➔x, pending➔check).
+  2. **Ekspansi Kontainer & Kartu In-Place:** Terapkan `motion-ui-lifecycle-and-morphing` / GSAP FLIP untuk peleburan kartu ringkas ke panel detail (*in-place expansion*), accordion tabel yang mendorong baris bawah secara fluida, dan popover yang meregang dari tombol asal.
+  3. **Haram Pop-Up Modal Kaku:** Dilarang keras menampilkan dialog pop-up yang tiba-tiba menimpa layar tanpa kesinambungan geometris objek (*zero spatial context rupture*).
+  4. **Kurva Gerak Pegas Inersia:** Wajib gunakan kurva spring elastis `cubic-bezier(0.16, 1, 0.3, 1)` atau `power3.out` pada 60 FPS GPU-accelerated (`transform` & `opacity` only).
+
 ---
 
 ## 4. Aturan Baku Rekayasa Backend & Debugging

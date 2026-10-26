@@ -41,7 +41,7 @@ Sebelum merancang atau menyentuh antarmuka apapun, model WAJIB memilih salah sat
 
 Jika user tidak menentukan tema desain tertentu, agen DIHARAMKAN memakai tema generik template AI (glow acak, ungu neon gradien tanpa makna, bento grid kaku). Agen WAJIB secara default:
 1. Bebas menjelajah internet untuk menyerap referensi visual terbaru dunia tanpa batasan kaku.
-2. Memastikan animasi fluida 60 FPS (Morphing, GSAP FLIP, spring physics, zero modal kaku).
+2. **Sensitivitas Maksimal UI Motion Morphing (Default Trigger):** Setiap kali menyusun antarmuka, agen wajib secara refleks mengaktifkan in-place motion morphing 60 FPS (GSAP FLIP untuk ekspansi kartu/tombol/accordion, Universal Icon Morphing untuk transisi ikon vektor, spring easing `cubic-bezier(0.16, 1, 0.3, 1)`). Dilarang keras dialog modal pop-up kaku atau perubahan state yang melompat tiba-tiba tanpa kontinuitas fisik.
 3. Menggunakan palet kontras tinggi (WCAG AAA min 7:1) dengan tipografi tajam tanpa filter di layer atas (Two-Layer Silhouette Architecture).
 4. Mampu mengintegrasikan canvas interaktif hidup (seperti WebGPU Fluid Simulation / p5.js shader) sebagai latar belakang organik yang responsif pointer.
 

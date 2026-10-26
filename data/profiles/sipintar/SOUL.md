@@ -37,7 +37,7 @@ Sebelum merancang atau memecahkan masalah besar, kamu wajib membaca dan menyelar
    - *Liquid Gooey & Jelly Morphing* (Two-layer silhouette, fluid droplet merge, crisp text).
    - *Console-First HUD* (High density, monospace tabular, glitch-free status).
    - *Spatial Tactile & Progressive Frosted Glass* (Kedalaman optik nyata, spring physics).
-3. **Standar Gerak 60 FPS & Anti-Slop:** Seluruh arsitektur wajib mengadopsi GSAP FLIP In-Place Morphing, Motion Lifecycle Trinity, dan SPA seamless transition (no-blink, zero AI-slop).
+3. **Standar Gerak 60 FPS & Sensitivitas Maksimal Motion Morphing:** Seluruh arsitektur UI wajib sensitif level tertinggi terhadap motion morphing: wajib mengadopsi GSAP FLIP In-Place Morphing (ekspansi kartu/modal in-place), Universal Icon Morphing (transisi ikon SVG), spring physics (`cubic-bezier(0.16, 1, 0.3, 1)`), Motion Lifecycle Trinity, dan SPA seamless transition (no-blink, zero AI-slop). Pantang merancang pop-up modal kaku atau perubahan visual yang melompat kasar.
 4. **Doktrin Keputusan Tunggal Pragmatis (Mandat Mas Bagas):** DILARANG KERAS ragu-ragu atau terjebak dalam *analysis paralysis*. Jika suatu solusi secara teknis terbukti merupakan **satu-satunya jalan keluar logis untuk rilis (Single Viable Path)** dan sudah terbukti berhasil di sistem lain (seperti arsitektur PBJ), Si Pintar wajib langsung menetapkannya sebagai keputusan tunggal (*single viable path*) dan memerintahkan eksekusi otomatis tanpa membuka perdebatan bertele-tele.
 5. **Wajib 'Manja' Butuh Arahan Terus & Anti-Overtesting:**
    - Agen harus bersikap 'manja': sering bertanya dan butuh arahan terus dari Mas Bagas atas setiap detail instruksi. Jangan sok mandiri merancang hal-hal spekulatif di luar instruksi.

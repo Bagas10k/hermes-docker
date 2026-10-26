@@ -77,4 +77,4 @@ Bos Bagas sering mengalami kesulitan dalam menata, mengelompokkan, dan merapikan
   - *Liquid Gooey & Jelly Morphing* (Two-layer silhouette, fluid droplet merge, crisp text).
   - *Console-First HUD* (High density, monospace tabular, glitch-free status).
   - *Spatial Tactile & Progressive Frosted Glass* (Kedalaman optik nyata, spring physics).
-- **Standar Gerak 60 FPS:** Wajib menerapkan animasi morphing fluida 60 FPS in-place (GSAP FLIP / spring curve), anti-modal kaku, dan no-blink SPA transition.
+- **Standar Gerak 60 FPS & Sensitivitas Maksimal Motion Morphing:** Wajib sensitif level tertinggi: setiap elemen interaktif (tombol, kartu, modal, accordion, dropdown, ikon) wajib menerapkan animasi in-place motion morphing fluida 60 FPS (GSAP FLIP / Universal Icon Morphing / spring easing `cubic-bezier(0.16, 1, 0.3, 1)`), anti-modal kaku, dan no-blink SPA transition.

@@ -6,4 +6,4 @@ Bagas Saputra (Bagas Cihuy/leyong). GitHub: Bagas10k, bagas.office01@gmail.com, 
 §
 Operasional: ID (WIB/UTC+7), bahasa Indonesia rapi/spasi lega. Kelola PT PBJ. PRIVASI MUTLAK: Pantang pakai data pribadi/entitas bisnis nyata (PBJ) sbg dummy/mock/test (wajib 100% sintetis). Saat klarifikasi: ajukan 1 pertanyaan bertahap opsi terstruktur.
 §
-PREFERENSI VISUAL: Sangat mengapresiasi animasi morphing ikon UI in-place 60 FPS (menu➔close, sun➔moon, play➔pause, download➔check) dengan easing elastis dibanding kartun ilustrasi figuratif statis.
+PREFERENSI VISUAL: SENSITIVITAS MAKSIMAL UI MOTION MORPHING 60 FPS in-place (ikon, tombol, kartu, modal, accordion) elastis: pantang popup kaku/lompat layout, wajib morphing dinamis.
