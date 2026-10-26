@@ -475,8 +475,12 @@ bagian 1 dan 1b. Ringkasnya:
       pesan penutup memuat Ctrl+S + hapus comp uji + perintah aerender
       (`references/ae-bridge-higgsfield.md`)
 - [ ] Explainer: pesan penutup memuat naskah VO lengkap + ajakan merekam /
-      generate sendiri dan mengirim ulang audionya untuk disinkronkan;
-      `vo-script.md` tersimpan di folder proyek
+      generate sendiri dan mengirim ulang audionya untuk disinkronkan bila
+      VO belum diminta untuk hasil saat ini; `vo-script.md` tersimpan di folder.
+- [ ] Bila brief eksplisit meminta VO/audio pada hasil ini, file final benar-
+      benar memiliki audio yang tersinkron. Versi silent hanya draft/preview;
+      jika audio tidak tersedia, laporkan belum lengkap dan minta audio atau
+      persetujuan eksplisit untuk menyerahkan versi silent. Naskah bukan VO.
 - [ ] Explainer: gaya, rasio, durasi, dan suara sudah ditanya dalam SATU
       pertanyaan (kecuali yang sudah disebut user) sebelum menulis kode;
       durasi mengikuti brief/VO; jumlah adegan mengikuti konteks, bukan durasi ÷ 6

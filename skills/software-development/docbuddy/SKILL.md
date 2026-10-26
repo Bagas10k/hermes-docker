@@ -23,17 +23,31 @@ Kakas baris perintah deterministik berbasis bukti untuk menghasilkan dan memperb
 ## Alur Kerja CLI yang Terverifikasi
 Jangan menganggap setiap proyek wajib mengadopsi seluruh paket. Tawarkan adopsi hanya saat cocok dengan tujuan pemilik proyek; paket terdiri dari `AGENTS.md`, `CLAUDE.md`, dan 15 file Markdown dalam `.onefreq/`.
 
-## CLI Commands
-Jalankan dari clone repositori DocBuddy (Python 3.11+, tanpa dependensi pihak ketiga):
+## CLI Commands (Tersedia Global)
+Jalankan dari terminal (`docbuddy` atau `python docbuddy.py`):
 ```bash
-# Salin template yang belum ada; file proyek yang sudah ada dipertahankan
-python docbuddy.py adopt <path_proyek>
+# 1. Adopsi template (menyalin 17 file template ONEFREQ yang belum ada)
+docbuddy adopt <path_proyek>
 
-# Usulkan pengayaan berdasarkan manifest; tampilkan diff dan simpan proposal
-python docbuddy.py propose <path_proyek> --proposal /tmp/docbuddy-proposal.json
+# 2. Usulkan pengayaan manifest (.onefreq/ARCHITECTURE.md & VERIFICATION.md)
+docbuddy propose <path_proyek> --proposal /tmp/docbuddy-proposal.json
 
-# Terapkan hanya setelah meninjau proposal
-python docbuddy.py apply <path_proyek> --proposal /tmp/docbuddy-proposal.json
+# 3. Terapkan proposal setelah ditinjau
+docbuddy apply <path_proyek> --proposal /tmp/docbuddy-proposal.json
+
+# 4. State Tracking (Pencegah Amnesia Konteks pada Build Panjang)
+docbuddy state <path_proyek>
+docbuddy state <path_proyek> --status IN_PROGRESS --goal "Implementasi fitur X" --slice "Modul A selesai" --next "Lanjut modul B" --blocker "Menunggu approval Mas Bagas"
+
+# 5. ADR Logging (Decision Provenance)
+docbuddy adr <path_proyek> --title "Pilihan Database Locking" --decision "lockForUpdate" --why "Mencegah race condition kasir" --alternatives "Timestamp"
+
+# 6. Report Generation (Engineering Execution Report v2.0)
+docbuddy report <path_proyek> --status ACCEPTED --deployment STAGING_TESTED
+
+# 7. Verification Contract Runner
+docbuddy verify <path_proyek>
+docbuddy verify <path_proyek> --run
 ```
 
 ## Prosedur Penerapan pada Repositori

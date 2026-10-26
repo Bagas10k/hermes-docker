@@ -62,11 +62,15 @@ per bab ≤ 90 dtk dengan berkas terpisah.
 
 ## Penyerahan: naskah VO ikut di pesan, user yang mengisi suaranya
 
-Explainer hampir selalu berakhir dengan VO dari user (direkam sendiri atau
-di-generate di layanan TTS pilihannya). Jadi urutan bakunya: bangun tanpa
-suara dengan timing baca → serahkan `index.html` + naskah VO DI DALAM pesan
-penutup → minta user merekam/generate dan mengirim ulang audionya → retime
-video ke audio itu. Contoh penutup:
+Bedakan brief sebelum produksi: bila VO belum diminta atau user memilih
+mengirimkannya nanti, bangun versi tanpa suara dengan timing baca, serahkan
+`index.html` dan naskah VO dalam pesan, lalu minta audio untuk disinkronkan.
+Bila user secara eksplisit meminta narasi dalam hasil ini, audio adalah syarat
+kelulusan: buat/masukkan VO dan verifikasi sinkronisasinya. Render tanpa suara
+hanya boleh disebut draft/preview; jika TTS atau sumber audio tidak tersedia,
+laporkan tugas belum lengkap dan minta audio user atau persetujuan eksplisit
+untuk hasil silent. Naskah bukan pengganti audio. Sesudah audio tersedia,
+retime video ke audio itu. Contoh penyerahan untuk jalur VO nanti:
 
 > Naskah VO (satu paragraf = satu adegan, angka ditulis dengan kata):
 > 1. …
