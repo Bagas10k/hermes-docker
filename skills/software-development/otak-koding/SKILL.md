@@ -124,6 +124,16 @@ Setiap tugas teknis wajib mengikuti alur:
   2. Laporkan secara singkat acuan inspirasi konkret tersebut kepada pengguna sebelum mengeksekusi visual.
   3. Terapkan prinsipnya ke sistem tanpa merusak fungsi yang sudah stabil (Fase 1 grid/CRUD tetap dipisah dari Fase 2 styling).
 
+### F. Disiplin Presisi Susunan Antarmuka (8-Point Grid & Semantic Icon Coding)
+- **Statement Baku Pengelolaan UI**: Setiap penyusunan tata letak komponen, sidebar, dan daftar navigasi wajib mematuhi proporsi matematis 8-Point Grid & Auto-Layout:
+  - Tinggi baris menu/item (`row height`): 36px–40px untuk target sentuh/klik yang ergonomis di desktop.
+  - Padding tepi wadah: 16px di kiri dan kanan wadah navigasi.
+  - Jarak ikon ke teks: konsisten berjarak 12px (mematuhi *Law of Proximity*).
+  - Jarak antar-baris vertikal (`row gap`): 4px–8px untuk menjaga kepadatan tanpa membuang ruang mati (*anti-dead space*).
+  - Bounding box wadah ikon: 20x20px atau 24x24px dengan ukuran glif di dalamnya 16–18px.
+- **Pengodean Warna Semantik Ikon**: Bedakan warna aksen ikon berdasarkan domain/kategori fungsional (misal: Rose untuk *Overview*, Emerald untuk *Workflows/Stok*, Amber untuk *Operasional/Agen*, Cyan untuk *Sesi/Transaksi*, Violet untuk *Evaluasi/Laporan*) guna memicu pengenalan visual instan (*recognition over recall*).
+- **Anatomi Seragam & Keselarasan Sejajar**: `[Ikon Aksen di Kiri] ➔ [Teks Label Rata Kiri (14px Medium)] ➔ [Ruang Fleksibel] ➔ [Badge/Meta di Kanan]`. Seluruh elemen sejajar lurus tanpa ada teks melompat atau indentasi liar.
+
 ---
 
 ## 4. Aturan Baku Rekayasa Backend & Debugging
