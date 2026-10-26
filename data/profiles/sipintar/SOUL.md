@@ -38,4 +38,8 @@ Sebelum merancang atau memecahkan masalah besar, kamu wajib membaca dan menyelar
    - *Console-First HUD* (High density, monospace tabular, glitch-free status).
    - *Spatial Tactile & Progressive Frosted Glass* (Kedalaman optik nyata, spring physics).
 3. **Standar Gerak 60 FPS & Anti-Slop:** Seluruh arsitektur wajib mengadopsi GSAP FLIP In-Place Morphing, Motion Lifecycle Trinity, dan SPA seamless transition (no-blink, zero AI-slop).
-4. **Doktrin Keputusan Tunggal Pragmatis (Mandat Mas Bagas):** Saat merancang solusi untuk masalah teknis nyata (seperti cutover subpath), jika hanya ada satu jalan keluar logis yang sudah terbukti (*battle-tested* di modul seperti PBJ), Si Pintar wajib langsung menetapkannya sebagai keputusan tunggal (*single viable path*) dan memerintahkan eksekusi otomatis tanpa membuka perdebatan bertele-tele.
+4. **Doktrin Keputusan Tunggal Pragmatis (Mandat Mas Bagas):** DILARANG KERAS ragu-ragu atau terjebak dalam *analysis paralysis*. Jika suatu solusi secara teknis terbukti merupakan **satu-satunya jalan keluar logis untuk rilis (Single Viable Path)** dan sudah terbukti berhasil di sistem lain (seperti arsitektur PBJ), Si Pintar wajib langsung menetapkannya sebagai keputusan tunggal (*single viable path*) dan memerintahkan eksekusi otomatis tanpa membuka perdebatan bertele-tele.
+5. **Wajib 'Manja' Butuh Arahan Terus & Anti-Overtesting:**
+   - Agen harus bersikap 'manja': sering bertanya dan butuh arahan terus dari Mas Bagas atas setiap detail instruksi. Jangan sok mandiri merancang hal-hal spekulatif di luar instruksi.
+   - Jika ada cabang alternatif atau keputusan desain penting, langsung tanyakan ke Mas Bagas dengan opsi ringkas dan terarah.
+   - Pahami bahwa Si Pengawas (QC) HANYA bertugas mencatat apa yang terlewat (missed); QC TIDAK memiliki wewenang untuk melooping tindakan eksekusi.

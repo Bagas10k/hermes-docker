@@ -332,18 +332,15 @@ custom_providers:
       deepseek-v4-pro: {}
       deepseek-v4.1-flash-1017: {}
       deepseek-v4.1-flash-expires-on-0910: {}
-      gemini-3-8-flash: {}
       glm-5-3-flash: {}
       glm5-2: {}
       glm5-3: {}
       laguna-s-2.1: {}
       longcat-2.5-preview: {}
       mimo-v2.6-flash: {}
-      minimax-m2.7: {}
       muse-spark-1.2-contributor: {}
       muse-spark-1.3-contributor: {}
       muse-wonder-1.0: {}
-      qwen3.8-plus: {}
       gpt-5-6-luna: {}
       gpt-5-6-sol: {}
       gpt-6-astra: {}
@@ -353,6 +350,8 @@ custom_providers:
       kimi-k3.1-pro: {}
       qwen3.8-abliterated-cyber: {}
       qwen3.8-uncensored: {}
+      gemini-3-8-flash: {}
+      minimax-m2.7: {}
     models_discovered: true
     name: kagiro
   - base_url: https://api.nbgate.com/v1
@@ -515,11 +514,6 @@ custom_providers:
       kc/k3: {}
       kc/k3-256k: {}
       kc/kimi-for-coding: {}
-      kc/kimi-for-coding-highspeed: {}
-      kcai/k3: {}
-      kcai/k3-256k: {}
-      kcai/kimi-for-coding: {}
-      kcai/kimi-for-coding-highspeed: {}
       kiro/claude-haiku-4.5: {}
       kiro/claude-opus-4.5: {}
       kiro/claude-opus-4.6: {}
@@ -544,15 +538,6 @@ custom_providers:
       mai/muse-spark-1.3: {}
       mai/muse-spark-1.3-contributor: {}
       mai/muse-wonder-1.0: {}
-      mm/MiniMax-M2: {}
-      mm/MiniMax-M2.1: {}
-      mm/MiniMax-M2.1-highspeed: {}
-      mm/MiniMax-M2.5: {}
-      mm/MiniMax-M2.5-highspeed: {}
-      mm/MiniMax-M2.7: {}
-      mm/MiniMax-M2.7-highspeed: {}
-      mm/MiniMax-M3: {}
-      mm/MiniMax-M3.1-Flash-Preview: {}
       mmcn/MiniMax-M2: {}
       mmcn/MiniMax-M2.1: {}
       mmcn/MiniMax-M2.1-highspeed: {}
@@ -577,7 +562,6 @@ custom_providers:
       cbcn/minimax-m3.1-flash: {}
       mimotp/mimo-v2.6-flash: {}
       mimotp/mimo-v2.6-pro: {}
-      mm/MiniMax-M3.1-Flash: {}
       mmcn/MiniMax-M3.1-Flash: {}
       ag/gemini-4-argon: {}
       cb/kimi-k3.1-pro: {}
@@ -585,31 +569,45 @@ custom_providers:
       cp/anthropic/claude-fable-5: {}
       cp/anthropic/claude-fable-5.1: {}
       cp/anthropic/claude-haiku-4.5: {}
-      cp/anthropic/claude-haiku-5.5: {}
       cp/anthropic/claude-opus-4.6: {}
       cp/anthropic/claude-opus-4.7: {}
       cp/anthropic/claude-sonnet-4.6: {}
       kc/k3.1-pro: {}
-      kcai/k3.1-pro: {}
-      kcai/k3.1-pro-highspeed: {}
       cp/openai/gpt-6.1-sol: {}
       cp/xai/grok-4.7: {}
       ag/claude-opus-5-5: {}
       ag/claude-sonnet-5-5: {}
-      cp/anthropic/claude-opus-4.1: {}
       cp/anthropic/claude-opus-4.5: {}
       cp/openai/gpt-6-astra-pro: {}
       cp/xai/grok-4.5: {}
       cp/anthropic/claude-opus-5: {}
       cp/anthropic/claude-sonnet-5: {}
-      cp/openai/gpt-6-astra: {}
       cp/openai/gpt-6-sol: {}
-      cp/openai/gpt-6.1-sol-pro: {}
       cp/xai/grok-4.6: {}
-      moon/kimi-k2.6: {}
-      moon/kimi-k2.7-code: {}
-      moon/kimi-k2.7-code-highspeed: {}
-      moon/kimi-k3: {}
+      cp/anthropic/claude-opus-4.8: {}
+      cp/anthropic/claude-sonnet-5.5: {}
+      cp/openai/gpt-6-luna: {}
+      cp/zai/glm-5.3-flash: {}
+      cp/anthropic/claude-haiku-5.5: {}
+      cp/anthropic/claude-opus-4.1: {}
+      cp/anthropic/claude-opus-5.5: {}
+      cp/anthropic/claude-sonnet-4.5: {}
+      cp/openai/gpt-6-astra: {}
+      cp/openai/gpt-6-luna-pro: {}
+      cp/openai/gpt-6-sol-pro: {}
+      cp/openai/gpt-6.1-sol-pro: {}
+      kc/k3.1-pro-highspeed: {}
+      kc/kimi-for-coding-highspeed: {}
+      mm/MiniMax-M2: {}
+      mm/MiniMax-M2.1: {}
+      mm/MiniMax-M2.1-highspeed: {}
+      mm/MiniMax-M2.5: {}
+      mm/MiniMax-M2.5-highspeed: {}
+      mm/MiniMax-M2.7: {}
+      mm/MiniMax-M2.7-highspeed: {}
+      mm/MiniMax-M3: {}
+      mm/MiniMax-M3.1-Flash: {}
+      mm/MiniMax-M3.1-Flash-Preview: {}
     models_discovered: true
     name: atmo
 group_sessions_per_user: true
