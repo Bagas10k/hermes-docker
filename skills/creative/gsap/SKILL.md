@@ -92,3 +92,12 @@ export function handleComponentMorph(triggerEl, expandedEl) {
   });
 }
 ```
+
+---
+
+## 5. Standar Wajib Interaksi & Motion (SOP Mas Bagas v2.0)
+Semua implementasi GSAP wajib memenuhi kriteria:
+1. **FLIP In-Place Morphing:** Kartu membesar in-place tanpa modal dialog kaku.
+2. **Motion Lifecycle:** Enter (280ms stagger fade-in), Loop (denyut halus), Exit (akselerasi sigap).
+3. **Anti-Berkedip Putih (SPA Seamless Swap):** Seluruh transisi filter dan tab di web dipadukan dengan GSAP crossfade tanpa me-reload browser.
+4. **Mobile Optimization:** Gunakan `will-change: transform` dan hindari animasi `top/left/width/height` mentah yang memicu CPU reflow.

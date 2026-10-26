@@ -3,6 +3,11 @@ name: database-design-migrations
 description: Use when designing schemas or database migrations.
 version: 0.1.0
 platforms: [linux, macos, windows]
+related_skills:
+  - long-horizon-app-building
+  - structured-project-execution
+  - fullstack-systems
+  - fullstack-delivery
 metadata:
   hermes:
     tags: [database, sql, migrations, transactions, performance]
@@ -18,7 +23,7 @@ Read existing migrations, ORM configuration, database engine/version declaration
 
 ## Procedure
 1. Model entities, cardinality, ownership/tenant boundaries, lifecycle, and business invariants. Define primary and foreign keys, nullability, unique constraints, deletion behavior, money precision, and time semantics. Avoid soft-delete unless recovery/audit requirements justify its query complexity.
-2. Put invariants in database constraints as well as server validation. For multi-tenancy, ensure uniqueness and relations cannot silently cross tenants. Consider composite keys or equivalent enforced checks where suitable. **For accounting and inventory tables (journals, balances, stock cards, periods), load `erp-engineering-doctrine`**: it specifies which invariants must live in the database (balance triggers, immutability, closed-period guards, negative-stock checks) rather than in application code.
+2. Put invariants in database constraints as well as server validation. For multi-tenancy, ensure uniqueness and relations cannot silently cross tenants. Consider composite keys or equivalent enforced checks where suitable.
 3. Design indexes from actual filters, joins, ordering, and cardinality. Inspect query plans on representative non-sensitive data using engine-appropriate EXPLAIN; remember EXPLAIN ANALYZE executes its query. Measure before and after; do not invent performance numbers.
 4. Define transaction boundaries and isolation needed for concurrent operations. Use atomic updates, conditional writes, row locking, or optimistic version checks as appropriate. Test competing booking/inventory/balance requests rather than relying on a read-then-write check.
 5. Generate migrations with the project's existing tool. Inspect generated SQL. For live compatibility use expand -> backfill in bounded resumable batches -> validate -> switch readers/writers -> contract in a later approved release. Analyze locks and table rewrites for the actual engine/version.
@@ -28,7 +33,6 @@ Read existing migrations, ORM configuration, database engine/version declaration
 
 ## Pitfalls
 - Successful schema generation is not a successfully applied migration.
-- For Laravel snapshot baselines, use native `database/schema/<connection>-schema.sql` loading before pending-file calculation; inserting history inside an old importer cannot stop its already-calculated replay list. Preserve historical PHP files and test both a fresh MariaDB install and an existing-history upgrade, including duplicate history rows. Native MySQL schema loading requires the `mysql` client; compare full DDL in addition to pending counts.
 - SQLite-only tests cannot prove PostgreSQL/MySQL locking, enum, or index behavior.
 - ORM validation cannot replace uniqueness under concurrent requests.
 - Docker CLI availability does not imply a running engine. Verify `docker info` through `terminal`; if unavailable, report the blocker or use an approved existing local database. Never silently change the production database choice.

@@ -1,8 +1,11 @@
 ---
 name: claim-proof-ledger
-description: Use when auditing claims against real test evidence.
+description: Use ONLY when auditing claims against real test evidence in formal forensic audits.
 ---
-# Claim-proof ledger
+# Claim-proof ledger (Restricted Forensic Scope)
+
+> **BATASAN PENGGUNAAN SAKRAL:**
+> Skill ini HANYA boleh dimuat dan dijalankan jika Mas Bagas secara eksplisit meminta **audit kepatuhan formal / forensic quality gate audit**. DILARANG KERAS memuat atau menerapkan prosedur skill ini pada pekerjaan koding harian, penyesuaian UI/UX, styling CSS, atau perbaikan bug biasa, guna mencegah testing paralysis dan birokrasi berulang yang menghambat rilis.
 
 ## Procedure
 

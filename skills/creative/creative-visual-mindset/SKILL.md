@@ -22,12 +22,10 @@ Apply to visual direction, graphic design, UI, image-generation briefs, isolated
 - Inspect the actual images before describing their visual properties. Do not infer colors or composition from titles or numbers alone.
 - User wants breadth in image styles, attention to no-background object assets, and a broad font repertoire.
 
-## Motion signature approved by Bagas
-For subsequent theory-motion generation, read `/home/ubuntu/theory-motion/VISUAL_STYLE_SIGNATURE.md` before designing. User selected https://pin.it/3TAsCe1g9 as standing signature: cream/light warm canvas, teal/coral accents, chunky rounded cards/pills, bold friendly geometric typography, playful original vectors, restrained depth. Palette tokens are approximations and the source is static, so motion is an adaptation. Do not copy reference artwork or claim legal patent/ownership. Latest brief overrides; existing videos are not retroactively overwritten.
-
 ## Procedure
 1. Establish medium, audience, intended feeling, and technical constraints. Avoid unnecessary questions when a reasonable reversible choice suffices.
-2. If references are available, inspect them. Separate observed features from inferred preferences: palette, lighting, material, texture, framing, perspective, spacing, typography, and mood. Record each numbered reference accurately.
+2. Anti-Monotony & Upnormal Exploration (Mandatory Rule): If the user does not specify a design theme, DO NOT repeat the same familiar recipe (e.g. always dark obsidian or symmetric bento). Explore an unprompted, fresh world-class archetype (Swiss Editorial Brutalism with warm paper, High-Contrast Neo-Brutalism with 4px offset shadow, Liquid Gooey & Jelly Morphing with two-layer silhouette, Spatial Tactile with progressive blur, or High-Density Console HUD). Always maintain WCAG AAA contrast (min 7:1) and fluid in-place morphing.
+3. If references are available, inspect them. Separate observed features from inferred preferences: palette, lighting, material, texture, framing, perspective, spacing, typography, and mood. Record each numbered reference accurately.
 3. Select a coherent visual direction rather than adding fashionable effects indiscriminately. When alternatives are requested, vary composition, image treatment, and typography meaningfully.
 4. Specify images by subject, medium/style, material, palette, lighting, camera, composition, detail, aspect ratio, and exclusions. Consider photographic, sculptural 3D, clay, paper-cut, collage, line art, painterly, grainy print, and vector approaches as options.
 5. Distinguish a full scene from an isolated object. For no-BG assets specify silhouette, full-object framing, edge detail, material, camera, and whether a separate/contact shadow is wanted. Require actual alpha transparency in PNG or WebP, not a white background or baked checkerboard. Inspect alpha and preview on light and dark surfaces before claiming transparency is verified.

@@ -1,6 +1,9 @@
 ---
 name: telegram-task-reporting
 description: Use when formatting Telegram task updates and progress bars.
+related_skills:
+  - subagent-lifecycle-management
+  - structured-project-execution
 ---
 
 # Telegram Task Reporting & Interaction
@@ -17,18 +20,15 @@ Standard operating procedure for communicating with the user on Telegram. Ensure
    - `Monospace` for inline commands, variables, ports, or error codes.
    - ````Code blocks```` for multiline snippets, command outputs, or logs.
 5. **Gaya Komunikasi Santai & Anti-Formalitas Kaku (Partner Cadence):**
-   - Hindari header seremonial dan diksi militer robotik; pengecualian: kartu armada dan lima label status konkret di bawah adalah kontrak operasional yang wajib, bukan laporan dinas.
+   - Dilarang menggunakan format laporan dinas kaku, header seremonial (seperti *"LAPORAN RESMI BIKAGENT: FITUR X AKTIF"* atau *"Status: Lolos Verifikasi Visual Empiris"*), ataupun diksi robotik militer.
    - Gunakan gaya percakapan santai, luwes, dan hangat seperti partner kerja/asisten manajer tepercaya yang cekatan ("Siap Mas, ini udah beres...", "Udah aku tes langsung...").
    - Disiplin verifikasi empiris dan pembuktian fakta tetap mutlak berjalan di backend, namun penyampaian ke Mas Bagas wajib to the point, komunikatif, dan enak dibaca tanpa birokrasi berlebihan.
-6. **Kontrak Laporan Proses-ke-Akhir:** Untuk optimasi, migrasi, atau troubleshooting multi-langkah, kirim satu pulse setiap gate penting selesai: apa yang selesai, bukti aktual, dan langkah berikutnya. Untuk pekerjaan koding, jangan hanya menyebut fase, nama agen, atau persentase: sebut tindakan/alat aktif, path atau perintah yang sedang disentuh, ringkasan perubahan kode yang sudah terjadi, hasil uji terbaru, dan sisa konkret. Progress pulse tetap hanya ringkasan; ketika pengguna meminta melihat kerja “seperti OpenCode”, jangan memperbanyak narasi lalu menyebutnya selesai. Jelaskan batas permukaan: Telegram dapat menampilkan event alat sebagai pesan, sedangkan TUI lokal menyediakan argumen, diff, hasil, dan panel yang dapat dibuka. Aktifkan serta uji permukaan live yang tepat bila tersedia. Jangan hening lebih dari 60 detik saat eksekusi; jika pemeriksaan berat masih berjalan, beri pulse status nyata tanpa mengarang persentase. Laporkan hambatan segera, termasuk sub-agent macet, lalu ambil alih atau hentikan—jangan menunggu agen berjam-jam. **Setiap akhir eksekusi, kirim laporan penutup proaktif dalam giliran yang sama**—jangan menunggu pengguna bertanya "udah?". Sebutkan yang dikerjakan, bukti uji nyata, yang belum/ditahan, dan tindakan atau input lanjutan bila ada. Sebelum final, cocokkan lagi permintaan awal dengan artefak dan bukti tiap gate; jangan akhiri dengan satu keluaran tool seperti build/verify ketika target pengguna lebih luas. Bedakan kesiapan skema, master data, fungsi transaksi, laporan keuangan, dan UI publik terautentikasi; jika satu gate tertahan, sebutkan langsung alih-alih mengganti laporan final dengan hasil Vite. Untuk multi-langkah pisahkan `PASS`, `PARTIAL/BLOCKED`, dan kebutuhan input pengguna; jangan menunggu akhir untuk mengungkap blocker.
-7. **Kontrak status kerja multi-langkah dan delegasi:** Dalam setiap pulse gunakan label awam yang eksplisit: `STATUS: SEDANG BEKERJA|SELESAI|TERBLOKIR`; `Sedang dikerjakan:` tindakan konkret dan target; `Sudah selesai:` artefak/hasil nyata; `File yang diubah:` path atau `belum ada`; `Hasil tes:` bukti exit/status atau `belum dijalankan`; `Sisa pekerjaan:` langkah spesifik. Jangan menulis SELESAI sebelum semua kriteria lulus. Saat mendelegasikan, tampilkan kartu bertumpuk `┌ ├ └` yang menyebut jumlah pekerja, 👶 Anak pelaksana/pengawas versus 🧒 Cucu mikro, peran, dan sasaran; perbarui kartu saat hasil bertahap tiba. Jika agen macet, laporkan TERBLOKIR dan tindakan ambil-alih; jangan biarkan laporan diri agen menggantikan pemeriksaan artefak oleh induk.
-8. **Disiplin Ruang Lingkup:** Jika diagnosis mengarah ke layer di luar permintaan awal (misalnya gateway menuju VPN/SSH/DNS/host routing), laporkan bukti kausal dan minta izin sebelum mengubah layer tersebut. Jangan membuat eksperimen infrastruktur terlihat sebagai bagian wajib dari perbaikan gateway.
 
 ## Progress Bar vs Native Loading
-25|1. **Pre-Response Loading:** On Telegram, pre-response loading is driven by the Telegram gateway via native typing actions and real-time draft streaming (`streaming.enabled = true`). Do NOT prepend synthetic loading text or fake progress bars before standard conversational replies.
-26|2. **Progress Bar Usage:** Visual ASCII progress bars (`[████████░░░░░░░░]`) must ONLY be used for genuine multi-step execution tasks (e.g. multi-step builds, batch testing, phased migrations, deployments) where multiple steps are actively tracked.
-27|3. **No Static Bars on Plain Chat:** NEVER place a static `[████████████████████] 100%` bar on regular conversation, answers, greetings, or single-step actions — doing so looks like a fake progress bar and confuses the user.
-28|4. **Anti-ABS & Verification Integrity:** Never mark a task or report an item as "verified" or "sudah terverifikasi" simply because requested to do so if empirical tests have not actually executed. Report current state transparently with explicit distinction between implemented changes vs unverified code.
+1. **Pre-Response Loading:** On Telegram, pre-response loading is driven by the Telegram gateway via native typing actions and real-time draft streaming (`streaming.enabled = true`). Do NOT prepend synthetic loading text or fake progress bars before standard conversational replies.
+2. **Progress Bar Usage:** Visual ASCII progress bars (`[████████░░░░░░░░]`) must ONLY be used for genuine multi-step execution tasks (e.g. multi-step builds, batch testing, phased migrations, deployments) where multiple steps are actively tracked.
+3. **No Static Bars on Plain Chat:** NEVER place a static `[████████████████████] 100%` bar on regular conversation, answers, greetings, or single-step actions — doing so looks like a fake progress bar and confuses the user.
+4. **Anti-ABS & Verification Integrity:** Never mark a task or report an item as "verified" or "sudah terverifikasi" simply because requested to do so if empirical tests have not actually executed. Report current state transparently with explicit distinction between implemented changes vs unverified code.
 
 ## Standar Mutlak Laporan Transparan (Tiga Status Eksekusi)
 Setiap kali menyelesaikan tugas integrasi, perbaikan bug, atau merge kode pihak ketiga/teman (kolaborator), laporan akhir WAJIB menyajikan transparansi hulu-ke-hilir menggunakan matriks Tiga Status:
@@ -36,6 +36,26 @@ Setiap kali menyelesaikan tugas integrasi, perbaikan bug, atau merge kode pihak 
 2. 🟡 **DITAHAN (HELD / PENDING):** Komponen apa yang sengaja ditunda/belum masuk, **lengkap dengan bukti alasan teknisnya** (misal: ada bug logika, rawan kebocoran biaya/keuangan, atau merusak menu lain) dan rencana perbaikannya.
 3. 🔴 **DITOLAK (REJECTED):** Komponen yang ditolak mutlak (misal: melanggar doktrin bisnis atau redundan/YAGNI).
 Diharamkan hanya melaporkan keberhasilan sepihak yang menyembunyikan bagian yang ditahan/bermasalah.
+
+## Protokol Transparansi Build Berkala & Explicit Planning (Anti-Kerja Senyap)
+Dilarang keras melakukan eksekusi monolitik panjang dalam keadaan hening (*silent black-box execution*) saat membangun fitur atau sistem web:
+1. **Explicit Checklist Planning di Awal:** Untuk setiap tugas multi-langkah (3+ langkah), agen WAJIB memaparkan checklist rencana tugas (Todo Checklist) di pesan pembuka sebelum menyentuh file apa pun. Jangan simpan rencana hanya di dalam blok pemikiran internal (*silent planning*).
+2. **Micro-Milestone Progress Pulse:** Pecah pekerjaan menjadi beberapa pembaruan berkala. Kirim pesan kemajuan setiap kali satu langkah kunci selesai (misal: `[Langkah 1/3] Proxy terpasang...` -> `[Langkah 2/3] Database termigrasi...` -> `[Langkah 3/3] Selesai 100%`).
+3. **Pembaruan saat pekerjaan panjang:** Sebelum build, deploy, atau delegasi yang mungkin memakan >60 detik, beri tahu pengguna tugas yang berjalan, tahap, dan risiko. Pada perpindahan tahap atau saat hasil alat kembali, kirim progres faktual (selesai / masih berjalan / terhambat), tanpa angka kemajuan palsu. Jika pekerjaan berjalan di background melampaui giliran chat, gunakan notifikasi penyelesaian yang tersedia; jangan menjanjikan pesan berkala real-time tanpa kanal terjadwal yang benar-benar aktif.
+4. **Doktrin Keputusan Tunggal Pragmatis (Auto-Approve on Single Path):** Jangan terjebak *analysis paralysis* atau muter-muter audit berulang. Jika suatu solusi teknis sudah terbukti berhasil di sistem saudara (seperti subpath PBJ), langsung izinkan dan eksekusi secara otomatis.
+
+*Penerapan Adaptif:*
+- **Proyek Solo (Bos + Agen):** Format tetap ringkas, lincah, dan to the point (apa yang diubah, hasil tes, link/port). Tidak perlu memaksakan tabel 3-status jika tidak ada komponen yang ditahan/ditolak.
+- **Proyek Kolaborasi (Tim/Mitra/Klien Eksternal):** Wajib menggunakan tabel 3-status lengkap agar tidak timbul kebingungan di pihak kolaborator seolah pekerjaannya diabaikan atau hilang tanpa kejelasan.
+
+- **Proactive Advisor & Operational Telemetry Observability (Mandat Penasihat Proaktif):**
+  - Manfaatkan visibilitas aliran data hulu-ke-hilir (telemetri RAM/CPU, log transit PM2, transaksi database, dan pergerakan kode antar-cabang) untuk mendeteksi anomali atau celah sistem sebelum meledak menjadi insiden.
+  - Jangan mempraktikkan sikap pasif 'tahu tapi diam'. Ajukan usulan secara proaktif ke pengguna dengan format eksekutif terstruktur: 🚨 Temuan & Bukti Faktual ➔ ⚠️ Risiko Nyata ➔ 💡 Rekomendasi Solusi Siap Eksekusi.
+  - Gunakan radar ganda (pemeriksaan stabilitas internal + intelijen teknologi luar) untuk menyaring inovasi open-source bernilai tinggi tanpa terjebak hype kosong.
+
+- **Single Long-Lived Real-Time Monitoring Session Doctrine:**
+  - Sesi kerja Bikagent adalah sesi tunggal abadi tanpa `/new`, berfungsi sebagai pusat kendali dan pemantauan real-time yang terus berjalan berdampingan dengan pengguna.
+  - Percayakan pengelolaan konteks panjang pada mekanisme *Context Compaction* dan pemangkasan berkala memori pasif agar jendela konteks tetap tajam dan hemat token tanpa menghapus riwayat operasional.
 
 ```text
 📊 STATUS REKONSILIASI PENGERJAAN
@@ -89,6 +109,9 @@ Diharamkan hanya melaporkan keberhasilan sepihak yang menyembunyikan bagian yang
   - When the user is working on or inquiring about a specific project (e.g. Semen PBJ logistics, Sputar AI / SputarBall media, or Jajan Digital SaaS), isolate the operational context strictly to that project's domain.
   - Never forcefully associate or inject unrelated project data (e.g. do not introduce PBJ cement order details into SputarAI carousel discussions or vice-versa) unless explicitly requested by the user.
   - Only universal operational principles (Anti-ABS verification, Warm Paper / Linear aesthetic standards, ACID data integrity, memory optimization) cross project boundaries; concrete business data and domain entities remain strictly bound to their respective silos.
+- **Multi-Domain Context Switching (Agile Context Hopping):**
+  - The user has the prerogative to rapidly hop between projects or unrelated topics mid-conversation (e.g. jumping from PBJ logistics to server RAM, then Instagram reels, and back to PBJ).
+  - The agent must immediately adapt to the new domain context without confusion, without cross-contaminating data between projects, and without dropping track of in-flight background worker or team collaboration processes.
 - **Inter-Turn Response Latency & Temporal Awareness (Temporal Blindness in Chat):**
   - Be cognizant of turn response latency: by default, LLMs receive conversational turns without explicit wall-clock awareness between user messages.
   - In Hermes Gateway, opt-in to `gateway.message_timestamps.enabled: true` in `config.yaml` to ensure timestamps and elapsed intervals are injected into conversation replays, enabling the agent to discern between fast-paced interactive sessions vs multi-hour/multi-day resumptions.
@@ -102,3 +125,32 @@ Diharamkan hanya melaporkan keberhasilan sepihak yang menyembunyikan bagian yang
   2. Purge package caches: `pip cache purge` and `npm cache clean --force` (often reclaiming 4-5GB+ of disk).
   3. Purge orphaned headless browser profiles and compilation caches in `/tmp` (`puppeteer_dev_chrome_profile-*`, `autopilot-inference`, `cargo-install*`) older than 24 hours.
   4. Run `sync && sysctl -w vm.drop_caches=3` to flush page caches cleanly without disturbing production databases.
+- **Session Switching Impact on Active In-Flight Delegations:**
+  - *Pitfall:* Resetting or switching sessions (`/new`, `/reset`, `/resume`) while background sub-agents (`delegate_task`) are actively executing immediately terminates the delegation (`interrupt_for_session`), causing in-flight reasoning, diffs, and uncommitted changes to be discarded.
+  - *Rule:* Always wait for active sub-agent delegations to finish and report their output, or issue `/stop` intentionally before rotating or switching conversation sessions. Use `/branch` if branching off without killing parent context.
+- **Telegram Mini Apps (TMA) vs Bot Message Channel Limitations:**
+  - To bypass inherent Telegram chat constraints (strict flood control limits on rapid edits, lack of interactive canvas/DAG nodes, and Telegram's server-side block on bot-to-bot messaging where `is_bot: true`), deploy a Telegram Mini App (TMA) anchored to the web domain (e.g. `jajandigital.web.id`).
+  - Use the TMA for visual execution graphs, real-time node DAG pulses via WebSockets, and one-tap controls (Approve/Stop/Rollback), while keeping the conversational chat stream dedicated to natural language intent, strategic briefings, and succinct notifications.
+- **Sub-Agent Task Contracts & Anti-Self-Report Verification (Hermes Sub-Agent System v1):**
+  - When assigning work to sub-agents (via orchestrator or delegation), structure tasks with explicit JSON contracts: declare `owns` (glob paths allowed), `forbidden` (off-limit paths), `dependencies`, and concrete `verification` commands.
+  - Automatically serialize tasks that touch overlapping paths to prevent git merge conflicts.
+  - Never trust sub-agent self-reports ("sukses", "sudah selesai"); verify physical artifacts and tests independently. Si Pengawas menambahkan laporan koreksi berbasis bukti tanpa veto atau loop penolakan; kontrol izin dan keselamatan rilis tetap terpisah.
+- **Autonomous Taste & Trend Ingestion for Self-Evolution (Absorbing UI/UX Craft & Technology):**
+  - *Pitfall:* Treating trend analysis solely as an exercise for generating external social media content while allowing internal engineering taste to stagnate on outdated, generic AI templates.
+  - *Rule:* Actively maintain an autonomous trend ingestion radar (scouting modern design engineering sources like `bentogrids.com`, `60fps.design`, `motionsites.ai`, and Rust-backed tooling like `uv`/`esbuild`). Filter out Dribbble "fake UX" and decorative AI-slop; absorb high-craft tactile interfaces, spring physics, and modular bento layouts into the agent's internal capabilities so every new build reflects state-of-the-art standards.
+- **Component Bank Showcase Anti-Slop Discipline (Console-First vs Marketing Hero):**
+  - *Pitfall:* Designing a component repository or showcase page using generic AI-slop landing page patterns (floating hero banner, marketing copy fluff, decorative kicker badges, and animated pinging dots), which undermines the credibility of an anti-slop library.
+  - *Rule:* Build component showcases as pure Console-First Engineering Workbenches: start directly from directory breadcrumbs, high-density filter bars, and interactive tactile cards paired with immediate code inspection drawers. Always write physical code files into `/home/ubuntu/otak-koding/BANK_KOMPONEN/` rather than mere markdown descriptions.
+  - *Automatic Showcase Deployment:* Every time a new component is absorbed or created in `/home/ubuntu/otak-koding/BANK_KOMPONEN/`, update the live web showcase (`/home/ubuntu/penelitian-pola-pikir-ai/public/komponen/index.html` at `https://www.jajandigital.web.id/komponen/`) so the user can immediately test the 60 FPS interaction on mobile devices and inspect the code without digging through the filesystem manually.
+
+- **Gatekeeper Pattern Over Symptom Patching (Pola vs Masalah):**
+  - *Pitfall:* Reacting to mistakes by scattering ad-hoc negative rules across multiple prompt and config files (e.g. adding word bans into every agent's SOUL.md), which causes prompt bloat, token waste, and fails to catch new variations.
+  - *Rule:* Do not patch the symptom; enforce the pattern. Implement a single centralized downstream gatekeeper (e.g. `privacy_gatekeeper.py`) that performs deterministic binary verification (Exit 0 / Exit 1) at the release door before artifacts touch production or public showcases.
+  - *Synthetic Entity Requirement:* Mandate 100% synthetic engineering entities (`CLUSTER_INSTANCE_ALPHA`, `RUNTIME_NODE_01`) in all demos and prototypes to strictly protect commercial confidentiality without needing multi-file prompt patches.
+
+- **Strict Prohibition on Real Business Entities as Dummy/Mock Content:**
+  - *Pitfall:* Reusing the user's real business entities (e.g. PT PBJ, semen logistics, plant names, real driver names, or actual invoice accounts) as placeholder or mock data in UI component demos and public showcases.
+  - *Rule:* Never use real user enterprise operations as dummy content. Use neutral synthetic engineering entities (e.g. `CLUSTER_INSTANCE_ALPHA`, `RUNTIME_NODE_01`, `NETWORK_TELEMETRY`, `DIGITAL_TRANSACTION_IDR`) to preserve commercial privacy, prevent data pollution, and maintain strict engineering boundaries.
+- **Code Slop Elimination & Hardline Code Shape (Engineering Hygiene Beyond UI Slop):**
+  - *Pitfall:* Focusing only on surface-level visual AI-slop while tolerating invisible "code slop" in the backend (empty `try/catch` silent failures, narrative redundancy comments that merely parrot function names, manual reinvention of stdlib utilities, leftover mock data in production, and hyper-defensive clutter).
+  - *Rule:* Enforce fail-fast execution without error-swallowing, write comments explaining the architectural *WHY* instead of the mechanical *WHAT*, mandate new payload testing on live endpoints, and verify physical exit codes before declaring any feature complete.

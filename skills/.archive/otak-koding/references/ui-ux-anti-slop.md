@@ -1,0 +1,18 @@
+# Pedoman Ringkas UI/UX & Konten Anti-Slop (Otak Koding)
+
+1. Subtraction Test: Jika dihapus tidak mengurangi fungsi, data, atau aksi pengguna, hapus elemen tersebut.
+2. Anti-AI-Topper: Dilarang menaruh badge kapsul versi/marketing mengambang di atas headline.
+3. Tipografi Poin-Poin: Judul tegas, deskripsi poin singkat faktual. Dilarang narasi pengantar panjang.
+4. Compact Density: Radius kartu maks 12px, tombol 6-8px, padding vertikal proporsional.
+5. Semantik Keuangan: Hijau = valid/balance, Merah = error/selisih, Kuning = review.
+6. Angka: Wajib tabular-nums, format Rp dengan titik, kolom angka rata kanan.
+7. Dimensi Tema Terang: Kanvas off-white (#FAF8F5/#FAF6EF) + kartu putih (#FFFFFF) + dual shadow (ambient + depth) + hairline border 1px + inner bevel highlight (inset 0 1px 0 rgba(255,255,255,0.9)). Dilarang tema putih datar tanpa elevasi.
+8. Bingkai Foto Taktil (Archival Frame): Khusus kartu galeri referensi/pameran visual, gunakan sasis kertas warm ivory (#F5F2EB) dengan dagu bawah lebar khas polaroid untuk metadata monospace dan soft ambient shadow di atas kanvas gelap, menghindari kontainer borderless generik.
+9. Source-Connected Design (Anti-Hallucination): Perancangan UI/UX dilarang hanya bersandar pada pengetahuan internal atau teks LLM semata. Wajib dihubungkan langsung ke program/MCP sumber komponen dan blok kode nyata (seperti Shadcn Studio MCP, UI-Layouts) serta bank visual terverifikasi (katalog referensi desain lokal) sebelum merangkai antarmuka.
+10. Zero-Emoji Policy (Anti-Kitsch): Dilarang keras menyematkan karakter emoji Unicode di antarmuka UI/UX. Wajib 100% menggunakan ikon vektor garis SVG monokrom presisi (Lucide SVG) dengan stroke-width seragam.
+11. Sasis Kartu Solid (Anti-Garis Tipis 3px): Dilarang menggunakan aksen garis tepi atas tipis (border-top 3px) pada kartu putih. Gunakan Sculpted Header Band bergradasi lembut dengan bayangan bertingkat (layered elevation) dan micro-card terstruktur.
+12. Neo-Brutalism Fungsional (Pola Depo Budget): Border hitam tebal (2-2.5px solid #000), hard offset drop shadow (4px 4px 0 #000 tanpa blur), blok warna kontras tinggi (Cobalt #1669E8, Lime #C8E832, Sunflower #FBBF24, Coral #FF6B55, Teal #2DD4BF), kanvas warm cream (#FAF7F2) berkisi teknis (28px), pita ticker marquee berjalan mulus, dan interaksi hover translate(-2px, -2px) dengan bayangan memanjang 6-7px.
+13. Mandor-Kuli Fan-Out untuk Halaman Penuh: Dilarang membuat prototipe setengah jalan atau stub. Kerahkan subagent spesialis secara paralel (Frontend, Backend, Obsidian) untuk menyelesaikan seluruh seksi dan fungsionalitas secara tuntas dan mandiri.
+14. Sentinel Diagnostic HUD vs Banner Promosi: Pada dasbor sistem/telemetri, dilarang membuat banner promosi lebar yang santai/kasual. Rancang sebagai Modul HUD Diagnostik Taktil yang presisi (lencana maskot vektor 48-52px, status operasional hidup, dan chip metrik mono terstruktur seperti 100ms AKTIF, Buffer, Kernel Source).
+15. Zero-Emoji Invariant Menyeluruh: Dilarang membiarkan karakter emoji Unicode menyelinap ke tag <title>, tombol tema (seperti kilauan), atau kategori mockup. Seluruh representasi visual wajib 100% menggunakan ikon vektor garis SVG monokrom presisi.
+16. Dual-Engine MCP Workflow: Wajib menggunakan MCP lokal uiux-reference (uiux_search, uiux_view, uiux_reference_board, uiux_extract_patterns) untuk membedah 100 aset visual fisik di server sebelum mengambil sasis komponen kode produksi via @ui-layouts/mcp (search_components, get_source_code). Alur: Cari Pola -> Validasi Gambar Fisik -> Komparasi Board -> Ambil Sasis Komponen -> Implementasi Bersih Zero-Emoji.

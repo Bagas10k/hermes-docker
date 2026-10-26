@@ -5,6 +5,11 @@ description: "Use when designing editorial magazine carousel slides."
 author: Bagas Cihuy
 version: 1.0
 tags: [carousel, instagram, editorial, typography, swiss-style, magazine, minimal]
+related_skills:
+  - seo-expert
+  - content-intelligence
+  - instagram-publishing-automation
+  - tiktok-content-extraction
 ---
 
 # Swiss Editorial & Modern Magazine Carousel Design System

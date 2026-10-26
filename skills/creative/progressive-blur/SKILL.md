@@ -43,3 +43,12 @@ Untuk performa 60 FPS tanpa membebani GPU rendering rasterization:
    Jika ingin efek blur muncul atau memudar (fade on scroll), **animasikan properti `opacity` (0 ➔ 1)** pada kontainer progressive blur.
 3. **Posisikan di Atas Konten (Composite Layer):**  
    Wajib diberi `pointer-events: none` dan `aria-hidden="true"` agar tidak memblokir interaksi klik tombol di bawahnya.
+
+---
+
+## 4. Standar Interaksi & Motion Lifecycle (SOP Mas Bagas v2.0)
+Komponen kartu berlatar progressive frosted glass WAJIB mengadopsi standar gerak:
+- **GSAP FLIP Morphing:** Saat kartu diklik, layer frosted glass bermetamorfosis membesar in-place (450ms `power3.out`).
+- **Enter Lifecycle:** Lapisan blur muncul dengan fade-in halus (280ms) untuk mencegah drop FPS GPU.
+- **Anti-Berkedip Putih (SPA Transition):** Efek kaca blur diuji di atas kanvas gelap terkunci agar tidak pernah memantulkan cahaya putih bocor saat filter/tab berganti.
+- **Mobile Touch Optimization:** Masking CSS gradient dioptimalkan hardware-accelerated (`will-change: transform`) untuk layar HP.

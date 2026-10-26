@@ -19,6 +19,11 @@ description: >
 
   【路由方式】SKILL.md 包含路由表和常用命令，复杂场景需按需阅读对应分类的 references/*.md。
   分类：search / social (小红书/推特/B站/V2EX/Reddit/Facebook/Instagram) / career(LinkedIn) / dev(github) / web(网页/文章/RSS) / video(YouTube/B站/播客) / finance(雪球/股票)。
+related_skills:
+  - competitor-news-monitor
+  - grounded-citations
+  - llm-wiki
+  - rss-feeds
 metadata:
   homepage: https://github.com/Panniantong/Agent-Reach
 ---

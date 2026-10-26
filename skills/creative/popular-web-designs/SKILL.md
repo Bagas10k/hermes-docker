@@ -16,6 +16,11 @@ triggers:
   - landing page
   - dashboard design
   - website styled like
+related_skills:
+  - upnormal-ui-architecture
+  - ui-ux-design-vault
+  - motion-ui-lifecycle-and-morphing
+  - creative-visual-mindset
 ---
 
 # Popular Web Designs
@@ -212,4 +217,3 @@ Match the design to the content:
 - **Premium / luxury:** Apple, BMW, Stripe, Superhuman, Revolut
 - **Data-dense / dashboards:** Sentry, Kraken, Cohere, ClickHouse
 - **Monospace / terminal aesthetic:** Ollama, OpenCode, x.ai, VoltAgent
-- **Civic / Education / Institutional systems:** Avoid tech neon SaaS slop. Use structured operational consoles, high-density audit ledgers, institutional serif/clean sans typography, and formal compliance cues (e.g. Gov/ISO standards).
