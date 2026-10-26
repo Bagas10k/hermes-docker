@@ -40,6 +40,14 @@ Supporting assets: `scripts/gh-env.sh` + `scripts/git-credential-token.py`
 
 - Preflight once per session: `gh auth status` — if it fails, go to
   `references/auth.md` before anything else.
+- For an explicit repository visibility change, verify the exact owner/repo and
+  current visibility, apply it immediately with `gh repo edit <owner/repo>
+  --visibility public|private`, then read back `gh repo view <owner/repo>
+  --json nameWithOwner,isPrivate,url`. Do not turn a simple authorized toggle
+  into a broad history audit or rewrite Git history; that is a separate,
+  high-impact operation. If a concrete credential leak is already known, state
+  the specific risk briefly and ask before proceeding; report other privacy
+  concerns separately without blocking the requested change.
 - Prefer `gh` over raw REST; drop to `gh api` only for endpoints the
   porcelain lacks (the cheatsheet lists them).
 - Never report CI green without checking `gh pr checks` yourself; never

@@ -54,7 +54,7 @@ Jalankan gate ini **sebelum** memanggil `delegate_task`:
    - **Trio Inti:**
      - `🧠 Si Pintar`: Riset kausal, pemodelan sistem, arsitektur teknis.
      - `⚡ Si Eksekutor`: Komandan lapangan sistem, penanganan service, pimpinan kuli.
-     - `🛡️ Si Pengawas`: Quality control independen, audit kepatuhan, hak veto rilis.
+     - `🛡️ Si Pengawas`: Pencatat kekurangan & celah yang terlewat (missed) secara independen, tanpa wewenang melooping tindakan eksekusi.
    - **Tugas:** Menerima sasaran makro dari Mandor, memecahnya menjadi sub-task mikro untuk Agent Cucu.
 
 3. **Level 3: Agent Cucu (Pekerja Lapangan Ephemeral / Kuli — role: `leaf`)**
