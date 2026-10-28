@@ -34,7 +34,9 @@ Orchestrate complex software and system development through structured Directed 
 - Target runtime environment (Node.js, Python, PHP, or Go) accessible via `terminal`.
 - Execution state tracking file at `build_tracker.json` in the current working directory.
 - Standard Python 3 runtime for the tracker script (`scripts/flight_plan_tracker.py`).
-- Follow `project-build-documentation`: inspect existing build docs first and update the canonical README/architecture/runbook when this work changes how contributors build, test, or operate the project.
+- During Stage 1, verify `AGENTS.md` and `.onefreq/`; if either is missing, run `docbuddy-adopt .` at the repository root before source edits. The wrapper performs non-overwriting template adoption only. If unavailable, `docbuddy adopt .` is the equivalent bootstrap; review project docs afterward.
+- Read the project brief, architecture, verification contract, current state, and existing build docs. Initialize `build_tracker.json` and create/complete the canonical README build path during Stage 1. **These are Stage 1 exit gates and must be ready before implementation coding begins.**
+- Keep proposal enrichment separate: `docbuddy propose` → inspect diff/scope → `docbuddy apply` only after explicit approval. Follow `project-build-documentation`; update canonical docs and `.onefreq/` state when milestones change facts or status.
 
 ## How to Run
 Initialize and track the project flight plan using the `terminal` tool:
@@ -74,7 +76,7 @@ python3 scripts/flight_plan_tracker.py --status
 ## Procedure
 
 1. **Conduct Discovery & System Audit (Stage 1):**
-   Inspect the existing runtime environment using `terminal` commands (`ss -tulpn`, `pm2 list`). Identify existing database tables and port allocations. Define explicit boundary paths and assert zero duplication.
+   Inspect repository guidance, docs, and runtime prerequisites before editing. Confirm `AGENTS.md` and `.onefreq/`; if either is missing, run `docbuddy-adopt .` from the repo root (non-overwriting template copy only), then inspect the adopted contracts. Read project brief, architecture, verification contract, current state, README/build instructions, and relevant tests. Identify database tables and ports only when relevant. Define path boundaries and avoid duplication. **Before Stage 1 exits or implementation begins, initialize `build_tracker.json` and create/complete the canonical README build instructions.** Enrich existing architecture/verification docs only via propose → diff review → approved apply.
 
 2. **Publish the Public Task DAG (Stage 2):**
    Initialize the DAG tracker with `scripts/flight_plan_tracker.py --init "<Project Name>"` via `terminal`. Present the numbered checklist to the user in the opening turn:
