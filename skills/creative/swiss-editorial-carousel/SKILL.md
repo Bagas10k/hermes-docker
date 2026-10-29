@@ -89,7 +89,8 @@ Desain editorial papan atas tidak memakai lebih dari 3 warna inti per komposisi.
   - Baris metadata: `KATEGORI BERITA // TANGGAL` (20px, all-caps, tracking 0.15em).
   - Headline editorial masif: 2–3 baris, ekstra tebal, langsung ke substansi berita.
 
-#### Slide 2 & 3: CONTEXT & NARRATIVE (Isi Berita)
+#### Slide 2 & 3: CONTEXT & NARRATIVE (Isi Berita — hanya arsitektur A)
+> Pada arsitektur B (hook + caption 2 slide), slide 2 adalah CTA dan seluruh paragraf pindah ke caption. Lihat selector arsitektur di §4 sebelum memakai anatomi ini.
 - **Bukan kartu melayang:** Teks mengalir di dalam kolom majalah yang lapang (*broadsheet column*).
 - **Struktur:**
   - Penanda bab tipis: `02 — KONTEKS PERISTIWA` (Mono, merah editorial atau putih muted).
@@ -109,6 +110,17 @@ Desain editorial papan atas tidak memakai lebih dari 3 warna inti per komposisi.
 ## 4. Arsitektur Copywriting Mandiri (*The 98/100 Self-Contained Rule*)
 
 Prinsip fundamental: **Carousel berita adalah media publikasi mandiri (Zero-Click Content), BUKAN funnel/alat pancing trafik web.**
+
+### Pilih arsitektur sebelum menulis (jangan mencampur)
+
+| Arsitektur | Bentuk | Kapan dipakai |
+|---|---|---|
+| **A. Mandiri 4 slide** | hook → konteks → dampak → CTA simpan | Desain ini dipakai sebagai media mandiri; pembaca paham penuh tanpa keluar slide |
+| **B. Hook + caption 2 slide** | slide 1 hook berita, slide 2 ajakan baca caption | Saat kreator/akun secara eksplisit menaruh isi berita di caption (mis. @sputarai) |
+
+Pada arsitektur B, aturan "pembaca harus memahami 100% fakta dari 4 slide" **tidak berlaku**; ganti dengan: slide hanya memuat satu gagasan dan angka pembulatan, caption memuat uraian, angka presisi, serta sumber primer dan perantara. Yang tetap berlaku di kedua arsitektur: nol elipsis menggantung, nol cliffhanger palsu, dan CTA harus jujur menyebut ke mana pembaca diarahkan.
+
+Jangan membuat 4 slide lalu menghentikannya di tengah dengan paragraf terpotong — pilih satu arsitektur dan selesaikan.
 
 ### 4 Aturan Penulisan Mutlak:
 1. **Tuntas & Mandiri (Self-Contained):** Pembaca harus memahami 100% fakta, konteks 5W+1H, dampak, dan kesimpulan langsung dari 4 slide tanpa perlu membuka rujukan luar.

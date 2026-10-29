@@ -67,17 +67,18 @@ Alih-alih mengedit foto, gunakan alur HTML-to-Image berbasis *headless browser*.
 - **Jangan pernah panggil endpoint publish atau Meta API saat testing** — gunakan mock/stub untuk Graph API calls di test suite.
 
 ## 6. Konten Carousel Editorial & Zero-Click Architecture
-Konten carousel berita (The Chronicle Engine / The Global AI Chronicle) WAJIB bersifat mandiri, tuntas (Zero-Click Content), dan bergaya editorial premium — dilarang menggantung kalimat (...) atau memaksa audiens mengunjungi web untuk membaca lanjutannya.
+Konten carousel berita @sputarai tetap memberi inti berita di slide, tetapi boleh memindahkan uraian lengkap dan tautan sumber ke caption. Jika CTA caption diminta, jangan memaksakan semua deskripsi berita ke slide demi prinsip Zero-Click; hindari cliffhanger menyesatkan dan jelaskan dengan jelas bahwa konteks/sumber lengkap ada di caption.
 
 - **Standar Visual:**
   - **Varian Warm Paper & Obsidian:** Warm Paper (`#F6F4EE`), Obsidian (`#111215`), aksen merah presisi (`#C5221F`), Newsreader serif masif, double hairline border sasis fisik.
   - **Varian Minimal Swiss Monochrome (Seputar AI 24/7 / @sputarai):** Kertas off-white bersih (`#FBFBFA`), tinta obsidian pekat (`#111214`), hairline sasis tipis, tipografi neo-grotesque masif (`Inter` 800/900 tight tracking -0.03em), indikator pulse dot solid tanpa pendaran warna. Memberikan kesan intelijen, objektif, dan instan. Gunakan penamaan komunikatif seperti **"SEPUTAR AI 24/7"** daripada istilah kaku "RADAR" saat mengelola akun publik seperti `@sputarai`.
-- **Struktur 4 Slide Mandiri (Zero-Click):**
-  - **Slide 1 (HOOK & COVER):** Headline langsung ke poin + Teks deskripsi singkat (deck) + Arahkan/Panah penunjuk geser lanjut.
-    - **Fallback Visual (Hero Image):** Selalu pasang fallback gambar latar (misal dari Unsplash) untuk Slide 1 jika artikel asli tidak memuat `image_url`. **PITFALL Gambar Kembar:** Jangan gunakan keyword pencarian generik seperti "AI" atau "Technology" yang statis. Sertakan fungsi acak/hash atau gunakan judul artikel sebagai seed pencarian gambar, agar jika terdapat 2 berita tanpa foto, tidak tertarik foto Unsplash yang sama persis sehingga konten terlihat duplikat.
-  - **Slide 2 (INTI & VISUALISASI):** Visualisasi pendukung mutlak di atas (Blueprint/SVG) untuk mendukung deskripsi + Teks deskripsi inti warta.
-  - **Slide 3 (LANJUTAN):** Lanjutan dari pembahasan / dampak (melanjutkan teks Slide 2).
-  - **Slide 4 (CTA):** Murni penutup dan Call to Action (Ajakan Simpan/Follow).
+- **Struktur default @sputarai — tepat 2 slide:** slide 1 hook berita, slide 2 CTA caption. Seluruh isi berita, angka rinci, dan tautan sumber berada di caption; jangan menyisakan paragraf penjelasan di slide mana pun. Aturan bentuk dan pemilihan aset: `references/photo-first-news-cover.md`, generator: `scripts/photo_cover.py`.
+- **Varian 4 slide (hanya bila diminta eksplisit; hook → bukti visual → mekanisme/dampak → caption):**
+  - **Slide 1 — Hook:** satu headline pendek, konkret, mudah dipahami saat scroll; boleh memakai angka paling menarik jika konteksnya jelas. Hindari deck/paragraf yang mengulang hook. Sertakan visual editorial yang khas dan relevan (foto sumber yang sesuai atau ilustrasi/diagram buatan sendiri); jangan menyerahkan kanvas kosong dengan hanya teks besar.
+  - **Slide 2 — Fakta utama:** tampilkan satu atau dua angka/fakta inti secara visual (skala, perbandingan, peta, timeline, atau grafik sederhana). Gunakan label/keterangan singkat, bukan paragraf deskripsi berita.
+  - **Slide 3 — Cara kerja atau dampak:** gunakan visualisasi yang sesuai dengan topik dan beberapa label ringkas. Jangan memindahkan paragraf narasi berita ke slide ini; uraian penjelasannya masuk caption.
+  - **Slide 4 — CTA caption:** arahkan pembaca secara eksplisit, misalnya `Baca penjelasan dan sumber lengkap di caption ↓`. Ajakan simpan/follow boleh menjadi sekunder, bukan pengganti CTA yang diminta.
+  - **Fallback visual:** jika sumber tidak menyediakan gambar yang relevan, pilih ilustrasi editorial atau visualisasi data yang dibuat khusus; jangan memilih foto stok generik hanya untuk mengisi ruang. Jika memakai foto fallback, variasikan secara deterministik agar berita berurutan tidak mendapat sampul identik.
     - **Header dan Subheader Dinamis:** Hindari label hardcoded seperti `BAGIAN 01 // 3 FAKTA KUNCI PERISTIWA` yang kaku. Hubungkan label (`chapterNum`) dan judul (`subheadVal`) secara dinamis ke role/slide index sehingga wajar saat berita berganti.
     - **Pitfall Teks "Tersangkut" (Hardcoded Fallback Value):** Jika teks di Slide 2 dan Slide 3 tidak mau berubah walau topik berganti, periksa file script algoritma AI fallback CMS (contoh: `content-cms.js`). Masalah biasanya terletak pada logic pengisian `fallbackValue()` di mana role `CONTEXT` dan `SIGNIFICANCE` diisi hardcoded string alih-alih mengekstraksi `source.summary` secara dinamis. Perbaiki *root cause* di script algoritmanya.
     - **Bahasa & Gaya Penulisan Lokal (Pasar Indonesia):** 
@@ -85,41 +86,57 @@ Konten carousel berita (The Chronicle Engine / The Global AI Chronicle) WAJIB be
       - **PITFALL Prompt Bahasa Lemah di Database:** Jika AI terus mengabaikan instruksi dan menghasilkan teks/JSON dalam bahasa Inggris (terutama saat menggunakan JSON Schema Strict), masalahnya ada pada aturan di *database template* CMS. Aturan `"language": "Bahasa Indonesia"` terlalu lemah. Wajib gunakan instruksi pelarangan tegas: `"DILARANG KERAS menyalin mentah-mentah teks sumber. Wajib diubah menjadi narasi cerita Bahasa Indonesia."`
       - **PITFALL Hardcoded Text Override pada Skrip CMS:** Jika model AI terbukti berhasil meracik teks Indonesia yang benar, tetapi hasil akhir yang tayang (seperti *caption*) kembali menjadi abstrak bahasa Inggris mentah, periksa skrip *publisher* (misal `daily-publisher-service.js` atau `content-cms.js`). Sering kali skrip *wrapper* memiliki baris kode *hardcoded* yang secara paksa menimpa (*override*) properti `content.caption` dengan teks aslinya. Perbaiki skrip agar mengutamakan hasil AI.
       - **Zero Fluff & To-The-Point (Dilarang Bertele-tele):** Dilarang keras menggunakan kalimat pembuka klise, dramatis, atau berbunga-bunga (seperti *"Kabar mengejutkan datang dari..."*, *"Langkah berani ini membuka mata publik..."*, *"Selama ini industri..."*). Wajib LANGSUNG ke inti: sebutkan subjek/institusi, nama spesifik sistem/model, mekanisme teknisnya, dan data/angka konkret terukur (persentase, biaya, waktu). Kalimat aktif, pendek, tegas, dan sarat informasi (Subjek - Predikat - Objek - Data).
-      - **Format Tepat 2 Paragraf Padat:** DILARANG menggunakan format bullet points (`•`) pada Slide 2 dan Slide 3. Sajikan isi warta dalam format **Tepat 2 Paragraf Bercerita** yang padat data dan tuntas (masing-masing 2-3 kalimat lugas).
-      - **Visualisasi Pendukung Slide Deskripsi (Slide 2 - Standar Blueprint SVG):** Wajib menyertakan elemen visual pendukung di Slide 2 (di antara kotak observasi dan narasi) untuk memecah kejenuhan teks (*visual breaker*) dan menghapus kekosongan ruang atas:
-        - **PITFALL "Diagram 3 Kotak Teks Biasa":** Hanya menyajikan 3 kotak abu-abu teks polos dengan panah dinilai sebagai diagram murahan/malas yang menjatuhkan skor estetika.
-        - **SOLUSI (Build Sendiri Technical Blueprint SVG):** WAJIB memprioritaskan perakitan **Infografis Skema Arsitektur Vektor SVG Murni** (kanvas 952×236px, stroke 1.5–2px, tanpa pendaran neon):
-          1. *Header Blueprint:* Menampilkan nama skema teknis kapital + lencana tolok ukur/status di sisi kanan (misal: `AKURASI: 100% VALID` atau `EFISIENSI: 80X`).
-          2. *Grid Blueprint Halus:* Latar belakang bertekstur grid teknis tipis (`rgba(17, 18, 20, 0.05)`).
-          3. *Tiga Node Fungsional Berbobot:*
-             - Node 01 (`01 // MASUKAN`): Ikon terminal/prompt, judul dataset, dan status masukan.
-             - Node 02 (`02 // PROSES`): Focal point berbingkai aksen merah pekat, ikon microchip/neural, nama model pemroses, dan bilah meter telemetri operasional aktif.
-             - Node 03 (`03 // KELUARAN`): Ikon shield centang verifikasi, hasil nyata capaian terobosan, dan status eksekusi. (Gunakan istilah bahasa Indonesia murni `03 // KELUARAN`, hindari kata asing seperti `OUTPUT`).
-          4. *Konektor Bus Data:* Garis merah tebal dengan panah penunjuk alur linier.
-          5. *Footer Metadata Telemetri:* 3 kolom data spesifikasi di bawah modul (`STATUS`, `ARSITEKTUR`, `DAMPAK`).
-        - **Larangan Foto Acak Internet di Slide 2:** Jangan gunakan pencarian web foto acak untuk Slide 2 yang berisiko menampilkan foto eksekutif tak terkait dengan kepala terpotong atau salah konteks. Blueprint SVG yang di-generate langsung dari inti teknis warta menjamin 100% kohesif dan akurat.
-      - **Kotak Observasi Seimbang (Observation Box):** Letakkan kotak observasi beraksen garis merah tebal di atas narasi Slide 2 dan Slide 3 (1 kalimat observasi padat, 10–12 kata). Pastikan isi teks di dalam kotak tidak mengulang kata label (hapus duplikasi prefiks `OBSERVASI:` atau `FOKUS:`).
-      - **Deck Summary Slide 1:** Pastikan di bawah judul utama terdapat 1–2 kalimat ringkasan pengantar (*deck summary*) murni berbahasa Indonesia untuk menyajikan konteks seketika.
-      - **Penebalan Visual (Visual Anchors):** Gunakan `<strong>...</strong>` pada 1 frasa kunci per paragraf agar pembaca yang membaca sekilas (*skimming*) langsung menangkap inti pesan tanpa merasa silau.
-      - **Kurasi Foto Hero Bersih & Anti-3D Cartoon:** Foto sampul WAJIB dokumentasi pers nyata atau fotografi konseptual teknologi beresolusi tinggi (lengan robot presisi di lab, wafer silikon semikonduktor, koridor server data center). DILARANG KERAS menggunakan foto render 3D kartun, meme, mainan/boneka, ilustrasi clipart, atau gambar ber-watermark komersial (filter out `plus.unsplash.com`, `premium_photo`, `shutterstock`, `gettyimages`). Hindari gambar artikel yang memuat banner teks promosi besar berbahasa Inggris atau logo vendor yang tidak relevan dengan topik.
+      - **Pindahkan narasi panjang ke caption:** Slide 2–3 memakai angka, diagram, visual, serta label pendek; jangan menaruh paragraf berita di kedua slide. Tulis uraian kontekstual yang lengkap di caption dengan Bahasa Indonesia alami, kalimat lugas, batas fakta vs proyeksi yang jelas, dan atribusi primer/sekunder yang tepat.
+      - **Visualisasi harus melayani isi, bukan memenuhi template:** pilih foto editorial berizin/relevan, ilustrasi khusus, perbandingan angka, peta, atau diagram alur sesuai berita. Hindari diagram kotak generik dan jangan memaksakan blueprint teknis yang tidak cocok dengan topik. Jangan membuat klaim metrik dekoratif (misalnya akurasi/efisiensi) yang tidak dibuktikan sumber.
+      - **Keterangan slide:** gunakan label ringkas yang membantu membaca visual; hindari kotak observasi dan subjudul berulang jika tidak menambah fakta atau memperjelas data.
+      - **Hook sampul:** jaga satu gagasan utama; jangan menambahkan deck summary panjang yang mengulang headline. Tambahkan konteks singkat hanya bila perlu untuk mencegah salah tafsir.
+      - **Penekanan visual:** di slide, pakai skala, posisi, warna aksen, dan visualisasi untuk menonjolkan satu fakta. Di caption, sorot istilah/angka seperlunya tanpa membuat setiap kalimat tampak tebal.
+      - **Visual hero relevan dan khas:** Utamakan foto editorial nyata yang relevan atau ilustrasi editorial khusus yang mendukung hook. Hindari clipart/gambar kartun generik, watermark komersial, banner promosi yang mencolok, dan logo vendor yang tidak menambah konteks.
     - **Pemenggalan Kalimat Aman:** Saat mengekstrak kalimat dari ringkasan berita, jika isi ringkasan sangat pendek (kurang dari 3 kalimat pendukung), jangan paksakan variabel kosong yang akan membuat layout *broken* atau tersangkut variabel lama. Siapkan satu klausul *fallback* redaksional elegan bergaya Indonesia yang tidak kaku.
     - **Filter Kosa Kata Asing di Judul:** Gunakan regex sederhana untuk mengganti frasa kaku bawaan mesin translasi dengan idiom lokal yang lebih natural (contoh: "How" / "Why" → "Cara", "Now everyone can" → "Kini Semua Orang Bisa", "puts on hold" → "Tunda", "due to" → "Gara-Gara").
     - **Konsistensi Identifier Role (Template vs Payload):** Pastikan role yang dikaitkan di template (`CONTEXT`, `SIGNIFICANCE`) cocok 100% dengan role yang dicek di dalam logika pemecah teks. Gunakan pencocokan majemuk jika ada varian nama role lama (`if (role === 'WHY_IT_MATTERS' || role === 'SIGNIFICANCE')`), agar format teks tetap bekerja walau sasis template pernah diubah namanya.
-    - **Fallback Visual (Hero Image):** Selalu pasang *fallback* gambar latar (misal dari Unsplash) untuk Slide 1 (Hook/Cover) di logika perenderan jika artikel asli tidak memuat `image_url` (bernilai `null` atau kosong). Kanvas sampul berita tidak boleh kosong tanpa foto.
-      - **PITFALL "Foto Sampul Kembar/Duplikat":** Jangan gunakan pencarian statis yang selalu mengembalikan gambar yang sama (misal `findReferenceImage` yang mereturn foto ke-1 dari hasil Unsplash) untuk berita tanpa gambar asli. Hal ini membuat dua berita berbeda (seperti *paper* ArXiv) tampak seperti *postingan ganda/spam* di *feed* Instagram karena Slide 1-nya identik. **Selalu tambahkan pengacakan (random/offset) atau rotasi bank gambar** agar gambar *fallback* tidak pernah sama berturut-turut.
+    - **Fallback visual sampul:** Jika artikel tidak memiliki aset gambar yang relevan, buat ilustrasi editorial/diagram khas dari isi berita; jangan mengisi ruang dengan foto stok generik. Jika foto fallback memang paling sesuai, gunakan pilihan deterministik berbasis topik dan cegah sampul identik pada posting berurutan.
     - **Gaya Caption Instagram:** Buat caption lebih organik dan bergaya media berita lokal. Gunakan emoji relevan (🚨, 🔍), label sumber berita yang jelas, dan CTA yang persuasif (*"📌 Jangan lupa follow @sputarai agar tak tertinggal info AI terkini!"*), menghindari diksi kaku atau bahasa teknis (*analis industri*, *dikaji mendalam*) saat menangani fallback teks kosong.
-    - **Banner Bawah Follow:** Jadikan banner hitam paling bawah sebagai zona murni follow akun (`@SPUTARAI` + maskot Inspektur Bebek + `IKUTI KABAR ➔`).
+    - **Brand mark/CTA opsional:** Letakkan handle atau ajakan follow sebagai elemen sekunder yang tidak menyaingi hook dan CTA utama menuju caption; jangan mewajibkan banner hitam atau maskot jika tidak cocok dengan komposisi.
     - **Pitfall Kontras CSS Banner Bawah:** Jika latar belakang banner hitam (`#111214`), teks kicker wajib memakai putih transparan (`rgba(255, 255, 255, 0.65)`), jangan memanggil variabel warna gelap sasis yang membuat teks tenggelam (*black text on black background*).
 - **Pantangan Anti-Slop Mutlak:**
   - Dilarang emoji sebagai ikon UI/UX (wajib pure inline SVG stroke 1.5–2px).
   - Dilarang teks gradasi warna-warni, badge kicker neon glow, border glow murahan, logo box melayang, dan kanvas kosong.
   - Dilarang teks terpotong menggantung dengan elipsis (...) pada narasi berita.
 - **Caption & Atribusi Bersih:**
-  - **Panjang Caption:** Pendek dan padat — hindari paragraf panjang yang melelahkan di layar HP. Cukup 1 judul aktif, 2–3 kalimat ringkasan inti, dan sumber asli.
+  - **Caption adalah rumah uraian lengkap:** sediakan konteks dan deskripsi berita yang dipindahkan dari slide, jelaskan angka/istilah yang perlu, beri caveat untuk estimasi, lalu cantumkan sumber primer dan sumber artikel perantara secara terpisah bila berbeda. Pecah teks menjadi paragraf pendek agar mudah dibaca di ponsel; ringkas tanpa menghilangkan konteks penting.
   - **Pantangan Domain Internal:** DILARANG KERAS menyebut atau menyertakan domain hosting/tunnel internal (seperti `jajandigital` atau staging URL) pada caption maupun slide grafis. Selalu cantumkan langsung nama penerbit sumber resmi aslinya (`Sumber: TechCrunch AI`, `Sumber: OpenAI`, dsb).
   - **Isolasi Handle Akun:** Untuk akun publikasi khusus (seperti `@sputarai`), dilarang menyuntikkan tag/mention akun pribadi kurator (`@_bagas.spt`) ke dalam gambar atau caption publik. Jaga agar identitas tetap murni atas nama media publikasi tersebut.
-  - **CTA Retensi Tegas (Wajib Simpan 24 Jam):** Pertegas instruksi di Slide 4 dan caption untuk **menyimpan postingan** sebagai arsip pemantauan 24 jam (*"📌 SIMPAN lembar ini agar tidak tertinggal perkembangan AI 24 jam"*). Metrik *save* dan *share* adalah pemicu utama distribusi algoritma Instagram 2026.
+  - **CTA tambahan opsional:** Ajakan simpan/follow boleh ditempatkan setelah arahan membaca caption, jika relevan dengan konten. Jangan mengklaim bahwa save/share pasti menaikkan distribusi algoritma tanpa data platform yang dapat diverifikasi.
   - **Tagar:** Gunakan 4–6 tagar spesifik topik dan identitas media (`#SputarAI #KecerdasanBuatan #InovasiAI`).
+
+## 6b. Gaya Cover Foto-First (News Photo Cover)
+
+Untuk berita bergambar: foto jurnalistik full-bleed 4:5, teks minim (kicker + satu headline ≤6 kata), aksen merah tunggal. Kekuatan gaya ini ada pada ketepatan memilih foto, bukan ornamen. Teks **menyesuaikan objek**: posisi, warna, dan scrim dibaca dari foto, bukan dari posisi tetap.
+
+- Spesifikasi, aturan pemilihan aset, dan algoritma penempatan teks: `references/photo-first-news-cover.md`.
+- Standar tipografi yang sudah disetujui Mas Bagas (Inter Tight 900, sentence case, font sistem dilarang): `references/typography-standard-sputarai.md`.
+- Generator siap pakai (PIL): `scripts/photo_cover.py` — memasang font editorial bila belum ada, membaca band/kepala subjek, mengukur bbox teks, lalu menghasilkan slide hook + slide CTA.
+
+**Tipografi (jangan pakai font sistem):**
+- DILARANG typeset cover dengan Liberation/DejaVu/font bawaan OS. Bentuknya terbaca seperti dokumen kantor dan langsung dinilai rendah oleh Mas Bagas; ini pernah terjadi dan harus tidak terulang.
+- Pasang stack Google Fonts ke `~/.local/share/fonts`, lalu pilih satu arah per akun: **Instrument Serif** (paling berwibawa), **Inter Tight 900** (paling cepat terbaca di HP), **Anton** (paling berteriak; hanya untuk breaking). Label/kicker: **JetBrains Mono**.
+- Variable font: set bobot lewat `font.set_variation_by_axes([weight])`; kalau `set_variation_by_name` tidak tersedia, axes tetap bekerja.
+- Ukuran headline bukan angka mati: mulai 96–138 px, lalu menyusut sampai **lebar** dan **tinggi glyph nyata** lolos. Backs-font condensed 118–150 px tanpa pengukuran adalah resep tabrakan.
+
+**Copywriting hook (bukan nama produk):**
+- Hook wajib menciptakan pertanyaan atau ketegangan, bukan mengumumkan nama model/fitur. Headline `GEMINI 4 CARBON` ditolak karena tidak ada alasan bagi orang awam untuk berhenti scroll.
+- Pola yang bekerja: kontradiksi/paradoks yang benar menurut sumber — *“AI terkuat Google, tak bisa kamu pakai.”* Alternatif: angka mengejutkan + konsekuensi, atau siapa yang diuntungkan/dikecualikan.
+- Maksimal dua baris, ≤6 kata, satu gagasan. Kalimat lengkap dengan tanda baca lebih terbaca daripada tumpukan caps tanpa titik.
+- Slide 2 harus menjawab pertanyaan yang dibuat slide 1, bukan mengulang CTA generik: *“Kenapa kamu tidak bisa pakai?” → jawabannya di caption.*
+
+**Pitfall format (mengulang kesalahan mahal):**
+- **Hitung slide secara literal.** Jika diminta 2 slide, keluarkan 2 slide. Menambah slide "untuk konteks" adalah pelanggaran spesifikasi, bukan inisiatif.
+- **Jika diminta memindahkan isi ke caption, jangan menyisakan setengah narasi di slide.** Caption memuat paragraf lengkap; slide hanya angka/label/visual.
+- **"Sederhana" bukan berarti teks besar di kanvas kosong.** Sebelum mendesain, ambil referensi nyata (post akun pembanding) atau tanyakan arah; jangan mengarang template datar lalu menyebutnya minimalis.
+- **Referensi bisa berupa foto, bukan template grafis.** Periksa pikselnya lebih dulu; kalau slide pembanding adalah foto full-bleed tanpa teks, meniru "gaya" berarti meniru pendekatan fotonya, bukan menambah tipografi.
+- **Jangan menilai tinggi blok teks dengan rumus.** `size * 0.94 * jumlah_baris` meleset puluhan piksel; pada headline Anton tiga baris bloknya menabrak kepala subjek 82 px. Ukur `draw.textbbox()` per baris, lalu perkecil font sampai `bottom <= subject_top - 40`.
+- **Deteksi kepala subjek dari energi tepi, jangan hardcode.** Ambil profil baris dari edge map; baris pertama yang melampaui ~1.8× median adalah awal subjek. Angka tetap (mis. 420) hanya berlaku untuk satu foto.
 
 ## 7. Monitoring & Analitik (Insights)
 API yang sama dapat digunakan untuk memantau performa postingan dan metrik interaksi tanpa perlu masuk ke aplikasi.
