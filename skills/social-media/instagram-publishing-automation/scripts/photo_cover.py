@@ -133,8 +133,10 @@ def fit_lines(d, lines, face, weight, tr, lh, y0, ceiling, start=138, floor=58):
     return load(face, floor, weight), floor
 
 
-def build(src_path, kicker, lines, out_dir: Path, tag, face='display_serif',
-          weight=None, tr=0.0, lh=1.06):
+def build(src_path, kicker, lines, out_dir: Path, tag, face='display_sans',
+          weight=900, tr=-3.4, lh=1.02):
+    # Locked default (Mas Bagas, 29 Oct 2026): Inter Tight 900, sentence case.
+    # Serif stays available via COVER_FACE=display_serif for special features only.
     src = Image.open(src_path).convert('RGB')
     base = crop45(src)
     base = ImageEnhance.Contrast(base).enhance(1.06)
@@ -207,6 +209,7 @@ if __name__ == '__main__':
     jobs = json.loads(sys.argv[1])
     out = Path(sys.argv[2])
     out.mkdir(parents=True, exist_ok=True)
-    face = os.environ.get('COVER_FACE', 'display_serif')
-    print(json.dumps([build(j['src'], j['kicker'], j['lines'], out, j['tag'], face=face)
+    face = os.environ.get('COVER_FACE', 'display_sans')
+    kw = dict(weight=900, tr=-3.4, lh=1.02) if face == 'display_sans' else dict(weight=None, tr=0.0, lh=1.06)
+    print(json.dumps([build(j['src'], j['kicker'], j['lines'], out, j['tag'], face=face, **kw)
                       for j in jobs], indent=1))

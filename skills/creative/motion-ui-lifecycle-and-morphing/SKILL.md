@@ -90,6 +90,11 @@ Hindari penerapan satu lapis `backdrop-filter: blur(16px)` datar yang terlihat s
   - Jika Level 1 (perintah singkat): eksekusi instan tanpa banyak tanya wacana.
   - Jika Level 3 (teguran/nilai 0/batasan mutlak): isolasi akar masalah, akui kesalahan tanpa membela diri, dan pasang pagar biner detik itu juga.
 
+## 7.1. Pitfall Runtime: Pan/Zoom Canvas Interaktif & Pointer Capture
+- **try/catch pada `setPointerCapture`:** Saat membuat kanvas spasial interaktif dengan Pointer Events (`pointerdown`, `pointermove`, `pointerup`), panggil `element.setPointerCapture(e.pointerId)` selalu di dalam blok `try/catch`. Event sintetis atau pointer yang terlepas sebelum event diproses akan melempar `NotFoundError: Failed to execute 'setPointerCapture'` dan menghentikan seluruh eksekusi handler drag jika tidak ditangkap.
+- **Dual-Loop Render Fallback (rAF + Timeout):** Browser otomatis menunda callback `requestAnimationFrame` saat tab berada di background (`document.hidden = true`) atau saat uji headless CDP dijalankan tanpa jendela aktif. Saat membuat scheduler render kanvas berbasis rAF (`swarmScheduleRender`), pasang timer cadangan pendek (100–120ms). Jika rAF tidak kunjung dieksekusi, timer cadangan akan memicu render langsung ke DOM sehingga state koordinat tidak tertahan (*frozen*).
+- **DOM Insertion via textContent over innerHTML:** Saat merender node kartu dari payload eksternal atau database (seperti goal/branch tugas agen), bangun elemen menggunakan `document.createElement` dan tetapkan teks via `.textContent` bukan template literal `.innerHTML`. Ini menutup celah XSS dan mencegah karakter khusus merusak pohon DOM kanvas.
+
 ## 8. Two-Layer Silhouette Liquid Gooey Architecture (Jakub Antalík)
 Untuk menerapkan efek cairan (*liquid / gooey / jelly morphing*) tanpa merusak ketajaman font dan bayangan:
 - **Masalah Klasik Filter Gooey:** Mengaplikasikan `filter: blur() contrast()` langsung pada elemen HTML merusak teks menjadi buram/kabur (*fuzzy/soft*), menelan bayangan `box-shadow`, dan memicu bug render di Safari/WebKit.

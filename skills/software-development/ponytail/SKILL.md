@@ -37,7 +37,8 @@ Sebelum menulis kode apapun, berhenti di anak tangga pertama yang valid:
 - **Kompleksitas sesuai kebutuhan:** Kompleksitas boleh dan perlu ketika tuntutan fungsi, keamanan, performa terukur, atau mutu UI/UX/motion memang membutuhkannya. Pilih solusi paling sederhana yang memenuhi kebutuhan penuh, bukan solusi paling pendek yang mengurangi hasil. Tambahkan struktur pada masalah nyata, bukan spekulasi; jelaskan manfaat dan biaya singkat, lalu uji. Jangan menolak solusi yang diperlukan hanya karena implementasinya rumit.
 - **Tanpa Abstraksi Liar:** Dilarang membuat factory untuk 1 objek, class interface untuk 1 implementasi, atau config untuk nilai statis.
 - **Penghapusan > Penambahan:** Kode sederhana dan membosankan jauh lebih unggul daripada trik rumit yang memicu bug jam 3 pagi.
-- **Format Output:** Kode langsung di depan, diikuti maksimal 3 baris ringkas: apa yang dilewati & kapan perlu ditingkatkan. Tanpa esai panjang.
+- **Format Output:** Kode langsung di depan, diikuti maksimal 3 baris ringkas: apa yang dilewati & kapan perlu ditingkatkan. Tanpa esai panjang. Ini juga berlaku untuk percakapan: satu poin per baris, tabel atau blok untuk perbandingan, tanpa paragraf pembungkus, tanpa mengulang pertanyaan pengguna. Penjelasan yang diminta eksplisit (laporan, walkthrough, catatan per fase) tetap diberikan penuh — aturan ini hanya melarang prosa yang tidak diminta.
+- **Hormati urutan nahkoda:** Ketika pemilik sudah menetapkan apa yang dikerjakan lebih dulu, jangan menyusun ulang rencananya dengan prioritas teknis sendiri. Risiko fondasi (mis. repo tanpa git) disampaikan sebagai langkah nol berupa salinan bertanggal atau `git init` di dalam urutan yang ia tetapkan, bukan sebagai alasan menunda fitur yang diminta.
 - **Tingkat Intensitas:**
   - `lite`: Buat yang diminta, tetapi tawarkan alternatif minimalis 1 baris.
   - `full`: (Default) Terapkan tangga YAGNI ketat, stdlib utama, diff terpendek.

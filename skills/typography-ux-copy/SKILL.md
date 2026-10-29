@@ -337,6 +337,18 @@ Keep content and presentation separable. Let containers grow where copy may expa
 
 Use `scripts/type_scale.py` when a calculated type scale or token starter is helpful. Treat generated values as candidates that still require visual review.
 
+## Typesetting rendered assets (images, PDFs, slides)
+
+Rules for type baked into a bitmap or PDF rather than a browser:
+
+- Never typeset with the renderer's default or OS fallback faces (Liberation, DejaVu, Arial clone). They read as office documents and collapse the perceived quality of the whole asset; install a real family first.
+- Google Fonts static/variable TTFs are enough: `raw.githubusercontent.com/google/fonts/main/ofl/<family>/<File>.ttf`, URL-encoding brackets in variable filenames (`InterTight%5Bwght%5D.ttf`). Store in `~/.local/share/fonts` and load by absolute path.
+- Variable fonts: set weight with `font.set_variation_by_axes([900])`; `set_variation_by_name` is not always available.
+- Do not estimate a text block's height with `size × multiplier`. Measure `draw.textbbox()` per line and shrink until the real glyph bottom clears the boundary (subject, safe area, footer). Estimation is routinely off by tens of pixels at display sizes.
+- PIL applies no letter-spacing: draw character by character and add the track to each advance. Negative tracking around −3 to −3.5 px at ~100 px tightens display type without touching glyphs.
+- For editorial credibility, prefer sentence-case bold over stacked all-caps; reserve all-caps condensed for breaking-news or poster contexts.
+- After rendering, zoom the smallest text (kicker, metadata, separator glyphs) before delivery — encoding and kerning defects hide there.
+
 ## Expert review standard
 
 Before finalizing a design or recommendation, verify:

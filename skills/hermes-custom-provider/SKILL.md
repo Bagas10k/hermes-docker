@@ -105,6 +105,10 @@ A model can 404 through a healthy proxy on healthy accounts. Run this attributio
 - **Key names must match exactly** between .env and the `${...}` reference in config.yaml; if auth fails mysteriously, diff the two strings first (`grep HERMES_CUSTOM ~/.hermes/.env` vs the config `api_key` line).
 - **Silent model switching is almost always fallback activation.** When a model seems to "switch itself", check `fallback_providers` in `config.yaml` and recent gateway logs for transient 429/500 errors on the primary route before assuming session corruption.
 
+## Native round-robin combos for custom providers
+
+For an Atmo-style upstream with multiple route prefixes, follow `references/9router-atmo-round-robin.md`. Use the installed management API, preserve existing router settings, verify real A→B→A requests, and distinguish routing from MoA or expanding account quota.
+
 ## 9. Reusing the Hermes Gateway in Auxiliary Apps (HexChat pattern)
 
 When a secondary local app (e.g. HexChat on :8765) needs LLM without its own key, reuse the Hermes/9Router credentials instead of minting a new provider:

@@ -14,6 +14,7 @@ Standard operating procedure for communicating with the user on Telegram. Ensure
 ## Core Rules & Formatting
 1. **Spasi Lega (Generous Spacing):** Give blank line separators between paragraphs and sections to ensure comfortable reading on mobile screens.
 2. **One-Line Points:** Format list items as concise single lines rather than dense wrapped blocks.
+3. **Respons Terlalu Panjang = Respons Sulit Dibaca:** Di terminal polos (CLI) markdown tidak dirender — asterisk, header, dan backtick tampil sebagai karakter literal. Jangan menulis blok paragraf panjang berlapis kualifikasi di permukaan apa pun. Pola yang benar: satu poin per baris, tanpa paragraf pembungkus, tanpa mengulang pertanyaan user, tanpa penutup "apakah ada lagi". Kalau respons lebih panjang dari kode yang dijelaskan, potong responsnya. Keluhan "sulit dibaca" jarang soal warna/skin — hampir selalu soal kepadatan teks.
 3. **Contextual Icons:** Use clear icons (e.g. 🚀, 🛠️, 📊, ⚡, ✅, 📁, ⏳, 🔄) to categorize message elements.
 4. **Native Telegram Markdown:**
    - **Bold** for statuses, file paths, and key concepts.
@@ -76,6 +77,7 @@ Dilarang keras melakukan eksekusi monolitik panjang dalam keadaan hening (*silen
 ```
 
 ## Pitfalls
+- **Overclaim Bertentangan dengan Status Tool:** Jangan pernah melaporkan "SELESAI" atau "PASS" untuk langkah yang tool-nya mengembalikan tanda peringatan, `interrupted`, timeout, atau exit non-zero. Klaim sukses hanya untuk hasil yang benar-benar terbaca di output. Jika ragu, re-verifikasi dengan perintah minimal dulu, baru laporkan — jangan memperdebatkan peringatan dengan narasi.
 - **Synthetic Loading on Plain Chat:** Never slap a static 100% progress bar onto regular conversation or single-shot answers; loading before response is handled by the gateway stream, while progress bars are strictly for multi-step execution tracking.
 - **Stating intent without applying changes:** Never just show a progress bar template as a promise; immediately persist settings and execute real updates to files/memory before reporting.
 - **Confusing UI/UX emoji restriction with Telegram chat:** Web dashboard UI/UX prohibits decorative emojis, but Telegram conversational messages explicitly require functional contextual icons for visual clarity.

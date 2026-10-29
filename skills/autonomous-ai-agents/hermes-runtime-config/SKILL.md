@@ -107,6 +107,16 @@ Keluhan "prompt banyak yang stack" dijawab dengan angka dari berkas nyata, bukan
 
 Probe siap pakai: `python3 scripts/measure_prompt_stack.py [nama-profil]`.
 
+## Prosedur: Membaca Setup Skin & Tema (TUI vs Dashboard)
+
+Keluhan “TUI-nya jelek / sulit dibaca” sering bukan soal skin, dan menebak akan mengganti tampilan yang sudah disukai pemilik.
+
+1. **Pisahkan tiga permukaan sebelum menyentuh apa pun:** skin TUI (`display.skin` + `~/.hermes/skins/<nama>.yaml`), knob kepadatan TUI (`display.compact`, `display.tui_compact`, `display.details_mode`, `display.sections.{activity,thinking,tools}`, `display.tool_progress`), dan tema dasbor web (`dashboard.theme`, `dashboard.font`). Mengubah yang ketiga tidak mengubah terminal.
+2. **Baca nilai efektif, jangan tebak dari ingatan:** `grep -nE "skin|theme|compact|tui_" ~/.hermes/config.yaml`, lalu buka berkas skin-nya. Skin kustom pemilik mendeskripsikan dirinya di baris `description:` dan `branding:` — kutip itu saat melapor.
+3. **Daftar skin bawaan dibaca dari sumber, bukan dihafal:** kunci di `_BUILTIN_SKINS` pada `~/.hermes/hermes-agent/hermes_cli/skin_engine.py`.
+4. **Jangan mengganti skin hanya karena pengguna mengeluh soal keterbacaan.** Periksa dulu apakah yang dilihatnya memang skin aktif itu. Bila ragu antara “preset tampilan” dan “warna/skin”, ajukan satu pertanyaan pilihan ganda — jangan menebak.
+5. **Kalau yang jelek adalah bentuk jawaban, perbaiki kebiasaan menulis, bukan warna.** Terminal polos tidak merender Markdown: tanpa header/tabel, bentuk satu-satunya adalah baris pendek, satu poin per baris, dan blok indentasi untuk status. Menumpuk paragraf panjang lalu menyalahkan skin adalah diagnosis yang salah.
+
 ## Pitfalls
 
 - **`delegation.orchestrator_enabled` bukan aktivasi skill.** Key itu hanya mengizinkan anak punya anak (`max_spawn_depth`). Memuat skill orkestrator di setiap turn adalah urusan `skills.auto_load`. Dua hal berbeda; menyamakan keduanya membuat laporan "sudah aktif" yang salah.

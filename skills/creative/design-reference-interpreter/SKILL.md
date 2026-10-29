@@ -35,20 +35,21 @@ Nilai Kecocokan Konteks + Vibe (vibe-mapping.md)
         ↓
 Triase: Adopt / Transform / Reject
         ↓
-Bentuk Design Direction Terarah
+Pilih artefak sesuai permintaan: DNA board saja ATAU UI
         ↓
-[Builder Agent] -> Build UI / Code (HTML, Tailwind, React, Vue, Svelte)
+DNA board: susun palet, peran warna, tipografi, bentuk, ikon, dan contoh state; ekspor gambar tanpa halaman aplikasi
+UI: build kode sesuai proyek, lalu render di browser
         ↓
-[Visual Judge / Critic] -> Visual Review via browser screenshot (5 Gerbang Audit)
+Visual Judge: periksa gambar board langsung, atau screenshot browser untuk UI
         ↓
-Refine (Iterasi hingga lulus acceptance test)
+Perbaiki masalah konkret dan verifikasi sekali lagi sebelum serah-terima.
 ```
 
 ---
 
 ## 1. Ekstraksi Design DNA
 
-Saat membaca gambar atau mock referensi desain, jangan meniru secara mentah. Bedah DNA desain ke dalam 5 elemen:
+Saat membaca gambar atau mock referensi desain, jangan meniru secara mentah. Untuk beberapa referensi, catat irisan bahasanya dan perbedaan peran warna; pisahkan unsur visual dari fitur/domain contoh (harga, kuota, nama, unggah, dsb.). Jangan menetapkan nilai HEX, breakpoint, perilaku, atau warna final dari tangkapan layar tanpa pengukuran/persetujuan. Bedah DNA desain ke dalam 5 elemen:
 
 1. **Layout & Grid Anatomy**: Struktur hirarki, ritme vertikal, bento grid, split column, asimetri terukur, atau kanvas tunggal.
 2. **Typography Hierarchy**: Rasio kontras heading vs body, pelacakan letter-spacing, font pairing (sans-serif netral, mono teknikal, atau editorial serif), serta berat font (*font-weight*).
@@ -83,7 +84,9 @@ Rujuk panduan detail di `references/vibe-mapping.md`. Prinsip utama:
 
 ## 4. Visual Judge / Design Critic ("Mata Kedua")
 
-Setelah kode selesai dibuat dan dirender di browser:
+**Cabang DNA-only:** Jika diminta gambar DNA, buat satu papan spesimen—swatch dengan peran, hierarki tipe, kartu/kontrol/ikon, contoh state dan prinsip aksesibilitas—bukan mockup layar penuh dan bukan perubahan kode aplikasi. Ekspor PNG (SVG sumber opsional), buka hasil akhir dengan `vision_analyze`, betulkan clipping/tumpang-tindih, lalu berikan `MEDIA:/path/absolut.png`. Ukur kontras pasangan teks/latar yang benar-benar dipakai; jangan klaim kepatuhan seluruh aplikasi dari rasio di papan. Tandai token sebagai usulan jika pemilik belum menyetujuinya. Bila hanya tersedia Pillow, gambar papan statis dapat dirender langsung dengan `ImageDraw` dan font lokal; jangan jadikan instalasi renderer vektor sebagai syarat.
+
+**Cabang UI:** Setelah kode selesai dibuat dan dirender di browser:
 1. Tangkap tampilan aktual layar (desktop & mobile) via browser harness / `vision_analyze`.
 2. Evaluasi hasil terhadap 5 kriteria pengujian kritis (`references/acceptance-tests.md`):
    - **Keterbacaan & Kontras (Readability Gate)**: Apakah teks mudah dibaca tanpa squinting?

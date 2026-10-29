@@ -65,6 +65,9 @@ Alih-alih mengedit foto, gunakan alur HTML-to-Image berbasis *headless browser*.
   - **CRITICAL PITFALL:** Ketika worker mengklaim publikasi dan mengubah status menjadi `PUBLISHING`, fungsi pengunggah (`uploadToInstagram`) WAJIB menerima `status IN ('APPROVED', 'PUBLISHING')` atau langsung menerima objek publikasi yang sudah di-claim. Jika kueri SQL di dalam fungsi upload mencari `WHERE status='APPROVED'`, pemanggilan akan gagal dengan pesan *"Publication yang disetujui tidak ditemukan"*.
 - **Windows PM2 Interpreter Mismatch:** Pada host Windows dengan virtualenv terpasang, menjalankan skrip Node di PM2 tanpa menentukan path interpreter eksplisit dapat menyebabkan PM2 salah mengeksekusi biner python sebagai wrapper, memicu crash `SyntaxError: Invalid or unexpected token (MZx)`. Selalu cantumkan path lengkap node pada `ecosystem.config.js` (contoh: `interpreter: 'C:/Users/Administrator/AppData/Local/hermes/node/node.exe'`).
 - **Jangan pernah panggil endpoint publish atau Meta API saat testing** — gunakan mock/stub untuk Graph API calls di test suite.
+- **JPEG saja, bukan PNG.** Graph API menolak PNG untuk container media. Konversi tiap slide 1080×1350 ke RGB JPEG kualitas ~95 sebelum membuat container; jangan menunggu error dari Meta.
+- **Pastikan token memang milik akun target sebelum publish.** Satu host bisa menyimpan beberapa token brand (`@sputarai`, `@sputarball`) di file terpisah. Panggil `GET https://graph.instagram.com/v18.0/me?fields=id,username,account_type` dan cocokkan `username`; salah akun tidak bisa dibatalkan lewat API.
+- **Image URL wajib publik dan sudah diverifikasi.** Meta mengunduh gambar dari sisi server, jadi `127.0.0.1`/path lokal gagal. Host di situs publik atau tunnel, lalu `curl -I` sampai `200` dan `Content-Type: image/jpeg` sebelum membuat container.
 
 ## 6. Konten Carousel Editorial & Zero-Click Architecture
 Konten carousel berita @sputarai tetap memberi inti berita di slide, tetapi boleh memindahkan uraian lengkap dan tautan sumber ke caption. Jika CTA caption diminta, jangan memaksakan semua deskripsi berita ke slide demi prinsip Zero-Click; hindari cliffhanger menyesatkan dan jelaskan dengan jelas bahwa konteks/sumber lengkap ada di caption.
@@ -117,10 +120,12 @@ Untuk berita bergambar: foto jurnalistik full-bleed 4:5, teks minim (kicker + sa
 - Spesifikasi, aturan pemilihan aset, dan algoritma penempatan teks: `references/photo-first-news-cover.md`.
 - Standar tipografi yang sudah disetujui Mas Bagas (Inter Tight 900, sentence case, font sistem dilarang): `references/typography-standard-sputarai.md`.
 - Generator siap pakai (PIL): `scripts/photo_cover.py` — memasang font editorial bila belum ada, membaca band/kepala subjek, mengukur bbox teks, lalu menghasilkan slide hook + slide CTA.
+  - **Pitfall argumen JSON dari shell:** karakter seperti `·` berubah menjadi teks literal `\u00b7` bila payload di-escape dua kali. Kirim dengan `json.dumps(jobs, ensure_ascii=False)` lalu bungkus `shlex.quote(...)`, atau tulis payload ke file dan baca dari sana; setelah render, zoom area kicker untuk memastikan separator benar.
+  - Skrip mengeluarkan PNG; konversi ke JPEG sebelum unggah (lihat bagian 5).
 
 **Tipografi (jangan pakai font sistem):**
 - DILARANG typeset cover dengan Liberation/DejaVu/font bawaan OS. Bentuknya terbaca seperti dokumen kantor dan langsung dinilai rendah oleh Mas Bagas; ini pernah terjadi dan harus tidak terulang.
-- Pasang stack Google Fonts ke `~/.local/share/fonts`, lalu pilih satu arah per akun: **Instrument Serif** (paling berwibawa), **Inter Tight 900** (paling cepat terbaca di HP), **Anton** (paling berteriak; hanya untuk breaking). Label/kicker: **JetBrains Mono**.
+- Pasang stack Google Fonts ke `~/.local/share/fonts`. Default terkunci untuk `@sputarai`: **Inter Tight 900, sentence case**. **Instrument Serif** dan **Anton** hanya dipakai bila Mas Bagas meminta eksplisit — jangan menawarkan serif sebagai "lebih berwibawa" lalu memakainya tanpa persetujuan. Label/kicker: **JetBrains Mono**.
 - Variable font: set bobot lewat `font.set_variation_by_axes([weight])`; kalau `set_variation_by_name` tidak tersedia, axes tetap bekerja.
 - Ukuran headline bukan angka mati: mulai 96–138 px, lalu menyusut sampai **lebar** dan **tinggi glyph nyata** lolos. Backs-font condensed 118–150 px tanpa pengukuran adalah resep tabrakan.
 
