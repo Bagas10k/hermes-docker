@@ -13,6 +13,8 @@ Gunakan saat merancang atau melanjutkan implementasi operasional kasir/admin. In
 ## Keputusan bisnis yang dikunci
 
 - Peran operasional kasir/admin; admin memegang master. Izin wajib server-side, bukan hanya tombol tersembunyi.
+- Kelola akun login melalui menu **Akun Login** di dalam area Admin; jangan menyamakan master karyawan dengan identitas autentikasi. Admin dapat membuat/mengubah akun, memilih Admin/Kasir, mengaktifkan/menonaktifkan, dan mengganti password; password kosong saat edit berarti tidak diganti. Jangan membuat akun contoh atau mengubah password produksi hanya untuk membuktikan menu bekerja.
+- Pertahankan akun dan jejak transaksi: gunakan status nonaktif, bukan hard delete; lindungi Admin aktif terakhir dan larang self-disable/self-demote. Selesaikan shift terbuka sebelum menonaktifkan atau mengubah role pemiliknya agar kas tidak kehilangan penanggung jawab. Perubahan role/status/password harus mencabut sesi lama; perubahan akses bukan sekadar perubahan label di layar.
 - Kasir mengajukan pembayaran utang supplier; admin mengesahkan. Usulan belum mengurangi saldo atau membuat jurnal. Pisahkan persetujuan dari pembayaran aktual bila uang belum keluar.
 - Penggajian ditunda; master karyawan/staf tetap termasuk. Jangan menambah otomatisasi absensi/lembur atau mengiklankan payroll selesai.
 - Ongkir yang ditagihkan pelanggan dan biaya sopir dicatat terpisah, bukan hanya selisih bersih.

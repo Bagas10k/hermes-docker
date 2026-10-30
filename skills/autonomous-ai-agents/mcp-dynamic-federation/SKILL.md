@@ -44,16 +44,24 @@ hermes mcp catalog
    - Daftarkan metadata tool (nama, deskripsi 1 baris, cakupan scope, mutasi flag) ke katalog lokal tanpa menyertakan `inputSchema` lengkap.
    - Kriteria selesai: Ukuran manifest di bawah 2.000 token untuk 100+ tools.
 
-2. **Penyaringan Berbasis Scope (Least Privilege Gate)**:
-   - Evaluasi token sesi agen terhadap permission yang dibutuhkan tool (`read`, `write`, `admin`).
-   - Tolak resolusi schema dengan tantangan `insufficient_scope` jika hak akses belum diberikan.
-   - Kriteria selesai: Tool berbahaya tidak dapat diakses sebelum ada step-up authorization eksplisit.
+2. **Evaluasi Keharusan MCP vs Native CLI (Ponytail Filter)**:
+   - Terapkan filter eliminasi: jika kapabilitas sudah tercakup oleh CLI bawaan (`sqlite3`, `docker`, `curl`, `git`) dalam 1-2 baris, tolak penambahan server MCP untuk menghindari overhead latensi dan konsumsi token.
+   - Gunakan MCP hanya untuk jembatan eksternal yang tidak memiliki CLI praktis atau membutuhkan ekstraksi skema semantik terstruktur (misal: AST parsing, inspeksi UI frame).
 
-3. **Resolusi Schema On-Demand (Deferred Hydration)**:
+3. **Penyaringan Berbasis Scope & Zero-Auth Boundary**:
+   - Jika mandat pengguna menetapkan **tanpa API key / tanpa login**, gugurkan semua integrasi SaaS cloud (Figma, Sentry, Brave, dsb.).
+   - Batasi server hanya pada tier lokal/publik:
+     - UNIX domain socket lokal (misal: Docker engine via `/var/run/docker.sock`).
+     - Local database engine (SQLite via stdlib, MariaDB localhost).
+     - Public unauthenticated APIs (misal: Iconify SVG via `api.iconify.design`).
+     - Pustaka referensi statis lokal (seperti `mcp-uiux-reference`).
+   - Evaluasi token sesi agen terhadap permission yang dibutuhkan tool (`read`, `write`, `admin`). Tolak resolusi schema dengan tantangan `insufficient_scope` jika hak akses belum diberikan.
+
+4. **Resolusi Schema On-Demand (Deferred Hydration)**:
    - Ketika agen membutuhkan kapabilitas spesifik, lakukan pencarian (`search_tools`) lalu ambil schema lengkap (`resolve_schema`) hanya untuk tool yang terpilih.
    - Kriteria selesai: Schema lengkap disuntikkan secara dinamis saat eksekusi tanpa mencemari system prompt awal.
 
-4. **Eksekusi Multi-Transport**:
+5. **Eksekusi Multi-Transport**:
    - Rujuk panggilan ke subprocess `stdio` atau endpoint `Streamable HTTP` dengan header protokol yang sesuai (`MCP-Protocol-Version`).
    - Simpan state session menggunakan opaque handle jika tool bersifat stateful.
    - Kriteria selesai: Panggilan menghasilkan JSON terstruktur valid tanpa kegagalan koneksi.

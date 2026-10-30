@@ -149,12 +149,9 @@ memory:
   user_char_limit: 2000
   nudge_interval: 10
 delegation:
-  model: deepseek-1017-rr
+  model: ag/gemini-3.8-flash-high
   provider: custom:lk
-  fallback_providers:
-    - base_url: http://localhost:20128/v1
-      model: ag/gemini-3.8-flash-low
-      provider: custom:lk
+  fallback_providers: []
   max_iterations: 60
   child_timeout_seconds: 180
   max_concurrent_children: 3
@@ -164,6 +161,7 @@ delegation:
   subagent_auto_approve: true
   surface_child_process_notifications: true
   worktree_isolation: true
+  reasoning_effort: high
 skills:
   auto_load:
     - autonomous-orchestrator
@@ -795,6 +793,16 @@ mcp_servers:
     args:
       - /home/ubuntu/mcp-uiux-reference/server.py
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
+    enabled: true
+  iconify:
+    command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
+    args:
+      - /home/ubuntu/mcp-iconify/server.py
+    enabled: true
+  upnormal-ui:
+    command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
+    args:
+      - /home/ubuntu/upnormal-ui/upnormal_ui/server.py
     enabled: true
 platform_toolsets:
   cli:
