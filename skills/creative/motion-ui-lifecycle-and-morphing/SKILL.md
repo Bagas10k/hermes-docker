@@ -131,7 +131,12 @@ Berdasarkan kurasi reel Threads Mas Bagas, tiga pola morphing berikut wajib diku
    Baris tabel datar bermetamorfosis menjadi modul kartu transaksi lengkap dengan input saldo dan sakelar agunan (*collateral*). Baris-baris tetangga di bawahnya terdorong ke bawah secara fluida (`ease: "power3.inOut"`) via GSAP Flip tanpa loncatan layout mendadak (*zero layout shift*).
 3. **3D Tilt Parallax & Perspective Card Expansion (Gigcep Pattern):**
    Kartu modular merespons koordinat kursor mouse dengan kemiringan 3D halus (`transform: perspective(1000px) rotateX(...) rotateY(...) scale3d(1.02, 1.02, 1.02)`), dengan kartu utama (*featured card*) berdenyut tenang di lapisan Z terdepan.
-4. **Sintesis Audio Taktil Tanpa Aset Eksternal (Web Audio API Click):**
+   - *Optical Glare:* Padukan dengan radial gradient cahaya dinamis (`mix-blend-overlay` atau `radial-gradient(circle at X% Y%, rgba(255,255,255,0.18), transparent)`) yang bergeser mengikuti kursor, lalu pudar ke `opacity: 0` dan kembali datar via `elastic.out(1, 0.4)` saat kursor meninggalkan kartu.
+4. **Elastic Bottom Drawer (Spring Sheet Expansion):**
+   Drawer atau sheet bawah yang menampung parameter operasional tanpa modal pop-up kaku. Muncul dari bawah via `translateY('0%')` menggunakan pegas fisika GSAP `elastic.out(1, 0.75)` dan tertutup via `power3.in` (`translateY('105%')`). Host kontainer tetap statis tanpa layout shift.
+5. **Kinetic Drum Odometer (Rolling Digit Counter):**
+   Untuk metrik angka throughput/keuangan yang berubah realtime, hindari teks meloncat tiba-tiba. Gunakan drum vertikal 5-10 baris angka (`0` s/d `9`) per kolom desimal dengan tinggi tetap (misal `h-10 / 40px`). Geser sumbu vertikal tiap kolom secara terisolasi via `translateY(-{digit * 40}px)` dengan kurva `cubic-bezier(0.16, 1, 0.3, 1)`.
+6. **Sintesis Audio Taktil Tanpa Aset Eksternal (Web Audio API Click):**
    Setiap interaksi morphing diiringi efek klik mikro taktil menggunakan generator frekuensi audio browser:
    ```javascript
    function playTactileClick(freq = 600, duration = 0.04) {
@@ -144,6 +149,24 @@ Berdasarkan kurasi reel Threads Mas Bagas, tiga pola morphing berikut wajib diku
      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
      osc.connect(gain); gain.connect(ctx.destination);
      osc.start(); osc.stop(ctx.currentTime + duration);
-   }
-   ```
+     }
+     ```
+
+     ## 11. Scroll-Linked & Pointer-Proximity Motion (Bukan Siklus Enter/Loop/Exit)
+     Tiga kelas gerakan yang tidak mengikuti Trinity lifecycle dan wajib dikuasai:
+     **sticky scroll stack**, **magnetic cursor dock** (proximity field), dan **kinetic split text**
+     (mask reveal per huruf). Resep kode lengkap + pitfall: `references/scroll-linked-and-proximity-motion.md`.
+
+     Aturan wajib yang berlaku untuk ketiganya:
+     - **Scroll stack tidak boleh memakai `opacity` untuk meredupkan kartu yang tertumpuk.** Kartu semi-transparan saling menembus sehingga teks kartu bawah terbaca menembus kartu atas (mush tak terbaca). Pakai `filter: brightness()` dan biarkan kartu tetap opak.
+     - **Ukur kedalaman tumpukan dari kartu BERIKUTNYA**, bukan dari posisi scroll container: setelah `position: sticky` menempel, `containerTop - card.top` selalu ~0 sehingga progres selalu nol dan efeknya terasa mati.
+     - **Beri tiap lapis `top` berbeda** (mis. 22px/lapis). Semua `top: 0` membuat tumpukan bertumpuk piksel-per-piksel dan judul tiap kartu hilang.
+     - **Magnetic dock wajib reset di `pointerleave`** dan menulis lewat `gsap.quickTo` (satu setter per properti, tanpa alokasi tween per event).
+     - **Split text wajib `aria-label` di parent + `aria-hidden` per glyph**, dibangun sekali (`dataset.built`), dipicu `IntersectionObserver` sekali, dan disediakan tombol putar ulang manual. Jangan pernah menjalankan loop idle.
+
+     ## 12. Jebakan Verifikasi Motion: Assertion Gaya Bukan Bukti Visual
+     - Membaca `element.style.transform` / `style.opacity` lewat browser JS membuktikan **handler berjalan**, bukan bahwa hasilnya **terbaca**. Pada sesi nyata, transform terpasang benar sementara tumpukan kartu secara visual rusak total (teks saling menembus).
+     - Karena itu verifikasi motion wajib dua lapis: (1) assertion state DOM (transform/filter/status teks berubah), lalu (2) tangkapan layar nyata yang diperiksa secara visual sebelum mengklaim elemen selesai.
+     - Bila hasil visual berbeda dari yang diharapkan, perbaiki penyebab struktural (offset, opacity, ukuran kontainer) dan **ulangi tangkapan layar**, jangan menyimpulkan dari angka transform saja.
+     - **Ambil screenshot pembuktian SEBELUM iterasi habis.** Polling berulang tanpa informasi baru membakar anggaran; bila anggaran habis sebelum patch terakhir dilihat secara visual, laporkan statusnya `LIKELY`, bukan `KNOWN`.
 

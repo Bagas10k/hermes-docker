@@ -1,7 +1,7 @@
 ---
 name: mcp-engineering-workflow
 description: "Use when building or registering custom MCP servers."
-version: 1.1.0
+version: 1.2.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -79,8 +79,8 @@ Jika MCP dinaikkan statusnya menjadi proyek/repositori publik GitHub:
 - Sediakan struktur paket standar Python: `pyproject.toml` dengan CLI entrypoint di `[project.scripts]`, `README.md` berstandar showcase (badges, manifesto, tabel tool, arketipe visual), `LICENSE` (MIT), dan `.gitignore`.
 - Lengkapi dengan CLI mandiri (`cli.py`) agar tool bisa dieksekusi dari terminal pengguna tanpa wajib membuka Hermes/MCP client.
 - Sediakan unit test suite di folder `tests/` yang memvalidasi seluruh fungsi logika inti secara deterministik.
-- Pola Arsitektur Dual Engine: Kombinasikan *Chassis Generator* (membuat komponen baru) dan *Transmute Engine* (linter + auto-healer untuk merombak kode eksisting).
+- **Pola Arsitektur Dual Engine & Anti-Slop Invariants:** Pada MCP antarmuka/desain, kombinasikan *Chassis Generator* (membuat komponen dari 5 arketipe dunia) dan *Transmute Engine* (linter + auto-healer). Tanamkan aturan keras anti-slop: larangan mutlak kicker badge mengambang, eliminasi tag pamer teknis (`Zero AI-Slop`, `WCAG AAA`), serta pembersihan kontras otomatis.
 
 ## 5. Lifecycle & Demonstrasi Visual Aset
 - **Pembaruan / Hapus Server:** Gunakan `hermes mcp remove <name>` sebelum mendaftarkan ulang jika ada perubahan path atau struktur command.
-- **Showcase Visual ke Pengguna:** Jika MCP menghasilkan artefak grafis/UI (seperti ikon SVG), render grid pratinjau ke berkas HTML temporer, tangkap screenshot via Chromium headless (`chromium --headless --no-sandbox --disable-gpu --screenshot=<path> <html-path>`), dan kirim langsung ke Telegram menggunakan `MEDIA:<path>.png`.
+- **Showcase Visual ke Pengguna:** Jika MCP menghasilkan artefak grafis/UI (seperti ikon SVG atau layout antarmuka), render grid pratinjau ke berkas HTML temporer, tangkap screenshot via Chromium headless (`chromium --headless --no-sandbox --disable-gpu --screenshot=<path> <html-path>`), dan kirim langsung ke Telegram menggunakan `MEDIA:<path>.png`.

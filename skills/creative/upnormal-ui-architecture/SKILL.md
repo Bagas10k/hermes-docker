@@ -52,6 +52,7 @@ Invoke component scaffolding and visual verification through the `terminal` tool
 - Contrast Floor: WCAG AAA minimal 7:1 against background.
 - Motion Standard: 60 FPS in-place morphing (FLIP or spring physics), strictly zero static blink modals.
 - Elevation: Zero fuzzy drop-shadows; separation via hairline borders (`1px solid #EDEDED`) and tonal fill shifts.
+- Strictly Zero Performative Meta-Badges & Eyebrow Clutter: Never render internal design metrics, audit criteria, or architectural jargon as public badges, kicker tags, or pill strips (e.g. '100% Zero AI Slop', 'WCAG AAA (≥ 7:1)', '60 FPS In-Place Morphing', 'VOL. 02 // PORTFOLIO', 'FIG. 01'). Quality must be experienced through actual interaction, typography, and clean space—never proclaimed via decorative badge clutter.
 - Control & Modal Governance: Strictly zero native browser dialogs (confirm/alert), raw OS inputs (<select>, <input type="date">), or browser-default validation bubbles ("Harap isi bidang ini"). All CRUD confirmations, dropdowns, datepickers, and form errors must use custom, theme-cohesive templates (always use `<form novalidate>`).
 - Branding Mandate: Direct text-only typography by default. Strictly zero fabricated rounded-box squircle AI logos (e.g. monitor, cart, star) unless official logo assets are provided.
 
@@ -120,6 +121,7 @@ Load deep architectural references on demand using `skill_view` (`name="upnormal
 ## Pitfalls
 - **Relying on Model Training Bias (Prior UI Habits):** Never default to the model's unassisted idea of a web UI (generic symmetrical bento boxes, purple-cyan buttons, muddy box-shadows). Always ground designs in live internet curators, explicit user direction, or official Hermes design vault tokens.
 - **Accidental Generic Slop:** Never use generic purple/blue AI gradient buttons or decorative status pills that serve no purpose.
+- **Displaying Internal Engineering Standards as UI Badges (Performative Meta-Slop):** Never turn internal quality metrics (WCAG AAA, 60 FPS, Zero AI Slop, Vol XX) into floating badges, eyebrow kickers, or marketing tag strips on the user's interface. It screams amateur AI-generated posturing and creates severe visual clutter. Let the typography and interaction speak for themselves silently.
 - **Fabricated Squircle AI Logos:** Never generate rounded-box icons containing PC monitors, shopping carts, or stars when the user has not asked for a logo; use direct text-only typography for headers and brand titles.
 - **Blurring the Text:** Never apply SVG gooey/distortion filters directly to parent containers containing text; always use the Two-Layer Silhouette pattern.
 - **Contrast Compromise:** Do not sacrifice text legibility for visual flair; body text must maintain WCAG AAA compliance.

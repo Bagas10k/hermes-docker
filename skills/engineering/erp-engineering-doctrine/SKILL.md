@@ -68,11 +68,26 @@ Resep Laravel, matriks jalur keluar, dan tes minimum tersedia di `references/ope
 - **I-11:** Hanya satu periode `terbuka` per tenant — tegakkan dengan `CREATE UNIQUE INDEX ... WHERE status = 'terbuka'`.
 - **I-12:** Saldo awal periode berjalan **tidak pernah** diinput manual; ia turunan dari jurnal periode sebelumnya. Pengecualian hanya untuk **bootstrap pertama saat onboarding**: nilai boleh disusun dalam tabel draf, tetapi menjadi saldo akuntansi hanya setelah diposting sebagai satu jurnal pembukaan seimbang dan kemudian dikunci permanen.
 
-### 2.4 Persediaan & HPP
+### 2.4 Persediaan, Kuantitas Bersatuan & HPP
 - **I-13:** Metode valuasi (FIFO / Moving Average) dikunci saat transaksi terjadi. HPP tercatat pada detik mutasi keluar, bukan dihitung ulang saat laporan.
 - **I-14:** Stok negatif dicegah `CHECK (saldo_tersedia >= 0)` di basis data. Bila kebijakan bisnis mengizinkan negatif sementara, gantikan dengan **akun penampung** + laporan pengecualian harian — jangan hapus kendala tanpa pengganti.
 - **I-15:** Mutasi stok wajib dua sisi: `kartu_stok` (kuantitas) dan jurnal (nilai). Tidak ada mutasi kuantitas tanpa jurnal nilai.
+- **I-16:** Perlakukan kuantitas sebagai pasangan `(nilai, satuan)`, bukan angka polos. Jangan jumlahkan kuantitas Zak, Bag, dan Ton, atau mengonversinya, kecuali ada aturan konversi produk yang disahkan dan sumber faktor konversinya tervalidasi.
+- **I-17:** Sebelum mengaktifkan satuan baru pada transaksi penjualan, telusuri alur end-to-end: master barang → SO/kuota → faktur → stok → antrean pengiriman → HPP/jurnal. Bila satu konsumen hilir masih unit-blind, tolak satuan tersebut di server sebelum mutasi apa pun; validasi browser hanya UX, bukan kontrol integritas. Jangan nyatakan unit didukung sampai seluruh jalur konsisten.
+- **I-18:** Ambil satuan kanonis dari master barang atau sumber domain tepercaya, bukan dari hidden input/request klien; bila SO dan faktur berbeda satuan, tolak kecuali konversi eksplisit memang diotorisasi. Untuk dokumen historis tanpa satuan, gunakan fallback legacy yang terdokumentasi—jangan menebak berdasarkan data baru.
+- **I-19:** Hitung total komersial di server dari kuantitas tervalidasi × harga per satuan memakai aritmetika desimal eksak; jangan percaya total yang dikirim browser. Uji nilai uang dengan helper/model aktual serta versi dependency proyek, bukan hanya menguji ulang formula tiruan atau mengasumsikan nama konstanta API.
+- **I-20:** Buktikan dukungan satuan lewat test terisolasi yang memeriksa model/persistensi dan konsumen yang relevan. Lint, source-string assertion, atau test formula saja tidak membuktikan transaksi bisnis end-to-end. Migrasi draft dan perubahan schema file bukan bukti bahwa database runtime sudah berubah.
 
+#### Workflow transaksi bersatuan
+1. Petakan pembacaan dan penulisan kuantitas pada semua konsumen hilir sebelum mengubah form; grep pemanggil, schema, accessor, antrean, dan HPP.
+2. Tetapkan satuan kanonis dan aturan legacy; validasi kecocokan SO-faktur serta batas kemampuan downstream di controller/service sebelum membuka transaksi penulisan.
+3. Persist nilai dan satuan bersama-sama; hitung nilai uang server-side dengan desimal eksak. Hindari float untuk uang, dan jangan menggunakan kuantitas tanpa satuan pada batas modul.
+4. Jalankan uji unit untuk accessor legacy dan aritmetika, kemudian uji integrasi pada database disposable untuk penyimpanan, kuota, stok, dan pengiriman. Jangan menulis data bisnis aktif atau menjalankan migrasi aktif tanpa otorisasi eksplisit.
+5. Laporkan cakupan yang benar-benar lulus per satuan; tandai unit yang diblokir downstream sebagai belum didukung, bukan keberhasilan parsial.
+
+Resep Laravel, matriks jalur keluar, dan tes minimum tersedia di `references/opening-balances-and-cash-guards.md`.
+
+Catatan: nomor invariants berikutnya mengikuti penomoran yang sudah ada; multi-tenant kini dimulai dari I-21.
 ### 2.5 Multi-Tenant
 - **I-16:** Identitas tenant untuk otorisasi hanya dari sumber yang tidak dapat dikendalikan klien: subdomain yang dipetakan ke tabel internal, atau klaim token bertanda tangan. Header `X-Tenant-Id` hanya petunjuk, wajib diverifikasi ulang.
 - **I-17:** Setiap unit eksekusi (request, job antrean, cron, migrasi) memiliki tepat satu tenant. Job tanpa `tenant_id` di payload wajib **gagal**, bukan jalan dengan tenant default.

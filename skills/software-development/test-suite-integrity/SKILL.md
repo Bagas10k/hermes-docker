@@ -84,7 +84,10 @@ a 419 measures CSRF, and a 302 alone does not distinguish successful mutation fr
 error redirect. For redirected reads, assert both status and the intended destination.
 
 A test that duplicates a branch is a **vacuous test**. Delete it and write one that
-fails when the branch is removed.
+fails when the branch is removed. Label fixture insertion separately from workflow
+execution: inserting a linked shipment row can prove a quota accessor avoids double
+counting, but cannot prove the shipment controller accepts the payload, computes tonnage,
+or performs approval and stock side effects. Name only the boundary actually exercised.
 
 Construct control-character negatives with actual bytes, such as `String.fromCharCode(10)`, and assert their code points before invoking the real boundary; a string containing backslash-plus-n tests a different input. Compare fixtures with captured wire shapes before changing production: `text` versus `content`, top-level versus nested fields, and native identifier names are contract differences, not reasons to weaken assertions.
 
@@ -126,7 +129,10 @@ Inspect the initial schema phase before choosing the image: a candidate that alr
 runs all migrations at startup cannot satisfy a premigration assertion. Keep the real
 premigration check on a deliberately old isolated baseline, then test the candidate's
 upgrade/rerun separately; do not weaken the assertion or call the phase mismatch an
-application regression.
+application regression. If a failed rehearsal has already changed the clone's schema or
+data, restore the original fixture before testing the corrected upgrade check. Reusing
+the upgraded clone proves only a rerun and can hide the first-upgrade preservation defect.
+Use separate recorded markers for restored-baseline upgrade and subsequent no-op rerun.
 
 Separate environment-dependent security and browser suites when their contracts differ.
 Laravel's testing environment can bypass CSRF by design, so run missing-token/authorization

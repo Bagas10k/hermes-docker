@@ -1,7 +1,7 @@
 ---
 name: design-qa-gatekeeper
 description: Use when auditing UI craft before delivery.
-version: 0.1.0
+version: 0.1.1
 author: Bagas Cihuy, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -35,6 +35,7 @@ Audit UI work before delivery so unfinished visuals, fake affordances, cramped s
 6. Verify catalog/live deployment when applicable. Completion: public route returns HTTP success and screenshot matches the new build.
 
 ## Hard Blockers
+- Ornamental kicker badges & tech-bragging tag clutter (e.g. `VOL. 02 // PORTFOLIO`, `100% Zero AI-Slop`, `WCAG AAA (≥ 7:1)`, `60 FPS In-Place Morphing`). Quality must be proven through typography, ample space, and real interaction—never proclaimed via decorative floating pills.
 - Fallback view (2D/no-GPU/no-JS) looking like an unfinished wireframe while primary view is styled. Fallback must be visually intentional from pass 1.
 - Public static deploy lacking cache-busting version strings on CSS/JS when verifying changes on mobile.
 - Unicode emoji or Extended Pictographic symbols in UI code.
@@ -48,6 +49,7 @@ Audit UI work before delivery so unfinished visuals, fake affordances, cramped s
 ## Static Scan Coverage
 The helper script checks source files, including Laravel `*.blade.php`, while skipping dependencies, archived backups, and generated storage so findings stay actionable:
 - Emoji / Extended Pictographic leakage.
+- Floating ornamental kicker badges or boastful tag strips (`hero-pill`, `Zero AI-Slop`, `WCAG AAA`, etc.).
 - Device simulator terms like `phone mockup`, `bezel`, `dynamic island`, or `viewport switcher`.
 - Generic AI-slop labels such as `premium`, `modern`, or `beautiful` overused in code comments/copy.
 - CSS risks: `overflow-x: scroll`, disabled outlines, and layout-animation properties.
@@ -58,6 +60,7 @@ Static checks are not enough. A clean static scan does not replace Playwright, A
 - Do not treat empty grep output as a completed audit; use the helper or explicit file reads.
 - Do not claim deployed success from a build alone; verify the public route or copied static directory.
 - Do not average responsive quality; the smallest viewport is a hard constraint.
+- Never add floating kicker tags or feature-bragging badge strips to fill space; users find decorative meta-pills tacky and repulsive.
 - Treat a low user score as evidence that the brief or reference was missed, not permission for a total rebuild. Identify whether the user wants refinement, restoration, or redesign; when a working incumbent is the requested reference, restore its components and interaction model before further polish. A rebuild requires explicit scope approval.
 - Treat delegated QC as a versioned snapshot, not a timeless verdict: bind it to the final source hash and exact post-remediation artifact paths. Every CSS/markup edit invalidates prior screenshots and verdicts, even when tests still pass; stop in-flight reviewers of stale artifacts, regenerate the full evidence matrix, then request one final read-only verdict. Reject recommendations for work already visible in the supplied hash.
 - Do not call ordinary document continuation “clipping” because the screenshot ends mid-row. Distinguish viewport fold from layout failure with DOM bounds, document scroll reachability, wrapper scroll reachability, and a second screenshot of a complete record; only hidden/unreachable content is a blocker. Before diagnosing a sticky-header overlap, inspect current scroll offsets and the target element's rectangle: focus may have scrolled a valid layout beneath the header.
