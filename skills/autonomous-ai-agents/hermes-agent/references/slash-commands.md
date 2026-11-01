@@ -33,6 +33,17 @@ it. New commands land often; `/help` in-session is always authoritative.
 /redraw                  Force full UI repaint (CLI)
 ```
 
+`/title` is the user-facing rename. When the user asks *the agent* to name the current session, set it yourself instead of telling them to type the command: take `$HERMES_SESSION_ID`, then
+
+```python
+from hermes_state import SessionDB
+from pathlib import Path
+db = SessionDB(Path.home() / '.hermes' / 'state.db')   # must be a Path — a str raises AttributeError: 'str' object has no attribute 'parent'
+db.set_session_title(session_id, 'backup hermes')
+```
+
+Read it back with `db.get_session(id)['title']` and quote before → after as proof.
+
 ### Configuration
 ```
 /config                  Show config (CLI)

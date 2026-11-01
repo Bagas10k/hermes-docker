@@ -82,11 +82,8 @@ Tombol pemicu mengembang secara fisik menjadi permukaan dialog modal utuh dengan
 Hasilkan skala 50 hingga 950 dari hex aksen apa pun. Setiap langkah otomatis menghitung luminansi relatif dan menyandingkan teks hitam atau putih yang terverifikasi WCAG AAA ($\ge 7:1$).
 
 ## 4. Pitfall Teknis Parsing DOM & Runtime Eksekusi
-- **Venv Eksekusi Mandatori:** Jalankan CLI dan modul `upnormal-ui` menggunakan venv Hermes yang memiliki dependensi lengkap (`mcp`, `httpx`, `beautifulsoup4`):
-  ```bash
-  /home/ubuntu/.hermes/hermes-agent/venv/bin/python
-  ```
-  Hindari binary Python default `/usr/bin/python3` atau shims tanpa venv aktif karena akan memicu `ModuleNotFoundError: No module named 'bs4'`.
+- **Manajemen Lingkungan Virtual (Venv) Repo vs Global:**
+  Gunakan `uv venv .venv --python 3.11 && uv pip install --python .venv/bin/python beautifulsoup4 mcp httpx pytest` langsung di repositori target jika environment sistem host tidak memiliki modul `ensurepip` standar. Eksekusi tes dan CLI via `.venv/bin/python` atau `.venv/bin/pytest`.
 - **Pitfall Atribut Kosong Falsy BeautifulSoup4:** Elemen tanpa atribut seperti `<select><option>...</option></select>` memiliki `elem.attrs = {}`. Dalam Python, `bool({}) == False`. Jika memeriksa dengan `if not getattr(elem, 'attrs', None): continue`, Python akan melewatkan elemen tersebut. Wajib gunakan pemeriksaan identitas eksplisit:
   ```python
   if getattr(elem, "attrs", None) is None:

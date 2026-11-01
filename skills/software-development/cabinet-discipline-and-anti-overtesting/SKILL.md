@@ -1,7 +1,7 @@
 ---
 name: cabinet-discipline-and-anti-overtesting
 description: "Use when executing agent tasks. Enforce direct execution."
-version: 1.1.0
+version: 1.2.0
 author: "Bagas Cihuy & Hermes Agent"
 license: MIT
 platforms: [linux, macos, windows]
@@ -29,6 +29,8 @@ Doktrin operasional resmi untuk seluruh kabinet agen (Bakagent, Si Pintar, Si Ek
 ## 3. Budaya "Manja Arahan" & Riset Internet Proaktif (Clarification-First Mindset)
 - **Haram Sok Mandiri atau Berasumsi Liar:** Agen dilarang mengambil inisiatif spekulatif di kepala sendiri atau berjalan jauh ke luar rel tanpa bertanya.
 - **Wajib Sering Bertanya & Minta Arahan:** Jika ada trade-off teknis, dua pilihan desain, atau spesifikasi yang ambigu, tanyakan langsung ke Mas Bagas dengan opsi terstruktur yang ringkas. Lebih baik banyak bertanya daripada salah arah.
+- **Disiplin Anggaran Klarifikasi (Pre-Clarification Budget Cap):** Jika tugas memiliki multi-halaman atau multi-target percabangan, ajukan `clarify` sedini mungkin (dalam 2–3 langkah inspeksi awal). Dilarang menguras jatah iterasi/token untuk inspeksi visual mendalam pada seluruh variasi halaman sebelum arah disepakati.
+- **Timeout Fallback Determinisme:** Jika `clarify` mengalami batas waktu habis (*timed out / user away*), jangan bingung atau mengulang audit; langsung pilih opsi rekomendasi pertama (opsi default / target utama aplikasi) dan eksekusi solusinya secara terarah (Ponytail mode: shortest working path).
 - **Ketidakpahaman Sedikit Wajib Cari di Internet (Terutama UI/UX):** Sikap 'manja' menuntut agen aktif mencari referensi: bila ada ketidakpahaman atau keraguan sedikit pun—terutama seputar standar estetika, tata letak, komponen interaktif, dan pola **UI/UX**—agen dilarang mengarang di kepala sendiri. Agen wajib 'manja' mencari contoh nyata di internet (*live web search / docs*), lalu menyodorkan opsi terarah untuk meminta arahan Mas Bagas.
 
 ## 4. Batas Wewenang Mutlak QC (Si Pengawas) — Non-Looping Authority
@@ -69,6 +71,7 @@ Doktrin operasional resmi untuk seluruh kabinet agen (Bakagent, Si Pintar, Si Ek
 - **Format Laporan Baku (Engineering Execution Report):** Wajib menyertakan: Status Operasional (ACCEPTED/BLOCKED/NOT ACCEPTED/UNVERIFIED), Status Deployment, Identitas Commit SHA, File Dimodifikasi, Perintah Pengujian, Exit Code, Cakupan Staging/Lokal, Dasar Keputusan Teknis, Catatan Celah QC (Si Pengawas), dan Lokasi Artefak Log.
 
 ## 8. Jebakan Kinerja & Solusi Cepat (Pitfalls)
+- **Pre-Clarification Budget Burn:** Melakukan investigasi mendalam berlebihan (seperti berulang-ulang membuka browser, inspect halaman sekunder, dan menjalankan multi-call vision) *sebelum* mengajukan klarifikasi arah ke pengguna memboroskan anggaran iterasi/token. Jika cakupan bercabang atau ada multi-halaman, batasi audit awal maksimal 2-3 langkah esensial, lalu langsung ajukan klarifikasi. Jika klarifikasi timeout, segera pilih opsi default teratas dan eksekusi.
 - **Testing Paralysis:** Mengulang loop screenshot Chromium + `vision_analyze` berkali-kali untuk mengevaluasi diri sendiri membuang waktu dan token; terapkan modifikasi langsung pada kode, verifikasi fungsional esensial sekali, dan serahkan ke Mas Bagas.
 - **QC Looping Deadlock:** Mengizinkan unit evaluasi/QC memveto rilis atau memerintahkan siklus revisi berulang secara otomatis memicu macet; perlakukan laporan QC sebagai catatan aditif, bukan pemblokir alur kerja.
 - **Sok Mandiri Tanpa Konfirmasi:** Merancang arsitektur spekulatif atau memilih arah desain sepihak tanpa bertanya ke pengguna berujung penolakan total; selalu 'manja arahan' dengan menyodorkan 1-2 opsi terarah saat menghadapi ambiguitas.

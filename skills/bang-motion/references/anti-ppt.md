@@ -42,6 +42,9 @@ sebuah adegan "kurang informasi", itu justru tanda adegannya sudah benar.
 | Spin/yaw/roll kejut (zoom+putar tiba-tiba dengan blur di tiap cut) | Itu bahasa PRESET editor video, bukan motion design. Ganti: kamera bernapas + koreografi elemen beririsan + object wipe |
 | Demo UI terasa statis: UI penuh di frame, kamera diam, hanya kursor bergerak, klik terlalu kecil untuk terbaca | Kamera mengikuti interaksi bila perlu: dekati area yang akan diklik (scale 1,4–2,2, 0,6–0,9 dtk ease in-out), klik terbaca, lalu mundur/geser ke hasilnya; tidak di setiap klik (techniques.md §8) |
 | Opener produk berbeda-beda keluar dengan kerangka sama: teks zoom lalu keluar ke kiri, tiga tile fitur, kotak input diketik, hook → fitur → fitur → janji → logo → CTA — kesannya template walau warnanya baru | Tiga kandidat konsep dari `opener-konsep.md`, satu dipilih dari sifat produk; sidik jari struktur berbeda dari opener sebelumnya; komponen kanonik maks dua dan hanya bila dituntut konsep |
+| Komposisi 9:16 portrait menumpuk di 60% atas, menyisakan 40% area kosong hitam di bawah ("top-heavy") | Posisikan secara vertical center, atau beri jangkar visual di area bawah (terminal daemon stream, live metrics bar, atau status telemetry) |
+| Visual animasi teknologi memakai bentuk primitif kartun CSS (kotak abu-abu bulat dengan mata titik) | Gunakan estetika Developer HUD / Swiss Cyberpunk (Linear, Vercel, Apple keynote): kanvas obsidian, hairline borders, monospace telemetry, dan diagram semantik fungsional |
+| Voice over memakai Google Translate TTS datar + hening tanpa sound design | Gunakan Neural TTS berkualitas tinggi (edge-tts Azure Neural) + multi-track sound design (ambient synth drone + foley whoosh/impact/click) |
 
 ## Pola gagal yang umum pada explainer
 

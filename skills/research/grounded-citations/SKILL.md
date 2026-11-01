@@ -186,6 +186,73 @@ sources disagree, cite both readings with their own ids and quotes, and say
 which you weight and why. One source is reporting; two independent sources are
 corroboration.
 
+For payment QR or token integrations, verify three layers separately: payload
+format/checksum, provider or acquirer acceptance/routing, and transaction
+status/reconciliation. A locally valid encoded payload proves only the first
+layer; do not claim it will be accepted, settle, or report payment without
+provider-specific evidence. State API/acquirer requirements as provider-specific
+unless an authoritative standard explicitly makes them universal.
+
+### Payment QR payload transformation gate
+
+Before implementing a tool that edits an existing merchant-payment QR:
+
+1. Find the technical specification for the exact national payment scheme and
+   QR mode, not only a general QR or EMV overview. Separate national QRIS
+   requirements from the baseline EMV MPM format; if only the latter is
+   verified, describe the result as an EMV-MPM-level payload transformation,
+   not as verified QRIS dynamic QR.
+2. Record the authoritative rules for field presence/value, amount syntax,
+   currency, TLV nesting/order, encoding, and checksum coverage/parameters.
+   If a required scheme-specific rule cannot be confirmed, stop the
+   scheme-compliance claim and make the uncertainty an explicit implementation
+   gate rather than filling it with a library or blog's assumptions.
+3. Validate checksum behavior against an example in the specification itself,
+   including the precise input bytes and expected checksum. A generic CRC test
+   vector alone does not verify the specification's framing or byte coverage.
+4. Preserve every merchant/account field that the documented transformation
+   does not authorize changing. Use clearly synthetic fixtures for tests; do
+   not request or store a real merchant QR as a test sample.
+5. Treat payload validation, QR image generation, and payment acceptance as
+   separate checks. Verify generated QR images by decoding them with an
+   independent QR decoder and comparing the decoded text to the output payload;
+   valid XML/SVG or a rendered-looking matrix is not proof of a scannable QR.
+   Never infer acquirer acceptance or settlement from a successful local
+   transformation or decode.
+6. Before coding, inspect project plans and check for both QR encoder and
+   decoder dependencies. Avoid building a custom encoder merely to keep a
+   zero-dependency promise; if no sound local option exists, record the choice
+   or blocker rather than emitting a non-decodable image.
+
+Do not perform live-payment tests, initiate charges, or test with real merchant
+credentials when the authorized scope is only payload transformation.
+Explicitly distinguish format-level conformance from scheme-specific approval
+and real transaction behavior in the handoff.
+
+## Pitfalls
+
+- **Substituting a general standard for a national scheme specification.** EMV
+  MPM may explain common tags, but national implementations can add constraints;
+  do not promote generic format evidence into QRIS-specific acceptance claims.
+- **Testing only the checksum primitive.** Recompute the documented sample
+  payload end-to-end because byte encoding, field ordering, and checksum
+  coverage can be wrong even when the primitive passes its textbook vector.
+- **Calling an SVG a working QR code without decoding it.** An SVG can be valid
+  XML while its matrix is not a valid QR; require a decoder round-trip before
+  claiming image generation works.
+- **Using payment acceptance as a proxy for payload correctness.** Issuer and
+  acquirer behavior depends on scheme/provider rules outside local encoding;
+  report those checks separately and only when actually performed.
+- **Discovering rendering prerequisites after promising the deliverable.**
+  Inventory encoder/decoder support before implementation because a QR payload
+  string alone does not satisfy a request for a generated scannable code.
+
+④ **Verify with the evidence gate and render the evidence block:**
+
+```bash
+python "$S" verify report.md --evidence --min-coverage 0.5
+python "$S" render --style evidence --replace-in report.md
+```
 ④ **Verify with the evidence gate and render the evidence block:**
 
 ```bash

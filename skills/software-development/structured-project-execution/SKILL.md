@@ -78,7 +78,12 @@ python3 scripts/flight_plan_tracker.py --status
 1. **Conduct Discovery & System Audit (Stage 1):**
    Inspect repository guidance, docs, and runtime prerequisites before editing. Confirm `AGENTS.md` and `.onefreq/`; if either is missing, run `docbuddy-adopt .` from the repo root (non-overwriting template copy only), then inspect the adopted contracts. Read project brief, architecture, verification contract, current state, README/build instructions, and relevant tests. Identify database tables and ports only when relevant. Define path boundaries and avoid duplication. **Before Stage 1 exits or implementation begins, initialize `build_tracker.json` and create/complete the canonical README build instructions.** Enrich existing architecture/verification docs only via propose → diff review → approved apply.
 
-2. **Publish the Public Task DAG (Stage 2):**
+2. **Lock standards evidence and cross-document contracts before publishing a project plan:**
+   For work whose core behavior depends on a payment, security, protocol, or regulatory standard, distinguish educational/regulatory summaries from normative technical specifications. Use the former only for the claims they actually support; use the relevant official technical specification and revision to establish field encodings, validation, and transformation rules. Vendor API docs establish that vendor's integration contract, not universal acceptance of a locally generated payload; code repositories and blog posts are implementation references, not normative proof. Cite the exact source beside each consequential requirement. If the technical rule cannot be verified, mark it `UNKNOWN` and make discovery a hard prerequisite that blocks dependent implementation—never turn a familiar tag/value or checksum into a confirmed requirement by inference.
+
+   When producing `PRD.md`, `PLAN.md`, and `TASKS.md`, map each requirement to tasks and binary evidence, then cross-check terminology, tag/field invariants, filenames, exit codes, prerequisites, and status labels across all three files. A task DAG must not label implementation ready while its standards gate is unresolved. Fix contradictions before delivery; after edits, rerun a bounded check against the final files and report any remaining failure rather than calling the package complete. For QR/image generation, require a real encoder and an independent decode/readability check; valid-looking SVG/XML or a hand-drawn matrix is not proof of a scannable QR.
+
+3. **Publish the Public Task DAG (Stage 2):**
    Initialize the DAG tracker with `scripts/flight_plan_tracker.py --init "<Project Name>"` via `terminal`. Present the numbered checklist to the user in the opening turn:
    ```text
    📋 RENCANA EKSEKUSI PROYEK:

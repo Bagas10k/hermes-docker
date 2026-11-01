@@ -169,4 +169,16 @@ Berdasarkan kurasi reel Threads Mas Bagas, tiga pola morphing berikut wajib diku
      - Karena itu verifikasi motion wajib dua lapis: (1) assertion state DOM (transform/filter/status teks berubah), lalu (2) tangkapan layar nyata yang diperiksa secara visual sebelum mengklaim elemen selesai.
      - Bila hasil visual berbeda dari yang diharapkan, perbaiki penyebab struktural (offset, opacity, ukuran kontainer) dan **ulangi tangkapan layar**, jangan menyimpulkan dari angka transform saja.
      - **Ambil screenshot pembuktian SEBELUM iterasi habis.** Polling berulang tanpa informasi baru membakar anggaran; bila anggaran habis sebelum patch terakhir dilihat secara visual, laporkan statusnya `LIKELY`, bukan `KNOWN`.
+- **Verifikasi Headless Screenshot CLI Tanpa Ketergantungan Eksternal (Zero Puppeteer/Selenium Dependency):** Jangan berasumsi runtime lokal memiliki modul `puppeteer` atau `selenium`. Bila dependensi Node/Python browser tidak terpasang, gunakan alat tangkapan headless Chromium native via terminal:
+  `google-chrome --headless=new --disable-gpu --no-sandbox --window-size=390,844 --screenshot=/path/output.png http://127.0.0.1:PORT/path`
+  atau gunakan pre-imported helper `browser_exec` bawaan Hermes (`new_tab`, `wait_for_load`, `capture_screenshot()`) daripada mengimpor pustaka third-party yang memicu loop error dan membakar jatah giliran tool call.
+
+## 13. Linimasa Waktu Berjalan (Continuous Real-Time Timeline Ticker)
+- **Akar Masalah Sumbu Waktu Membeku:** Bila linimasa hanya dihitung dari `maxT = max(lane.end, event.end)` data historis, grafik akan membeku saat sesi masih aktif (`ended_at == null`) namun tidak ada event baru. Akibatnya jarum waktu (`live-edge`), rentang waktu teramati, dan sasis linimasa berhenti bergerak ke kanan seolah sistem mati.
+- **Dynamic Virtual Horizon:** Jika sesi aktif terdeteksi (`isActive` atau `ended_at == null`), hubungkan batas kanan linimasa ke jam lokal berjalan (`nowSec = Date.now() / 1000 - sessionT0`).
+- **Live Ticker Loop (rAF / Interval 1s):** Pasang ticker ringan yang memperbarui:
+  1. Transform posisi jarum penanda waktu terkini (`#armada-live-edge`) secara fluida.
+  2. Teks durasi teramati (`#armada-observed-time`) setiap detik tanpa menunggu payload API berubah.
+  3. Lebar sasis lajur aktif (`.armada-lane-span`) yang terus memanjang ke kanan mengikuti waktu nyata.
+- **Pencegahan Re-render Berlebih:** Jangan memanggil fungsi rebuild DOM menyeluruh (`replaceChildren`) setiap detik. Pisahkan ticker posisi jarum (`translate3d`) dari perender struktur event/lajur agar tidak memicu layout thrashing atau merusak scroll position pengguna.
 

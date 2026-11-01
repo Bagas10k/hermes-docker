@@ -109,6 +109,14 @@ A model can 404 through a healthy proxy on healthy accounts. Run this attributio
 
 For an Atmo-style upstream with multiple route prefixes, follow `references/9router-atmo-round-robin.md`. Use the installed management API, preserve existing router settings, verify real A→B→A requests, and distinguish routing from MoA or expanding account quota.
 
+## Operating the 9Router dashboard itself
+
+When the task is publishing, locking, or health-checking the router (dashboard password, provider/combo health, headroom, patching the built UI), follow `references/9router-dashboard-health-ops.md`. Rules that apply every time:
+
+- **Authenticated calls must reuse the host that issued the cookie** — a cookie minted on the public domain returns 401 against `127.0.0.1:20128` and vice versa.
+- **Judge health by real completions, not `/api/providers` `testStatus`** — connections report `unavailable` while happily serving traffic, and every combo member must exist in `/v1/models` before it can act as a fallback.
+- **`/_next/static` is immutable-cached for a year**, so a patched chunk is invisible publicly until its filename changes; renaming plus rewriting its references is the cache-bust.
+
 ## 9. Reusing the Hermes Gateway in Auxiliary Apps (HexChat pattern)
 
 When a secondary local app (e.g. HexChat on :8765) needs LLM without its own key, reuse the Hermes/9Router credentials instead of minting a new provider:

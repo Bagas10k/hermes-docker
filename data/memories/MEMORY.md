@@ -4,7 +4,7 @@ Obsidian vault berlokasi di /home/ubuntu/otak-koding. Rujukan utama: SYSTEM/KNOW
 §
 Format Telegram: spasi lega, poin 1 baris. PANTANGAN: Dilarang emoji di UI/UX. Standar TUI: gaya Zen (⚡ Skill, # Command, → Read/Edit, diff side-by-side maks 20 baris, [✓]/[ ] checklist).
 §
-Services: jajandigital :3000; gateway :8080; buku /buku; telemetry :8090; penelitian-ai :3050; 9router :20128. Profil kunagent terhubung ke @kunagentt_bot.
+Services: jajandigital :3000; gateway :8080; buku /buku; telemetry :8090; penelitian-ai :3050; 9router :20128 (dash https://9router.jajandigital.web.id, sandi: ~/.9router/dashboard-password.txt). Profil kunagent terhubung ke @kunagentt_bot.
 §
 100 aset desain terverifikasi tersimpan di /home/ubuntu/referensi-desain/, dikelola via web https://www.jajandigital.web.id/desain/.
 §
@@ -22,7 +22,7 @@ Skill `otak-koding`: SKILL.md sudah 101k char, di atas batas 100k — tambahan t
 §
 Plugin autonomous-orchestrator aktif via pre_llm_call hook (hierarki 3 generasi). Tangga kebenaran: lokal/vault -> empiris mesin -> model -> pencarian semantik Exa. Telegram display: cleanup_progress: false, thinking_progress: true, tool_preview_length: 120, delegation fallback aktif.
 §
-Rilis statis publik (seperti di jajandigital): wajib sematkan cache-buster (?v=...) pada tautan CSS/JS di HTML agar peramban ponsel klien tidak menyajikan aset usang.
+Rilis statis publik: wajib cache-buster (?v=) di CSS/JS; aset immutable Cloudflare di-cache 1 th, bust dengan ganti nama berkas.
 §
 Protokol Batas Waktu 30 Menit: Batas kerja mandiri per tugas/sprint adalah maks 30 menit. Tetap jaga mutu maksimal (pantang asal jadi). Jika waktu habis, langsung laporkan: 1) Hasil terverifikasi, 2) Kekurangan/limitasi saat ini, 3) Rencana langkah kelanjutan.
 §
