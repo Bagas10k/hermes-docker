@@ -84,9 +84,20 @@ python scripts/docx_validate.py out.docx
 | Delete comment by id | `docx_comments.py delete f.docx --id 0` |
 | Health-check the package | `docx_validate.py f.docx` (exit 1 on errors) |
 
+## Delivery contract for this user
+
+- Confirm the selected native format before final production. When Word is selected, deliver actual `.docx` attachments; Markdown sources or a ZIP alone do not satisfy the request.
+- For a company operating manual, keep one modular master document with templates inside its appendices plus one concise AI onboarding brief. Keep models, code, source ledgers and QC reports as optional supporting evidence, not additional documents the user must study.
+- Apply new founder decisions to the substantive content before conversion: positioning, product scope, examples, sales proposals, content calendar, assumptions and brief. A changed cover does not realign an old plan.
+- When the user asks to check the finished work, deliver the verified files with a short changed/verified/limitations note; do not restart the interview or replay the drafting process.
+
 ## Procedure
 
-1. **Create.** Write a JSON spec with `write_file`, then run
+1. **Create.**
+   Before generating Word from a long Markdown draft, follow
+   `references/markdown-delivery.md` for content alignment, native structure,
+   text-preservation checks and pagination boundaries.
+    Write a JSON spec with `write_file`, then run
    `scripts/docx_create.py`. The spec supports: `page` (size + margins in
    mm), `header`/`footer` strings, `footer_page_numbers` (adds a
    "Page X of Y" field footer), `styles` (custom paragraph styles with

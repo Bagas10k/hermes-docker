@@ -1,8 +1,8 @@
 model:
   api_mode: chat_completions
-  base_url: https://atmorouter.dev/v1
-  default: kiro/claude-opus-4.5
-  provider: custom:atmo
+  base_url: http://localhost:20128/v1
+  default: ag/gemini-3.8-flash-high
+  provider: custom:lk
 fallback_providers:
   - base_url: http://localhost:20128/v1
     key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
@@ -169,7 +169,7 @@ skills:
   creation_nudge_interval: 15
 timezone: Asia/Jakarta
 approvals:
-  mode: 'off'
+  mode: 'smart'
   destructive_slash_confirm: false
 plugins:
   disabled: []
@@ -368,7 +368,6 @@ custom_providers:
       atmorr/cb/minimax-m3.1-flash: {}
       atmorr/cbcn/deepseek-v4-flash: {}
       atmorr/cbcn/deepseek-v4-pro: {}
-      atmorr/cbcn/deepseek-v4.1-flash: {}
       atmorr/cbcn/glm-5.1: {}
       atmorr/cbcn/glm-5.2: {}
       atmorr/cbcn/glm-5.3: {}
@@ -464,16 +463,18 @@ custom_providers:
       atmorr/cbcn/kimi-k3.1-pro: {}
       atmorr/kcai/k3.1-pro-highspeed: {}
       atmorr/kcai/kimi-for-coding-highspeed: {}
-      atmorr/moon/kimi-k2.6: {}
-      atmorr/moon/kimi-k2.7-code: {}
-      atmorr/moon/kimi-k2.7-code-highspeed: {}
-      atmorr/moon/kimi-k3: {}
       atmorr/combo/hemat: {}
-      atmorr/combo/medium: {}
       free: {}
       atmorr/ag/gemini-4-argon: {}
       atmorr/ali/deepseek-v4.1-flash-1017: {}
       atmorr/combo/opus-kiro: {}
+      atmorr/kc/k3: {}
+      atmorr/kc/k3-256k: {}
+      atmorr/kc/k3.1-pro: {}
+      atmorr/kc/k3.1-pro-highspeed: {}
+      atmorr/kc/kimi-for-coding: {}
+      atmorr/kc/kimi-for-coding-highspeed: {}
+      atmorr/combo/qwen-max: {}
     models_discovered: true
     name: lk
   - base_url: https://api.nbgate.com/v1
@@ -588,7 +589,6 @@ custom_providers:
       cb/minimax-m3: {}
       cbcn/deepseek-v4-flash: {}
       cbcn/deepseek-v4-pro: {}
-      cbcn/deepseek-v4.1-flash: {}
       cbcn/glm-5.1: {}
       cbcn/glm-5.2: {}
       cbcn/glm-5.3: {}
@@ -696,6 +696,15 @@ custom_providers:
       combo/hemat: {}
       combo/opus-kiro: {}
       combo/qwen-max: {}
+      ali/deepseek-v4.1-flash-1017: {}
+      kc/k3: {}
+      kc/k3-256k: {}
+      kc/k3.1-pro: {}
+      kc/k3.1-pro-highspeed: {}
+      kc/kimi-for-coding: {}
+      kc/kimi-for-coding-highspeed: {}
+      mimotp/mimo-v2.6-flash: {}
+      mimotp/mimo-v2.6-pro: {}
     models_discovered: true
 group_sessions_per_user: true
 known_builtin_toolsets:

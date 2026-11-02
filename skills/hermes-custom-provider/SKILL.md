@@ -26,7 +26,15 @@ Point Hermes at any OpenAI-compatible endpoint. Order matters: verify the provid
    - Single-quote the `${...}` so the shell does not expand it.
    - Never hand-edit config.yaml with a text editor: a stray indent corrupts a live gateway, and file-edit tools refuse Hermes config paths. Adding a *list* entry is the one exception — use the scripted edit below.
 4. **Verify through Hermes, not just curl:** `hermes chat -q "balas satu kata: siap"`. A fresh process reads config.yaml + .env from disk, so this proves Hermes's env-resolution chain end-to-end — curl cannot prove that.
-5. **Record notable model IDs** from step 1; later switching is one command: `hermes config set model.default <id>`.
+5. **Record notable model IDs** from step 1:
+   - Switching model within the *same* provider: `hermes config set model.default <id>`.
+   - Switching to a model under a *different named provider* (e.g. `custom:lk` vs `custom:atmo`): set both provider and model, and align `base_url` so single-process CLI and gateway resolution stay consistent:
+     ```bash
+     hermes config set model.provider custom:<name>
+     hermes config set model.default <id>
+     hermes config set model.base_url <provider_base_url>
+     ```
+     Verify with a fresh process test: `hermes chat -q "balas satu kata: siap"`.
 6. **Telegram runtime footer alignment**: When verifying output on Telegram messaging (`display.runtime_footer`), ensure `gateway/runtime_footer.py` preserves provider context for custom/proxy endpoints so the footer reflects the actual serving provider alongside the short model name.
 7. **Align or isolate fallback chains**: Hermes automatically walks `fallback_providers` on 429, 500, or capacity errors. If user requests a specific model/tier (e.g. free models or specific proxy), align `fallback_providers` to peer models on the same tier or disable with `hermes config set fallback_providers "[]"` so failures report directly instead of silently switching models.
 8. **Local router / 9Router model routing & combo troubleshooting**:

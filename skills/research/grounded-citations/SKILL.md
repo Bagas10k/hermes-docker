@@ -299,6 +299,8 @@ and read the `info: stats:` line to see the counts before picking a number.
 - **Quoting from a snippet instead of the page.** Evidence quotes must come
   from the extracted page text, not a search-result description — `web_extract`
   first, save the text, then `quote --from` that file.
+- **Using a title/navigation paragraph as evidence.** Select the exact passage supporting the load-bearing claim, not the first long paragraph returned by extraction. A successful literal quote check proves textual presence, not relevance or legal interpretation. Retain explicit access dates and confidence per claim, and distinguish an institutional explainer from the underlying enacted text.
+- **Accepting a reviewer’s legislative inference unchecked.** A page recalling that an instrument was proposed on a past date does not establish that it remains a proposal. If an extracted page omits enactment details, state that limitation and verify the final legal text rather than upgrading either the author’s or reviewer’s inference into a fact.
 - **Paraphrasing into `quote --text`.** The verbatim check will reject it; the
   fix is to find the actual sentence, not to reword until something matches.
 - **Using `[unverified]` as an escape hatch.** It marks the rare claim that

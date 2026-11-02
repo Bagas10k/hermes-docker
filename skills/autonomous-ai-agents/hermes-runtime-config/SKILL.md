@@ -1,7 +1,7 @@
 ---
 name: hermes-runtime-config
 description: "Use when changing Hermes config.yaml or activating skills."
-version: 1.0.0
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -56,6 +56,27 @@ Cara aman mengubah `~/.hermes/config.yaml` dan membuktikan efeknya. Skill ini ti
 5. **Lapor** nama skill, jumlah karakter/token, dan kapan efeknya mulai.
 
 Probe siap pakai: `scripts/verify_auto_load.py`.
+
+## Prosedur: Mengganti Model Default ke Provider Kustom / 9Router Lokal
+
+Saat mengubah `model.default` ke router lokal (misal 9Router pada `localhost:20128`):
+
+1. **Uji inferensi model secara nyata via CLI sebelum mengubah config:**
+   ```bash
+   hermes chat -q "balas satu kata: siap" -m "<model-id>" --provider "custom:<provider-name>"
+   ```
+   Pastikan menghasilkan exit code 0 dan output teks valid (bukan sekadar daftar di `/models`).
+2. **Cadangkan konfigurasi:**
+   ```bash
+   cp ~/.hermes/config.yaml ~/.hermes/config.yaml.bak-$(date +%s)
+   ```
+3. **Set model dan provider via CLI:**
+   ```bash
+   hermes config set model.default "<model-id>"
+   hermes config set model.provider "custom:<provider-name>"
+   hermes config set model.base_url "http://localhost:20128/v1"
+   ```
+4. **Buktikan:** Baca kembali dengan `hermes config get model` dan uji satu query pendek dengan proses baru `hermes chat -q "tes"`.
 
 ## Prosedur: Merapikan Progres Agent di Telegram (`display.platforms.<platform>.*`)
 
@@ -128,6 +149,7 @@ Keluhan “TUI-nya jelek / sulit dibaca” sering bukan soal skin, dan menebak a
 - **Entri `platform_toolsets` untuk platform yang tidak ada membanjiri `errors.log`.** Nilai seperti `hermes-google_chat` / `hermes-teams` tidak terdaftar di `toolsets.py`, jadi setiap sesi menulis WARNING "platform has no valid toolsets configured". Validasi nama sebelum set: `venv/bin/python -c "import sys;sys.path.insert(0,'.');from toolsets import validate_toolset;print(validate_toolset('hermes-telegram'))"`, lalu `hermes config unset platform_toolsets.<platform>` untuk yang `False`.
 - **Plugin yang aktif di `plugins.enabled` tanpa direktori di `~/.hermes/plugins/` adalah plugin bawaan.** Tidak ada kode lokal untuk dibaca; jangan mengklaim perilakunya (mis. "retriever menutup celah auto_load") sebelum ada bukti. Nyatakan sebagai UNCERTAIN bila hanya config yang terlihat.
 - **Beban doktrin yang sama di dua tempat bukan pengaman, tapi ongkos.** Sebelum menambah aturan ke skill yang `auto_load`, cek apakah plugin `pre_llm_call` atau prompt dasar sudah memuatnya; kalau sudah, perbaiki di satu tempat saja.
+- **Uji santai permukaan klien (Hermes Mobile / Web Dashboard):** Saat pengguna sedang mencoba atau menjelajahi antarmuka klien bergerak (mobile/PWA), jangan menanggapi salam uji coba atau mention acak (`@nama`) dengan kuliah teknis isolasi profil atau penolakan kaku. Tetap tenang, responsif, dan tanyakan kenyamanan antarmukanya secara natural.
 
 ## Verification
 

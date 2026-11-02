@@ -63,7 +63,18 @@ Jalankan gate ini **sebelum** memanggil `delegate_task`:
      - `🔍 Analis Cucu`: Menganalisis log, membaca potongan kode, ekstraksi teks, kueri database.
      - `⚡ Kuli Eksekutor`: Menjalankan skrip pengujian, patching berkas terisolasi, curl endpoint.
      - `🛡️ QC Cucu`: Memeriksa byte gambar, mengecek status HTTP, inspeksi artifact disk.
-   - **Sifat:** Lahir saat task dipanggil (`delegate_task`), selesai menyetor bukti, langsung dimusnahkan agar hemat RAM.
+   - `Sifat`: Lahir saat task dipanggil (`delegate_task`), selesai menyetor bukti, langsung dimusnahkan agar hemat RAM.
+
+## Mode Operasi: Forum Diskusi Terbuka vs Chat Pribadi (DM)
+
+1. **Forum Diskusi Terbuka (Discussion Thread / Ruang Sidang):**
+   - **Tujuan:** Deliberasi arsitektur, kesepakatan desain, transparansi peran kabinet, dan konfirmasi langsung ke Mas Bagas.
+   - **Karakteristik Alur:** **Sekuensial (bergantian)** pada antarmuka percakapan. Agen merespons satu demi satu agar konteks utuh dan tidak terjadi tabrakan koding (*race condition*).
+   - **Persepsi Waktu:** Terasa lebih lama karena merupakan akumulasi waktu penalaran model + eksekusi alat nyata (shell/curl/browser) di server per giliran. Bukan karena koneksi internet lambat.
+2. **Chat Pribadi / DM (Direct Execution & Background Sprint):**
+   - **Tujuan:** Kecepatan, pengerjaan minim obrolan (*zero slop*), dan hasil bersih.
+   - **Karakteristik Alur:** **Paralel di latar belakang** via `delegate_task`. Mandor melepas sub-agent (Anak/Cucu) simultan pada berkas/jalur terisolasi tanpa membanjiri ruang chat.
+   - **Output:** Satu laporan terstruktur dengan bukti biner (exit code, status HTTP, bukti render fisik).
 
 ## Model Sub-Agent: Resolusi & Verifikasi
 
@@ -97,6 +108,7 @@ Ketika mendelegasikan beberapa sub-agent bekerja bersamaan pada satu proyek:
 3. Sub-agent **tidak bisa** membaca chat history. Semua info krusial (jalur file absolut, nama fungsi, rule desain) HARUS disematkan ke dalam `context`.
 4. Setelah sub-agent selesai, **Mandor wajib memverifikasi hasil kerjanya** (contoh: curl endpoint, baca head file) sebelum dilaporkan ke pengguna. Jangan sekadar menjadi "kurir" tanpa paham apa yang diperbaiki sub-agent.
 5. **Pitfall drift/hang leaf:** Aktivitas tool bukan otomatis progres. Berikan satu artefak konkret, paling banyak tiga berkas utama, kriteria biner dan batas 4–6 tool call; sertakan konteks yang sudah diperiksa agar worker tidak mengulang audit. Jangan menganggap batas dalam prompt sebagai timeout yang ditegakkan runtime. Bila delegasi berjalan sinkron sehingga Mandor tidak dapat memberi pulse atau mengambil alih selama panggilan, kecilkan unit kerja sebelum dispatch—jangan menyerahkan satu subsystem dengan anggaran pendek di atas kertas. Pada mode background, kerjakan jalur independen dan gunakan lifecycle/control yang tersedia jika ada sinyal drift; jangan menunggu atau polling transcript sebagai pengganti pekerjaan. Sesudah hasil masuk, periksa status runtime, exit reason, diff dan output mentah; klaim `SELESAI` atau `GO` dari hasil `max_iterations`, `interrupted`, atau dengan tes gagal tetap parsial. Verifikasi hunk yang tersimpan, ambil alih sisa yang jelas, dan simpan anggaran untuk satu QC independen atas sumber final. Jangan delegasikan diagnosis awal bila Mandor dapat menentukannya dalam ≤5 tool call.
+6. **Inspeksi Respon Bot Mode (`message_agent`) Terpotong:** Notifikasi penyelesaian background runner `bot_mode_dm.py` pada gateway/TUI dapat terpotong (`[… output truncated — showing last 0 chars]`). Jika runner selesai dengan exit code 0, jangan anggap handoff gagal atau kosong; baca durable receipt fisik di `<target_profile_home>/runtime/bot_live_delivery/<delivery_id>.json` atau lewat `tools.bot_live_delivery.read_delivery_result(profile_home, delivery_id)` untuk mengekstrak field `reply` lengkap berstatus `settled`.
 
 ## Kontrak Laporan Progres Konkret
 
