@@ -463,22 +463,21 @@ custom_providers:
       atmorr/cbcn/kimi-k3.1-pro: {}
       atmorr/kcai/k3.1-pro-highspeed: {}
       atmorr/kcai/kimi-for-coding-highspeed: {}
-      atmorr/combo/hemat: {}
       free: {}
       atmorr/ag/gemini-4-argon: {}
       atmorr/ali/deepseek-v4.1-flash-1017: {}
-      atmorr/combo/opus-kiro: {}
       atmorr/kc/k3: {}
       atmorr/kc/k3-256k: {}
       atmorr/kc/k3.1-pro: {}
       atmorr/kc/k3.1-pro-highspeed: {}
       atmorr/kc/kimi-for-coding: {}
       atmorr/kc/kimi-for-coding-highspeed: {}
-      atmorr/combo/qwen-max: {}
       atmorr/moon/kimi-k2.6: {}
       atmorr/moon/kimi-k2.7-code: {}
       atmorr/moon/kimi-k2.7-code-highspeed: {}
       atmorr/moon/kimi-k3: {}
+      atmorr/combo/glm: {}
+      atmorr/combo/deepseek: {}
     models_discovered: true
     name: lk
   - base_url: https://api.nbgate.com/v1
@@ -913,6 +912,11 @@ mcp_servers:
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
     args:
       - /home/ubuntu/mcp-svg-forge/server.py
+    enabled: true
+  canvas-inspector:
+    command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
+    args:
+      - /home/ubuntu/mcp-canvas-inspector/server.py
     enabled: true
 platform_toolsets:
   cli:

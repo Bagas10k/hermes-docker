@@ -34,3 +34,10 @@ author: Hermes Agent
    - **Above The Fold Priority Mobile**: Header dan kartu gamifikasi (seperti tanaman tumbuh) wajib kompak horizontal (maks 20-25% tinggi layar HP 390px) agar formulir input dan daftar agenda langsung terlihat utuh tanpa scroll.
    - **Simetri Input 50-50**: Hindari prefix statis panjang pada kapsul pilihan (gunakan `● Kategori ▾` dan `🕒 Jam`), posisikan simetris 50-50, dan pastikan floating toast tidak pernah menutupi area input atau kartu tugas aktif.
 
+8. **Visionless Spatial Sensory Audit (Standar Mandat Mas Bagas):**
+   - Dilarang hanya mengandalkan tebakan visual atau vision_analyze semata untuk mengecek kerapian tata letak mobile. Jalankan probe telemetri DOM (`dom_responsive_sensor.py` / `canvas-inspector` MCP) untuk memverifikasi matematis:
+     * `scrollWidth <= clientWidth` (wajib zero horizontal overflow / dilarang ada geseran kanan-kiri yang merusak UX).
+     * Luas target sentuh tombol/link interaktif $\ge 44 \times 44$px sesuai standar ergonomi sentuh mobile.
+     * Peta wireframe ASCII berbasis teks untuk melihat langsung posisi elemen above-the-fold tanpa memanggil Vision API yang boros token.
+
+
