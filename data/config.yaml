@@ -918,6 +918,11 @@ mcp_servers:
     args:
       - /home/ubuntu/mcp-canvas-inspector/server.py
     enabled: true
+  liquid-glass:
+    command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
+    args:
+      - /home/ubuntu/mcp-liquid-glass/server.py
+    enabled: true
 platform_toolsets:
   cli:
     - browser
