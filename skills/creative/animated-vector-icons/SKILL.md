@@ -12,7 +12,7 @@ metadata:
 
 # Animated SVG Vector Icons Studio
 
-Standard operating procedure and mathematical recipes for generating ultra-lightweight (<2 KB), zero-dependency, resolution-independent animated SVG vector icons with physical micro-interactions.
+Build resolution-independent animated SVG icons with measured export size and deliberate micro-interactions. Prefer SVG/CSS for compact web icons; select Lottie or another format when the brief or animation requires it. Measure the self-contained export, including required CSS/JS, before making a size claim.
 
 ## When to Use
 
@@ -23,17 +23,19 @@ Standard operating procedure and mathematical recipes for generating ultra-light
 
 ## Core Architecture Principles
 
-1. **Pure Vector Zero-Dependency:** Never use MP4 video, heavy Lottie JSON, or raster GIFs for iconography. Output must be raw SVG with inline CSS `<style>` or `@keyframes`.
-2. **Pinned `transform-origin` Absolute Anchor:** Any element undergoing `scale()`, `rotate()`, or `skew()` must explicitly define its pivot point in SVG coordinate space (e.g., `transform-origin: 24px 24px`). Unpinned transforms default to `(0, 0)`, causing detached/floating artifacts.
-3. **GPU-Friendly Compositor Properties:** Only animate `transform` and `opacity` to maintain locked 60 FPS performance without triggering DOM layout recalculations.
-4. **Interactive Dual-State:** Every icon must support passive looping (breathing/idle) and active triggered states (`.is-active`, `:hover`, or mouse pointer tracking).
+1. **Self-contained vector export:** For SVG delivery, include its styles, keyframes, namespace, unique IDs and required interaction code. Extracting only `outerHTML` from a page does not copy external animation CSS. Exercise the copied/downloaded result in an isolated document before describing it as ready to embed; raw SVG is not automatically valid JSX.
+2. **Explicit physical anchors:** Pin CSS transforms to the intended SVG pivot and group parts that move together; define `transform-box` deliberately. XML `rotate(angle cx cy)` already has an explicit pivot and is not invalid merely because CSS `transform-origin` is absent. Measure attachment points in initial, intermediate, and final states, not only full-size state.
+3. **Measured motion quality:** Prefer transform/opacity when suitable, but do not guarantee GPU backing or60 FPS from the property names. Path morph/draw may legitimately update geometry. Distinguish physical simulation from hand-authored easing; CSS cubic-bezier is not proof of a spring solver.
+4. **Intentional interaction:** Provide finite click/hover/focus state changes and reduced-motion handling; idle loops are optional, not mandatory. Pause animation offscreen or in hidden documents. Use semantic controls with keyboard activation and `aria-pressed` for toggles. Keep animation triggers separate from code inspection/copy controls so a modal does not obscure the very interaction being demonstrated.
+5. **Reference evidence:** A screenshot proves shape/composition only. Inspect video frames or the actual interactive source before asserting blinking, cursor tracking, collision physics, motion direction, size, or performance; do not turn a vision model's enthusiastic description into test evidence.
 
 ## Essential Animation Formulas
 
 ### 1. Organic Eye Tracking & Eyelid Blink
 - **Blink Keyframes:** Eyelids stay fully open (100% scaleY) for 94% of the cycle, swiftly compressing to 8% scaleY at 97%, and opening again by 100%.
 - **Pupil Pointer Delta:** Calculate normalized mouse offset from card center:
-  $$\Delta x = \left(\frac{x - x_{\text{center}}}{W} - 0.5\right) \times \text{range}_x, \quad \Delta y = \left(\frac{y - y_{\text{center}}}{H} - 0.5\right) \times \text{range}_y$$
+  $$\Delta x = \frac{x-x_{\text{center}}}{W}\,\text{range}_x, \quad \Delta y = \frac{y-y_{\text{center}}}{H}\,\text{range}_y$$
+  Equivalently use `(pointerX - rect.left)/rect.width - 0.5`; do not subtract0.5 again after already subtracting the center. Clamp movement inside the iris mask, move pupil/highlight together, and reset on pointer leave. Avoid a hover keyframe animation overriding the same transform used by tracking.
 
 ### 2. Squash & Stretch Bounce (Basketball / Ball Physics)
 - **Falling vs Impact Timing:**
@@ -42,14 +44,14 @@ Standard operating procedure and mathematical recipes for generating ultra-light
   - Rebound: Spring curve `cubic-bezier(0.28, 0.84, 0.42, 1)`.
 - **Contact Shadow Scaling:** Ground ellipse expands (`scale(1.2)`) and darkens at contact, shrinking (`scale(0.5)`) and fading at peak altitude.
 
-### 3. Orthographic 3D Seam Spin (Tennis Ball / Globe)
-- Sphere remains fixed while inner hyperbolic seams rotate around polar axis:
+### 3. Planar Seam Rotation (Tennis Ball / Globe)
+- A fixed sphere outline with rotating inner paths gives a flat in-plane spin, not an orthographic3D projection:
   ```css
   @keyframes tennis-spin {
     100% { transform: rotate(360deg); }
   }
   ```
-- Two opposing curved paths `M 12 15 C 19 20, 29 20, 36 15` and `M 12 33 C 19 28, 29 28, 36 33` create continuous 3D rotation illusions.
+- Two opposing curves can give a stylized spin. For a true sphere-turn illusion, project seam points under3D rotation and clip/hide the rear hemisphere; do not label plain `rotate(360deg)` as3D geometry.
 
 ### 4. Damped Pendulum Clapper Swing (Bell Notification)
 - Clapper and bell body rotate around top pivot with alternating decay:
@@ -57,6 +59,6 @@ Standard operating procedure and mathematical recipes for generating ultra-light
 
 ## Pitfalls
 
-- **Unanchored Scale Displacement:** Scaling SVG sub-elements without explicit `transform-origin` calculates offsets from the SVG viewBox origin `(0, 0)`, throwing the element completely out of position. Always pin `transform-origin: Xpx Ypx` to the element's geometric center.
-- **Stroke-Dasharray Float Jitter:** Animating path drawing with fractional stroke dashes causes subpixel flickering on high-DPI screens. Round dash lengths to nearest integer values.
-- **Unbounded Idle Animations:** Running dozens of continuous complex SVG animations simultaneously on mobile causes CPU thermal throttling. Provide an auto-play toggle or use `IntersectionObserver` to pause offscreen animations.
+- **Pivot drift:** Check computed transform origin, transform-box and ancestor transforms together; use the intended attachment point, which may not be the shape's center. Refer to `canvas-spatial-grounding` for coordinate spaces and SVG screen bounds.
+- **Dash jitter:** Inspect actual rendered frames before attributing flicker to fractional dash values. Prefer consistent pathLength/units and measured geometry; rounding every dash length is not a universal fix.
+- **Excess idle work:** Bound loops and expose pause/reduced-motion behavior. Measure runtime cost before claiming thermal throttling or performance improvements; inspect paused descendants and transitions, not only the outer `<svg>` animation state.

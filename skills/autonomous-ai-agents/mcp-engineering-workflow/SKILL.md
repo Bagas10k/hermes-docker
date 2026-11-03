@@ -22,10 +22,13 @@ Skill panduan baku untuk membuat, mengonfigurasi, dan mendaftarkan server MCP (M
   echo "Y" | hermes mcp add <name> --command <executable> --args <args...>
   ```
 
-## 2. Pola Pembuatan MCP Server Lokal Bebas Token (Zero-Auth FastMCP)
-Jika pengguna meminta server MCP tanpa API key atau tanpa login:
-- Manfaatkan venv internal Hermes (`/home/ubuntu/.hermes/hermes-agent/venv/bin/python`) yang sudah memiliki dependensi `mcp` (`from mcp.server.mcpserver import MCPServer`) dan `httpx`.
-- Simpan berkas server di direktori terisolasi (misal `/home/ubuntu/mcp-<nama>/server.py` atau repo `/home/ubuntu/<repo>/<pkg>/server.py`).
+## 2. Pola Pembuatan MCP Server Lokal
+
+1. Temukan interpreter yang akan menjalankan server dan periksa SDK-nya pada interpreter itu (`importlib.metadata.version('mcp')` dan uji import). Jangan menganggap `python3`, executable `pip`, runtime browser, dan venv Hermes menunjuk lingkungan yang sama.
+2. Pilih API sesuai SDK: v1 memakai `from mcp.server.fastmcp import FastMCP`; v2 memakai `from mcp.server.mcpserver import MCPServer`. Verifikasi migrasi terhadap dokumentasi SDK sebelum mengganti import. Untuk v2, stdio async dapat dijalankan dengan `asyncio.run(server.run_stdio_async())` seperti contoh di bawah.
+3. Tambahkan/pin dependensi dalam venv proyek bila perlu; jangan meng-upgrade runtime agen bersama untuk memperbaiki satu server. Gunakan interpreter itu juga saat tes dan pendaftaran.
+4. Tanpa API key/login hanya berarti tidak perlu autentikasi penyedia; stdio lokal bukan sandbox OS dan tidak boleh diekspos sebagai HTTP publik tanpa batas akses. Batasi output path, durasi kerja dan subprocess sesuai fungsi tool.
+5. Simpan server di direktori proyek terisolasi dan gunakan import lokal relatif/path resolver yang benar, bukan `sys.path` ke salinan helper pribadi di luar repo. Clone bersih harus mempunyai sumber yang sama dengan server yang diuji.
 - **Pitfall Resolusi `sys.path` Paket:** Ketika Hermes mengeksekusi script server secara langsung (`--args .../server.py`), Python menyetel `sys.path[0]` ke folder `server.py`, bukan root paket. Jika mengimpor modul saudaranya (`from pkg.core...`), akan muncul `ModuleNotFoundError` yang mengakibatkan error `✗ Failed to connect: Connection closed`. Wajib selipkan path resolver di baris teratas `server.py`:
   ```python
   import sys, os
@@ -51,8 +54,13 @@ if __name__ == "__main__":
     asyncio.run(server.run_stdio_async())
 ```
 
-## 3. Alur Verifikasi Biner (3-Step Verification)
-Sebelum melaporkan ke pengguna bahwa MCP siap digunakan, wajib jalankan 3 langkah verifikasi:
+## 3. Alur Verifikasi Biner
+
+Pisahkan source ditulis, import berhasil, wire call berhasil, registrasi, enabled dan aktivasi sesi. Jangan melaporkan salah satunya sebagai bukti semuanya.
+
+Sebelum registrasi, lakukan smoke test stdio nyata dengan `StdioServerParameters` + `stdio_client` + `ClientSession`: `initialize()` → `list_tools()` → `call_tool()` menggunakan payload representatif. Periksa isi hasil dan status error, bukan hanya jumlah nama tool. Type hint `dict` tidak memvalidasi bentuk nested storyboard; jalankan payload negatif untuk tipe salah, field wajib hilang dan nilai di luar batas. Discovery yang berhasil belum membuktikan render/side effect sebuah tool.
+
+Jika registrasi masuk cakupan tugas, lanjutkan langkah klien berikut:
 1. **Uji Script Standalone:**
    Jalankan fungsi modul langsung via Python CLI untuk memastikan tidak ada error sintaks, import, atau jaringan:
    ```bash

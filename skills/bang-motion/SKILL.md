@@ -110,7 +110,7 @@ hukum di bawah. Sebelum menyerahkan, cek KODE, bukan perasaan:
    butuh paragraf untuk dimengerti, informasi itu pindah ke gerak objek atau
    dipecah jadi dua adegan, satu pernyataan each.
 5. **Komposisi 9:16 tidak boleh top-heavy.** Mengumpulkan seluruh kartu atau elemen di 60% bagian atas dan membiarkan 40% bagian bawah kosong melompong (dead space) membuat video terlihat menggantung. Komposisi wajib di-center secara vertikal, atau diseimbangkan dengan jangkar visual di area bawah (seperti live terminal daemon stream, telemetri bar, atau metrik tabular) agar kanvas terasa padat, berbobot, dan deliberate.
-6. **Anti-bentuk primitif / CSS 101.** Untuk topik teknologi (arsitektur AI, protokol, sistem, database), dilarang menggambar objek primitif seperti kotak abu-abu bulat dengan mata titik ala tugas pemula CSS. Gunakan estetika Developer HUD / Swiss Cyberpunk (Linear, Vercel, Apple keynote): kanvas obsidian (#07080A), border 1px translucent, display typography kontras tinggi, monospace tracking, dan diagram semantik berbobot nyata.
+6. **Anti-objek dekoratif tanpa makna.** Untuk topik teknologi, gunakan objek dan hubungan yang menjelaskan mekanismenya; kotak bermata atau partikel acak bukan representasi arsitektur. Pilih gaya dari brief dan referensi, bukan otomatis obsidian/HUD untuk semua teknologi. Primitive SVG tetap sah untuk diagram matematis yang jelas; mutu ditentukan makna, proporsi, hirarki dan keterbacaan, bukan kerumitan bentuk.
 7. Ken Burns (scale 1.0→1.05 pada foto) sebagai satu-satunya gerak → PPT.
    Gerak tiap detik harus datang dari BAHASA GERAK LATAR dari menu
    `techniques.md` §7c. Batang/garis melintas ke samping ("lane", "range",
@@ -146,9 +146,22 @@ jenis — ia punya dokumen sendiri karena strukturnya beda.
 | Title / lower third | 2–6 dtk | elemen kecil di atas footage, masuk-keluar bersih | `techniques.md` |
 | Explainer / video penjelasan | 30–90 dtk | fakta bersumber, entitas tampil, sudut pandang berganti | `references/explainer.md` + starter per gaya |
 
+## Video informasi dan engine berbasis kode
+
+- Prioritaskan pemahaman: tulis tujuan komunikasi, fakta/sumber, narasi, representasi visual, dan bukti yang harus terlihat untuk setiap beat sebelum mengode. Animasi UI bukan pengganti mesin video penjelasan.
+- Visualisasikan besaran yang dibahas, bukan sekadar aliran dekoratif: pembentukan antrean harus memperlihatkan pekerjaan menunggu dan perubahan jumlahnya; bedakan arus masuk, kapasitas maksimum, keluaran aktual, dan stok awal.
+- Cocokkan angka, satuan, label, dan kondisi waktu pada narasi dengan diagram di beat yang sama; grafik kapasitas enam tidak boleh mengiringi kalimat kapasitas empat tanpa perubahan keadaan yang jelas.
+- Pisahkan resep bank, adapter renderer yang tersedia, dan hasil yang sudah diuji. Katalog puluhan preset bukan bukti semuanya dieksekusi; tolak adapter yang belum ada, jangan mengganti diam-diam.
+- Gunakan telemetri DOM untuk bounds dan clipping teks; kotak aman tidak membuktikan isi kotak muat. Tetap periksa frame untuk makna dan komposisi, serta review audio untuk pelafalan. Lulus tes geometri bukan bukti penonton memahami.
+- Perlakukan angka safe zone, batas kata, waktu baca, dan durasi preset sebagai kebijakan desain bertanda sumber/status, bukan hukum universal platform. Metadata lisensi bukan bukti hak pakai aset.
+- Pertahankan perbedaan bukti: audio valid, render aktif, MP4 terprobe, MCP dapat dipanggil, mutu audio ditinjau, dan pemahaman manusia diuji adalah gerbang terpisah. Jangan mengganti gerbang yang belum diuji dengan skor estetika.
+
+Untuk pengembangan pipeline/MCP video, ikuti urutan integrasi dan gerbang di `references/architecture.md` bagian **Engine video informasi**; untuk narasi terukur dan mixing kompatibel, lihat `references/vo-sync.md`.
+
 ## Hukum #1 — Ini video, bukan slide
 
 - **Untuk opener: satu kalimat pendek + maksimal satu objek utama per adegan.**
+- Batas copy opener tidak berlaku otomatis pada subtitle, penjelasan edukasi, atau atribusi sumber; ringkas headline tanpa menghapus syarat yang membuat klaim benar.
   Tidak ada kicker ("01 — FITUR"), sub-judul, paragraf keterangan, chip/badge.
 - **Informasi baru = respons visual baru.** Pada explainer, ubah keadaan/aksi
   di dunia yang sama bila masih berhubungan; pergantian kalimat tidak wajib

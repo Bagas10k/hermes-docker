@@ -3,6 +3,21 @@
 Tiap keputusan di sini pernah salah dulu sebelum benar. Bagian "kenapa"
 lebih penting daripada kodenya.
 
+## Engine video informasi
+
+Gunakan alur berikut saat mengembangkan CLI/MCP video, bukan hanya membuat satu opener:
+
+1. Temukan engine, komposisi, jalur render, serta kontrak repo yang sudah ada. Tambahkan pipeline terisolasi sebelum menyentuh komposisi lama; pisahkan nama produk, skill panduan, dan renderer pihak ketiga.
+2. Kunci satu golden path kecil: beat terstruktur → storyboard → validasi → narasi → visual → MP4 → receipt QA. Arsipkan kontrak dan update tracker pada milestone teruji; jangan membangun bank besar terlebih dahulu sambil membiarkan jalur utama belum pernah berjalan.
+3. Definisikan beat dengan `goal`, `narration`, `text`, `visual:{type,data}`, `layout`, `duration`, `elements`, `source_refs`, `sfx`. Beban editorial tetap pada agent/editor jika router hanya memakai kata kunci; jangan menyebut substring matching sebagai pemahaman atau pemeriksa fakta.
+4. Pisahkan matriks kapabilitas: resep tersimpan, adapter tersedia, parameter benar-benar dikonsumsi, dan fixture sudah dirender. Uji satu preset dengan perubahan parameter yang menghasilkan perubahan frame; mengembalikan JSON efek tidak membuktikan renderer memakainya.
+5. Validasi sebelum TTS/render: tipe objek bertingkat, ID unik, angka finite non-boolean, ukuran positif, peran penting/dekoratif, geometri sesuai profil kanonik, isi wajib, anggaran durasi/komputasi, serta metadata hak pakai. Jangan beri PASS pada daftar elemen kosong. Gagal tertutup pada adapter atau data grafik yang tidak tersedia.
+6. Rancang portrait dan landscape sebagai komposisi berbeda di safe rect, bukan memampatkan tumpukan vertikal. Bedakan frame master, skala preview, dan viewport penonton. Periksa teks HTML dengan `scrollHeight/clientHeight` dan `scrollWidth/clientWidth`; `overflow:hidden` dapat menyembunyikan cacat, bukan memperbaikinya. Label SVG perlu pengukuran tersendiri.
+7. Bangun narasi dan caption terukur dengan `vo-sync.md`, lalu kunci state visual pada waktu/frame yang sama. Render beberapa still terpilih sebelum ekspor seluruh video; inspeksi gambar diam tidak membuktikan gerak atau suara.
+8. Setelah render selesai, gunakan `ffprobe -show_streams -show_format -of json` untuk ukuran, codec, fps, durasi, dan keberadaan audio. Periksa awal/akhir audio agar mux tidak memotong ucapan; jangan gunakan `-shortest` untuk menyembunyikan timeline yang tidak cocok. Labeli preview resolusi rendah sebagai preview, bukan Full HD.
+9. Uji MCP lewat initialize → list_tools → call_tool dengan payload positif dan negatif. Bedakan skrip bisa diimpor, wire call berhasil, terdaftar di klien, enabled, dan aktif di sesi berjalan. Simpan receipt dan kirim artefak nyata; jangan mengklaim background render selesai hanya karena proses berhasil dimulai.
+10. Tutup dengan daftar kelulusan dan kekurangan, bukan skor kualitas buatan. Jumlah preset, loudness, dan batas kotak tidak mengukur kejelasan narasi atau peningkatan pemahaman; review editorial, dengar, dan uji pemahaman harus diberi status sendiri.
+
 ## Struktur berkas
 
 ```

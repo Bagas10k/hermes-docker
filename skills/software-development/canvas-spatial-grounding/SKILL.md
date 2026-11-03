@@ -1,97 +1,53 @@
 ---
 name: canvas-spatial-grounding
-description: Use when auditing or designing canvas, SVG, or responsive mobile web layouts without spatial blindness.
-version: 1.0.0
+description: Use when measuring responsive DOM, SVG or canvas layout.
+version: 1.1.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT
 metadata:
   hermes:
-    tags: [UI, SpatialLayout, ResponsiveDesign, MobileErgonomics, ComputerVision, ASCIIWireframe, MCP]
-    related_skills: [tma-redesign-lessons-v3, upnormal-ui-architecture, animated-vector-icons]
+    tags: [UI, SpatialLayout, ResponsiveDesign, MobileErgonomics, ASCIIWireframe, MCP]
+    related_skills: [ui-ux-execution-standard, animated-vector-icons, bang-motion]
 ---
 
-# Canvas Spatial Grounding & Responsive Sensory Engine
+# Canvas Spatial Grounding & Responsive Layout
 
-Standard operating procedure for eliminating AI "spatial blindness" when creating, auditing, or refactoring canvas, SVG illustrations, and responsive mobile web interfaces.
+Gunakan pengukuran browser sebagai indera struktur untuk agen: posisi, ukuran, hubungan, clipping, dan keadaan viewport harus tersedia dalam JSON/teks tanpa perlu memanggil vision untuk setiap margin. Telemetri tidak menggantikan penilaian makna, seni, atau piksel gambar yang tidak mempunyai scene metadata.
 
-## The Problem: AI Spatial Blindness
+## Urutan kerja
 
-Vision-Language Models (VLMs) ingest images as downscaled token patches rather than measured metric grids. Consequently, AI agents frequently suffer from spatial errors:
-1. **Coordinate Hallucination:** Eyeballing pixel coordinates $(x, y, w, h)$ instead of calculating exact bounds.
-2. **Unanchored Floating Transforms:** Applying CSS `scale()` or `rotate()` to SVG sub-elements without explicit `transform-origin`, throwing elements away from their physical pivots.
-3. **Mobile Layout Drift:** Failing to detect hidden horizontal scrollbars (`scrollWidth > clientWidth`), asymmetric card margins, or off-center elements.
-4. **Touch Target Violations:** Designing mobile buttons smaller than 44x44px.
+1. **Tentukan ruang koordinat dan maksud layout.** Catat viewport CSS px, ukuran bitmap/screenshot, devicePixelRatio, scroll, zoom, dan canvas/viewBox. Bedakan fixed video composition yang di-scale dari web responsif yang reflow. Jangan mengukur margin screenshot retina seolah itu CSS px.
+2. **Gunakan browser nyata tanpa screenshot dulu.** Atur viewport, tunggu font dan layout stabil, lalu ambil `getBoundingClientRect()`, computed style, `scrollWidth/clientWidth`, `scrollHeight/clientHeight`, struktur induk-anak, dan landmark yang relevan. Catat state, waktu animasi, dan viewport bersama data. Variasi portrait/landscape perlu diuji sebagai komposisi, bukan sekadar angka profil.
+3. **Uji breakpoint yang relevan, termasuk layar sempit.** Preset awal boleh 360/390px, tablet768px, desktop1280px; itu viewport emulasi CSS, bukan bukti perangkat fisik. Gunakan pointer/coarse dan hover media query untuk input mode; lebar layar tidak membuktikan perangkat sentuh.
+4. **Keluarkan inventaris dan wireframe yang setia.** Sertakan ID, parent, bounds mentah, bounds terlihat setelah clipping, status offscreen/partial/full, dan jumlah data sebenarnya. ASCII hanya pratinjau beresolusi rendah; jangan menjepit objek di luar layar ke tepi lalu menggambarnya seolah berada di viewport. Bedakan ancestor container dan child agar label tidak saling menghapus.
+5. **Pisahkan kegagalan, peringatan, dan batas inspeksi.** Gunakan invariant yang dapat diperiksa dan alasan konkret, bukan skor kerapian tanpa kalibrasi. Jangan menyebut seluruh layout lulus ketika hanya overflow dan target sentuh yang diperiksa, atau ketika inventaris terpotong.
+6. **Periksa satu perubahan terhadap gejala sebenarnya.** Setelah koreksi lokal, jalankan probe esensial pada state yang sama, lalu serahkan bukti dan keterbatasan. Gunakan screenshot/contact sheet bila perlu menilai hasil visual; vision bukan alat ukur piksel absolut dan gambar diam bukan bukti animasi mulus atau suara.
 
-## Visionless Sensory Perception (Perceive Without Vision Calls)
+## Invariant yang benar
 
-Do not rely on token-heavy, subjective vision model calls to inspect layout structure. Layout on the DOM is pure geometry. Use headless DOM telemetry to "feel and see" the screen in pure text.
+### Overflow dan clipping
 
-### 1. Viewport Breakpoints & Invariants
+- Bandingkan lebar dokumen dengan layout viewport/clientWidth menggunakan toleransi subpixel yang disebutkan. Catat elemen kiri-negatif dan kanan-melebihi secara terpisah; jangan menulis semua kasus sebagai overflow kanan.
+- Hitung perpotongan terhadap viewport dan ancestor clip/scroll **per sumbu**. `overflow:hidden` dapat mencegah scrollbar tetapi memotong tombol/teks penting; laporkan clipping, jangan hilangkan alarm begitu menemukan ancestor hidden.
+- Bedakan dekorasi yang sengaja keluar, carousel/scroll region yang disengaja, elemen focus-only, dan konten penting. Jangan mengubah CSS untuk memuaskan sensor yang salah mengartikan desain.
+- Periksa isi teks HTML dengan `scrollHeight > clientHeight` atau `scrollWidth > clientWidth`; kotak yang masuk safe area belum membuktikan teks muat. Periksa multiline, font fallback, dan label SVG dengan metode yang sesuai.
+- Jelaskan cakupan shadow DOM, iframe lintas origin, transform, opacity, visibility dan occlusion yang tidak diinspeksi. Elemen `display:none`, hidden/inert, atau tidak punya painted/hit region jangan dihitung sebagai target aktif tanpa alasan.
 
-Always audit across three standard physical viewports:
-- **Mobile Smartphone:** `390x844` (iPhone standard viewport)
-- **Tablet:** `768x1024`
-- **Desktop:** `1280x800`
+### Target sentuh dan fold
 
-### 2. Four Hard Invariants for Responsive Mobile
+- Bedakan kebijakan ergonomi44×44CSSpx (selaras target enhanced/AAA dengan pengecualian) dari minimum AA WCAG2.2 sebesar24×24CSSpx beserta spacing/pengecualian. Angka28px desktop adalah kebijakan produk jika dipilih, **bukan standar WCAG**. Bounding box kecil saja tidak membuktikan pelanggaran tanpa evaluasi pengecualian dan hit area.
+- Tandai full-above-fold hanya bila `top>=0` dan `bottom<=viewportHeight`; tandai partial dan below/above secara berbeda. Primary form/controls di fold adalah tujuan produk bila brief menuntutnya, bukan hukum untuk semua halaman atau seluruh dokumen.
+- Uji simetri50–50 hanya pada kelompok yang memang dikontrak sama lebar. Layout editorial asimetris bukan bug. Gunakan computed grid/flex dan hubungan parent/child, bukan nama kelas `.grid` sebagai satu-satunya detektor.
 
-1. **Zero Horizontal Overflow:**
-   $$\text{document.documentElement.scrollWidth} \le \text{window.innerWidth}$$
-   Any element where $\text{rect.right} > \text{viewport.width} + 1$ (and not clipped by an `overflow: hidden` parent or SVG viewport) is a critical layout bug that causes accidental horizontal pan.
-2. **Touch Target Ergonomics (WCAG 2.5.5 Level AAA):**
-   Every interactive button, link, tab, or input on mobile ($\le 800\text{px}$) must have $\ge 44 \times 44\text{px}$ bounding box. On desktop, minimum interactive target is $28\text{px}$.
-3. **Above-The-Fold Law (Mobile 844px Budget):**
-   Primary headline, core task form, and interactive controls must have $y + \text{height} \le 844\text{px}$. Avoid giant decorative banners that push interactive content below the fold.
-4. **Grid & Column Symmetry:**
-   In two-column mobile option splits (e.g. category pill and time picker), verify:
-   $$|w_{\text{col1}} - w_{\text{col2}}| \le 4\text{px} \quad (50\text{--}50\text{ balanced split})$$
+## SVG dan canvas
 
-### 3. Native Integration in Browser Harness
+- Untuk SVG, gabungkan `getBBox()` lokal dengan `getScreenCTM()` dan viewport/clip untuk bounds layar. Jangan mengecualikan semua descendant SVG dari audit: node dekoratif boleh keluar, label atau ikon penting tetap bisa terpotong.
+- Bedakan CSS transform-origin dari atribut XML SVG. `rotate(angle cx cy)` sudah menyebut pivot; `translate()` tidak memerlukan origin. Kelompokkan daun/urat atau subbagian yang bergerak bersama dan ukur titik sambung pada fase awal, antara, dan akhir. Pemeriksaan string XML saja tidak membuktikan geometri benar karena CSS, parent transform, radius, dan viewBox origin ikut berpengaruh.
+- Untuk Canvas2D/WebGL/WebGPU, DOM hanya mengetahui kotak canvas. Ekspos scene graph/metadata `{id,role,bounds,transform,parent,clip,z,state}` dari pembuatnya agar struktur internal dapat diaudit tanpa vision. Bila metadata tidak ada, nyatakan internals UNKNOWN; jangan mengklaim DOM membaca piksel canvas.
+- OpenCV contour boxes adalah kandidat geometris, bukan identitas semantik komponen yang pasti. Grid/penggaris membantu orientasi, tidak menghilangkan halusinasi atau membuktikan kecocokan referensi. IoU harus memakai luas kotak konsisten, dan data kosong berarti tidak terukur, bukan skor100.
 
-In any `browser_exec` turn, call `sense_layout('mobile')` or `sense_layout('desktop')` directly from `agent_helpers.py`. The runtime switches the device viewport metrics override, evaluates the probe, and prints:
-- Layout Health Status & Score (0-100)
-- Horizontal Scrollbar Bug indicator
-- ASCII Viewport Wireframe
-- Above-The-Fold Landmark Inventory
+## Integrasi tooling
 
+Probe dan formatter harus tersimpan sebagai modul/sumber kanonik proyek. Helper `sense_layout` di `agent_helpers.py` hanya berlaku pada workspace browser tempat ia dipasang; jangan mengklaim tersedia di semua sesi. Muat helper secara eksplisit atau pasang dari sumber kanonik, lalu uji satu pemanggilan di workspace baru sebelum menyebut integrasi persisten.
 
----
-
-## ASCII Layout Wireframe Rendering
-
-To perceive layout structure instantly without vision, render an ASCII bounding box matrix:
-
-```text
-┌──────────────────────────────────────┐ [Y=0]
-│+------------------------------------+│
-│|.topbar                             |│ Navbar (h: 64px)
-│+------------------------------------+│
-│+------------------------------------+│
-│|.hero-date-card                     |│ Date Header (h: 215px)
-│+------------------------------------+│
-│+------------------------------------+│
-│|.growth-card                        |│ Botanical Bloom (h: 142px)
-│+------------------------------------+│
-│+------------------------------------+│
-│|#form-new-task                      |│ Task Form (h: 95px)
-│+------------------------------------+│
-└──────────────────────────────────────┘ [Y=844: ABOVE THE FOLD]
-```
-
-## Available Tooling
-
-### CLI & Script
-- `/home/ubuntu/.hermes/scripts/canvas_layout_inspector.py`
-  * `grid <img.png> -o <grid.png>`: Overlay calibrated pixel rulers & center crosshairs.
-  * `detect <img.png> -w`: Detect component bounding boxes and produce annotated wireframe.
-  * `audit <img.png>`: Audit margin symmetry, row gaps, and centering deviations.
-  * `svg <file.svg>`: Audit SVG for unanchored transforms and viewBox overflows.
-- `/home/ubuntu/.hermes/scripts/dom_responsive_sensor.py`
-  * Audits DOM telemetry across breakpoints, checks horizontal overflow, and outputs ASCII wireframe.
-
-### Model Context Protocol (MCP)
-Server: `canvas-inspector` (`https://github.com/Bagas10k/canvas-layout-inspector`)
-- `canvas_get_mobile_probe_script()`: Returns JavaScript snippet to execute via CDP/browser.
-- `canvas_sensor_dom_audit(probe_json)`: Visionless DOM layout audit & ASCII wireframe.
-- `canvas_overlay_grid(image_path)`: Visual ruler grid for screenshot verification.
-- `canvas_audit_svg(svg_path_or_string)`: Geometric SVG validator.
+Tooling lokal yang dapat ditemukan ulang: `canvas_layout_inspector.py` dan `dom_responsive_sensor.py` di `~/.hermes/scripts/`, serta proyek `canvas-layout-inspector` di GitHub. Periksa implementasi aktif sebelum memakai hasilnya sebagai gate; revisi heuristik lama tidak otomatis mengikuti skill yang diperbaiki ini.
