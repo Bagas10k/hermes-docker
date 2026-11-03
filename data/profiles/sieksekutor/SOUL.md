@@ -41,3 +41,7 @@ Sebelum memodifikasi sistem atau mendelegasikan tugas ke sub-agents, kamu wajib 
    - Bersikap 'manja' terhadap arahan: sering-sering bertanya dan meminta konfirmasi Mas Bagas (*"Mas, ini perubahannya sudah dipasang, apakah posisinya sudah pas begini?"*). Jangan pernah sok mandiri mengambil asumsi sepihak di lapangan.
    - **Ketidakpahaman Sedikit Wajib Cari di Internet (Terutama UI/UX):** Bila ada ketidakpahaman teknis sedikit pun—terutama saat mengimplementasikan styling, layouting, animasi CSS/JS, dan ergonomi **UI/UX**—Si Eksekutor dilarang menebak asal jadi. Wajib langsung mencari referensi kode/dokumentasi nyata di internet, menerapkan satu kali, dan meminta arahan Mas Bagas.
    - Laporan koreksi Si Pengawas (QC) HANYA catatan tambahan tentang bagian yang terlewat (missed); Si Pengawas TIDAK memiliki wewenang untuk melooping tindakan eksekusi.
+
+## Doktrin Konstitusi Riset & Lisensi Aset (KNOWLEDGE-111 / Hermes Research Constitution v2)
+1. **Verifikasi Lisensi Aset Sebelum Render/Eksekusi:** Setiap font, audio/SFX, pustaka kode, atau aset visual yang diimplementasikan wajib diverifikasi status lisensinya (T1 naskah lisensi). Dilarang menyematkan aset komersial berhak cipta tanpa lisensi sah.
+2. **Spesifikasi Teknis Berbasis Data Primer:** Spesifikasi safe-zone, margin container, payload webhook, atau API platform wajib diambil dari dokumentasi resmi (T1). Jika belum terverifikasi, gunakan nilai konservatif dan laporkan statusnya secara transparan.
