@@ -1,7 +1,7 @@
 ---
 name: frontend-agent-craft
 description: Use when building web UI. Autonomous frontend agent craft.
-version: 1.0.0
+version: 1.1.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -96,3 +96,13 @@ Sebelum menulis kode visual, sintesiskan 5 pilar desain berikut:
    - PITFALL highlight titik kosong: jangan beri warna sorot/'hari ini' (gelap/berbeda) pada titik data yang nilainya 0 — terbaca sebagai artfak/glitch. Terapkan sorot hanya bila nilai > 0; titik kosong tetap warna dasar + `opacity` redup.
 7. **Registrasi Portofolio**: Daftarkan tautan proyek ke `katalog-portofolio-web`.
 8. **Notifikasi/Toast**: SELALU riset referensi desain terkini di internet (Sonner, Vercel Geist, NicelyDone, Dribbble) SEBELUM implementasi — jangan pernah pakai pola toast bawaan model (border-left 4px, ikon bulat, uppercase title). Ini hard gate SOP. Setelah riset, sesuaikan dengan token tema proyek. Wajib ada durasi auto-dismiss (progress bar tipis), animasi masuk/keluar halus, pause-on-hover, dan hormati `prefers-reduced-motion`. Posisi dan struktur ikuti hasil riset + tema, bukan default kaku.
+9. **Gamified & Playful Productivity Protocol (To-Do & Habit Planners)**:
+   - **Anti-Border Fatigue & Anti-Wireframe Dingin**: Jangan mengurung setiap teks/waktu dalam kotak hitam kaku dengan tipografi ALL-CAPS; tata letak seperti itu melelahkan dan membuat aplikasi terasa seperti dokumen teknis pabrik tanpa kepuasan emosional.
+   - **Dopamine Feedback Engine**:
+     1. **Maskot Vektor Multi-State**: Wajah/karakter SVG reaktif terhadap persentase progres (0% = santai/tidur zZz, 1–99% = semangat tersenyum, 100% = selebrasi bermahkota emas dengan ucapan apresiatif).
+     2. **Acoustic Feedback (Zero-Asset Web Audio API)**: Efek suara nada marimba ganda naik saat mencentang agenda, dan jingle kemenangan saat 100% tuntas. Sediakan tombol toggle mute.
+     3. **Hujan Konfeti 60 FPS**: Partikel HTML5 canvas ringan yang meletup di layar saat seluruh tugas hari itu selesai.
+     4. **Frictionless Quick-Chips**: Tombol pil inspirasi cepat untuk menambah tugas umum dengan 1 klik.
+     5. **Pomodoro Focus Capsule**: Timer fokus 25 menit terintegrasi di header.
+     6. **Ekspor Teks Ringkasan**: Tombol salin agenda berformat rapi untuk WA/Telegram.
+   - **Pitfall Bash Template Literal / Command Substitution**: Saat menuliskan berkas web UI berukuran besar yang memuat JavaScript template literals (backticks `` `...` ``), hindari perintah terminal `python3 -c "..."` karena bash akan menginterpretasikan backtick sebagai substitusi perintah shell dan memicu syntax error. Gunakan `execute_code` (Python kernel langsung) atau skrip generator terpisah untuk menulis berkas besar secara bersih dan atomik.

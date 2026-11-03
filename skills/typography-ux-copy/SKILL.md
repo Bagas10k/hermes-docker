@@ -53,6 +53,7 @@ When a screenshot or design reference is provided, infer the system behind it ra
 Read only the references required for the current task:
 
 - Type fundamentals, anatomy, scale, weight, width, line-height, tracking: `references/typography-foundations.md`
+- Curated distinctive character font catalog & pairings (anti-monoton): `references/distinctive-font-catalog-and-pairings.md`
 - Semantic hierarchy, responsive type systems, numbers/data, dense interfaces: `references/type-hierarchy.md`
 - UX writing principles, clarity, brevity, information scent, scanability: `references/ui-copywriting.md`
 - Buttons, forms, helper text, errors, empty states, loading, success, permissions, dialogs, notifications: `references/component-microcopy.md`

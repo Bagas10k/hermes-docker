@@ -28,3 +28,9 @@ author: Hermes Agent
 6. **Diskrit Kinerja Agen (*Truth-Grounded Discrete Events*):**
    - Dilarang merekayasa balok pengerjaan yang terus-menerus memanjang tanpa henti (`bar-running` buatan) saat agen aktif.
    - Balok linimasa wajib terputus-putus (*discrete*) sesuai pemanggilan alat/tool nyata (`lane.events`). Saat agen sedang jeda, berpikir, atau menunggu, lintasan wajib kosong/terputus agar mencerminkan kinerja nyata.
+
+7. **In-Place Sliding Indicator Morphing & Ergonomi Mobile (Standar Mas Bagas):**
+   - **Anti-Snap/Anti-Blink**: Dilarang merusak DOM (`container.textContent = ''`) saat berpindah tab atau tanggal. Node tombol dan indikator aktif (`.week-indicator`, `.filter-indicator`) wajib persisten, bergerak meluncur mulus via CSS `transform: translateX(...)` dan spring easing `cubic-bezier(0.16, 1, 0.3, 1)`.
+   - **Above The Fold Priority Mobile**: Header dan kartu gamifikasi (seperti tanaman tumbuh) wajib kompak horizontal (maks 20-25% tinggi layar HP 390px) agar formulir input dan daftar agenda langsung terlihat utuh tanpa scroll.
+   - **Simetri Input 50-50**: Hindari prefix statis panjang pada kapsul pilihan (gunakan `● Kategori ▾` dan `🕒 Jam`), posisikan simetris 50-50, dan pastikan floating toast tidak pernah menutupi area input atau kartu tugas aktif.
+

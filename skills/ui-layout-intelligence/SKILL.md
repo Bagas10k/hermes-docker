@@ -272,5 +272,6 @@ Load only what is needed:
 - `references/reference-analysis.md` — extracting a spacing system from screenshots and references.
 - `references/accessibility-quality.md` — target size, RTL, zoom, localization, QA checklist.
 - `references/implementation.md` — CSS, Tailwind, tokens, React-oriented implementation patterns.
+- `references/panduan-universal-spasial-uiux.md` — Standar Rekayasa Spasial Universal oleh Bagas Cihuy: definisi padding/gap/margin, 4-level spatial ladder, 4-distance rule, eliminasi margin collapsing, CSS logical properties, fluid clamp, hit target 44px, dan 5 anti-pattern spasial.
 - `references/sources.md` — authoritative reference links and notes.
 - `scripts/spacing_audit.py` — inspect values against a base spacing system and suggest nearest tokens.

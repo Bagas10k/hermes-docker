@@ -475,6 +475,10 @@ custom_providers:
       atmorr/kc/kimi-for-coding: {}
       atmorr/kc/kimi-for-coding-highspeed: {}
       atmorr/combo/qwen-max: {}
+      atmorr/moon/kimi-k2.6: {}
+      atmorr/moon/kimi-k2.7-code: {}
+      atmorr/moon/kimi-k2.7-code-highspeed: {}
+      atmorr/moon/kimi-k3: {}
     models_discovered: true
     name: lk
   - base_url: https://api.nbgate.com/v1
@@ -904,6 +908,11 @@ mcp_servers:
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
     args:
       - /home/ubuntu/vault-engine/vault_engine/server.py
+    enabled: true
+  svg-forge:
+    command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
+    args:
+      - /home/ubuntu/mcp-svg-forge/server.py
     enabled: true
 platform_toolsets:
   cli:

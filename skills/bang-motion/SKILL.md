@@ -21,12 +21,27 @@ presentasi — patuhi sebelum menulis kode.
 
 ## Bila user menilai hasil jelek: perbaiki, jangan menawar konsep
 
-Nilai buruk (mis. "-4/10"), "koreksi aja sendiri", atau "gimana kamu ngga
-perbaiki?" adalah perintah kerja, bukan undangan diskusi. Langsung rombak dan
-serahkan artefak baru — jangan membalas dengan usulan konsep, pertanyaan
-persetujuan, atau pembelaan diri. Satu-satunya pengecualian: brief belum punya
-informasi yang benar-benar tidak bisa diturunkan (rasio, durasi, ada suara atau
-tidak), dan itu ditanya SEKALI di awal, bukan setelah hasil pertama gagal.
+Untuk artefak video/motion yang brief-nya sudah disetujui, nilai buruk atau
+permintaan koreksi adalah arahan memperbaiki dalam cakupan itu, bukan undangan
+membela hasil atau meminta persetujuan yang sama lagi. Koreksi mismatch yang
+terlihat, lalu serahkan artefak baru dengan bukti frame; jangan mengklaim selera
+baru sudah berhasil sebelum dinilai pengguna. Tanyakan hanya informasi brief
+yang benar-benar belum tersedia. Jangan menerapkan aturan video ini untuk
+membongkar aplikasi kerja: refinement, restoration, dan redesign UI mengikuti
+cakupan yang diotorisasi dalam `ui-ux-execution-standard`.
+
+## Membandingkan kemampuan dengan alat lain
+
+Baca dokumentasi resmi atau source alat pembanding sebelum menetapkan mesin,
+format ekspor, biaya, dukungan lokal/cloud, atau batas fiturnya. Caption sosial
+dan halaman showcase hanya membuktikan klaim yang benar-benar tercantum, bukan
+arsitektur keseluruhan. Pisahkan skill/panduan pembuatan kode dari aplikasi
+studio dan layanan inference; jangan menyebut skill ini engine milik sendiri,
+bebas biaya model, atau otomatis berjalan 60 FPS. Jangan menyimpulkan Remotion
+membatasi morphing atau bahwa HTML lebih unggul kualitasnya dari nama stack.
+Bandingkan per kebutuhan dengan bukti yang setara; keunggulan kualitas atau
+performa memerlukan brief, aset, ukuran output, dan hasil uji yang sebanding.
+Jika belum diuji, nyatakan belum ada dasar menentukan pemenang.
 
 ## Prasyarat — hanya browser
 

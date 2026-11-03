@@ -28,7 +28,7 @@ Turn real visual references into a strict design contract before implementation.
 
 ## Procedure
 1. Acquire the reference assets. Completion: every source URL/image used is saved or directly accessible, and at least one visual artifact is inspected with `vision_analyze`.
-2. Extract the design DNA, not a vague mood. Completion: fill `templates/design-contract.md` with color fingerprint, layout grid, typography ladder, component signatures, texture/material rules, and interaction model.
+2. Extract the design DNA and spatial ground truth. Completion: run spatial calibration (`canvas_overlay_grid` or `/home/ubuntu/.hermes/scripts/canvas_layout_inspector.py grid / detect`) on reference screenshots to extract exact component bounding boxes `[W x H @ (X, Y)]`, outer margins, and column grids without eyeballing. Fill `templates/design-contract.md` with measured color fingerprint, layout grid, typography ladder, component signatures, texture/material rules, and interaction model.
 3. Identify negative constraints. Completion: explicitly list what must not be copied, what would look fake, and which old mistake this prevents.
 4. Convert the reference into a product-specific adaptation. Completion: the contract names the target product, core screens/widgets, and contextual data model.
 5. Only then implement. Completion: code changes map back to the contract sections, not to unaudited intuition.
@@ -49,6 +49,7 @@ Turn real visual references into a strict design contract before implementation.
 - Do not infer mobile/web split from a screenshot unless the user requested a simulator.
 - Do not use generated placeholder imagery when the task requires authentic reference/photo evidence.
 - A live URL is not evidence by itself; inspect the visual output.
+- Spatial Blindness Eyeballing: Never guess component coordinates, padding, or alignment from raw screenshots. Vision models perceive downscaled token patches, leading to misaligned elements and drifting margins. Always overlay a calibrated pixel grid (`canvas_overlay_grid`) or extract bounding boxes (`canvas_detect_components`) before writing layout code.
 
 ## Verification
 - At least one `vision_analyze` result informed the implementation.

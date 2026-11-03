@@ -73,3 +73,10 @@ For multi-page or view transitions in modern browsers:
 }
 ```
 Ensures page-to-page navigation morphs shared images and titles effortlessly.
+
+## 5. Persistent Sliding Indicator Morphing (Anti-Snap Navigation)
+When navigating calendar strips, segmented controls, or filter tabs, NEVER destroy and rebuild DOM nodes with `container.textContent = ''`. Rebuilding nodes destroys transition context and produces jarring visual jumps.
+- Keep all interactive tab/strip nodes persistent in the DOM.
+- Use a dedicated `.sliding-indicator` element with `position: absolute; pointer-events: none;`.
+- Move the indicator via hardware-accelerated `transform: translateX(...)` with spring easing `cubic-bezier(0.16, 1, 0.3, 1)` and animate `width` simultaneously so the indicator fluidly glides across items at 60 FPS without layout thrashing.
+

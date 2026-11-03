@@ -32,8 +32,11 @@ Generate crisp, resolution-independent SVG vector graphics directly from procedu
 - "generate vector artboard berstandar Figma"
 - "buat icon atau grafik tanpa emoji dan tanpa aset eksternal"
 
+## Unified SVG + Motion MCP
+For reusable UI icons, support elements and their animated variants, use the registered **svg-forge** MCP. Read `references/svg-forge-mcp.md` for catalog → generate/compose → animate → export, static-input boundaries and honest Bang Motion integration scope. Use Iconify for existing third-party icon collections; never substitute emoji for required vector assets.
+
 ## Prerequisites
-- Standard Python 3 runtime (stdlib `math`, `json`, `os` only).
+- Standard Python 3 runtime (stdlib `math`, `json`, `os` only). Below CLI recipes are separate from the MCP, which uses the installed MCP SDK.
 - Optional: `resvg-py` or `cairosvg` if headless PNG rasterization of the generated SVG is required.
 
 ## How to Run
