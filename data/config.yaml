@@ -923,6 +923,12 @@ mcp_servers:
     args:
       - /home/ubuntu/mcp-liquid-glass/server.py
     enabled: true
+  bakmotion:
+    command: /home/ubuntu/bekmotion-video-studio/.venv-bakmotion/bin/python
+    args:
+      - /home/ubuntu/bekmotion-video-studio/bakmotion/server.py
+    enabled: true
+    timeout: 900
 platform_toolsets:
   cli:
     - browser

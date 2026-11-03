@@ -55,7 +55,18 @@ Saat kartu atau tombol kaca membesar, mengecil, atau membuka modal:
 
 ---
 
-## 4. Pemanfaatan dalam Pipeline Video (Remotion / Puppeteer)
+## 4. Pitfall Kritis Desain Visual: Transparansi Kaca & Kontras Tipografi
+
+1. **Pantang Gradien Abu-abu Buram di Tengah Kaca:**
+   Jangan pernah mengisi badan tengah kaca dengan gradien perak/abu-abu pekat (`#666666` - `#888888`). Hal ini membuat kaca tampak seperti aluminium kusam atau akrilik murahan. Kaca optik WAJIB memiliki transparansi kristal di bagian tengah (`background: rgba(255, 255, 255, 0.02 - 0.04)`), membatasi distorsi refraksi dan aberasi kromatik hanya pada tepian bevel perimeter.
+2. **Cegah Tabrakan Teks Latar Belakang (*Background Bleed*):**
+   Jangan menempatkan teks watermark atau banner berjalan berukuran raksasa dengan opasitas tinggi tepat di belakang kartu kaca. Lapisan substrat latar belakang harus memiliki kontras teratur atau berupa target spesimen geometris/badge yang sengaja diletakkan untuk inspeksi refraksi, bukan teks berjalan acak yang mengacaukan keterbacaan (WCAG AAA).
+3. **Pendaftaran Rute Publik Portal (Privacy Boundary):**
+   Setiap demo kaca web baru di `penelitian-pola-pikir-ai/public/<slug>` wajib didaftarkan pada regex `isPublic()` di `src/privacy-boundary.js` dan di-restart via `pm2 restart penelitian-ai` agar tidak terlempar ke redirect 303 `/private/login`.
+
+---
+
+## 5. Pemanfaatan dalam Pipeline Video (Remotion / Puppeteer)
 
 Di server VPS kita, rendering video untuk **SputarBall**, **SputarAI**, dan **Studio Gerak** dijalankan melalui headless Chromium:
 - Headless Chromium mendukung `backdrop-filter: url(#id)` dengan akselerasi GPU penuh.
