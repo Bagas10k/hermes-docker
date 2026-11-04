@@ -14,9 +14,10 @@ metadata:
 
 Doktrin operasional resmi untuk seluruh kabinet agen (Bakagent, Si Pintar, Si Eksekutor, Si Pengawas, Bikagent):
 
-## 1. Prioritas Eksekusi Langsung (Direct Execution First)
-- Dilarang melempar tugas sepele ke sub-agent hanya karena agen utama malas mengetik sendiri.
-- Kerjakan langsung di agen utama jika tugas hanya menyentuh 1–3 berkas atau membutuhkan ≤5 tool calls.
+## 1. Pembagian Peran Mandor & Eksekusi Paralel (High-Sensitivity Delegation)
+- Agen utama (Mandor) fokus pada orkestrasi, penerimaan mandat Mas Bagas, perumusan DAG tugas, dan verifikasi akhir.
+- Untuk setiap pekerjaan teknis (koding, perbaikan bug, audit, penelusuran sistem bercabang), aktifkan pembagian kerja paralel via `delegate_task` (minimal 1 Pelaksana + 1 QC Pengawas) agar eksekusi cepat dan kualitas terjaga via konteks terisolasi.
+- Direct execution di agen utama HANYA digunakan untuk percakapan santai, klarifikasi arah, atau pengecekan status instan 1 baris tanpa proses kerja.
 
 ## 2. Larangan Keras Over-Testing & Bounded Recovery (Risk-Adaptive Verification)
 - **Cek Secukupnya Secara Adaptif (Bukan Cek 1x Mati Kaku):** Jangan memperlakukan semua pekerjaan sama rata. Risiko mengubah warna tombol/label berbeda dari mengubah kalkulasi invoice atau saldo kas/bank.

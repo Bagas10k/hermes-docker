@@ -27,8 +27,12 @@ Automated Instagram carousel publishing, Meta Graph API integration, and content
 
 SputarAI now teaches agentic AI to nontechnical audiences rather than operating as a news-only account. Load `content-intelligence` and its `references/sputarai-editorial-direction.md` for the current editorial direction. Keep exactly four carousel slides. The news-centric examples below are historical format examples, not a mandate to restore the old news dispatcher.
 
+## Motion-feed publishing
+For explicitly authorized four-video SputarAI carousel uploads, load `references/sputarai-video-carousel-publishing.md`. It records the exercised hosting path, parent-container fallback, deduplicated publication and exact readback contract.
+
 ## Instagram comment replies
 
+- For existing SputarAI credential discovery and concrete read/send tests, load `references/sputarai-live-api-check.md` before broad filesystem searches.
 - Official reference: https://developers.facebook.com/docs/instagram-platform/comment-moderation
 - Meta supports reading comments on authorized professional-account media and replying through `POST /<IG_COMMENT_ID>/replies` with `message`; read the reply back before claiming it was posted.
 - Instagram Login requires `instagram_business_basic` and `instagram_business_manage_comments`; Facebook Login uses `instagram_basic`, `instagram_manage_comments`, and `pages_read_engagement`, with additional requirements depending on access configuration. Verify the actual account, login route, token permissions and API response before saying SputarAI can currently reply.

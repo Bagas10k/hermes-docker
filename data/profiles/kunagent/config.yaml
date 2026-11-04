@@ -11,3 +11,9 @@ approvals:
   mode: manual
 terminal:
   cwd: /home/ubuntu/otak-koding
+compression:
+  threshold_tokens: 50000
+  proactive_prune_tokens: 30000
+  protect_last_n: 10
+  proactive_prune_min_result_chars: 4000
+  proactive_prune_min_reclaim_tokens: 2048

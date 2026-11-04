@@ -39,6 +39,8 @@ plugins:
   enabled: []
 _config_version: 51
 agent: {}
+compression:
+  threshold_tokens: 50000
 
 # ── Security ──────────────────────────────────────────────────────────
 # Secret redaction is ON by default — strings that look like API keys,
@@ -77,3 +79,7 @@ agent: {}
 # fallback_model:
 #   provider: openrouter
 #   model: anthropic/claude-sonnet-4
+  proactive_prune_tokens: 30000
+  protect_last_n: 10
+  proactive_prune_min_result_chars: 4000
+  proactive_prune_min_reclaim_tokens: 2048

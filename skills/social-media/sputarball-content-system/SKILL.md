@@ -1,11 +1,37 @@
 ---
 name: sputarball-content-system
 description: Use when producing or auditing SputarBall content.
-version: 1.0.0
+version: 1.1.0
 author: Bagas & Hermes Agent
 ---
 
 # SputarBall Content System
+
+## Core Growth Directive & Audience Metrics Gate
+- Pipeline Execution Is Not Success: Generating hundreds of automated posts without follower growth is rated 0. Metrics that matter are non-follower reach, profile visits, saves, shares, and follower conversion.
+- Reels-First Discovery (Top-of-Funnel Engine): Static carousels and single images are primarily retention formats distributed to existing followers. For accounts with <10k followers, carousel non-follower reach is near zero. Vertical video Reels (9:16) must drive >=75% of content output to achieve organic discovery in Instagram Explore and TikTok FYP.
+
+## Motion Video Reels Doctrine (Strict Prohibition on Static Slideshows)
+- **STRICT BAN ON STATIC PHOTO SLIDESHOW AS REEL:** Never stitch static graphic cards or still photographs into an MP4 and present it as a Reel or video. A series of still images crossfaded with a monotone drone is a slideshow masquerading as video, completely rejected by audiences and algorithms alike.
+- **The 4 Essential Pillars of a Real Video Reel:**
+  1. **Real Motion Footage (Cuplikan Gerak Nyata):** Must feature authentic match action clips—goal celebrations, crunching tackles, fingertip saves, manager touchline tantrums, or explosive skill runs—sourced from verified local footage archives (`data/footage/`) or `yt-dlp`.
+  2. **Neural Voiceover Mandate (Strict Ban on Robotic Google TTS):** Robotic TTS (like Google Translate TTS) is rated 2/10 and strictly banned. Must use Microsoft Neural Voice (`edge-tts` with `id-ID-ArdiNeural` at `rate=+16%`) for lively, energetic Indonesian suporter commentary cadence.
+  3. **Zero-Obstructed Match Footage & Separated Subtitle Card:** Subtitles MUST NEVER cover or obstruct the match action video (rated 1/10 when covering players/pitch). The 1080x1920 layout strictly partitions:
+     * Header Bar: y = 0 to 200 (Branding & Hot Take topic, black 95%).
+     * Clean Match Video: y = 280 to 1000 (100% clean video, zero text covering the action).
+     * Dedicated Subtitle Card: y = 1180 to 1450 (High-contrast yellow `#FFE600` & white text on dark card with 4px yellow top accent rule).
+     * Mobile UI Safe Zone: y = 1450 to 1920 (Free for Instagram & TikTok native UI overlays).
+  4. **Multi-Track Audio (Soundtrack & SFX):** Multi-track audio mix combining the voiceover (prominent at volume 1.4) with high-energy drill background music (`data/audio/bgm_drill.mp3` ducked at volume 0.13) and clean cut transitions.
+- **Local Footage Vault Principle:** Maintain pre-cut 20-30s clean match action clips in `data/footage/` (`match_action_clean.mp4`, `paes_clip_clean.mp4`, `marselino_raw.mp4`) so scheduled background workers render instantly without runtime live download latency or IP blocking.
+- **Public Ingress & Meta CDN Routing:** Meta Graph API requires public, unauthenticated access to `video_url`. The gateway/reverse proxy (e.g. `penelitian-pola-pikir-ai/server.js` or ingress router) MUST route `/sputarball` directly to port 3085 without session auth redirects (`/login`), or container creation will fail with download errors.
+
+## Topic Selection & Quota Doctrine (Mandat Mas Bagas)
+- **Deterministic 80/20 Quota Rule (80% Timnas & Abroad, 20% Big Match Eropa):**
+  * Gatekeeper evaluates the last 5 publications from SQLite. If 1 or more non-Timnas posts exist in the last 4 posts, the candidate selection is LOCKED 100% to `TIMNAS_INDONESIA` / Pemain Diaspora.
+  * Base score for `TIMNAS_INDONESIA` is boosted to **+90 Poin** to prevent foreign league saturation.
+  * General foreign league results (Al Nassr, Como, Bologna, etc.) are de-prioritized to prevent feed pollution.
+- **Regex Word Boundary Matching for Keywords:** Short keywords (<=4 characters, e.g. `aff`, `sty`, `pssi`) MUST be matched using regex word boundaries `\bkeyword\b` to prevent catastrophic substring false positives (e.g. `aff` accidentally matching `Old Trafford`).
+- **Generation Model Mandate (Mas Bagas Standard):** Exclusively use Gemini (`ag/gemini-3.8-flash-high` with fast fallback `ag/gemini-3.8-flash-medium` via router `127.0.0.1:20128/v1/chat/completions`). Do not route debate naskah to models lacking colloquial Indonesian suporter tone.
 
 ## Content cleanup scope and inventory
 - Before destructive cleanup, resolve the account and whether the request means local assets, live platform posts, or both; do not infer SputarBall from a generic carousel request when multiple brands exist.
@@ -39,6 +65,12 @@ author: Bagas & Hermes Agent
   3. Present tabular specifications using hairline-divided archival ledgers rather than heavy card containers.
 
 ## Formats and archetypes
+- `DEBATE_REEL_916` (Real Video Reels / TikTok 1080x1920): High-intensity 15-20s real motion video designed to spark heated comments between opposing fan bases.
+  - Video Composition: Fast cuts of authentic match action clips (2-3s per beat), dynamic spoken voiceover narration, animated kinetic text overlays, and drill/trap sports soundtrack.
+  - Structure:
+    * Beat 1 (0.0s - 4.0s): Slap hook question + intense action clip.
+    * Beat 2 (4.0s - 12.0s): 2 brutal contrasting arguments + matching footage.
+    * Beat 3 (12.0s - 18.0s): Call to debate question forcing fans to pick a side in the comments.
 - `MATCH_POINT_POSTER` (1 Slide): Clean, high-impact full-time result poster inspired by 433 and Bleacher Report Football (1080x1350, 4:5 ratio). The dramatic hero celebration/action photo dominates 70–75% of the upper frame without obstruction from heavy text cards.
   - Scoreboard Elevation & Bottom Negative Space: Raise the entire scoreboard block away from the bottom canvas edge (e.g., bottom padding 85–95px, not <50px) to provide generous visual breathing room and prevent crowding against the footer rule.
   - Anti-AI Slop Status Rule (Ban Floating Capsule/Pill Badges): Strictly ban floating rounded neon/green capsule pill badges for `FULL TIME` or match status (rejected as generic AI slop). Present match status with architectural Swiss discipline: a clean micro-tracked monospace label (e.g. `• FULL TIME` or `FULL TIME // RESULT`, letter-spacing 0.25–0.28em) flanked symmetrically by 1px subtle hairline rules (`rgba(255, 255, 255, 0.18)`), or integrated directly into the typographic grid.
@@ -61,6 +93,9 @@ author: Bagas & Hermes Agent
   - Zero Emoji Compliance: 100% text and CSS indicators only (`•`, monospace tags, glowing dots).
 
 ## Topic and writing
+- Generation Model Mandate (Mas Bagas Standard): Exclusively use Gemini (`ag/gemini-3.8-flash-high` with fast fallback `ag/gemini-3.8-flash-medium` via router `127.0.0.1:20128/v1/chat/completions`). Do not route debate naskah to models lacking colloquial Indonesian suporter tone.
+- Anti-Commodity News Rule (Opinion & Debate Takes over Raw Scoreboards): Raw match results and scoreboards ("Team A menang 3-0") are low-value commodities already broadcast by mainstream outlets hours earlier. Audiences do not follow new accounts for stale scores. Every post must carry an emotional hook, debatable angle, controversial take, or tactical critique ("Bukti taktik X gagal", "Wasit berat sebelah?", "Siapa paling bersalah?").
+- Mandatory Shareability Gate: Before passing Gatekeeper, evaluate: "Would an Indonesian football fan share this to their IG Story or WhatsApp football group?" If purely informative without emotional resonance, debate friction, or sharing utility, penalize or veto.
 - Empirical Match Data Verification Gate: Strictly prohibit assuming, predicting, or extracting match statistics (scorers, minute timestamps, cards, penalties) from unverified live stream commentary feeds, pirate stream chat, or pre-match templates. An incorrect goalscorer attribution destroys media credibility immediately. Always verify against official match result cards (e.g. Google Sports official match card, official competition site, SofaScore/Flashscore) before rendering match result graphics or writing match captions. 'No Official Score Card = No Publication'.
 - Default to Timnas Indonesia when a topic is broad or unconstrained: When requested for a general topic without an explicit club or league (e.g. 'jersey ketiga yang baru', 'kabar pemain cedera', 'update transfer'), evaluate active Timnas Indonesia and Garuda squad developments first before European leagues, as national-team events drive the highest local interest and save velocity.
 - Make topics immediately understandable to casual audiences; avoid unexplained tactical jargon.
@@ -77,6 +112,7 @@ author: Bagas & Hermes Agent
 - Avoid the last 5 used sound queries and randomize track selection among the top 3 search results, recording selections in `tiktok_sound_history`.
 
 ## Continuous learning
+- Statistical Minimum Support for Topic Penalization: Never prune or penalize high-affinity core niche categories (such as Timnas Indonesia or marquee rivalries) based on underpowered sample sizes (e.g. < 25-30 posts) or skewed metrics from an unseeded infant account. Small sample noise on cold accounts will falsely penalize top-performing categories.
 - Evaluate visual, topic, writing hook, and publication time as separate dimensions.
 - Record predictions before publication and measure results at staged intervals rather than judging only final views.
 - Control for timing, freshness, topic, player popularity, and platform before attributing causality.

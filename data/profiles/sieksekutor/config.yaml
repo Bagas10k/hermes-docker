@@ -4,10 +4,10 @@ model:
   base_url: http://localhost:20128/v1
   api_key: ${HERMES_CUSTOM_LOCALHOST_20128_API_KEY}
 fallback_providers:
-- provider: custom
-  model: ag/gemini-3.8-flash-low
-  base_url: http://localhost:20128/v1
-  key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+  - provider: custom
+    model: ag/gemini-3.8-flash-low
+    base_url: http://localhost:20128/v1
+    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
 database:
   journal_mode: wal
 runtime:
@@ -53,18 +53,19 @@ compression:
   progress_notices: false
   threshold: 0.5
   target_ratio: 0.2
-  protect_last_n: 20
+  protect_last_n: 10
   min_tail_user_messages: 1
   max_attempts: 3
-  proactive_prune_tokens: 0
-  proactive_prune_min_result_chars: 8000
-  proactive_prune_min_reclaim_tokens: 4096
+  proactive_prune_tokens: 30000
+  proactive_prune_min_result_chars: 4000
+  proactive_prune_min_reclaim_tokens: 2048
   hygiene_max_turn_hold_seconds: 10
   protect_first_n: 3
   codex_gpt55_autoraise: true
   codex_app_server_auto: native
   codex_responses_native: false
   idle_compact_after_seconds: 0
+  threshold_tokens: 50000
 prompt_caching:
   cache_ttl: 5m
 display:
@@ -89,9 +90,9 @@ display:
   runtime_footer:
     enabled: true
     fields:
-    - model
-    - context_pct
-    - latency
+      - model
+      - context_pct
+      - latency
   tool_progress: all
   cleanup_progress: true
   long_running_notifications: true
@@ -134,8 +135,8 @@ approvals:
   destructive_slash_confirm: false
 plugins:
   enabled:
-  - rtk-rewrite
-  - skill-retriever
+    - rtk-rewrite
+    - skill-retriever
   disabled: []
   entries:
     rtk-rewrite:
@@ -194,92 +195,92 @@ _config_version: 51
 group_sessions_per_user: true
 platform_toolsets:
   cli:
-  - browser
-  - clarify
-  - code_execution
-  - computer_use
-  - connections
-  - cronjob
-  - delegation
-  - file
-  - image_gen
-  - memory
-  - session_search
-  - skills
-  - terminal
-  - todo
-  - tts
-  - vision
-  - web
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - cronjob
+    - delegation
+    - file
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - vision
+    - web
   telegram:
-  - hermes-telegram
+    - hermes-telegram
   discord:
-  - hermes-discord
+    - hermes-discord
   whatsapp:
-  - hermes-whatsapp
+    - hermes-whatsapp
   slack:
-  - hermes-slack
+    - hermes-slack
   signal:
-  - hermes-signal
+    - hermes-signal
   homeassistant:
-  - hermes-homeassistant
+    - hermes-homeassistant
   qqbot:
-  - hermes-qqbot
+    - hermes-qqbot
   yuanbao:
-  - hermes-yuanbao
+    - hermes-yuanbao
   teams:
-  - hermes-teams
+    - hermes-teams
   google_chat:
-  - hermes-google_chat
+    - hermes-google_chat
 custom_providers:
-- name: lk
-  base_url: http://localhost:20128/v1
-  key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
-  models:
-    bk: {}
-    cklow: {}
-    ag/gemini-3.8-flash-high: {}
-    ag/gemini-3.8-flash-medium: {}
-    ag/gemini-3.8-flash-low: {}
-    ag/gemini-3.8-flash: {}
-    ag/gemini-3.7-flash-high: {}
-    ag/gemini-3.7-flash-medium: {}
-    ag/gemini-3.7-flash-low: {}
-    ag/gemini-3.6-flash-high: {}
-    ag/gemini-3.6-flash-medium: {}
-    ag/gemini-3.6-flash-low: {}
-    ag/gemini-3.5-flash-high: {}
-    ag/gemini-3-flash-agent: {}
-    ag/gemini-3.5-flash-low: {}
-    ag/gemini-3.5-flash-extra-low: {}
-    ag/gemini-pro-agent: {}
-    ag/gemini-3.1-pro-low: {}
-    ag/claude-sonnet-4-6: {}
-    ag/claude-opus-4-6-thinking: {}
-    ag/gpt-oss-120b-medium: {}
-    ag/gemini-3-flash: {}
-    cx/gpt-6-astra: {}
-    cx/gpt-5.6-sol: {}
-    cx/gpt-5.6-sol-review: {}
-    cx/gpt-5.6-terra: {}
-    cx/gpt-5.6-terra-review: {}
-    cx/gpt-5.6-luna: {}
-    cx/gpt-5.6-luna-review: {}
-    cx/gpt-5.5: {}
-    cx/gpt-5.5-review: {}
-    cx/gpt-5.4: {}
-    cx/gpt-5.4-review: {}
-    cx/gpt-5.4-mini: {}
-    cx/gpt-5.4-mini-review: {}
-    cx/gpt-5.3-codex-spark: {}
-    cx/gpt-5.3-codex-spark-review: {}
-  models_discovered: true
+  - name: lk
+    base_url: http://localhost:20128/v1
+    key_env: HERMES_CUSTOM_LOCALHOST_20128_API_KEY
+    models:
+      bk: {}
+      cklow: {}
+      ag/gemini-3.8-flash-high: {}
+      ag/gemini-3.8-flash-medium: {}
+      ag/gemini-3.8-flash-low: {}
+      ag/gemini-3.8-flash: {}
+      ag/gemini-3.7-flash-high: {}
+      ag/gemini-3.7-flash-medium: {}
+      ag/gemini-3.7-flash-low: {}
+      ag/gemini-3.6-flash-high: {}
+      ag/gemini-3.6-flash-medium: {}
+      ag/gemini-3.6-flash-low: {}
+      ag/gemini-3.5-flash-high: {}
+      ag/gemini-3-flash-agent: {}
+      ag/gemini-3.5-flash-low: {}
+      ag/gemini-3.5-flash-extra-low: {}
+      ag/gemini-pro-agent: {}
+      ag/gemini-3.1-pro-low: {}
+      ag/claude-sonnet-4-6: {}
+      ag/claude-opus-4-6-thinking: {}
+      ag/gpt-oss-120b-medium: {}
+      ag/gemini-3-flash: {}
+      cx/gpt-6-astra: {}
+      cx/gpt-5.6-sol: {}
+      cx/gpt-5.6-sol-review: {}
+      cx/gpt-5.6-terra: {}
+      cx/gpt-5.6-terra-review: {}
+      cx/gpt-5.6-luna: {}
+      cx/gpt-5.6-luna-review: {}
+      cx/gpt-5.5: {}
+      cx/gpt-5.5-review: {}
+      cx/gpt-5.4: {}
+      cx/gpt-5.4-review: {}
+      cx/gpt-5.4-mini: {}
+      cx/gpt-5.4-mini-review: {}
+      cx/gpt-5.3-codex-spark: {}
+      cx/gpt-5.3-codex-spark-review: {}
+    models_discovered: true
 mcp_servers:
   ui-layouts:
     command: npx
     args:
-    - -y
-    - '@ui-layouts/mcp'
+      - -y
+      - '@ui-layouts/mcp'
     enabled: true
   context7:
     url: https://mcp.context7.com/mcp
@@ -287,47 +288,47 @@ mcp_servers:
   uiux-reference:
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
     args:
-    - /home/ubuntu/mcp-uiux-reference/server.py
+      - /home/ubuntu/mcp-uiux-reference/server.py
     enabled: true
   rust-docs:
     command: /home/ubuntu/.cargo/bin/rust-docs-mcp
     args:
-    - serve
+      - serve
     enabled: true
   huggingface:
     url: https://huggingface.co/mcp
     enabled: true
 known_plugin_toolsets:
   cli:
-  - a2a
-  - spotify
+    - a2a
+    - spotify
 known_builtin_toolsets:
   cli:
-  - browser
-  - clarify
-  - code_execution
-  - computer_use
-  - connections
-  - context_engine
-  - cronjob
-  - delegation
-  - discord
-  - discord_admin
-  - file
-  - homeassistant
-  - image_gen
-  - kanban
-  - memory
-  - session_search
-  - skills
-  - spotify
-  - stt
-  - terminal
-  - todo
-  - tts
-  - video
-  - video_gen
-  - vision
-  - web
-  - x_search
-  - yuanbao
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - context_engine
+    - cronjob
+    - delegation
+    - discord
+    - discord_admin
+    - file
+    - homeassistant
+    - image_gen
+    - kanban
+    - memory
+    - session_search
+    - skills
+    - spotify
+    - stt
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao

@@ -14,21 +14,22 @@ metadata:
 
 Skill ini digunakan untuk mengatur delegasi pekerjaan ke sub-agent menggunakan alat `delegate_task`. Gunakan saat menghadapi tugas panjang, debugging ruwet, penulisan skrip masif, atau tugas berulang yang akan mengotori riwayat chat utama jika dikerjakan sendiri oleh agen utama (Mandor).
 
-## 🚨 Gate Kecepatan Eksekusi (Wajib Sebelum Delegasi)
+## 🚀 Kebijakan Orkestrasi Sensitivitas Tinggi (Mandat Mas Bagas: Konkurensi Paralel Maksimal)
 
-Jalankan gate ini **sebelum** memanggil `delegate_task`:
+Mandor WAJIB bersikap proaktif dan responsif memecah pekerjaan ke sub-agent paralel via `delegate_task`:
 
-1. **Cek lokal dulu (≤10 detik).** Jalankan `terminal` / `search_files` / `read_file` sendiri. Kalau 1–2 tool call sudah menjawab pertanyaan → STOP, jangan delegasikan.
-2. **≤5 tool call total?** Kerjakan langsung di Mandor. Sub-agent untuk tugas sepele = overhead menit tanpa nilai tambah.
-3. **Batch agresif.** Semua operasi independen (rename + tulis .env + verify) dalam satu blok, bukan giliran terpisah.
-4. **Delegasi HANYA untuk:** QC independen · pekerjaan paralel beda jalur nyata · reasoning-heavy butuh isolasi konteks.
-5. **Dilarang audit pre-task via sub-agent** kalau satu `terminal` call menjawab hal yang sama.
-
-**Anti-pola (menghasilkan kecepatan rendah):**
-> delegasi audit → tunggu 4 menit → baca hasil → baru eksekusi 1 terminal call
-
-**Pola benar:**
-> terminal (cek + eksekusi + verify dalam satu blok) → sub-agent hanya untuk QC independen
+1. **Default Proaktif (High Sensitivity):**
+   - Setiap kali Mas Bagas memberikan tugas kerja teknis (coding, debugging, audit, optimasi, perancangan, penulisan dokumen/skrip, penelusuran sistem bercabang), Mandor LANGSUNG memecahnya ke armada sub-agent paralel (minimal 1 Pelaksana + 1 QC Pengawas).
+   - Jangan menahan eksekusi di Mandor sendirian jika tugas dapat dibagi menjadi jalur paralel independen. Konkurensi memangkas durasi dan menjamin mutu lewat isolasi konteks kerja.
+2. **Kapan Mandor Menjawab Langsung (Tanpa Delegasi)?**
+   - HANYA untuk percakapan/obrolan biasa, klarifikasi pertanyaan santai, atau cek status instan 1 baris tanpa proses kerja.
+   - Segala bentuk tugas operasional, verifikasi sistem, audit, atau rekayasa multi-langkah WAJIB langsung melibatkan armada sub-agent.
+3. **Pemanfaatan Kapasitas Penuh (Hingga 3 Pekerja Simultan):**
+   - Manfaatkan slot paralel (maksimal 3 sub-agent per batch) untuk menyelesaikan pekerjaan jauh lebih cepat.
+   - Contoh pembagian:
+     - Worker 1: Pelaksana implementasi / backend / logika
+     - Worker 2: Pelaksana frontend / antarmuka / data
+     - Worker 3: QC Pengawas independen (verifikasi empiris, cek exit code, uji runtime)
 
 ## Kapan Menggunakan Sub-Agent?
 1. **Refactoring / Coding Skala Besar:** Memperbaiki sistem, menulis API baru, merombak CSS.
@@ -37,9 +38,8 @@ Jalankan gate ini **sebelum** memanggil `delegate_task`:
 4. **Research:** Mencari dokumentasi API, membaca forum, atau menggali referensi.
 
 **TIDAK cocok untuk sub-agent:**
-- Cek profil list, status gateway, atau pembacaan file tunggal
-- Langkah yang output-nya langsung dibutuhkan sebelum lanjut
-- Tugas yang bisa selesai dalam ≤3 tool call
+- Percakapan santai / tanya jawab murni tanpa pekerjaan sistem
+- Konfirmasi arahan langsung ke Mas Bagas
 
 ## Peran Arsitektur (Hierarki 3 Generasi: Mandor, Anak, Cucu)
 
@@ -82,6 +82,21 @@ Jalankan gate ini **sebelum** memanggil `delegate_task`:
 - **Profil bukan sub-agent.** `~/.hermes/profiles/<nama>/` adalah proses Hermes terpisah (punya `model.default` sendiri) dan tidak pernah dipakai `delegate_task`. Jangan menjawab "sub-agent pakai model X" dari daftar profil.
 - **Buktikan nama model dengan satu `curl` nyata** ke endpoint provider sebelum menyebutkannya ke Mas Bagas — entri di config bukan bukti endpoint melayaninya.
 - QC independen sebaiknya memakai model **beda keluarga** dari pelaksana; QC se-keluarga mewarisi blind spot yang sama. Ganti model QC hanya setelah model pengganti diuji nyata.
+
+## Optimasi Efisiensi & Latensi Delegasi (Reasoning Effort & Fallback)
+
+1. **Reasoning Effort untuk Worker (Medium/Low):**
+   - Hindari `delegation.reasoning_effort: high` untuk sub-agent pelaksana/kuli (leaf worker). Pada model dengan native thinking (seperti Gemini Flash Thinking), effort `high` menghasilkan pemikiran internal mendalam selama 20+ detik sebelum tool call pertama keluar.
+   - Setel `delegation.reasoning_effort: medium` (atau `low` untuk eksekusi skrip murni). Pengujian empiris membuktikan penurunan durasi API dari ~26 detik menjadi ~15 detik (~41% lebih cepat) tanpa menurunkan akurasi tool call.
+2. **Redundansi Provider (Fallback Chain):**
+   - Wajib mendaftarkan minimal 1 entri pada `delegation.fallback_providers` (misal `custom:nbgate`) agar sub-agent tidak tertahan (*stall*) ketika provider utama mengalami antrean atau spike latensi.
+3. **Konfigurasi Resmi Hermes:**
+   - Berkas `~/.hermes/config.yaml` diproteksi dari pengeditan langsung oleh agen (`refusing to write`). Selalu gunakan CLI resmi:
+     `hermes config set delegation.reasoning_effort medium`
+     `hermes config set delegation.fallback_providers '[{"provider": "custom:nbgate", "model": "ag/gemini-3.8-flash-high"}]'`
+4. **Pemantauan Status Armada di Telegram (/agents & Live HUD):**
+   - Perintah resmi gateway untuk mengecek aktivitas agent dan background delegation adalah `/agents` (jamak) atau `/tasks` (alias `/agent` tunggal sudah didukung di CLI command definition).
+   - Pola Live HUD Card: Saat mengorkestrasi sub-agent paralel, terapkan pembaruan status *in-place* (`edit_message` dengan jeda throttling `EDIT_INTERVAL >= 1.5s`) agar ruang obrolan Telegram tetap rapi (*zero chat spam*) tanpa memicu flood control.
 
 ## Panduan Menggunakan `delegate_task`
 Gunakan tool `delegate_task` untuk mengirim tugas. Berikan `context` sejelas mungkin karena sub-agent tidak memiliki riwayat chat ini.
