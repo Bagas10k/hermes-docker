@@ -114,6 +114,7 @@ Full recipe (bundle patch + reference rewrite + 9Router dashboard-password flow)
 - **Rate limiting must live inside the auth middleware itself** (`requireAdmin`), not only on the login endpoint — otherwise attackers brute-force the secret against any admin-gated route.
 - **URL scheme allowlisting (`safeUrl()`):** Any URL from user input, RSS feeds, or external APIs rendered as `src`/`href` must pass through a validator rejecting non-http(s) schemes (`javascript:`, `data:`, `vbscript:`). Apply both server-side and in client-rendered HTML.
 - **Atomic workflow state claims:** Use `UPDATE ... SET status='PUBLISHING' WHERE status='APPROVED'` (checking rows affected = 1) to prevent concurrent double-publish. The second request sees 0 rows and fails.
+
 ### 13. Dynamic Content Rendering & CMS Fallback Values
 - When building automated content generators or CMS templates, **never hardcode text** (like "Bagian 1", "Dampak") directly into the fallback logic or HTML renderer if those values should adapt to the topic.
 - Extract dynamic titles, summaries, and topics directly from the source material. Use conditional logic tied to the current content context (e.g., `return \`3 Fakta Utama: \${source.title.split(':')[0]}\``) instead of generic static strings.
@@ -187,3 +188,10 @@ Full recipe (bundle patch + reference rewrite + 9Router dashboard-password flow)
   - TMA endpoints protected by Telegram HMAC auth (e.g. `auth.requireAuth`, `requireMutation`) often strictly validate the `Origin` header against an allowlist (e.g. `https://www.jajandigital.web.id`).
   - When testing TMA headless in Puppeteer or Playwright, navigating to `http://127.0.0.1:<port>/tma/tools` causes the browser to send an origin of `http://127.0.0.1:<port>`, triggering HTTP 403 `Forbidden: Invalid or missing Origin header`.
   - Always execute headless browser verification against the canonical public domain (e.g. `https://<public_domain>/tma/tools`) with synthetic `window.Telegram.WebApp.initData` injection, or configure the testing harness to route through the approved origin.
+
+### 23. Disambiguating Public Homepage vs Admin/Portal Login on Multi-Service Hosts
+- **The Login-Redirect Trap on Domain Roots**: On hosts where multiple services coexist under one public domain (e.g. a public portfolio/showcase on port 3050 and an operational store/backend on port 3000):
+  - Do NOT assume "halaman home / depan" is the admin login screen simply because one local port (e.g. :3000) responds with a 302 redirect to `/login`.
+  - Check the active services across all ports (`pm2 list`, `ss -ltnp`) and search for existing public static assets or previous screenshots (`*_homepage_*.png`) before editing.
+  - Distinguish the public landing page (e.g. personal portfolio, marketing showcase with hero headlines like "Ide liar jadi sistem nyata") from the internal management login portal (`login.html`).
+  - If the user provides a visual reference or headline, grep the repository tree for the exact headline text rather than guessing the project folder by domain name alone.

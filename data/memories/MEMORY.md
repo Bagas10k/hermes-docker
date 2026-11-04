@@ -4,7 +4,7 @@ Obsidian vault berlokasi di /home/ubuntu/otak-koding. Rujukan utama: SYSTEM/KNOW
 §
 Format Telegram: spasi lega, poin 1 baris. PANTANGAN: Dilarang emoji di UI/UX. Standar TUI: gaya Zen (⚡ Skill, # Command, → Read/Edit, diff side-by-side maks 20 baris, [✓]/[ ] checklist).
 §
-Services: jajandigital :3000; gateway :8080; buku /buku; telemetry :8090; penelitian-ai :3050; 9router :20128 (dash https://9router.jajandigital.web.id, sandi: ~/.9router/dashboard-password.txt). Profil kunagent terhubung ke @kunagentt_bot.
+Services: jajandigital :3000; gateway :8080; buku /buku; telemetry :8090; sputarball :3085; 9router :20128 (dash https://9router.jajandigital.web.id, sandi: ~/.9router/dashboard-password.txt). Profil kunagent terhubung ke @kunagentt_bot.
 §
 100 aset desain terverifikasi tersimpan di /home/ubuntu/referensi-desain/, dikelola via web https://www.jajandigital.web.id/desain/.
 §

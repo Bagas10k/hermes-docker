@@ -1,7 +1,7 @@
 ---
 name: calm-productivity-planner
 description: Use when building daily planners or calm habit trackers.
-version: 1.0.0
+version: 1.1.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT
 metadata:
@@ -12,7 +12,9 @@ metadata:
 
 # Calm Productivity Planner Architecture (Standar Baku Mas Bagas)
 
-Gunakan skill ini saat merancang, membangun, atau merombak aplikasi perencanaan harian (*daily planner*), pelacak kebiasaan (*habit tracker*), atau workstation produktivitas pribadi. Skill ini mengkodifikasi standar visual, ergonomi mobile, dan rekayasa gerak *in-place morphing* yang telah disetujui Mas Bagas agar hasil kerja langsung tepat sasaran pada percobaan pertama.
+## When to Use
+
+Use when designing, building, or refactoring personal productivity workstations, daily to-do planners, or calm habit trackers. This skill defines non-negotiable rules for in-place morphing, mobile ergonomics, and botanical growth gamification approved by Mas Bagas.
 
 ---
 
@@ -31,7 +33,7 @@ Gunakan skill ini saat merancang, membangun, atau merombak aplikasi perencanaan 
 ## 2. Enam Hukum Rekayasa Baku (Non-Negotiable Invariants)
 
 ### Hukum 1: In-Place Persistent Sliding Indicator Morphing (Anti-Snap / Anti-Blink)
-- **Dilarang Keras:** Menghancurkan DOM (`container.textContent = ''` atau me-recreate tombol) setiap kali hari kalender atau tab filter diklik.
+- **Dilarang Keras:** Menghancurkan DOM (`container.textContent = ''` atau me-recreate tombol) setiap kali hari kalender atau tab filter diklik. Tindakan ini menghapus acuan interpolasi CSS dan membuat indikator melompat kaku (*snapping*).
 - **Wajib:**
   1. Elemen 7 tombol hari (`.week-day`) dan elemen indikator luncur (`.week-indicator`, `.filter-indicator`) **wajib persisten di dalam DOM**.
   2. Saat berpindah hari/filter, perbarui atribut `data-date`, `aria-pressed`, dan kelas aktif langsung pada node yang sudah ada.
@@ -65,15 +67,16 @@ Gunakan skill ini saat merancang, membangun, atau merombak aplikasi perencanaan 
 ```
   4. Gerakkan posisi indikator seketika pada saat klik (`requestAnimationFrame`) agar tidak ada jeda tunda (*zero-latency*).
 
-### Hukum 2: Gamifikasi Botani Bertahap (*Botanical Habit Bloom*)
+### Hukum 2: Gamifikasi Botani Bertahap & Pencegahan Glitch Bunga Melayang (*Botanical Habit Bloom*)
 Gantikan bar analitik kaku dengan metafora pertumbuhan tanaman pot tanah liat terakota 4 tahap sesuai persentase penyelesaian tugas:
-- **Pencegahan Glitch Bunga Melayang (Pinned Transform-Origin Absolut):**
-  - Pada fase pertumbuhan (Stage 1 dan 2), elemen bunga dan kelopak **wajib dikunci dengan `transform-origin: 140px 85px`** (titik pucuk batang utama). Tanpa ini, peramban melakukan scale dari titik `(0, 0)` kanvas SVG yang melempar lingkaran kuncup melayang lepas ke kiri atas udara.
-  - Daun dan urat daun wajib dibundel dalam satu grup SVG (`<g class="leaf-left-group">` di titik tumpu `139px 155px` dan `<g class="leaf-right-group">` di `140px 135px`) agar urat daun tidak terpisah dari helaiannya saat scaling.
+- **Penyebab & Solusi Glitch Bunga Melayang (Pitfall Transform-Origin SVG):**
+  * Ketika elemen SVG di-scale (`scale(0.5)` dsb.) tanpa `transform-origin` eksplisit, peramban secara bawaan melakukan transformasi terhadap titik `(0, 0)` kiri atas kanvas SVG. Akibatnya, kepala kuncup bunga terlempar melayang bebas ke udara di sebelah kiri atas batang.
+  * **Wajib:** Kunci seluruh grup kepala bunga dengan koordinat absolut pucuk batang utama: `transform-origin: 140px 85px`.
+  * **Wajib:** Bundel helaian daun dan urat daun ke dalam grup yang sama (`<g class="leaf-left-group">` dan `<g class="leaf-right-group">`) dengan `transform-origin` di titik tumpu batang (`139px 155px` untuk daun kiri, `140px 135px` untuk daun kanan). Jangan pernah menganimasikan daun terpisah dari tulang daunnya.
 - **Tahapan Pertumbuhan:**
-  - **Stage 0 (0%):** Kuncup hening (tunas hijau kecil di pot tanah liat tanpa ada bunga mengambang).
-  - **Stage 1 (1–49%):** Mulai bersemi (pucuk kuncup bulat cokelat-emas menempel kokoh di ujung batang).
-  - **Stage 2 (50–99%):** Merekah segar (kelopak bunga mulai membuka setengah mekar).
+  - **Stage 0 (0%):** Kuncup hening (tunas hijau kecil di pot tanah liat tanpa bunga atau lingkaran mengambang).
+  - **Stage 1 (1–49%):** Mulai bersemi (batang tumbuh dengan dua daun segar, kuncup bunga bulat cokelat-emas menempel kokoh di ujung batang).
+  - **Stage 2 (50–99%):** Merekah segar (batang tegak dengan kelopak bunga matahari keemasan mulai membuka mengelilingi inti).
   - **Stage 3 (100%):** Mekar sempurna (bunga matahari mekar penuh berseri-seri, lingkaran cahaya *sun halo*, partikel kilau emas, dan pesan *"Semua tugas telah tuntas diselesaikan"*).
 - *Catatan Teknis:* Jangan menghancurkan SVG tanaman; gunakan CSS state selector `[data-stage="0|1|2|3"]` untuk menganimasikan `transform: scale()`, `opacity`, dan rotasi secara mulus.
 
@@ -116,5 +119,6 @@ Gantikan bar analitik kaku dengan metafora pertumbuhan tanaman pot tanah liat te
    - Gunakan `cubic-bezier(0.34, 1.56, 0.64, 1)` untuk sakelar toggle kenyal.
 4. **Verifikasi Visual Nyata di Browser:**
    - Periksa di desktop (1280px) dan mobile (390px).
-   - Pastikan klik hari meluncurkan kapsul secara mulus tanpa lonjakan visual.
-   - Pastikan teks placeholder dan nama kategori tidak terpotong satu huruf pun.
+   - Uji seluruh tahap pertumbuhan botani (Stage 0, 1, 2, 3); pastikan kepala bunga selalu menempel kokoh pada puncak batang di setiap tahap tanpa ada bagian melayang.
+   - Pastikan klik hari meluncurkan kapsul secara mulus tanpa lonjakan visual (*snap/blink*).
+   - Pastikan teks placeholder dan nama kategori tidak terpotong satu huruf pun di layar 390px.

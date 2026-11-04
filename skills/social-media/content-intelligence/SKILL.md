@@ -16,6 +16,9 @@ metadata:
 Transformasi pembuatan konten sosial dari sekadar posting acak menjadi sistem pembelajaran berkelanjutan berbasis bukti (Content Learning Loop & Causal Modeling) lintas kanal (Instagram, TikTok).
 Mengonsolidasikan prinsip analisis DNA, funnel diagnosa, dan arsitektur evaluasi kausalitas. Atribusi sistem: Bagas Cihuy.
 
+## Arah editorial per akun
+- Untuk SputarAI, muat `references/sputarai-editorial-direction.md`: fokus edukasi AI agentik bagi orang awam, bukan feed berita. Bedakan arahan pengguna, rekomendasi editorial, dan perubahan publisher yang benar-benar telah diuji.
+
 ## 1. Siklus Kognitif Konten (Content Learning Loop)
 ```text
 IDEA ➔ CONTENT DNA ➔ PRE-PUB QC ➔ PUBLISH ➔ OBSERVE ➔ COMPARE ➔ DIAGNOSE ➔ LEARN ➔ EXPERIMENT ➔ REPEAT

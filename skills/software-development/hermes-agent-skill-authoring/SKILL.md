@@ -211,6 +211,7 @@ Completion means the existing class-level skill contains the unique value, all t
 9. **Skipping the docs generator or pushing its unrelated drift.** Both directions are wrong: no regen = orphan skill with no docs page; blind regen = a ballooned diff full of other skills' drift.
 10. **Expecting the current session to see the new skill.** The loader is initialized at session start.
 11. **Letting skills accumulate sediment.** When adding a rule, remove the old wording it replaces.
+12. **Fragmenting incremental versions and sub-skills into separate SKILL.md folders.** Never create `foo-v2`, `foo-v3` or separate sub-skill folders each with their own `SKILL.md` for one tool suite (e.g. 20 folders for one security scanner). Maintain one canonical master `SKILL.md` and place specialized sub-workflows, lessons learned, and deep topics in `references/<topic>.md`. Fragmented SKILL.md entries inflate the system prompt skill index on every turn.
 
 ## Verification Checklist
 

@@ -9,6 +9,7 @@
 | **Decorative Kicker Badges** | Trivial pills like "✨ NEXT GEN AI PLATFORM" filling empty space. | Direct, confident headline statements with zero buzzword padding. |
 | **Muddy Heavy Drop Shadows** | `box-shadow: 0 20px 40px rgba(0,0,0,0.4)` makes surfaces look dirty. | Hairline borders (`1px solid #EDEDED`) and clean surface tonal contrast. |
 | **Symmetric Bento Grids** | Boring uniform 2x2 or 3x3 identical rounded rectangles. | Asymmetric editorial grid with variable column spans and proportional weights. |
+| **Box Soup / Identical Card Grids on Portfolios** | Packing every project into identical rounded cards with internal badges; instantly feels like a generic corporate SaaS AI template. | Radical Editorial Directory: continuous horizontal typographic rows with hairline dividers and a single 60 FPS magnetic floating preview card. |
 | **Rigid Center-Screen Modals** | Blocks full viewport, blinks in, destroys browsing context. | In-place card morphing (GSAP Flip) or side-sliding tactile drawers. |
 | **Generic Rounded-Box AI Logos** | Cheap squircle icons (PC monitor, cart, star, building) fabricated by AI. | Direct Text-Only Branding: razor-sharp typography without fake app-icon boxes unless logo assets are provided. |
 | **Native Browser Dialogs (`confirm()`, `alert()`)** | Breaks UI theme, freezes JS execution thread, feels cheap/native. | Custom async confirmation modal/bottom sheet setema dengan backdrop-blur dan spring physics. |

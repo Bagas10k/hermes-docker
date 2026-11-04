@@ -351,8 +351,6 @@ custom_providers:
       atmorr/alicn/qwen3.8-max: {}
       atmorr/alicn/qwen3.8-max-0902: {}
       atmorr/alicn/qwen3.8-omni-flash: {}
-      atmorr/atmo/deepseek-v4.1-flash: {}
-      atmorr/cb/deepseek-v4.1-flash: {}
       atmorr/cb/glm-5.2: {}
       atmorr/cb/glm-5.3: {}
       atmorr/cb/glm-5.3-flash: {}
@@ -472,12 +470,16 @@ custom_providers:
       atmorr/kc/k3.1-pro-highspeed: {}
       atmorr/kc/kimi-for-coding: {}
       atmorr/kc/kimi-for-coding-highspeed: {}
+      atmorr/combo/glm: {}
+      atmorr/combo/deepseek: {}
+      atmorr/alicn/kimi/kimi-k3.1-pro: {}
+      atmorr/alicn/kimi/kimi-k3.1-pro-highspeed: {}
+      atmorr/cb/deepseek-v4.1-flash-sg: {}
+      atmorr/kiro/kimi-k3: {}
       atmorr/moon/kimi-k2.6: {}
       atmorr/moon/kimi-k2.7-code: {}
       atmorr/moon/kimi-k2.7-code-highspeed: {}
       atmorr/moon/kimi-k3: {}
-      atmorr/combo/glm: {}
-      atmorr/combo/deepseek: {}
     models_discovered: true
     name: lk
   - base_url: https://api.nbgate.com/v1
@@ -524,10 +526,8 @@ custom_providers:
       Greg/glm-5.2-mod: {}
       Greg/deepseek-v4-pro: {}
       Greg/glm-5.3-flash-mod: {}
-      Gregv5/muse-wonder-1.0: {}
-      Gregv5/muse-spark-1.3: {}
       Gregv5/deepseek-v4.1-flash-1017: {}
-      Gregv5/mimo-v2.6-pro: {}
+      Gregv5/NbGate-Free: {}
     models_discovered: true
     name: nbgate
   - base_url: https://ai.cutad.web.id/v1
@@ -535,18 +535,14 @@ custom_providers:
     model: glm-5.3-flash
     models:
       deepseek-v4.1-flash: {}
-      poolside/laguna-s-2.1: {}
       dots-studio/dots-3-note-preview: {}
-      meta/muse-spark-1.2-contributor: {}
       z-ai/glm-5.2: {}
       CutadAgent-Pro: {}
       glm-5.3-flash: {}
-      meta/muse-spark-1.3-contributor: {}
       deepseek-v4-pro: {}
-      muse-wonder-1.0: {}
       NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4: {}
-      longcat-2.5-preview: {}
-      atria/Atria-Dawn-Preview: {}
+      testing-model: {}
+      step-5-preview: {}
     models_discovered: true
     name: cutad
   - base_url: https://atmorouter.dev/v1
@@ -577,7 +573,6 @@ custom_providers:
       alicn/qwen3.8-max: {}
       alicn/qwen3.8-max-0902: {}
       alicn/qwen3.8-omni-flash: {}
-      atmo/deepseek-v4.1-flash: {}
       cb/glm-5.2: {}
       cb/glm-5.3: {}
       cb/glm-5.3-flash: {}
@@ -671,7 +666,6 @@ custom_providers:
       ali/qwen3.8-omni-flash: {}
       alicn/deepseek-v4.1-flash: {}
       alicn/deepseek-v4.1-flash-1017: {}
-      cb/deepseek-v4.1-flash: {}
       cb/minimax-m3.1-flash: {}
       cbcn/minimax-m3.1-flash: {}
       mmcn/MiniMax-M3.1-Flash: {}
@@ -696,9 +690,6 @@ custom_providers:
       kcai/k3.1-pro-highspeed: {}
       kcai/kimi-for-coding-highspeed: {}
       ag/gemini-4-argon: {}
-      combo/hemat: {}
-      combo/opus-kiro: {}
-      combo/qwen-max: {}
       ali/deepseek-v4.1-flash-1017: {}
       kc/k3: {}
       kc/k3-256k: {}
@@ -708,6 +699,16 @@ custom_providers:
       kc/kimi-for-coding-highspeed: {}
       mimotp/mimo-v2.6-flash: {}
       mimotp/mimo-v2.6-pro: {}
+      alicn/kimi/kimi-k3.1-pro: {}
+      alicn/kimi/kimi-k3.1-pro-highspeed: {}
+      cb/deepseek-v4.1-flash-sg: {}
+      kiro/kimi-k3: {}
+      combo/glm: {}
+      combo/deepseek: {}
+      moon/kimi-k2.6: {}
+      moon/kimi-k2.7-code: {}
+      moon/kimi-k2.7-code-highspeed: {}
+      moon/kimi-k3: {}
     models_discovered: true
 group_sessions_per_user: true
 known_builtin_toolsets:
