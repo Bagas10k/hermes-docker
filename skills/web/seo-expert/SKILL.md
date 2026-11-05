@@ -85,7 +85,7 @@ Load detailed operational references on demand using `skill_view` (`name="seo-ex
 - `references/technical-seo-core-web-vitals.md`: Indexing rules, canonicalization, Core Web Vitals (LCP, INP, CLS), SSR/SSG vs CSR, and crawl budget management.
 - `references/on-page-content-architecture.md`: Heading hierarchies, search intent mapping (informational, transactional), E-E-A-T signals, and internal linking SILO.
 - `references/schema-structured-data.md`: Validated JSON-LD schemas for Rich Snippets, Organizations, Products, FAQs, and Breadcrumbs.
-- `references/programmatic-and-ai-search.md`: Programmatic SEO (pSEO) database-driven page architecture and Generative Engine Optimization (GEO).
+- `references/programmatic-and-ai-search.md`: Programmatic SEO (pSEO) database-driven page architecture, utility micro-tools (instant calculators), and Generative Engine Optimization (GEO).
 - `references/international-and-multilingual-seo.md`: Multilingual URL routing, bidirectional hreflang tags, and Indonesian market search nuances.
 - `references/seo-incident-recovery-and-migrations.md`: Google Core/HCU update recovery, zero-downtime 301 migration DAG, and soft-404 elimination.
 
@@ -94,6 +94,7 @@ Load detailed operational references on demand using `skill_view` (`name="seo-ex
 - **Cannibalization:** Targeting the exact same primary keyword across multiple URLs on the same domain, causing ranking volatility.
 - **Soft 404s:** Returning HTTP 200 for empty or "not found" pages instead of HTTP 404 or 410.
 - **Blocked Rendering Assets:** Disallowing Googlebot from accessing CSS and JS in `robots.txt`, preventing proper mobile-friendly evaluation.
+- **Pure Client-Side Computation without Prerender:** Relying solely on client JS to populate interactive micro-tools (calculators, simulators). Always prerender default values, full formulas, and step-by-step methodology in static HTML so search bots index complete content.
 
 ## Verification
 Run audit script on target page:

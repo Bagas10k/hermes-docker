@@ -432,9 +432,7 @@ custom_providers:
       atmorr/kiro/qwen3-coder-next: {}
       atmorr/mai/muse-spark-1.1: {}
       atmorr/mai/muse-spark-1.2: {}
-      atmorr/mai/muse-spark-1.2-contributor: {}
       atmorr/mai/muse-spark-1.3: {}
-      atmorr/mai/muse-spark-1.3-contributor: {}
       atmorr/mai/muse-wonder-1.0: {}
       atmorr/mimotp/mimo-v2.6-flash: {}
       atmorr/mimotp/mimo-v2.6-pro: {}
@@ -479,10 +477,8 @@ custom_providers:
       atmorr/alicn/kimi/kimi-k3.1-pro-highspeed: {}
       atmorr/cb/deepseek-v4.1-flash-sg: {}
       atmorr/kiro/kimi-k3: {}
-      atmorr/moon/kimi-k2.6: {}
-      atmorr/moon/kimi-k2.7-code: {}
-      atmorr/moon/kimi-k2.7-code-highspeed: {}
-      atmorr/moon/kimi-k3: {}
+      atmorr/mai/muse-spark-1.3-contributor: {}
+      atmorr/mai/muse-spark-1.2-contributor: {}
     models_discovered: true
     name: lk
   - base_url: https://api.nbgate.com/v1
@@ -972,4 +968,5 @@ platforms:
   whatsapp:
     enabled: false
 command_allowlist:
+  - script execution via -e/-c flag
   - script execution via heredoc

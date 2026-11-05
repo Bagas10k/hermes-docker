@@ -67,6 +67,7 @@ python3 ~/.hermes/skills/autonomous-ai-agents/vision-agent-computer-interface/sc
 - **Coordinate-space contract:** CDP mouse input memakai main-frame viewport CSS pixels: jangan kalikan DPR. Input OS memakai unit backend dan origin layar yang harus dikalibrasi terpisah (scale serta translation, termasuk chrome browser/DPI). DPR saja tidak menentukan transform CSS-ke-OS; tolak transform yang tidak diketahui.
 - **Dynamic Popup & Stale AXTree:** Menu dropdown yang menghilang seketika saat blur event memicu koordinat fiktif. Selalu re-sample bounding box 50ms sebelum eksekusi klik.
 - **Click-Drift pada Animasi:** Elemen yang sedang bergeser (CSS transition) dapat memicu klik meleset jika snapshot diambil di tengah frame interpolasi.
+- **Rabaan Titik Hit-Test (Tactile Occlusion Probe):** Jangan hanya mempercayai bounding box $(x, y)$ hasil proyeksi AXTree atau model visi. Lakukan hit-test `document.elementFromPoint(x, y)` pada titik sasaran untuk memastikan elemen target tidak tertutup modal transparan, floating header, atau lapisan z-index tak kasatmata.
 
 ## Verification
 

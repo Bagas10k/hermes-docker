@@ -41,13 +41,14 @@ Jangan mengarang hasil demo, penghematan, atau klaim bebas salah. Bedakan agen y
 
 ## Desain produksi yang telah disetujui
 - Kontrak format kanonis: `/home/ubuntu/hermes-backup/projects/penelitian-pola-pikir-ai/content-studio/design-contract.json`.
-- Default produksi: empat slide 1080×1350, masing-masing loop dua detik 30 fps; teks utama diam, ilustrasi SVG bergerak sesuai sebab-akibat, SFX palet yang disetujui tertanam di MP4.
+- Default produksi: empat slide 1080×1350, masing-masing **4 detik** 30 fps (120 frame native, BUKAN 2s yang di-loop 2×); teks utama diam, ilustrasi SVG bergerak sesuai sebab-akibat, SFX palet yang disetujui tertanam di MP4.
+- **Teks tidak boleh tertimpa visual motion.** Semua elemen teks wajib `position:relative;z-index:2`. SVG hero/ilustrasi diposisikan di bawah area teks dengan jarak aman (gunakan `top:620px` atau lebih rendah pada layout 1350px, bukan `top:540px` yang terlalu dekat). Verifikasi visual sebelum render.
 - **VISUAL WAJIB ACAK setiap konten baru, WARNA BRANDING TETAP.** Palet warna identitas brand TIDAK BOLEH berubah (paper #F4F2EB, ink #171819, blue #1644A2, yellow #F3C84B, muted #4B4D50, Inter Tight). Yang WAJIB diacak setiap konten baru:
   1. Gaya ilustrasi SVG (objek, metafora visual, komposisi, sudut gambar).
   2. Struktur hook (rumus berbeda dari konten terakhir).
   3. Layout dan tata letak elemen dalam slide.
   4. Mencari referensi visual terbaru di internet sebelum mendesain.
-- Pertahankan standar teknis (1080×1350, 2s loop, 30fps, SFX, penekanan kata) tapi BEBAS di aspek visual dan tematik.
+- Pertahankan standar teknis (1080×1350, 4s native, 30fps, SFX, penekanan kata, teks z-index:2 di atas SVG) tapi BEBAS di aspek visual dan tematik.
 - Tidak ada izin otomatis untuk publikasi, penggantian mesin berita, atau klaim generator sudah berjalan hanya dari persetujuan desain.
 
 ## Revisi visual cepat dan fokus feed
@@ -56,22 +57,31 @@ Jangan mengarang hasil demo, penghematan, atau klaim bebas salah. Bedakan agen y
 - Dilarang keras membalas teks klaim "sudah dikirim" atau menampilkan status tanpa menyertakan tag lampiran `MEDIA:/path/absolut` pada respons tersebut. Jika artefak (PNG/MP4) telah selesai dirender, sertakan langsung path MEDIA fisiknya di akhir pesan agar langsung tampil di Telegram.
 - Untuk pekerjaan motion, periksa MCP `bakmotion` yang sudah tersedia sebelum menulis pipeline baru. Gunakan kemampuan yang sesuai untuk storyboard/render/effects tanpa mengganti desain yang sudah disetujui dengan template generik. Jika adapter atau kontrol yang diperlukan belum ada, jelaskan keterbatasan spesifik dan gunakan kode kustom hanya pada bagian yang dibutuhkan; jangan menyimpulkan MCP tidak berguna karena satu hasil dibuat tanpa MCP.
 - Bedakan katalog MCP yang berhasil dibaca dari render MP4 yang berhasil dijalankan. Jangan mengklaim pipeline MCP sudah menghasilkan video ketika hanya memanggil katalog atau storyboard.
+- **Sub-agent render sering timeout** karena CDP + 120 frame capture membutuhkan waktu lama. Jika mendelegasikan render ke sub-agent, berikan budget waktu cukup (≥5 menit) dan unit kerja kecil (1-2 slide per sub-agent). Jika sub-agent gagal/timeout, Mandor langsung ambil alih — jangan delegasi ulang karena makan waktu lebih lama.
 - Perlakukan arah gaya baru sebagai kandidat sampai pemilik menilai gambarnya. Jangan mengubah publisher atau template produksi hanya dari persetujuan atas konsep.
 
 ## Palet suara yang disetujui
 Untuk SFX, gunakan `references/approved-sfx-palette.md`: tiga rekaman Mixkit dan resep mix yang disukai pemilik sudah disimpan dalam bank aset privat. Persetujuan ini untuk karakter suara, bukan izin publikasi otomatis.
 
+## Pipeline Render Motion MP4
+- Renderer: Chromium CDP headless (`render-motion-full.mjs`) → 120 frame PNG → FFmpeg encode.
+- Frame capture: `window.renderFrame(i/120)` untuk setiap frame, progress 0→1 dalam satu siklus.
+- Video: `ffmpeg -r 30 -i frames/%03d.png -c:v libx264 -pix_fmt yuv420p -crf 18 -vf scale=1080:1350`.
+- SFX 4s: buat cue pendek 0.5s dari file SFX (gain 0.4, fade in 0.008, fade out 0.015), lalu mix 2 cue ke 4s silence track di posisi 0.3s dan 2.3s via `amix` filter. Jangan loop video 2s×2 — render 120 frame langsung.
+- Setelah render selesai, LANGSUNG sertakan `MEDIA:/path/motion-full-XX.mp4` di respons. Jangan kirim teks status tanpa lampiran.
+
 ## Hook berbasis masalah dan arah produk
 - Awali hook dari kejadian sehari-hari yang dikenali audiens, bukan nama teknologi atau daftar kemampuan AI. Sambungkan masalah → kebiasaan kerja yang perlu dipertanyakan → mekanisme solusi → tawaran jasa yang spesifik.
 - Gunakan sudut provokatif yang mengkritik proses/kebiasaan, bukan menghina orang atau mengarang fakta. Jangan menyebut hook lebih efektif sebelum ada data respons audiens.
 - Pertahankan ilustrasi dan gerak yang sudah disukai saat yang diminta hanya revisi hook. Pilihan kata baru tidak mengizinkan desain ulang seluruh komposisi.
-- Untuk Bakmotion storyboard, `platform=universal` mendukung preview 4:5; `instagram` ditolak oleh tool. Pakai `beats` terstruktur dengan `narration` tidak kosong, bukan menaruh instruksi produksi di `script` yang dipecah menjadi teks layar. Pada perilaku yang teramati, durasi 2 detik diubah menjadi 4 detik; jangan mengklaim loop 2 detik dihasilkan langsung oleh MCP jika ekspornya memakai renderer terpisah.
+- Untuk Bakmotion storyboard, `platform=universal` mendukung preview 4:5; `instagram` ditolak oleh tool. Pakai `beats` terstruktur dengan `narration` tidak kosong, bukan menaruh instruksi produksi di `script` yang dipecah menjadi teks layar. Pada perilaku yang teramati, durasi per slide adalah 4 detik (120 frame native); jangan mengklaim durasi berbeda dihasilkan langsung oleh MCP jika ekspornya memakai renderer terpisah.
 
 ## Landing Page & Funnel Konversi
 - Landing page live: https://www.jajandigital.web.id/sputarai/ (file: /home/ubuntu/penelitian-pola-pikir-ai/public/sputarai/index.html)
 - CTA WhatsApp konsultasi: 085764985114 (nomor khusus SputarAI, bukan WA pribadi Bagas)
 - Auto-reply komentar IG aktif: timer systemd `sputarai-comment-dm.timer` 2 menit, config `config/comment-dm.json`, sending ON
 - Alur konversi: komentar keyword → DM otomatis berisi link landing page → pengunjung klik → halaman jasa → tombol WA
+- Pendaftaran Keyword Baru: Setiap pembuatan konten dengan kata kunci CTA baru (misal: CHAT, STOK, GUDANG, NOTA), wajib segera ditambahkan ke `config/comment-dm.json` pada list `keywords` agar pengujian `python3 -m unittest tests/test_comment_dm.py` lulus dan auto-reply siap.
 - Caption DILARANG berisi disclaimer/kredit sumber ("Visual ini ilustrasi konsep...", rujukan Anthropic, label SFX Mixkit). Bersih tanpa label AI/sumber.
 
 ## Sistem Optimasi Konten Anti-Template

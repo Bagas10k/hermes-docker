@@ -38,6 +38,7 @@ Do not turn a fast transactional workbench into a list-first CRUD page. A suppor
 3. Capture the actual old and new pages at equal dimensions. Verify the saved PNG's pixel dimensions, not its filename. Label differences in fixture data, selected period, populated cart, or navigation expansion instead of presenting unequal states as pixel-equivalent.
 4. Check critical child controls against their pane bounds, not only page overflow. Prove the catalogue's select action is visible/reachable and the cart's quantity buttons, total and checkout are accessible.
 5. Check apparent overlap or transparency against scroll position, stacking, computed opacity/background and animation state before editing CSS from a screenshot diagnosis.
+6. For cashier refinement, run one essential smoke sequence with neutral synthetic records: search/filter, add an item, change quantity, open payment, reject insufficient cash without saving, accept sufficient cash with correct change, and confirm the transaction after reload. Exercise product create/edit/delete and history only where those surfaces are in scope. Inspect populated catalogue/cart and open checkout at the intended phone viewport; verify the final payment action clears fixed navigation and remains reachable while the form is scrolled. This browser evidence does not establish Android keyboard behavior, native downloads, or physical printing.
 
 A compact readout for each render:
 

@@ -10,9 +10,11 @@ metadata:
     related_skills: [ui-ux-execution-standard, animated-vector-icons, bang-motion]
 ---
 
-# Canvas Spatial Grounding & Responsive Layout
+# Canvas Spatial Grounding & Responsive Layout (Mata & Rabaan Agen)
 
-Gunakan pengukuran browser sebagai indera struktur untuk agen: posisi, ukuran, hubungan, clipping, dan keadaan viewport harus tersedia dalam JSON/teks tanpa perlu memanggil vision untuk setiap margin. Telemetri tidak menggantikan penilaian makna, seni, atau piksel gambar yang tidak mempunyai scene metadata.
+Gunakan pengukuran browser dan visi komputer sebagai "indera struktur" bagi agen:
+1. **Mata (Visual Vision):** Kalibrasi koordinat absolut piksel, grid penggaris, deteksi kontur visual, dan Set-of-Marks tanpa halusinasi spasial.
+2. **Rabaan (Tactile Sensing):** Pemeriksaan fisik tumpang-tindih (collision/overlap), hit-testing titik `elementFromPoint(x, y)`, batas scroll/overflow, dan occlusion z-index secara deterministik. Telemetri tidak menggantikan penilaian makna, seni, atau piksel gambar yang tidak mempunyai scene metadata.
 
 ## Urutan kerja
 
@@ -24,6 +26,12 @@ Gunakan pengukuran browser sebagai indera struktur untuk agen: posisi, ukuran, h
 6. **Periksa satu perubahan terhadap gejala sebenarnya.** Setelah koreksi lokal, jalankan probe esensial pada state yang sama, lalu serahkan bukti dan keterbatasan. Gunakan screenshot/contact sheet bila perlu menilai hasil visual; vision bukan alat ukur piksel absolut dan gambar diam bukan bukti animasi mulus atau suara.
 
 ## Invariant yang benar
+
+### Rabaan Taktil & Deteksi Tabrakan (Tactile Collision & Text Safety)
+
+- **Anti-Text Overlap:** Teks judul dan deskripsi tidak boleh tertimpa atau menimpa visual gerak. Verifikasi via `RectA.bottom < RectB.top` (atau sebaliknya). Jangan hanya mengandalkan `opacity` atau mode blend CSS.
+- **Hit-Testing Nyata (`elementFromPoint`):** Untuk memastikan elemen interaktif dapat diraba pengguna, lakukan probe `document.elementFromPoint(x_center, y_center)`. Jika elemen yang kembali adalah backdrop transparan atau overlay tak kasatmata, laporkan `OCCLUDED` (terhalang).
+- **Subpixel & Margin Tolerance:** Toleransi subpixel maks 1px; bedakan offset yang disengaja (misal hard brutalist shadow `box-shadow: 4px 4px 0px`) dari pergeseran layout liar (*layout shift*).
 
 ### Overflow dan clipping
 
@@ -51,3 +59,6 @@ Gunakan pengukuran browser sebagai indera struktur untuk agen: posisi, ukuran, h
 Probe dan formatter harus tersimpan sebagai modul/sumber kanonik proyek. Helper `sense_layout` di `agent_helpers.py` hanya berlaku pada workspace browser tempat ia dipasang; jangan mengklaim tersedia di semua sesi. Muat helper secara eksplisit atau pasang dari sumber kanonik, lalu uji satu pemanggilan di workspace baru sebelum menyebut integrasi persisten.
 
 Tooling lokal yang dapat ditemukan ulang: `canvas_layout_inspector.py` dan `dom_responsive_sensor.py` di `~/.hermes/scripts/`, serta proyek `canvas-layout-inspector` di GitHub. Periksa implementasi aktif sebelum memakai hasilnya sebagai gate; revisi heuristik lama tidak otomatis mengikuti skill yang diperbaiki ini.
+
+### Standar Kompatibilitas MCP Server Python (SDK 2.0.0)
+Pada lingkungan Hermes dengan pustaka `mcp >= 2.0.0`, server MCP Python lokal WAJIB mengimpor `from mcp.server.mcpserver import MCPServer` (bukan `from mcp.server.fastmcp import FastMCP` yang usang dan menyebabkan kegagalan startup modul).
