@@ -48,6 +48,11 @@ Supporting assets: `scripts/gh-env.sh` + `scripts/git-credential-token.py`
   high-impact operation. If a concrete credential leak is already known, state
   the specific risk briefly and ask before proceeding; report other privacy
   concerns separately without blocking the requested change.
+- Large files & initial push safeguard: scan files >= 50MB and > 95MB before initial
+  push (`find . -type f -size +95M`). Files >= 100MB are hard rejected by GitHub unless
+  tracked with Git LFS (`git lfs track "<pattern>"`). On an unborn branch / root commit,
+  if large files were committed before LFS tracking, reset via `git update-ref -d HEAD`
+  (never `git reset --soft HEAD~1` as no parent exists), add `.gitattributes`, and re-commit.
 - Prefer `gh` over raw REST; drop to `gh api` only for endpoints the
   porcelain lacks (the cheatsheet lists them).
 - Never report CI green without checking `gh pr checks` yourself; never
