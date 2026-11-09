@@ -12652,3 +12652,302 @@ Arsip rekaman observasi, kalibrasi Bayesian, dan adaptasi algoritma media sosial
 - **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
 
 ---
+
+### Siklus Belajar Divisi 1 — 2026-11-08T21:52:02.294Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-08T22:53:02.833Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-08T23:54:03.245Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T00:55:04.745Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T01:56:02.872Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T02:57:03.296Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T03:58:02.673Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T04:59:02.385Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T06:00:02.934Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T07:01:04.073Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T08:02:02.654Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T09:03:02.877Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T10:04:02.248Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T11:05:02.325Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T12:06:02.308Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T13:07:02.813Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T14:08:03.472Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T15:09:03.704Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T16:10:02.583Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T17:11:02.894Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T18:12:03.657Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T19:13:02.737Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
+
+### Siklus Belajar Divisi 1 — 2026-11-09T20:14:02.617Z
+- **Total Postingan Dianalisis:** 10
+- **Rata-rata Views Baseline:** 64.5
+- **Rata-rata Engagement:** 1.70%
+- **Status Aturan Belajar Mandiri:**
+  - Aturan Aktif       : 6
+  - Aturan Eksperimen : 5
+  - Aturan Dipangkas  : 1
+- **Ringkasan:** Total Aturan: 12 (Aktif: 6, Eksperimen: 5, Dipangkas: 1). Baseline Views: 65
+- **Status Publikasi Sosial:** Mengikuti gerbang approval (zero direct publish).
+
+---
