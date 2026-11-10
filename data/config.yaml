@@ -337,10 +337,8 @@ custom_providers:
       atmorr/ali/kimi-k3: {}
       atmorr/ali/qwen3.8-2.4t-a95b: {}
       atmorr/ali/qwen3.8-27b: {}
-      atmorr/ali/qwen3.8-flash: {}
       atmorr/ali/qwen3.8-max: {}
       atmorr/ali/qwen3.8-max-0902: {}
-      atmorr/ali/qwen3.8-omni-flash: {}
       atmorr/alicn/deepseek-v4-flash-0731: {}
       atmorr/alicn/deepseek-v4-pro-0813: {}
       atmorr/alicn/deepseek-v4.1-flash: {}
@@ -408,10 +406,6 @@ custom_providers:
       atmorr/grok/grok-4.6: {}
       atmorr/grok/grok-4.7: {}
       atmorr/grok/grok-4.7-build-fast: {}
-      atmorr/kcai/k3: {}
-      atmorr/kcai/k3-256k: {}
-      atmorr/kcai/k3.1-pro: {}
-      atmorr/kcai/kimi-for-coding: {}
       atmorr/kiro/claude-haiku-4.5: {}
       atmorr/kiro/claude-opus-4.5: {}
       atmorr/kiro/claude-opus-4.6: {}
@@ -422,18 +416,9 @@ custom_providers:
       atmorr/kiro/claude-sonnet-4.6: {}
       atmorr/kiro/claude-sonnet-5: {}
       atmorr/kiro/claude-sonnet-5.5: {}
-      atmorr/kiro/deepseek-3.2: {}
-      atmorr/kiro/glm-5: {}
       atmorr/kiro/gpt-5.6-luna: {}
       atmorr/kiro/gpt-5.6-sol: {}
       atmorr/kiro/gpt-5.6-terra: {}
-      atmorr/kiro/minimax-m2.1: {}
-      atmorr/kiro/minimax-m2.5: {}
-      atmorr/kiro/qwen3-coder-next: {}
-      atmorr/mai/muse-spark-1.1: {}
-      atmorr/mai/muse-spark-1.2: {}
-      atmorr/mai/muse-spark-1.3: {}
-      atmorr/mai/muse-wonder-1.0: {}
       atmorr/mimotp/mimo-v2.6-flash: {}
       atmorr/mimotp/mimo-v2.6-pro: {}
       atmorr/mm/MiniMax-M2: {}
@@ -460,25 +445,42 @@ custom_providers:
       atmorr/zai/glm-5.3: {}
       atmorr/zai/glm-5.3-flash: {}
       atmorr/cbcn/kimi-k3.1-pro: {}
-      atmorr/kcai/k3.1-pro-highspeed: {}
-      atmorr/kcai/kimi-for-coding-highspeed: {}
       free: {}
       atmorr/ag/gemini-4-argon: {}
-      atmorr/ali/deepseek-v4.1-flash-1017: {}
-      atmorr/kc/k3: {}
-      atmorr/kc/k3-256k: {}
-      atmorr/kc/k3.1-pro: {}
-      atmorr/kc/k3.1-pro-highspeed: {}
-      atmorr/kc/kimi-for-coding: {}
-      atmorr/kc/kimi-for-coding-highspeed: {}
       atmorr/combo/glm: {}
       atmorr/combo/deepseek: {}
       atmorr/alicn/kimi/kimi-k3.1-pro: {}
       atmorr/alicn/kimi/kimi-k3.1-pro-highspeed: {}
       atmorr/cb/deepseek-v4.1-flash-sg: {}
       atmorr/kiro/kimi-k3: {}
-      atmorr/mai/muse-spark-1.3-contributor: {}
-      atmorr/mai/muse-spark-1.2-contributor: {}
+      atmorr/ali/kimi-k3.1-pro: {}
+      atmorr/alicn/kimi-k3.1-pro: {}
+      atmorr/cb/deepseek-v4.1-flash: {}
+      atmorr/cb/gemini-3.1-pro: {}
+      atmorr/cb/hy4free: {}
+      atmorr/cbcn/deepseek-v4.1-flash: {}
+      atmorr/cbcn/hy4free: {}
+      atmorr/cc/claude-fable-5-2: {}
+      atmorr/ds/deepseek-flash: {}
+      atmorr/ds/deepseek-v4-pro: {}
+      atmorr/nebula/claude-opus-5-5: {}
+      atmorr/nebula/claude-sonnet-5-5: {}
+      atmorr/nebula/deepseek-v4-flash: {}
+      atmorr/nebula/deepseek-v4-flash-0731: {}
+      atmorr/nebula/deepseek-v4-pro: {}
+      atmorr/oai/gpt-5.6-sol: {}
+      atmorr/oai/gpt-5.6-terra: {}
+      atmorr/oai/gpt-6-luna: {}
+      atmorr/oai/gpt-6-sol: {}
+      atmorr/oai/gpt-6.1-sol: {}
+      atmorr/oai/gpt-6.1-terra: {}
+      atmorr/kiro/deepseek-3.2: {}
+      atmorr/kiro/glm-5: {}
+      atmorr/kiro/minimax-m2.1: {}
+      atmorr/kiro/minimax-m2.5: {}
+      atmorr/kiro/qwen3-coder-next: {}
+      atmorr/nebula/deepseek-v4.1-flash: {}
+      atmorr/nebula/deepseek-v4.1-flash-1017: {}
     models_discovered: true
     name: lk
   - base_url: https://api.nbgate.com/v1
