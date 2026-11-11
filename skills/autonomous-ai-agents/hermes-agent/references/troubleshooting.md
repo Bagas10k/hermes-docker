@@ -13,8 +13,9 @@
 ### Model/provider issues
 1. `hermes doctor` — check config and dependencies
 2. `hermes auth` — re-authenticate OAuth providers (or `hermes auth add <provider>`)
-3. Check `.env` has the right API key
-4. **Copilot 403**: `gh auth login` tokens do NOT work for Copilot API. You must use the Copilot-specific OAuth device code flow via `hermes model` → GitHub Copilot.
+3. Check `.env` has the right API key (e.g. `ANTHROPIC_API_KEY`, not `ANTHROPIC_TOKEN`)
+4. **SDK missing or digest mismatch**: If logs show `ImportError` or `lazy installs are disabled`, run `hermes pm doctor` and `hermes pm repair`, or install directly into the Hermes toolchain python (`<hermes-python-bin> -m pip install <package>`).
+5. **Copilot 403**: `gh auth login` tokens do NOT work for Copilot API. You must use the Copilot-specific OAuth device code flow via `hermes model` → GitHub Copilot.
 
 ### "Hermes feels slow" — verify the model route before blaming the host
 Perceived lag is usually a dead model ID in the chain, not the machine. The

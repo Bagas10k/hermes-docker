@@ -35,7 +35,7 @@ stt:
     language: id
 plugins:
   enabled: []
-_config_version: 51
+_config_version: 53
 onboarding:
   seen:
     profile_build_offered: true

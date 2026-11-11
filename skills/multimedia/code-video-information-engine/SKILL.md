@@ -28,7 +28,21 @@ Standard operating procedures for developing and auditing code-driven video gene
 - **Separate Bounded Semantic Regions from Exact Slots:** Distinguish generic bounded regions (headline, visual stage, caption bar) from bespoke multi-slot layout implementations in architecture documents.
 - **Complete Visual Semantic Coverage:** When declaring support for visual types (e.g. `warning`, `comparison`, `process`, `timeline`, `quote`, `location`, `entity`, `definition`, `statistic`, `abstract`), ensure each type has an active SVG/React rendering adapter and strict matching in pipeline validation.
 
-## 3. Audio Pipeline & TTS Reliability
+## 3. Headless 3D & WebGL CPU Pipeline (Three.js + Chromium + FFmpeg)
+
+When rendering 3D procedural animations or technical infografis on GPU-less Linux servers (e.g. VPS with multi-core Xeon):
+
+- **Software Rasterizer Configuration:** Launch Chromium with SwiftShader ANGLE backend:
+  `chromium --headless=new --remote-debugging-port=9222 --no-sandbox --disable-gpu --use-gl=angle --use-angle=swiftshader --window-size=1080,1920`
+- **Deterministic Step Rendering (No Dropped Frames):** Never record canvas via real-time screen scraping or media streams. Real-time capture on CPU SwiftShader drops frames whenever rasterization dips below target FPS. Instead, bind a deterministic time stepping function in the web page:
+  `window.renderAtTime(currentTime, duration)`
+  Advance time by `1.0 / FPS` per iteration, evaluate in Chromium via CDP (`Runtime.evaluate`), and capture exact snapshots.
+- **Zero-Disk Frame Streaming (FFmpeg Pipe):** Avoid dumping thousands of PNGs/JPEGs to disk. Pipe base64-decoded frame binaries directly into FFmpeg `image2pipe` stdin:
+  `ffmpeg -y -f image2pipe -vcodec mjpeg -r 30 -i - -i vo.mp3 -c:v libx264 -preset ultrafast -crf 22 -pix_fmt yuv420p -c:a aac -shortest output.mp4`
+  This eliminates disk I/O bottlenecks and avoids filling the filesystem with temporary image files.
+- **Offline Assets:** Download Three.js (`three.min.js`) and fonts locally into the workspace. Never link external CDNs in headless batch renderers to prevent network timeouts and flakiness during long rendering runs.
+
+## 4. Audio Pipeline & TTS Reliability
 
 - **Isolate Provider Dependencies:** When using external neural TTS engines (such as `edge-tts`), manage dependencies in an isolated virtual environment (`.venv-bakmotion/`). Upstream protocol changes can cause HTTP 403 errors on older minor versions (e.g. 7.2.7 vs 7.3.1); verify package releases before declaring audio broken.
 - **Cache Narration by Hash:** Hash `voice + text + provider_version` into sidecar receipt files (`.json`). Re-render runs should reuse valid cached audio rather than hitting public rate limits.

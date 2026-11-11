@@ -5,7 +5,7 @@ model:
   api_key: ${HERMES_CUSTOM_LOCALHOST_20128_API_KEY}
 plugins:
   enabled: []
-_config_version: 51
+_config_version: 53
 agent: {}
 approvals:
   mode: manual

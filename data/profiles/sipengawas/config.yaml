@@ -31,10 +31,7 @@ terminal:
   docker_mount_cwd_to_workspace: false
   lifetime_seconds: 300
 browser:
-  backend: browser-use
   inactivity_timeout: 120
-  extension_control:
-    enabled: false
 tool_loop_guardrails:
   warnings_enabled: true
   hard_stop_enabled: true
@@ -191,7 +188,7 @@ updates:
   pre_update_backup: false
   backup_keep: 5
   non_interactive_local_changes: stash
-_config_version: 51
+_config_version: 53
 group_sessions_per_user: true
 platform_toolsets:
   cli:

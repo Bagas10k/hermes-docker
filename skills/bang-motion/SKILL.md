@@ -314,6 +314,17 @@ Resep lengkap + alat: `references/vo-sync.md`,
 
 Detail di `references/techniques.md` bagian "Jebakan", plus:
 
+- **Target tab CDP Chromium headless salah (`tabs[0]` bukan halaman kerja)**:
+  Pada Chromium versi modern (terutama `--headless=new`), pemanggilan `http://localhost:<port>/json`
+  mengembalikan target internal browser pada urutan pertama (misal `chrome://webui-toolbar.top-chrome/`
+  dengan type `browser_ui`). Menghubungkan WebSocket ke `tabs[0]` menyebabkan `window.renderAtTime`
+  atau variabel scene berstatus `undefined`, kanvas WebGL tidak pernah dieksekusi, dan tangkapan
+  layar menjadi frame kosong/hitam pekat. **Solusi:** Wajib filter target secara eksplisit:
+  `target_page = [t for t in tabs if t.get("type") == "page"][0]`.
+- **Rendering WebGL di VPS tanpa GPU fisik (software rasterizer)**:
+  Saat merender scene WebGL / Three.js di server/VPS tanpa kartu grafis mandiri, Chromium headless
+  memerlukan flag software SwiftShader agar konteks `webgl`/`webgl2` tidak crash atau blank:
+  `--use-gl=angle`, `--use-angle=swiftshader`, dan `--enable-unsafe-swiftshader`.
 - **`tl.pause(t)` / `tl.seek(t)` MENSUPPRESS callback secara default**
   (`suppressEvents=true`). Semua `tl.call()`, dan efek samping yang dipasang
   di callback, TIDAK jalan saat snapshot maupun export frame-by-frame — hasil

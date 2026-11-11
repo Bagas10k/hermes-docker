@@ -37,7 +37,7 @@ onboarding:
     busy_input_prompt: true
 plugins:
   enabled: []
-_config_version: 51
+_config_version: 53
 agent: {}
 compression:
   threshold_tokens: 50000

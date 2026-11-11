@@ -78,7 +78,11 @@ Mandor WAJIB bersikap proaktif dan responsif memecah pekerjaan ke sub-agent para
 
 ## Model Sub-Agent: Resolusi & Verifikasi
 
-- Anak `delegate_task` **tidak mewarisi model percakapan induk** bila `delegation.model` + `delegation.provider` dipin di `config.yaml`; rantai cadangannya `delegation.fallback_providers`. Tanpa pin, anak mengikuti model induk.
+- **Pewarisan Model Induk (Default Standar):** Parameter `delegation.model` dan `delegation.provider` di `config.yaml` dikosongkan agar anak/sub-agent otomatis 100% mewarisi model dan provider aktif dari induk.
+- **Protokol Deterministic & Zero-Decision Sub-Agent (Tugas Basic):**
+  1. *Zero-Decision:* Sub-agent dilarang mengambil keputusan arah atau arsitektur; seluruh perencanaan/analisis rumit diselesaikan induk.
+  2. *Bounded Scope:* Sub-agent hanya menerima tugas mekanis tertutup (baca log tertentu, curl/probe endpoint tunggal, atau patch file spesifik yang sudah dirumuskan).
+  3. *Single-Pass Verification:* Dilarang looping eksplorasi sendiri saat gagal. Jika gagal/error, langsung laporkan fakta biner ke induk untuk mitigasi. Batasi maksimal 3–5 tool call per sub-agent.
 - **Profil bukan sub-agent.** `~/.hermes/profiles/<nama>/` adalah proses Hermes terpisah (punya `model.default` sendiri) dan tidak pernah dipakai `delegate_task`. Jangan menjawab "sub-agent pakai model X" dari daftar profil.
 - **Buktikan nama model dengan satu `curl` nyata** ke endpoint provider sebelum menyebutkannya ke Mas Bagas — entri di config bukan bukti endpoint melayaninya.
 - QC independen sebaiknya memakai model **beda keluarga** dari pelaksana; QC se-keluarga mewarisi blind spot yang sama. Ganti model QC hanya setelah model pengganti diuji nyata.
