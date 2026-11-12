@@ -18,6 +18,21 @@ A standardized flight plan for complex engineering tasks, eliminating "cowboy co
 - Inspect architectural precedents: reuse proven subpath patterns, session isolates, and database connectors.
 - Explicitly declare boundary paths: what is in-scope vs what is strictly forbidden to touch.
 
+### Repo-native plan onboarding (repo ships AGENTS.md + PROTOCOL + task file)
+Use when a repo is planning-first (PRD/TECH/CONTRACTS + task DAG, little or no code). Read-only; batch independent reads.
+1. **Read in the repo's declared order** (usually README → AGENTS → PROTOCOL → DECISIONS → CONTRACTS → task file). For large PRD/TECH, list headings first (`grep -n '^#' PRD.md`) and read only the sections the next task references.
+2. **Run the repo's own consistency checker** if present (e.g. `python3 tools/check_docs.py`) and quote its exit code/summary line.
+3. **Count the plan, don't eyeball it:** load the task file and tally status/kind/size plus tasks containing `manual:` acceptance steps:
+   ```bash
+   python3 -c "import yaml,collections;t=yaml.safe_load(open('plan/tasks.yaml'))['tasks'];print(len(t),collections.Counter(x['status'] for x in t),collections.Counter(x.get('kind') for x in t),sum(any(str(a).startswith('manual') for a in x.get('acceptance',[])) for x in t))"
+   ```
+4. **Cross-check names across docs:** grep component/crate/module names used in task deliverables and contracts against the structure list in AGENTS.md. A scaffold task that says "create all X per AGENTS.md" will silently miss anything absent from that list; flag it and propose fixing it inside that scaffold task.
+5. **Note superseded sections:** when PRD and TECH disagree, check whether one explicitly defers to the other before calling it a conflict.
+6. **Environment fit:** compare documented toolchain versions/target OS with the host (`cargo --version`, `node --version`, `pnpm --version`, free RAM/disk). Split tasks into "runnable here" vs "needs the user's machine" (OS-only APIs, desktop apps, manual acceptance).
+7. **Visibility check:** unauthenticated `curl -s -o /dev/null -w '%{http_code}' https://api.github.com/repos/OWNER/NAME` → 404 while the authenticated clone works means the repo is private; mention it and never copy its content to public surfaces.
+8. **Design artifacts:** view one key screen with `vision_analyze` and summarise the layout/tokens from the repo's design doc.
+9. **Report** (no edits): product in a few lines, state with counts, how to drive the next task per the repo protocol (exact prompt the user can send), numbered inconsistencies/risks, one recommended next step.
+
 ---
 
 ## Stage 2: Public Task DAG & Checklist (Anti-Silent Planning)

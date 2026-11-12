@@ -1,6 +1,6 @@
 ---
 name: structured-project-execution
-description: Execute structured project workflows and task DAG phases.
+description: Use when onboarding or executing project task DAGs.
 version: 0.1.0
 author: Hermes Agent
 license: MIT
@@ -34,8 +34,8 @@ Orchestrate complex software and system development through structured Directed 
 - Target runtime environment (Node.js, Python, PHP, or Go) accessible via `terminal`.
 - Execution state tracking file at `build_tracker.json` in the current working directory.
 - Standard Python 3 runtime for the tracker script (`scripts/flight_plan_tracker.py`).
-- During Stage 1, verify `AGENTS.md` and `.onefreq/`; if either is missing, run `docbuddy-adopt .` at the repository root before source edits. The wrapper performs non-overwriting template adoption only. If unavailable, `docbuddy adopt .` is the equivalent bootstrap; review project docs afterward.
-- Read the project brief, architecture, verification contract, current state, and existing build docs. Initialize `build_tracker.json` and create/complete the canonical README build path during Stage 1. **These are Stage 1 exit gates and must be ready before implementation coding begins.**
+- During Stage 1, verify `AGENTS.md` and `.onefreq/`; if either is missing, run `docbuddy-adopt .` at the repository root before source edits. The wrapper performs non-overwriting template adoption only. If unavailable, `docbuddy adopt .` is the equivalent bootstrap; review project docs afterward. **Exception — repo-native protocol:** if the repo already ships its own agent contract (AGENTS.md plus a PROTOCOL/PLAN doc and a task file such as `plan/tasks.yaml`), that contract governs: do not run docbuddy-adopt or add `build_tracker.json`/`.onefreq/` into the repo without asking, because such repos usually forbid out-of-deliverable files and stray artifacts; use the repo's own task status + log as the durable tracker, and keep any Hermes tracker outside the repo (scratch dir).
+- Read the project brief, architecture, verification contract, current state, and existing build docs. Initialize `build_tracker.json` and create/complete the canonical README build path during Stage 1 (or, under a repo-native protocol, confirm its task file/log serves this role). **These are Stage 1 exit gates and must be ready before implementation coding begins.**
 - Keep proposal enrichment separate: `docbuddy propose` → inspect diff/scope → `docbuddy apply` only after explicit approval. Follow `project-build-documentation`; update canonical docs and `.onefreq/` state when milestones change facts or status.
 
 ## How to Run
@@ -122,6 +122,8 @@ Load deep architectural references on demand using `skill_view` (`name="structur
 - `references/anti-abs-verification-matrix.md`: Epistemic classification (`KNOWN`, `LIKELY`, `UNCERTAIN`, `UNKNOWN`) and empirical verification checklists.
 
 ## Pitfalls
+- **Orientation request treated as a build order:** When the user asks to pull/clone a repo or "get acquainted" with it, stay read-only (no edits, installs, builds, branch creation) and deliver an orientation: what the product is, current state with counted evidence, how the repo expects work to be driven, cross-document inconsistencies found, environment/platform mismatches, and ONE recommended next step. Starting the first task unasked violates the repo's own task-claiming protocol. Checklist in `references/five-stage-flight-plan.md` (Stage 1, repo-native plan onboarding).
+- **Project design doc vs Hermes default aesthetic:** When the repo ships its own design spec (tokens, screens, UI copy), it overrides Upnormal/Hermes default styling; say so in the orientation so later UI tasks don't drift.
 - **Premature Polishing Trap:** Styling colors, gradients, and animations before the database and CRUD endpoints work. Strictly adhere to Phase 1 first.
 - **Silent Rabbit Holes:** Spending over 60 seconds debugging without sending a progress pulse to the user.
 - **Silent Infinite Tool Loops & Failing to Fail-Fast:** When a backend command, script, or patch encounters repeated errors, the agent must NEVER loop silently (e.g. running 50–100+ turns leaving the user in an endless loading state). Enforce `hard_stop_enabled: true` and a strict turn ceiling (`max_turns: 25`). If a tool fails 3 times with the same error or cannot make progress after 3–4 tries, HALT immediately, emit the concrete error output and root blocker directly to the user, and present clear next options.

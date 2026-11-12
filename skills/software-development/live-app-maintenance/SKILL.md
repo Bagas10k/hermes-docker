@@ -43,6 +43,7 @@ Full recipe (bundle patch + reference rewrite + 9Router dashboard-password flow)
 - First identify the port owner and its supervisor: `ss -ltnp` (or `netstat -ano`), then inspect the process cgroup/parent and `systemctl --user status <unit>` or `pm2 status`. Restart through the **existing supervisor**, not by killing its PID and launching an untracked background copy; competing launches can collide on the same port and trigger a restart loop.
 - **Prove server-side changes on a scratch port before touching production**: a copy of the real process on an alternate port (`PORT=3199 node server.js`, background, then `curl` it) exercises the actual new route/module against the real DB read-only path while production still serves the old code. Send the negative cases there too (404 unknown id, 409 when a delete is blocked by a dependency), then kill the scratch process and confirm its listener is gone. Only after that restart production.
 - **Resolve restart fears with evidence instead of declining the restart**: when a supervisor reports a suspicious cwd (`pm2 describe` shows `exec cwd` pointing at another project), do not treat that as a blocker. Grep the entrypoint for `process.cwd()` versus `__dirname`: if data/static/config paths are built from `__dirname`, cwd is irrelevant and a scratch-port boot proves it. Report the finding as a corrected assumption; only a real relative-path dependency justifies a controlled cwd fix first.
+- **A PM2 app name is not proof of which process serves a site.** A process named after the domain or brand can be an unrelated bot, while the website runs under a different name. Resolve it in this order: `ss -ltnp | grep :<port>`, then the PID, then `pm2 jlist` (`pm_exec_path`/`pm_cwd`), and confirm the entrypoint's `PORT` default. Do this before restarting, because restarting the wrong process interrupts another service and leaves your change unloaded.
 - Before any production restart, preserve rollback state and plan a readiness check; restart only the named service, then verify its listener, HTTP endpoint, and recent journal/error log. Never issue indiscriminate process kills that disrupt other daemons.
 - **State held in memory survives a DB cleanup**: deleting rows directly from the database does not change what an already-running process serves. If an in-memory registry (scheduler, cache, session map) has no delete API, either add one and expose it via a route, or restart to force a reload from DB. Prefer adding the delete path: a missing removal API is a real gap that will bite again, and a route lets you test the removal on the scratch port first.
 
@@ -83,6 +84,7 @@ Full recipe (bundle patch + reference rewrite + 9Router dashboard-password flow)
   - Include `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">`.
   - Minimum touch-target size 44px with active tap feedback (`transform: scale(0.98)`).
   - Use responsive grid layouts (1-column on mobile, multi-column on desktop) and cluster topbar action buttons into a unified segmented chassis rather than loose individual buttons.
+  - Put viewport-hiding rules inside their own media query, e.g. `@media (max-width:767px){.sidebar-desktop{display:none}}`. A bare `display:none` declared after the desktop `@media (min-width)` block wins by source order, so it hides the element at every width. Verify by measuring the element's box at desktop width (0x0 means it is still hidden); a mobile-only check will not catch this.
 
 ### 8. Asynchronous Daemon Startup & Readiness Verification
 - Heavy service daemons (e.g. Node.js apps initializing SQLite schemas, cleaning stale headless Chrome sessions, or connecting messaging clients) do not bind ports instantaneously.
@@ -189,7 +191,18 @@ Full recipe (bundle patch + reference rewrite + 9Router dashboard-password flow)
   - When testing TMA headless in Puppeteer or Playwright, navigating to `http://127.0.0.1:<port>/tma/tools` causes the browser to send an origin of `http://127.0.0.1:<port>`, triggering HTTP 403 `Forbidden: Invalid or missing Origin header`.
   - Always execute headless browser verification against the canonical public domain (e.g. `https://<public_domain>/tma/tools`) with synthetic `window.Telegram.WebApp.initData` injection, or configure the testing harness to route through the approved origin.
 
-### 23. Disambiguating Public Homepage vs Admin/Portal Login on Multi-Service Hosts
+### 23. Disambiguating and Re-Homing the Public Homepage on Multi-Service Hosts
+- **"Homepage" means the page the user lands on in their browser, not necessarily the file served at `/`.** If `curl /` returns a different page from the one the user describes, do not act on the curl result. Ask which headline they see, as a single question with options, and probe both the apex and `www` hosts (`dig +short <apex>; dig +short www.<apex>`, plus `curl -sv` on each). They can resolve to different servers, and one of them may fail TLS, so the user's landing page can come from a host you never probed. Report which hostname actually works.
+- **Recipe: make page X the homepage and turn the old root into a menu entry.**
+  1. Back up the server entrypoint, the old root page, and X's page.
+  2. Add `app.get('/', (req,res)=>res.redirect(302,'/x/'))` before `express.static`, because otherwise static serves `index.html` at `/` first. Use 302, not 301, so the change stays reversible without browsers caching a permanent redirect.
+  3. Copy the old root page to `/old/index.html`. Rewrite its relative asset refs to absolute paths (`js/a.js` becomes `/js/a.js`), because moving a page one directory deeper breaks them. Find the remaining ones with `grep -on '\(href\|src\)="[^"#/h][^"]*"'`.
+  4. Add a link to `/old/` in X's existing nav. Check the desktop nav and the mobile toggle menu, which usually share one list.
+  5. Run `node --check`, then restart the process that owns the port (see section 4).
+  6. Verify on the public host: `/` returns 302 to `/x/`, `/old/` and its assets return 200, and in a real browser at 1440 and 390 the menu click lands on `/old/` with the page laid out correctly.
+- Lift any earlier "not on /x/" constraint once the user clarifies that X is the homepage. Restore content you removed from X under the old reading (keep the backup for exactly this), and say so in the report.
+
+#### Homepage vs admin/portal login
 - **The Login-Redirect Trap on Domain Roots**: On hosts where multiple services coexist under one public domain (e.g. a public portfolio/showcase on port 3050 and an operational store/backend on port 3000):
   - Do NOT assume "halaman home / depan" is the admin login screen simply because one local port (e.g. :3000) responds with a 302 redirect to `/login`.
   - Check the active services across all ports (`pm2 list`, `ss -ltnp`) and search for existing public static assets or previous screenshots (`*_homepage_*.png`) before editing.

@@ -97,3 +97,24 @@ Resolve `<skill-dir>` from skill_view. The example is standalone and contains on
 Profile a representative interaction in DevTools Performance, inspect main-thread tasks, paint flashing, and layer composition. Prefer transform/opacity where appropriate, but verify actual paint/layout behavior. Use will-change only for a demonstrated need and remove unnecessary hints. Choose frame/layer budgets for target hardware and refresh rate; no fixed count guarantees speed.
 
 Report environment, method, actual results, and limitations. Headless is not inherently software-only, but this task's --disable-gpu functional run cannot prove physical GPU acceleration. Hardware FPS, thermal behavior, and field p75 INP/LCP/CLS remain NOT RUN without suitable device/RUM evidence. Microtasks/Promise.resolve do not yield to rendering; use an available scheduler.yield or a supported task-yield fallback for noncritical long work.
+
+## 7. Live mini-demos on static showcase pages (case studies, portfolios)
+
+Use when a static page must prove a system works (dashboard, CMS, ERP) with an interactive in-browser demo and no backend.
+
+**Build order**
+1. Shared shell first: copy the parent site's tokens (colors, ease, radius, padding, self-hosted fonts) into one shared CSS + one shared JS for the section; each case study page adds only its own `demo.js`. Never fork tokens per page.
+2. One demo per file: IIFE + `'use strict'`, no globals except an explicit test hook.
+3. Seeded PRNG (e.g. `mulberry32(seed)`) for all synthetic data: the same seed gives the same initial state, so screenshots and assertions are reproducible. Data stays neutral synthetic (`mock-data-governance`).
+4. DOM safety: dynamic values only via `textContent`/`createElement`; `innerHTML` only for a static skeleton, with a comment saying so.
+5. Lifecycle: tick only while an IntersectionObserver reports visible and `!document.hidden`; honor a shared reduced-motion flag (render a static snapshot, advance only on user action).
+6. Domain invariants (debit = credit, stock never negative, totals reconcile) recomputed after every action and shown in a visible panel. Expose `window.__<demo>Check()` returning per-rule pass/fail and support a `#selftest` hash that runs a scripted scenario, so verification asserts rules instead of eyeballing numbers.
+7. Bump the cache-buster (`?v=N`) on every page that loads a changed shared CSS/JS file; Cloudflare/immutable caching otherwise serves the old shell.
+8. Land navigation last: change homepage/index cards to point at new case studies only in the same batch that publishes the target pages, or curl every linked URL first. A trailing-slash route with no `index.html` answers 301/308 instead of 200, so a published card silently leads nowhere.
+9. Scroll-reveal and hover must not drive the same property on the same element: the reveal's inline/animated `transform`/`opacity` overrides or snaps the hover state. Put the reveal on an outer wrapper and the hover `transform` on an inner element (or clear reveal styles once the entrance ends), then re-test hover after the reveal has run.
+
+**Gate (once, then hand over)**
+- `node --check` on every `demo.js`; HTTP 200 on every page using its canonical trailing-slash URL.
+- Browser at 390 and 1440: horizontal overflow 0, console errors 0.
+- Click each control and assert the result changed (a ticking value differs after N ms; a spike button moves the metric and status), call the check hook, run `#selftest`, emulate reduced motion.
+- Capture screenshots of the real pages for the user.

@@ -60,7 +60,7 @@ description: "Use when creating interfaces. GPU-aware design system & UI."
 - **Delegation:** Partition by independent files; define explicit ownership and test contracts; merge only after verification.
 
 ## Reference Router
-- Practical recipes & patterns: `references/usage-recipes.md`
+- Practical recipes & patterns: `references/usage-recipes.md` (section 7: live mini-demos on static case-study pages, with seeded data, invariant check hooks, and a verification gate)
 - Dimensional composition & 2.5D case study: `references/dimensional-composition.md`
 - Source ledger & verified grounding matrix: `references/verified-sources.md`
 - Motion keyframing, DOM semantics & WebGPU contract: `references/motion-keyframe-webgpu.md`
