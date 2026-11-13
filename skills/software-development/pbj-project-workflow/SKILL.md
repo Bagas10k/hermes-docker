@@ -27,7 +27,8 @@ Operational, architectural, accounting, and UI engineering doctrine for the PBJ 
 
 ## 1. Database & Migration Invariants
 
-- **Engine Lockdown (MySQL 8.0)**: PBJ strictly targets MySQL 8.0.30 (`pbj_db` on Docker). Never test or migrate using SQLite or MariaDB syntax variations that produce engine-divergence bugs.
+- **Engine Lockdown**: Check the live engine before assuming: `docker inspect pbj_db --format '{{.Config.Image}}'` (observed 2026-11: `mariadb:11.4`, client binary `mariadb`). Rehearse on the same engine/version; never test with SQLite.
+- **Deploy = live migration**: `docker/entrypoint.sh` runs `php artisan migrate --force` when the app container starts with php-fpm. Rebuild/up of `pbj_app` therefore mutates the live DB; compare `database/migrations` vs DB `migrations` table, back up the DB, and get Bagas's explicit OK first.
 - **Disposable Testing**: Always rehearse migrations and test regressions on a disposable target MySQL container before touching live state.
 - **Opening Balance Baseline**: When auditing initial balances (`saldo_awal`), first sum `saldo_awal` grouped by `saldo_normal`. Debit must equal Credit exactly before approving postings.
 - **Dropdown & Master Data Pipeline**: When dropdown data is reported missing, verify in order: master rows in DB → cached options/catalog → controller payload → view component inclusion.
@@ -37,6 +38,7 @@ Operational, architectural, accounting, and UI engineering doctrine for the PBJ 
 - **Target Worktree**: PBJ lives at `/home/ubuntu/website-pbj`. Inspect active branch and remote divergence before editing.
 - **Dedicated Exploration**: Use branch `sandbox` tracked to `origin/sandbox`. Never commit exploratory experiments or unapproved refactors directly to `main`.
 - **Collaborator Review**: Run `git fetch origin` before assuming branch spelling or existence. Inspect diffs via three-way merge preview before merging collaborator work.
+- **Hard sync to remote** ("harus sama dengan kode baru"): back up local-only commits to a `backup/...` branch first, then `git reset --hard origin/sandbox`. `storage/` and `bootstrap/cache/` are owned by uid 82 (container www-data), so reset fails with `unable to unlink ... Permission denied`; wrap it in `sudo chown -R ubuntu:ubuntu storage bootstrap/cache` before and `sudo chown -R 82:82 ...` after. Git 2.34 lacks `merge-tree --write-tree`; preview conflicts with `git worktree add --detach` and `merge --no-commit`.
 - **Publish Sandbox**: "Publish sandbox" means building and deploying to Bagas's public PBJ preview instance, NOT pushing untested code to production.
 
 ## 3. RBAC, Authentication & Security
