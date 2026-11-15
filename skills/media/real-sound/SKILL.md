@@ -157,6 +157,11 @@ Levels: -14 LUFS, true peak <= -1 dBTP after AAC, LRA 5-9 LU, the loudest moment
 8-20 dB under it, about 5 designed effects per 10 s, effects dry and centred. Measured norms and the cheap tells:
 `references/sound-design.md`.
 
+A user's stated taste overrides this table's restraint defaults. Example: a user who calls the mix "monotonous" wants
+more voice variety and audible zoom/glow cues, not fewer effects. Record the preference in the project's own video
+skill and follow it there. Before reaching for new recordings, count how often each sample is used in the design
+(one voice repeated 30x reads as monotony) and report the count as the diagnosis.
+
 ## Tools
 
 | need | tool |

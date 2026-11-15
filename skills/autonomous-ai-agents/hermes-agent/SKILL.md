@@ -113,6 +113,7 @@ Profiles use `~/.hermes/profiles/<name>/` with the same layout. When a profile i
 | Connecting a messaging platform (Telegram, Discord, Slack, WhatsApp, …) | docs: `/user-guide/messaging` |
 | Same-host profiles, gateway multiplexing, or Bot-to-Bot collaboration | `references/multi-profile-gateways-bot-mode.md` + docs: `/user-guide/bot-mode` |
 | Backup, clone (kloning), or migrate this install, and ship the archive to a chat | `references/backup-and-clone.md` |
+| Recover something "we built before" from vault notes, session history or `state.db` | `references/session-history-forensics.md` |
 
 The reference list above is not the feature list — it is the set of topics that
 need more than their docs page. For everything else Hermes ships, fetch

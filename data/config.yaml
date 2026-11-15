@@ -282,6 +282,50 @@ custom_providers:
       cc/claude-sonnet-5-5: {}
       cc/claude-sonnet-5: {}
       cc/claude-haiku-4-5-20251001: {}
+      ag/gemini-4-argon-high: {}
+      ag/gemini-3.8-flash-high: {}
+      ag/gemini-3.8-flash-medium: {}
+      ag/gemini-3.8-flash-low: {}
+      ag/gemini-3.8-flash: {}
+      ag/gemini-3.7-flash-high: {}
+      ag/gemini-3.7-flash-medium: {}
+      ag/gemini-3.7-flash-low: {}
+      ag/gemini-3.6-flash-high: {}
+      ag/gemini-3.6-flash-medium: {}
+      ag/gemini-3.6-flash-low: {}
+      ag/gemini-3.1-pro-high: {}
+      ag/gemini-pro-agent: {}
+      ag/gemini-3.1-pro-low: {}
+      ag/claude-sonnet-5-5-high: {}
+      ag/claude-sonnet-5-5-medium: {}
+      ag/claude-sonnet-5-5-low: {}
+      ag/claude-sonnet-5-5: {}
+      ag/claude-opus-5-5-high: {}
+      ag/claude-opus-5-5-medium: {}
+      ag/claude-opus-5-5-low: {}
+      ag/claude-opus-5-5: {}
+      ag/claude-sonnet-4-6: {}
+      ag/claude-opus-4-6-thinking: {}
+      ag/gpt-oss-120b-medium: {}
+      cx/gpt-6.1-sol: {}
+      cx/gpt-6-astra: {}
+      cx/gpt-6-astra[1m]: {}
+      cx/gpt-6-sol: {}
+      cx/gpt-6-sol[1m]: {}
+      cx/gpt-6-luna: {}
+      cx/gpt-6-luna[1m]: {}
+      cx/gpt-5.6-sol: {}
+      cx/gpt-5.6-sol[1m]: {}
+      cx/gpt-5.6-sol-review: {}
+      cx/gpt-5.6-terra: {}
+      cx/gpt-5.6-terra[1m]: {}
+      cx/gpt-5.6-terra-review: {}
+      cx/gpt-5.6-luna: {}
+      cx/gpt-5.6-luna[1m]: {}
+      cx/gpt-5.6-luna-review: {}
+      cx/gpt-daybreak-blue-latest: {}
+      cx/gpt-reserve: {}
+      cx/codex-auto-review: {}
     models_discovered: true
     name: lk
 group_sessions_per_user: true

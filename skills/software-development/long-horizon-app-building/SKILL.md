@@ -60,6 +60,7 @@ Orchestrate long-horizon milestones through Hermes tools:
    - Translate the user's reference product into the primary user journey and acceptance check (e.g. online music discovery → licensed catalog result → playable audio), plus secondary features. Separate feasibility questions from the user's actual requirement.
    - Probe upstream data/API rights, terms, uptime, browser support, and media playback early. If the defining journey cannot be implemented responsibly, explain the blocker and ask permission for a changed scope before building a materially different product. A local-file player is not a substitute for an online-streaming player.
    - If the user has named a visual vibe, carry it through the functional phase; do not ask for it again.
+   - If the user has had a similar product before (an earlier monitor or dashboard), find its design note or session history first. Use its look, metrics and update rate as the default contract instead of a blank wireframe. The vibe checkpoint then confirms "same as before?" rather than offering a fresh menu.
 
 2. **Establish Build Documentation and Persistent Tracker:**
    Follow `project-build-documentation`: read existing docs first, reuse their canonical entry points, and keep setup/build/test/architecture notes accurate as the implementation changes. Do not create duplicate or ceremonial docs. Never rely solely on volatile conversational context. Write a persistent plan:

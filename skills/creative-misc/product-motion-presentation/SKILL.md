@@ -22,6 +22,47 @@ description: Use when making Bagas's product promo or showcase videos.
 - Musik hanya dipakai jika lisensi komersialnya jelas (misal CC BY). Tulis atribusinya di caption dengan format `Musik: <judul> – <artis> (<lisensi>)`. Tanpa lisensi jelas, jangan pakai musik itu.
 - Aksen brand yang terang/neon (misal lime) hanya untuk isi pil, label, atau tombol, dengan tinta gelap di atasnya. Jangan dipakai sebagai warna teks di latar terang, karena kontrasnya jatuh jauh di bawah 7:1.
 - Video lama yang akan diganti dibiarkan utuh di foldernya. Buat proyek baru (`<proyek>-v2`), jangan menimpa.
+- Jangan menulis nama atau tautan berkas `.png`/`.mp4` di chat sebelum berkas itu benar-benar ada di folder publik. Chat Bagas merender tautan menjadi kartu pratinjau, dan kartu itu error bila berkasnya belum ada.
+- Setelah storyboard ACC dan Bagas bilang "lanjut"/"gas", jangan minta konfirmasi lagi. Kerjakan sampai draf terbit, dan pakai sub-agent bila diminta.
+- Jika pesan Bagas terpotong, tanyakan bagian yang hilang di laporan yang sama dan masukkan sebelum render berikutnya. Jangan menebak isinya.
+
+## Standar gerak & suara minimum (berlaku untuk setiap draf)
+
+Bagas menolak draf yang "bagus tapi datar". Kelima hal ini wajib ada sejak draf pertama, bukan baru ditambahkan setelah ia mengeluh:
+
+- **Video tidak pernah diam, tapi tidak goyang.** Gambar yang beku ≥ 0,4 detik dihitung cacat, dan frame 0 sudah berisi gambar tanpa pembuka hitam. Isi "tidak diam" dengan rantai aksi bermakna yang saling tumpang tindih (aksi berikut mulai 0,1–0,2 dtk sebelum aksi sebelumnya selesai), detail kecil yang hidup (kursor, ketikan, angka, indikator), atau satu push kamera searah saat hold baca. Jangan menumpuk drift/rig/zoom kamera yang bolak-balik: transform gabungannya membuat skala naik-turun dan pusat bingkai meloncat, sehingga terbaca sebagai goyangan buatan mesin dan menjatuhkan nilai kerapian.
+- **Zoom masuk-keluar yang tegas** di momen kunci: klik, angka penting, ganti perangkat atau adegan. Push halus 3–10% saja belum dihitung sebagai zoom. Zoom tidak boleh memotong elemen penting (tombol, label, stiker, perangkat) di tepi frame; snapshot setiap adegan di detik puncak zoom-nya, karena zoom yang ditambahkan belakangan sering mendorong elemen tepi yang tadinya aman keluar layar.
+- **Glow aksen** (misalnya lime) pada tombol aktif, angka kunci, kartu aktif, dan logo, dengan denyut halus yang digerakkan timeline. Glow hanya menegaskan elemen, tidak menggantikan kontras teks ≥ 7:1.
+- **SFX bervariasi.** Pakai satu suara untuk tiap jenis aksi (klik, kartu muncul, angka mengunci, zoom, kilau/glow, transisi, logo), dan jangan biarkan satu suara mendominasi. Patokannya: suara yang sama dipakai paling banyak sekitar 8 kali per 60 detik. Setiap zoom diberi suara zoom dan logo diberi dentuman. Preferensi ini menggantikan batas "~2 swish per film" di skill `real-sound`. Aturan "satu suara klik untuk satu film" tetap berlaku untuk aksi klik. SFX baru dipotong bagian sunyi di awalnya (supaya bunyinya jatuh tepat di aksi) dan disamakan kerasnya sebelum dipakai.
+- **Rapi = semua item storyboard ACC muncul.** Sebelum render, cocokkan storyboard dengan isi tiap adegan satu per satu, termasuk baris tabel, label, dan posisi kursor.
+
+## Kerapian & kehalusan gerak (wajib, dinilai Bagas)
+
+Draf yang lolos checklist isi tetap dinilai rendah bila geraknya patah atau tata letaknya berantakan. Tabel ease, aturan kamera, checklist tata letak, dan perintah QC ada di `references/keyframe-craft.md`; sintaks GSAP keyframes/CustomEase ada di skill `gsap`.
+
+- Gerak multi-tahap pada satu elemen ditulis sebagai satu tween `keyframes` (persen + `easeEach`), bukan rangkaian `tl.to` terpisah, karena sambungan antar-tween memutus kecepatan sehingga gerak tampak patah.
+- Ease dipilih menurut peran (masuk, keluar, pop, kamera, kursor, angka, denyut glow), bukan satu ease untuk semua. Keluar 40–50% lebih singkat dari masuk; pop maksimal `back.out(1.7)`; ease di sambungan dicerminkan (`power3.in` keluar → `power3.out` masuk).
+- Satu track kamera per adegan pada satu wrapper, dan setiap gerak kamera punya sebab (klik, angka, reveal, ganti adegan).
+- Satu fokus per momen: maksimal dua elemen besar bergerak bersamaan. Setiap elemen yang masuk punya animasi keluar atau bertahan sampai cut; tidak ada elemen yang muncul/hilang dalam 1 frame.
+- Tata letak: margin aman dan posisi judul tetap antar-adegan, ukuran perangkat konsisten antar-adegan berurutan kecuali zoom disengaja, komposisi mengisi sebagian besar frame, label sejajar, stiker tersebar di luar fokus tanpa menutupi bezel/label dan tetap di dalam safe area saat zoom puncak.
+- Sebelum menulis JS adegan, tulis lembar keyframe (satu baris per elemen bergerak: detik lokal, keadaan, ease, sebab). Generator menulis detik dan durasi sebagai angka literal, karena analyzer HyperFrames tidak bisa membaca posisi berupa variabel atau loop dan tween itu lolos dari QC.
+- Sebelum render, jalankan `hyperframes keyframes --json` per adegan lalu `scripts/kf_qc.py <json> --png lanes.png --strict`. Laporkan vonis dan grafik lajurnya bersama pengukuran momen diam. Baseline r7 (3/10): 11 dari 11 adegan gagal.
+- Sebelum membangun efek atau adegan dari nol, cek peta kemampuan: `references/hyperframes-capability-map.md` (blok registry, perintah CLI per tahap) dan `gsap/references/video-capability-map.md` (plugin GSAP yang aman untuk render beserta resepnya).
+
+## Revisi dari keluhan draf
+
+0. Bila Bagas memberi nilai rendah dan meminta skill di-upgrade dulu, patch skill (aturan + perintah QC) sebelum menyentuh video. Untuk ronde revisi apa pun, tulis artefak pertama (patch skill, brief worker, atau `rN_fx.py`) paling lambat sekitar 8 tool call setelah permintaan; riset berikutnya menyempurnakan berkas yang sudah tertulis. Giliran yang habis di diagnosis berakhir dengan nol perubahan.
+1. Ukur render lama sebelum mengedit, dan ubah setiap keluhan menjadi angka. Untuk keluhan "kurang halus/rapi", tambahkan distribusi ease, overlap properti, dan jumlah lapis kamera dari `hyperframes keyframes --json` (lihat `references/keyframe-craft.md`). Momen diam per adegan dideteksi dengan perbedaan antar-frame (skrip `build/qc_motion.py` di proyek, atau alternatifnya filter ffmpeg `freezedetect` dengan d=0.4). Hitung pemakaian tiap suara dari daftar `AUDIO`, catat zoom dan glow apa saja yang sudah ada per adegan, lalu buat checklist storyboard → adegan. Laporkan angka-angka ini ke Bagas sebagai diagnosis, karena angka lebih jujur daripada "sudah diperbaiki".
+2. Tetapkan syarat lulus yang jelas ya/tidak-nya: 0 momen diam, suara terbanyak ≤ sekitar 8 kali, setiap adegan punya ≥ 1 zoom tegas, ada glow di CTA/angka/logo, dan checklist storyboard 100%.
+3. Pisahkan pekerjaan isi adegan dari efek global. Penjelasannya ada di `references/scene-generator-delegation.md` bagian "Ronde revisi".
+4. Jalankan lagi pengukuran yang sama pada render baru sebelum publish, dan tulis hasilnya di laporan.
+
+## Membangun film baru dari storyboard ACC (banyak adegan)
+
+Pola: generator Python milik mandor + satu berkas adegan per worker + pratinjau terisolasi di scratch. Detailnya ada di `references/scene-generator-delegation.md` (struktur berkas, kontrak `SC`/`AUDIO`, urutan kerja, aturan penulisan adegan untuk brief).
+
+- Kirim worker paling lambat sekitar 5 langkah setelah "lanjut". Jangan membaca ulang storyboard penuh, dokumentasi skill, atau inventaris aset di konteks mandor. Tulis brief yang menunjuk rentang baris storyboard dan path dokumentasi, lalu biarkan worker yang membacanya. Discovery di konteks mandor menghabiskan jatah iterasi, sehingga giliran berakhir tanpa satu worker pun terkirim.
+- Buktikan pipeline generator dengan satu adegan contoh (lint 0 error + satu snapshot dilihat) sebelum dispatch. Brief yang menunjuk contoh berformat salah akan menggandakan kesalahan ke semua worker.
 
 ## Revisi gaya (restyle) film yang sudah ada
 
@@ -35,5 +76,8 @@ Urutannya:
 6. Mandor menjalankan `hyperframes check` dan snapshot per scene atas hasil gabungan, baru render draf.
 
 Pitfall verifikasi visual:
+- `check`/`snapshot` di root proyek mengaudit `index.html` yang sedang terpasang. Sebelum generator menulis ulang `compositions/` dan `index.html`, yang teraudit masih revisi lama. Laporkan hasil itu sebagai "revisi lama", jangan sebagai bukti revisi baru.
+- Perkecil contact sheet sebelum dikirim ke vision (`ffmpeg -i sheet.png -vf scale=1440:-1 sheet_s.jpg`); PNG berukuran MB sering time out, sedangkan JPG ±100 KB lolos. Pakai crop region beresolusi penuh hanya untuk detail kecil.
 - Cek elemen kecil yang ditumpuk (pil miring di atas teks, stiker di tepi kartu) dengan crop region beresolusi penuh. Contact sheet menyembunyikan tumpang tindih tipis yang memotong huruf tinggi (f terbaca t).
+- Bila vision menandai elemen miring, setengah tampak, atau salah posisi, petakan detik absolut ke detik lokal adegan dan cek di JS apakah ada tween yang sedang aktif pada elemen itu. Frame di tengah animasi masuk bukan bug. Snapshot ulang setelah tween selesai untuk membedakan elemen yang macet dari elemen yang sedang bergerak, sebelum memperbaiki atau melaporkannya.
 - Baca vonis vision secara harfiah. "Masih bisa ditebak tapi terpotong" berarti GAGAL. Perbaiki dan snapshot ulang sebelum melaporkan "bersih" ke Bagas. Melaporkan bersih sebelum vonis lolos adalah overclaim.

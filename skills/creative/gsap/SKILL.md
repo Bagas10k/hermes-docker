@@ -1,3 +1,7 @@
+---
+name: gsap
+description: Use when animating with GSAP for UI morph or video.
+---
 # GSAP (GreenSock Animation Platform) — Arsitektur Standar Morphing UI/UX
 
 Skill ini adalah **panduan baku penerapan animasi morphing 60 FPS** menggunakan ekosistem GSAP 3.15 (Flip, MorphSVG, Timeline) sesuai mandat resmi Mas Bagas.
@@ -101,3 +105,36 @@ Semua implementasi GSAP wajib memenuhi kriteria:
 2. **Motion Lifecycle:** Enter (280ms stagger fade-in), Loop (denyut halus), Exit (akselerasi sigap).
 3. **Anti-Berkedip Putih (SPA Seamless Swap):** Seluruh transisi filter dan tab di web dipadukan dengan GSAP crossfade tanpa me-reload browser.
 4. **Mobile Optimization:** Gunakan `will-change: transform` dan hindari animasi `top/left/width/height` mentah yang memicu CPU reflow.
+
+---
+
+## 6. Timeline video & keyframes (render deterministik, misal HyperFrames)
+
+Video dirender frame demi frame dari `gsap.timeline({paused:true})`, jadi semua yang tampak harus fungsi waktu timeline: tanpa `repeat:-1`, `Math.random()` tanpa seed, `Date`, timer, atau CSS transition. Craft gerak dan QC video ada di skill `product-motion-presentation` (berkas referensi keyframe-craft di skill itu). Daftar plugin yang aman/tidak aman untuk render, beserta resep kamera, kartu, kursor, angka, dan stagger yang sudah diuji, ada di `references/video-capability-map.md`.
+
+**Tiga bentuk keyframes (GSAP ≥ 3.9) dan ease bawaannya:**
+
+| Bentuk | Contoh | Ease per segmen bawaan |
+| --- | --- | --- |
+| Persen | `keyframes:{'0%':{x:0}, '60%':{x:120, ease:'expo.out'}, '100%':{x:140}, easeEach:'power2.inOut'}` + `duration` di tween | `power1.inOut` |
+| Array nilai | `keyframes:{x:[0,120,140], y:[0,-20,0], easeEach:'sine.inOut'}` (nilai dibagi rata, panjang array boleh beda) | `power1.inOut` |
+| Array objek | `keyframes:[{x:120, duration:0.4, ease:'expo.out'}, {x:140, duration:0.8}]` (tiap keyframe punya durasi/`delay` sendiri) | linear |
+
+- `easeEach` ditulis di dalam objek `keyframes`; `ease` per keyframe menimpa `easeEach` untuk segmen itu.
+- `ease` di level tween membengkokkan seluruh blok. Tulis `ease:'none'` secara eksplisit bila ingin hanya ease segmen yang membentuk kurva.
+- Gerak multi-tahap satu elemen = satu tween keyframes, bukan rangkaian `tl.to` terpisah, agar kecepatan tidak patah di sambungan.
+- Di sambungan dua gerak, cerminkan ease (`power3.in` → `power3.out`) supaya kecepatan sama di kedua sisi.
+
+**CustomEase (kurva cubic-bezier bernama):**
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/CustomEase.min.js"></script>
+<script>
+  gsap.registerPlugin(CustomEase);
+  CustomEase.create('ui', '0.16,1,0.3,1');   // juga menerima path SVG
+</script>
+```
+
+- Versi plugin harus sama dengan `gsap.min.js`. Paket hyperframes membawa salinan lokal (`dist/vendor/npm/gsap@<ver>/dist/CustomEase.min.js`, `MotionPathPlugin.min.js`); cari dengan `find ~/.npm/_npx -name CustomEase.min.js`.
+- Di HyperFrames setiap komposisi punya skrip sendiri: register di helper bersama generator agar semua adegan memuatnya, lalu buktikan dengan lint + snapshot satu adegan sebelum dipakai massal.
