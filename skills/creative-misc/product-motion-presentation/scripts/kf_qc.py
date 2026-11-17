@@ -54,6 +54,8 @@ def analyse(d):
         props = set()
         for k in t.get('keyframes') or []:
             props |= set(k.get('properties') or {})
+        if str(t['target']).startswith('proxy'):
+            continue  # tiap count() = objek {v} sendiri; analyzer melabeli semuanya sama
         for p in props:
             by[(str(t['target']), p)].append(t)
     overlaps, joins = [], []

@@ -117,6 +117,9 @@ display:
   tool_progress: all
   tui_compact: true
   interface: cli
+  message_reactions: false
+  in_app_tips: false
+  in_app_tours: false
 dashboard:
   theme: midnight
   basic_auth:
@@ -165,6 +168,9 @@ skills:
     - autonomous-orchestrator
     - advanced-gpu-aware-design-system
   creation_nudge_interval: 15
+  disabled:
+    - sputarai-archived-v2
+    - ponytail
 timezone: Asia/Jakarta
 approvals:
   mode: 'smart'
@@ -175,7 +181,6 @@ plugins:
     - autonomous-orchestrator
     - disk-cleanup
     - flash-review
-    - ponytail
     - rtk-rewrite
     - security-guidance
     - skill-retriever
