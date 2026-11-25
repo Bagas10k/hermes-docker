@@ -34,8 +34,8 @@ Mode: forum/thread = sekuensial bergantian agar konteks utuh dan tanpa race cond
 - Sub-agent mewarisi model induk (`delegation.model/provider` kosong); profil `~/.hermes/profiles/<nama>/` bukan sub-agent. Sebut nama model hanya setelah satu `curl` nyata ke endpoint provider. QC idealnya model beda keluarga; ganti model QC hanya setelah diuji nyata.
 
 ## Setelah child selesai
-- Laporan diri bukan bukti: periksa status runtime, exit reason, diff, output mentah; jalankan tes integrasi/regresi pada hasil gabungan. Hasil `max_iterations`, `interrupted`, atau tes gagal = parsial. Bila gagal, bedakan cacat implementasi dari fixture dan karantina hunk worker yang bermasalah saja; jangan revert/reset seluruh berkas di worktree kotor.
-- Mode background: kerjakan jalur independen lalu akhiri giliran; jangan polling transcript.
+- Laporan diri bukan bukti: periksa status runtime, exit reason, diff, output mentah; jalankan tes integrasi/regresi pada hasil gabungan. Pengawas menyetor bukti independen terhadap kriteria lulus yang disepakati. Jika bukti menunjukkan kriteria rilis gagal, jangan rilis atau beri status `SELESAI`; Mandor menindaklanjuti temuan tanpa mengulang putaran QC tanpa alasan baru. Hasil `max_iterations`, `interrupted`, atau tes gagal = parsial. Bila gagal, bedakan cacat implementasi dari fixture dan karantina hunk worker yang bermasalah saja; jangan revert/reset seluruh berkas di worktree kotor.
+- Mode background: kerjakan jalur independen, catat kriteria penerimaan yang masih terbuka dan tindakan induk yang menunggu hasil anak, lalu akhiri giliran dengan satu baris status sementara; jangan polling transcript. Saat hasil anak masuk, lanjutkan tindakan induk dan verifikasi artefak terhadap permintaan pengguna. Jangan jadikan cek tracker, staging, atau laporan anak sebagai laporan akhir — itu hanya checkpoint, bukan bukti deliverable.
 - Layanan persisten diluncurkan Mandor (`pm2 start <script> --name <n> --cwd <dir>` + `pm2 save`, atau systemd) lalu cek listener (`ss -ltnp`); proses latar child mati bersama child.
 - Child gagal karena provider: baca `~/.hermes/cache/delegation/live/<deleg_id>/task-N.log`; untuk 429/503 jangan kirim ulang ke model yang sama — ambil alih atau pecah tugas.
 - Notifikasi `bot_mode_dm.py` terpotong padahal exit 0: baca receipt `<target_profile_home>/runtime/bot_live_delivery/<delivery_id>.json` (field `reply`, status `settled`).
@@ -47,7 +47,7 @@ Tiap pulse multi-langkah, bahasa awam: `STATUS: SEDANG BEKERJA | SELESAI | TERBL
 - "gimana"/"lanjut" = minta pulse enam field dari status nyata (path, PID, port, tes terakhir).
 - Hemat anggaran iterasi: gabungkan discovery (port, pm2, ingress, routing) dalam sedikit perintah; kirim pulse sebelum anggaran habis.
 - Bila diminta melihat kerja live, tampilkan artefak nyata (alat aktif, file/perintah, diff, exit status, lifecycle sub-agent); format rapi bukan pengganti observabilitas.
-- Telegram: status armada (jumlah pekerja, peran, sasaran) diperbarui in-place (`edit_message`, jeda >= 1,5 s); cek armada via `/agents` atau `/tasks`.
+- Saat delegasi dimulai dan ketika status pekerja berubah, tampilkan kartu `[Status Armada Sub-Agent]`: jumlah pekerja nyata, generasi Anak/Cucu, peran, sasaran, serta tindakan atau hasil tiap pekerja. Tandai pekerja aktif setelah dispatch terkonfirmasi; jangan menghitung Cucu yang belum dibuat. Telegram: perbarui in-place (`edit_message`, jeda >= 1,5 s); cek armada via `/agents` atau `/tasks`.
 
 ## Runtime & konfigurasi
 - Health check pilar: `/home/ubuntu/check-5pilar.sh` atau `./check.sh` di root pilar (`website-pbj`, `kasir-bangunan-app`, `dasbor-jajan-digital`, `sputarball`).

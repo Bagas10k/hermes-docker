@@ -56,6 +56,18 @@ Full recipe (bundle patch + reference rewrite + 9Router dashboard-password flow)
   - System daemon tunnels (e.g., Windows Service `Cloudflared` bound to production endpoints like port 3000) must remain undisturbed.
   - Temporary exploratory dashboards or high-frequency telemetry tools should not spawn multiple individual ad-hoc tunnels that exhaust memory and scatter URLs.
 - **Unified Gateway Pattern**: Combine multiple internal micro-services (e.g., telemetry at 8090, briefing at 8095, design vault at 8085) behind a single reverse proxy gateway (port 8080) routed by URL path prefix (`/telemetry/`, `/briefing/`, `/apex/`), exposed via one single Cloudflare tunnel.
+- **Fast 3-Step Public URL Discovery for Proxied Internal Services**:
+  When locating the public URL of an internal background daemon (telemetry monitor, admin tool, private dashboard):
+  1. *Step 1 (Port & Process Identification)*: Find the target daemon's listening port via `ss -ltnp` or `pm2 list` (e.g., `vps-monitor` listening on `127.0.0.1:3091`).
+  2. *Step 2 (Trace Gateway Mount)*: Locate the public origin gateway process (e.g., Express server on port 3050 receiving Cloudflare Tunnel ingress). Grep the gateway codebase for the internal port (`grep -rn '3091' <gateway_dir>/`) to extract the exact path mount (e.g., `/monitor/`). Never waste tool turns grepping bash history, searching binary folders, or guessing random paths.
+  3. *Step 3 (Verify Auth Gate & Public URL)*: Probe the public URL with `curl -sI https://<domain>/<prefix>/`. If wrapped by auth middleware (e.g., 302 redirect to `/koper/`), document the required login gate and verify if real-time streaming subpaths (e.g., `/monitor/tick` SSE) bypass auth. Check for local CLI/TUI alternatives (e.g., `server-monitor`) for zero-browser SSH monitoring.
+- **Retrieving and Verifying Existing Portal Credentials for the Owner**:
+  When the owner requests credentials (username/password) for an internal service or auth gateway:
+  1. *Trace Secret Location from Auth Middleware*: Inspect the gateway route/middleware (e.g., `koper-auth.js` -> `~/.chronicle-secrets/koper-auth.json`, or `.9router/dashboard-password.txt`) to determine the storage format (plaintext secret file vs one-way hash).
+  2. *Reconstruct Provenance for Hashed Secrets*: If credentials are stored as a one-way cryptographic hash (e.g. scrypt/argon2/bcrypt with salt), do not guess blindly against live login endpoints or prematurely demand a disruptive reset. Search provisioning records or session history (`session_search`) using the secret filename or setup context.
+  3. *Offline Cryptographic Verification*: Always verify the discovered candidate credential against the stored salt and hash offline (e.g. Node.js `crypto.timingSafeEqual(crypto.scryptSync(candidate, salt, 32), storedHash)`) before providing it to the user. This proves correctness empirically without consuming login rate-limit attempts or triggering brute-force lockouts (e.g., 5-failure lockouts).
+- **Pitfall: Remotely-Managed Cloudflare Tunnels Lack Ingress YAMLs**:
+  - Cloudflare Tunnels managed via Cloudflare Zero Trust Dashboard store ingress routing in Cloudflare's edge, not in local `~/.cloudflared/*.yaml` files. Grepping `~/.cloudflared` for service paths is a guaranteed dead end that wastes tool budget; always trace routing directly through the local reverse proxy code.
 - **Ad-Hoc Local Service Public Exposure via Cloudflare Quick Tunnels**:
   - When exposing an isolated local backend running on loopback (e.g. Next.js/custom daemon on port 20128):
     1. Inspect running `cloudflared.exe` instances and their local metrics ports (`127.0.0.1:20241..20245`).

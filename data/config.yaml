@@ -274,19 +274,9 @@ custom_providers:
       gemini/gemini-3-flash-preview: {}
       gemini/gemma-4-31b-it: {}
       mmf/mimo-auto: {}
-      oc/muse-spark-1.2-contributor-free: {}
-      oc/muse-spark-1.3-contributor-free: {}
-      oc/union-alpha: {}
       oc/jev-1.13-free: {}
       deepseek-1017-rr: {}
       free: {}
-      cc/claude-opus-5-5: {}
-      cc/claude-opus-5: {}
-      cc/claude-fable-5-1: {}
-      cc/claude-fable-5: {}
-      cc/claude-sonnet-5-5: {}
-      cc/claude-sonnet-5: {}
-      cc/claude-haiku-4-5-20251001: {}
       ag/gemini-4-argon-high: {}
       ag/gemini-3.8-flash-high: {}
       ag/gemini-3.8-flash-medium: {}
@@ -331,6 +321,41 @@ custom_providers:
       cx/gpt-daybreak-blue-latest: {}
       cx/gpt-reserve: {}
       cx/codex-auto-review: {}
+      ag/gemini-4-hydrogen-xhigh: {}
+      ag/gemini-4-hydrogen-high: {}
+      ag/gemini-4-hydrogen-medium: {}
+      ag/gemini-4-hydrogen-low: {}
+      ag/gemini-4-hydrogen: {}
+      ag/gemini-4-carbon-high: {}
+      ag/gemini-4-carbon-medium: {}
+      ag/gemini-4-carbon-low: {}
+      ag/gemini-4-carbon: {}
+      ag/gemini-4-argon-medium: {}
+      ag/gemini-4-argon-low: {}
+      ag/gemini-4-argon: {}
+      ag/gemini-4-neon-xhigh: {}
+      ag/gemini-4-neon-high: {}
+      ag/gemini-4-neon-medium: {}
+      ag/gemini-4-neon-low: {}
+      ag/gemini-4-neon: {}
+      ag/claude-sonnet-5-5-max: {}
+      ag/claude-opus-5-5-max: {}
+      cx/gpt-6.2-sol: {}
+      cx/gpt-6.2-sol[1m]: {}
+      cx/gpt-6.2-astra: {}
+      cx/gpt-6.2-astra[1m]: {}
+      cx/gpt-6.1-terra: {}
+      gemini/gemini-4-hydrogen: {}
+      oc/big-pickle: {}
+      oc/mimo-v2.6-flash-free: {}
+      oc/deepseek-v4.1-flash-free: {}
+      oc/iceman-free: {}
+      oc/beam-free: {}
+      oc/flint-40b-free: {}
+      oc/nemotron-3.5-super-vl-free: {}
+      oc/nemotron-3.5-lightning-free: {}
+      oc/hy4-flash-free: {}
+      oc/tidepool-alpha-free: {}
     models_discovered: true
     name: lk
 group_sessions_per_user: true
@@ -541,7 +566,7 @@ mcp_servers:
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
     args:
       - /home/ubuntu/mcp-canvas-inspector/server.py
-    enabled: true
+    enabled: false
   liquid-glass:
     command: /home/ubuntu/.hermes/hermes-agent/venv/bin/python
     args:

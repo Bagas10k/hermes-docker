@@ -57,6 +57,7 @@ Periksa endpoint ready secara langsung:
 - **Token Expose di Process Table**: Jangan melewatkan token mentah via argumen CLI `--token`. Gunakan `--token-file` agar token aman dari inspeksi `ps aux`.
 - **Missing Metrics Flag**: Jika flag `--metrics` tidak disertakan saat daemon start, probing lokal via port 20241 akan gagal (Connection Refused).
 - **QUIC UDP Blackhole**: Jika provider jaringan memblokir UDP port 7844 keluar, tunnel beralih ke TCP fallback yang meningkatkan tail-latency.
+- **Remotely-Managed Tunnels Lack Local Ingress Files**: Tunnel yang dijalankan dengan token (dashboard Cloudflare Zero Trust) tidak menyimpan konfigurasi ingress hostname/path di `~/.cloudflared/*.yaml`. Mencari rute di `~/.cloudflared` akan selalu kosong dan membuang anggaran iterasi. Lacak rute upstream langsung pada reverse proxy gateway lokal (Express/Nginx/Caddy) tempat tunnel bermuara.
 
 ## Verification
 

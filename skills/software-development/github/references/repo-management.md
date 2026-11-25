@@ -127,6 +127,15 @@ curl -s -X POST \
   -d '{"name": "my-new-project", "private": false}'
 ```
 
+### Publishing an existing app with a README preview
+
+1. Check the active account (`gh api user --jq .login`), local repository root (`git rev-parse --show-toplevel`), and exact remote (`gh repo view "$OWNER/$REPO" --json nameWithOwner,isPrivate,defaultBranchRef,url`). Do not treat an auth error as an available name or infer authorization for public visibility. If the app is running in production and you are publishing a source snapshot, use separate staging so review and Git operations do not alter the running checkout.
+2. Stage an explicit allowlist: runnable source, manifests/lockfiles, static assets with notices, README, and reviewed documentation assets. Check `git diff --cached --name-only` and review the staged text for secrets, deployment paths and environment-specific config. Exclude real exports, logs and existing operational screenshots; private visibility is not a substitute for sanitizing the package. Do not assign an app license without authorization.
+3. Render the actual UI in a browser against isolated synthetic fixtures, including API responses or a local fixture stream for a live dashboard. Do not fetch live telemetry to populate a documentation image. Wait for populated widgets, inspect the captured PNG, and use a relative Markdown image such as `![Dashboard with synthetic data](docs/dashboard.png)`. Include runnable setup instructions and note any required access protection for operational data.
+4. Smoke-test the staged package in isolation and name what ran: syntax checks do not establish startup. Run `git diff --cached --check` and commit only the reviewed paths; if reusing history, review the commits being sent as well, because removed files can still be present in earlier commits.
+5. For a new private repo, run `gh repo create "$OWNER/$REPO" --private` without `--push`. Read `gh api "repos/$OWNER/$REPO" --jq '[.full_name, .private] | @tsv'` and require the exact owner/repo and `true` before adding the verified origin and pushing the intended branch. If using an existing remote, verify the same fields and inspect its branch before pushing; do not replace unrelated history.
+6. Read back identity, visibility and default branch, then compare `git rev-parse HEAD` with `gh api "repos/$OWNER/$REPO/commits/$BRANCH" --jq .sha`. Fetch `readme?ref=<sha>` and `contents/<image-path>?ref=<sha>` with the raw media type and compare both files with `cmp`. Check the expected image tag via the HTML media type, or verify visually in a browser if access is available. If a trailing metadata command fails, read back the remote rather than repeating creation or push.
+
 ### From a Template
 
 **With gh:**
