@@ -355,7 +355,7 @@ custom_providers:
       oc/nemotron-3.5-super-vl-free: {}
       oc/nemotron-3.5-lightning-free: {}
       oc/hy4-flash-free: {}
-      oc/tidepool-alpha-free: {}
+      oc/seaglass-alpha-free: {}
     models_discovered: true
     name: lk
 group_sessions_per_user: true

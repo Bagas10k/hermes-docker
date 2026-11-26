@@ -86,6 +86,7 @@ pm2 jlist | jq '.[] | {name: .name, status: .pm2_env.status, mem_mb: (.monit.mem
 - **Mass Restart Starvation**: Never run `pm2 restart all` blindly on production servers. Restart services individually to prevent memory spikes and connection dropouts.
 - **Log Disk Exhaustion**: Without `pm2-logrotate`, unhandled exceptions can generate gigabytes of log files in `~/.pm2/logs/`.
 - **Systemd Linger Inactive**: If linger is disabled, systemd user services terminate as soon as the user logs out.
+- **Stale In-Memory Code Trap**: Editing files on disk does not update running Node/Python daemons supervised by PM2. Before concluding a bug fix or patch failed, compare file modification time (`stat -c "%y" <file>`) against process start time (`ps -o lstart -p <pid>` or `pm2 describe <app>`). If `mtime > start_time`, the daemon is executing stale bytecode in memory and must be restarted individually.
 
 ## Verification
 
