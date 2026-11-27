@@ -1,18 +1,18 @@
 ---
 name: web-agent-chat-runtime
 description: Use when building or fixing web chat AI agent interfaces.
-version: 0.2.0
+version: 0.3.0
 author: Bagas Cihuy & Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
-    tags: [web-chat, agents, prompt-engineering, ui-ux, claude-style, runtime]
+    tags: [web-chat, agents, prompt-engineering, ui-ux, claude-style, runtime, whatsapp, messaging-bridge]
 ---
 
 # Web Agent Chat Runtime
 
-Bidirectional web chat interfaces, prompt studios, and streaming runtimes for autonomous AI agents.
+Bidirectional web chat interfaces, prompt studios, streaming runtimes, and messaging bridges (WhatsApp, Telegram, Web) for autonomous AI agents.
 
 ## Chat-First Delivery Rules
 
@@ -22,6 +22,7 @@ Bidirectional web chat interfaces, prompt studios, and streaming runtimes for au
 4. **Contract Freeze**: Freeze session/room ownership and SSE event contract before building UI.
 5. **Real Evidence Only**: Prove real tool turns, subagent delegation traces, approvals, and reconnects. Exclude raw private credentials.
 6. **Zero Slop UI**: Serene empty state, Apple SF Symbols line icons (no emojis in UI), cardless unboxed assistant responses, continuous squircle corners.
+7. **Structured Output No-Leak Guarantee**: Never allow internal schema metadata (`show_node`, `intent`), raw JSON syntax, or unescaped control characters to leak into user-facing chat interfaces. Enforce dual-layer parsing and transport-level egress guards.
 
 ## Supporting References
 - `references/full-procedure-guide.md`: Unabridged step-by-step engineering procedure.
@@ -29,7 +30,7 @@ Bidirectional web chat interfaces, prompt studios, and streaming runtimes for au
 - `references/sse-resilience-and-claude-reasoning.md`: SSE handshakes, heartbeats, auto-retry, Claude XML partitioning, rAF 60 FPS streaming queue.
 - `references/architecture-recipe.md`: Deep architectural recipe, database schemas, and state transitions.
 - `references/chat-first-project-rooms.md`: Multi-agent room access control and state isolation.
-- `references/chat-bridge-json-resilience.md`: Messaging bridge adapters (Telegram/WhatsApp) without deadlocks.
+- `references/chat-bridge-json-resilience.md`: Messaging bridge adapters (Telegram/WhatsApp), control character normalization, and sibling key purging.
 - `references/mobile-access-and-public-exposure.md`: Safe reverse proxy and mobile web exposure.
 - `references/agent-execution-authority.md`: Permission models and human-in-the-loop approvals.
 - `references/telegram-gateway-interactive-feedback.md`: In-chat interactive feedback loops.
@@ -84,21 +85,35 @@ Bidirectional web chat interfaces, prompt studios, and streaming runtimes for au
 - Wrap `navigator.clipboard.writeText()` with fallback to hidden `<textarea>` + `document.execCommand('copy')`. Show emerald checkmark (`#10b981`) and 'Tersalin' for 1.8s.
 - Bind `Escape` key globally to dismiss lightbox modals, sandboxes, and history drawers.
 
+### 7. Structured Messaging Bridges & WhatsApp/Telegram Gateways
+- **RFC 8259 Raw Control Character Sanitization**: LLMs routinely output raw unescaped newlines (`\n`, byte 0x0A) or tabs inside JSON strings. In RFC 8259, unescaped control chars (ASCII 0x00–0x1F) crash `JSON.parse` with `SyntaxError: Bad control character in string literal`. Before parsing, normalize control characters inside string literals or replace unescaped control characters.
+- **Tolerant Extraction with Sibling Key Purging**: When JSON parsing fails due to token truncation or malformed escapes:
+  - First, strip markdown code fences (` ```(?:json)? `).
+  - Use regex with positive lookahead for sibling keys: `/"reply"\s*:\s*"([\s\S]*?)(?=",\s*"[a-zA-Z0-9_-]+"\s*:|"\s*\}?\s*$|"$)/i`.
+  - In strip-based fallbacks, purge trailing sibling attributes (e.g. `/(?:"\s*,\s*"[a-zA-Z0-9_-]+"\s*:[\s\S]*|,\s*"[a-zA-Z0-9_-]+"\s*:[\s\S]*)$/i`) BEFORE trimming closing quotes/braces. Stripping only leading `{"reply":"` and trailing `}` leaves trailing sibling metadata (`","show_node":null`) attached to customer replies.
+- **Transport Egress Guard (Defense in Depth)**: Never rely solely on upstream AI service parsers. Implement a secondary regex filter at the message transport handler (e.g. `customerHandler` / `sock.sendMessage` / `sendTargetReply`) to catch and strip residual JSON scaffolding (`/^\{[\s\S]*?"reply"\s*:/i`, `/["}\s]*,\s*"[a-zA-Z0-9_-]+"\s*:/i`) before transmission.
+- **Group Chat Delimiter Sanitization**: When attributing multi-user group chat turns (`[${senderName}]: ${message}`), sanitize `senderName` by stripping brackets (`[`, `]`), newlines, and control characters to prevent prompt injection and simulated system delimiter spoofing.
+- **Resilient Multi-Provider Fallback**: Maintain a prioritized gateway/provider list (e.g., local Ollama/vLLM -> secondary cloud gateway). Catch model timeouts and connection errors to failover sequentially without dropping the message or crashing the bridge daemon.
+- **Zero-Downtime Hotfix Isolation**: When patching live messaging bridges or AI services in production, modify only the parser and handler modules. Run offline unit tests with representative malformed payloads before restarting only the affected worker; never restart unrelated production services, databases, or API gateways.
+
 ---
 
 ## Top Critical Pitfalls (Summary)
-*(Full catalog of 49 traps in `references/pitfalls-and-edge-cases.md`)*
+*(Full catalog in `references/pitfalls-and-edge-cases.md`)*
 
 1. **Missing [DONE] Stream Hang**: Gateways dropping `data: [DONE]` cause UI spinners to hang indefinitely. Fallback on HTTP response close event.
-2. **Empty Password Admin Bypass**: Passwordless or 1-step registration routes must never treat empty string as valid admin credentials.
-3. **CSS Transition vs rAF Solver Jitter**: Attaching CSS `transition: transform` to 60 FPS rAF-animated elements causes violent visual jitter. Use GPU layer promotion and rAF only.
-4. **Mobile Scroll Inset & Dock Submersion**: Standard bottom padding leaves media cards cut off behind floating docks. Enforce `padding-bottom: 180px-185px`.
-5. **Cross-Origin Image Download Failure**: `<a download>` on cross-origin URLs opens in a new tab instead of downloading. Use `fetch() -> blob() -> createObjectURL()`.
-6. **Forced Synchronous Layout Thrashing**: Calling `getBoundingClientRect()` inside an rAF loop forces reflow on every frame. Cache coordinates on passive resize/scroll.
-7. **Streaming Code Block Parity Unclosure**: Unclosed backticks during token streaming break markdown rendering. Implement an auto-closing token parser.
-8. **Redundant Dropdown Selection Toasts**: Never fire floating toast popups for standard model/thinking effort pill selections. Update pill labels in-place.
-9. **Naïve Multi-Turn Regeneration Drift**: Always slice history back to the targeted turn; never append duplicate assistant turns on retry.
-10. **HTML Entity Collision in Syntax Highlighting**: Run syntax highlighting before escaping, or unescape entities safely within tokens to prevent double-escaping.
+2. **The Sibling Key Metadata Bleed Trap**: Stripping leading `{"reply":"` and trailing delimiters without purging trailing sibling keys leaves internal schema attributes (`","show_node":null`, `,"intent":...`) attached to customer-facing messages when `JSON.parse` fails. Purge trailing sibling attributes before trimming closing delimiters.
+3. **The Raw Control Character JSON Crash Trap**: LLMs emit literal unescaped newlines (`\n`) inside JSON string values. RFC 8259 forbids unescaped control chars (0x00–0x1F) in strings, causing `JSON.parse` to throw `SyntaxError: Bad control character in string literal`. Sanitize control characters or use regex extractors that handle unescaped multi-line text.
+4. **The Single-Layer Parser Trust Trap (Missing Transport Egress Guard)**: Relying solely on upstream AI service parsing allows unhandled LLM edge cases to reach end-user phones. Place an independent secondary regex guard at the final messaging transport layer right before socket dispatch.
+5. **The Group Chat Delimiter Spoofing Trap**: Passing unsanitized user profile names into `[${senderName}]: ${message}` allows malicious users to inject fake prompts or impersonate roles. Strip brackets, newlines, and limit length to <= 30 chars.
+6. **The Reverse Proxy Host Mismatch 403 Trap (`sameOrigin` behind Proxy)**: When an application sits behind a reverse proxy that rewrites `Host` to loopback (`localhost:PORT`), naive `sameOrigin` guards comparing `req.headers.origin` strictly with `http(s)://${req.headers.host}` reject legitimate requests with HTTP 403. Check `origin` against an explicit canonical domain whitelist alongside direct loopback host matching.
+7. **Empty Password Admin Bypass**: Passwordless or 1-step registration routes must never treat empty string as valid admin credentials.
+8. **CSS Transition vs rAF Solver Jitter**: Attaching CSS `transition: transform` to 60 FPS rAF-animated elements causes violent visual jitter. Use GPU layer promotion and rAF only.
+9. **Mobile Scroll Inset & Dock Submersion**: Standard bottom padding leaves media cards cut off behind floating docks. Enforce `padding-bottom: 180px-185px`.
+10. **Cross-Origin Image Download Failure**: `<a download>` on cross-origin URLs opens in a new tab instead of downloading. Use `fetch() -> blob() -> createObjectURL()`.
+11. **Forced Synchronous Layout Thrashing**: Calling `getBoundingClientRect()` inside an rAF loop forces reflow on every frame. Cache coordinates on passive resize/scroll.
+12. **Streaming Code Block Parity Unclosure**: Unclosed backticks during token streaming break markdown rendering. Implement an auto-closing token parser.
+13. **Naïve Multi-Turn Regeneration Drift**: Always slice history back to the targeted turn; never append duplicate assistant turns on retry.
 
 ---
 
@@ -107,7 +122,11 @@ Bidirectional web chat interfaces, prompt studios, and streaming runtimes for au
 - [ ] Zero emoji across entire UI (Apple SF Symbols style SVGs only).
 - [ ] Mobile virtual keyboard test on real touch viewport (zero dock overlap or jumping).
 - [ ] SSE stream tested with network interrupt (auto-retry reconnects with backoff).
+- [ ] Structured JSON outputs tested with unescaped newlines, truncated token boundaries, and trailing sibling metadata (zero leak to end user).
+- [ ] Transport-level egress sanitizer verified before socket dispatch.
+- [ ] Group chat sender names sanitized against delimiter injection.
+- [ ] Reverse proxy `sameOrigin` validated against canonical domain whitelist.
 - [ ] Blob export verified for code and media artifacts.
 - [ ] KaTeX formulas render offline with zero raw LaTeX string leakage.
 - [ ] Mascot kinematics verified at 60 FPS without CSS transition fighting.
-- [ ] All 49 detailed pitfalls cross-referenced in `references/pitfalls-and-edge-cases.md`.
+- [ ] All detailed pitfalls cross-referenced in `references/pitfalls-and-edge-cases.md`.
